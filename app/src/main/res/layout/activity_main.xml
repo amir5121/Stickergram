@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.amir.telegramstickerbuilder.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/include_toolbar" />
+
+        <ImageView
+            android:id="@+id/activity_main_image"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_below="@id/include_toolbar"
+            android:background="#266468"
+            android:contentDescription="@string/entry_image"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/activity_main_image">
+
+            <View
+                android:id="@+id/view_horizontal"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+
+            <View
+                android:id="@+id/view_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_centerVertical="true" />
+
+            <ImageView
+                android:id="@+id/activity_main_user_stickers_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/view_vertical"
+                android:layout_alignEnd="@id/view_horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@id/view_horizontal"
+                android:background="@color/colorPrimary"
+                android:clickable="true"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/view_vertical"
+                android:layout_alignEnd="@id/view_horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@id/view_horizontal"
+                android:layout_marginBottom="2dp"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="@string/your_stickers"
+                android:textColor="#eeeeee"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/activity_main_phone_stickers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/view_vertical"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@id/view_horizontal"
+                android:layout_toRightOf="@id/view_horizontal"
+                android:background="@color/colorAccent"
+                android:clickable="true" />
+
+            <ImageView
+                android:id="@+id/activity_main_template_stickers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/view_horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@id/view_horizontal"
+                android:layout_alignTop="@id/view_vertical"
+                android:background="#1ff23f"
+                android:clickable="true" />
+
+            <ImageView
+                android:id="@+id/activity_main_start_scratch_stickers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/view_vertical"
+                android:layout_toEndOf="@id/view_horizontal"
+                android:layout_toRightOf="@id/view_horizontal"
+                android:background="@color/colorPrimaryDark"
+                android:clickable="true" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <include layout="@layout/include_nav_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

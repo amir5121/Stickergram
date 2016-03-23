@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Telegram Sticker Generator</string>
+    <string name="home">Home</string>
+    <string name="exit">Exit</string>
+    <string name="entry_image">Entry Image</string>
+    <string name="your_stickers">Your Stickers</string>
+</resources>
