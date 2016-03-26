@@ -3,45 +3,55 @@ package com.amir.telegramstickerbuilder.infrastructure;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.View;
 
+import com.amir.telegramstickerbuilder.Single.StickerItem;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
-import com.amir.telegramstickerbuilder.views.StickerAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 public class Loader {
     public static boolean hasLoadedOnce = false;
+    private static final int THUMBNAIL_IMAGE_QUALITY = 85;
+
     public static final String USER_STICKER_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
     public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
 //    public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "messenger" + File.separator + "cache" + File.separator;
 
-    public static void loadPhoneStickers(DataSource dataSource) {
-        File files[] = new File(PHONE_STICKERS_DIRECTORY).listFiles();
-
-
-        for (File file : files) {
-            String name = file.getName();
-            if (name.contains(".webp") && name.charAt(1) == '_') {
-//                Log.e("Loader: ", file.getAbsolutePath());
-                dataSource.update(file.getAbsolutePath(), null, StickerItem.TYPE_IN_PHONE, false, true);
-            }
-        }
-        Log.e("PhoneStickerActivity", "Got here");
-        hasLoadedOnce = true;
-
-//        new AsyncLoader().execute(dataSource);
-    }
+//    public static void loadPhoneStickers(DataSource dataSource, BaseActivity activity) {
+//        File files[] = new File(PHONE_STICKERS_DIRECTORY).listFiles();
+//
+//        int length = files.length;
+//        for (int i = 0; i < length; i++) {
+//            String name = files[i].getName();
+//            if (name.contains(".webp") && name.charAt(1) == '_') {
+//                String thumbDirectory = activity.getCacheDir().getAbsolutePath() + File.separator + name;
+//                StickerItem item = new StickerItem(
+//                        files[i].getAbsolutePath(),
+//                        generateThumbnail(files[i].getAbsolutePath(), thumbDirectory),
+//                        StickerItem.TYPE_IN_PHONE,
+//                        false,
+//                        true);
+//                dataSource.update(item);
+////                PhoneStickersActivity.progressStatus = (i / length) * 100;
+//            }
+//        }
+//        Log.e("Loader", "hasLoadedOnce been set to true");
+//        hasLoadedOnce = true;
+//
+//    }
 
     private void loadUsersStickers() {
     }
@@ -106,31 +116,33 @@ public class Loader {
         }
         return true;
     }
-
-
-    public static class AsyncLoader extends AsyncTask<DataSource, String, DataSource> {
-        @Override
-        protected DataSource doInBackground(DataSource... dataSources) {
-            File files[] = new File(PHONE_STICKERS_DIRECTORY).listFiles();
-
-            for (File file : files) {
-                String name = file.getName();
-                if (name.contains(".webp") && name.charAt(1) == '_') {
-//                Log.e("Loader: ", file.getAbsolutePath());
-                    dataSources[0].update(file.getAbsolutePath(), null, StickerItem.TYPE_IN_PHONE, false, true);
-                }
-            }
-            return dataSources[0];
-        }
-
-        @Override
-        protected void onPostExecute(DataSource dataSource) {
-            super.onPostExecute(dataSource);
-
-
-//            dataSource.setItems(dataSource.getDataSource().getAllItems());
 //
-//            dataSource.notifyDataSetChanged();
-        }
+//    public static String generateThumbnail(String fromDirectory, String toDirectory) {
+//        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(fromDirectory), 100, 100);
+//        FileOutputStream outStream = null;
+//
+//        try {
+//            outStream = new FileOutputStream(toDirectory);
+//            if (bitmap != null) {
+//                bitmap.compress(Bitmap.CompressFormat.WEBP, THUMBNAIL_IMAGE_QUALITY, outStream);
+//                return toDirectory;
+//            } else {
+//                return null;
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            return null;
+//        } finally {
+//            try {
+//                if (outStream != null)
+//                    outStream.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+    public static Bitmap generateThumbnail(Bitmap regionalBitmap){
+        return ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth(), regionalBitmap.getHeight());
     }
 }

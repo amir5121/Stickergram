@@ -5,7 +5,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +106,7 @@ public class NavDrawer {
             if (container == null)
                 throw new RuntimeException("Nav Drawer Item " + text + " could not be attached to ViewGroup. View Not Found");
 
-            view = inflater.inflate(R.layout.nav_drawer_item, container, false);
+            view = inflater.inflate(R.layout.item_nav_drawer, container, false);
             container.addView(view);
 
             view.setOnClickListener(this);
@@ -123,7 +122,7 @@ public class NavDrawer {
         public void setSelected(boolean isSelected) {
             if (isSelected) {
                 view.setBackgroundResource(R.drawable.nav_drawer_item_slected_background);
-                textView.setTextColor(ContextCompat.getColor(navDrawer.activity, R.color.list_item_nav_drawer_selcted_item_text_color));
+                textView.setTextColor(ContextCompat.getColor(navDrawer.activity, R.color.list_item_nav_drawer_selected_item_text_color));
             } else {
                 view.setBackgroundResource(0);
                 textView.setTextColor(defaultTextColor);

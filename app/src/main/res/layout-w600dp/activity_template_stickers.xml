@@ -14,27 +14,23 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <fragment
+            android:layout_width="150dp"
             android:layout_height="match_parent"
-            android:layout_below="@id/include_toolbar"
-            android:id="@+id/progress_bar"
-            android:clickable="true"
-            android:background="@color/loading_background">
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true"/>
-        </FrameLayout>
+            android:id="@+id/activity_template_stickers_list_fragment"
+            android:name="com.amir.telegramstickerbuilder.Icon.IconListFragment"
+            tools:layout="@layout/fragment_icon_list"
+            android:layout_below="@id/include_toolbar"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/activity_users_stickers_list"
+        <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/activity_template_stickers_detailed_fragment"
+            android:name="com.amir.telegramstickerbuilder.StickerPack.IconPackDetailedFragment"
+            tools:layout="@layout/fragment_icon_detailed"
             android:layout_below="@id/include_toolbar"
-            android:padding="10dp"
-            android:scrollbars="vertical" />
+            android:layout_toRightOf="@id/activity_template_stickers_list_fragment"
+            android:layout_toEndOf="@id/activity_template_stickers_list_fragment"/>
 
     </RelativeLayout>
 

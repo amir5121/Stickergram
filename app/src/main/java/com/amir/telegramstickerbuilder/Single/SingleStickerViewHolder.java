@@ -1,25 +1,23 @@
-package com.amir.telegramstickerbuilder.views;
+package com.amir.telegramstickerbuilder.Single;
 
-import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.amir.telegramstickerbuilder.R;
-import com.amir.telegramstickerbuilder.infrastructure.StickerItem;
 
-public class StickerViewHolder extends RecyclerView.ViewHolder{
+public class SingleStickerViewHolder extends RecyclerView.ViewHolder{
     ImageView stickerImageView;
     ImageView selectedStickerImageView;
 
-    public StickerViewHolder(View itemView) {
+    public SingleStickerViewHolder(View itemView) {
         super(itemView);
-        stickerImageView = (ImageView) itemView.findViewById(R.id.list_view_item_stickerItem);
+        stickerImageView = (ImageView) itemView.findViewById(R.id.simple_sticker_item_image);
         selectedStickerImageView = (ImageView) itemView.findViewById(R.id.list_view_item_selectedSticker_foreground);
     }
 
-    public void populate(Context context, StickerItem item){
+    public void populate(StickerItem item){
+        //TODO: might need setOnclickListener
         itemView.setTag(item);
         stickerImageView.setImageBitmap(item.getThumbBitmap());
 

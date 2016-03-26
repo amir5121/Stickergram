@@ -2,8 +2,8 @@ package com.amir.telegramstickerbuilder.infrastructure;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.util.Log;
+
+import com.amir.telegramstickerbuilder.Single.StickerItem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,15 +20,6 @@ public class DataSource  {
     public DataSource(Context context) {
         preferences = context.getSharedPreferences(context.getClass().getSimpleName(), Context.MODE_PRIVATE);
     }
-
-//    public List<String> findAllDirectories() {
-//        Set<String> directories = preferences.getStringSet(DIRECTORIES, null);
-//
-//        if (directories == null)
-//            return null;
-//
-//        return new ArrayList<>(directories);
-//    }
 
     public void update(StickerItem item) {
         addDirectoryToSet(item.getStickerDirectory());
@@ -54,6 +45,8 @@ public class DataSource  {
         return false;
     }
 
+
+    //** Returns all of the stickers that are saved in telegram directory (basically all of the user's stickers that telegram has cashed*//
     public List<StickerItem> getAllItems() {
         List<StickerItem> items = new ArrayList<>();
         Set<String> newSet = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
@@ -95,25 +88,4 @@ public class DataSource  {
         editor.apply();
     }
 
-    public void update(String absolutePath, String thumbDirectory, int typeInPhone, boolean isSelected, boolean isVisible) {
-        addDirectoryToSet(absolutePath);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putString(absolutePath + STRING, thumbDirectory);
-        editor.putBoolean(absolutePath + BOOLEAN, isSelected);
-        editor.putInt(absolutePath + INT, typeInPhone);
-
-        editor.apply();
-    }
-
-//    public class AsyncDataResource extends AsyncTask<List<StickerItem>, String, String>{
-//        @Override
-//        protected String doInBackground(List<StickerItem>... lists) {
-//            Set<String> newSet = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
-//            for (String item : newSet){
-//                lists[0].add(getItem(item));
-//            }
-//            return null;
-//        }
-//    }
 }

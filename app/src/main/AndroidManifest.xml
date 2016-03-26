@@ -24,6 +24,8 @@
         <activity android:name=".UserStickersActivity"/>
 
         <activity android:name=".PhoneStickersActivity"/>
+
+        <activity android:name=".TemplateStickersActivity"/>
     </application>
 
 </manifest>

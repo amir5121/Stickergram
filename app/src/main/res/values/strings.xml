@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">Telegram Sticker Generator</string>
+    <string name="app_name">Telegram Sticker Builder</string>
     <string name="home">Home</string>
     <string name="exit">Exit</string>
     <string name="entry_image">Entry Image</string>
     <string name="your_stickers">Your Stickers</string>
+    <string name="need_permission">Need permission to access Telegram stickers</string>
+    <string name="this_might_take_some_time">This might take some time!</string>
+    <string name="phone_stickers">Phone Stickers</string>
+    <string name="template_stickers">Template Stickers</string>
 </resources>

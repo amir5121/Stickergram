@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_margin="5dp"
+        android:scaleType="fitCenter"
+        android:id="@+id/item_pack_sticker_image"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/selected_item_foreground"
+        android:id="@+id/list_view_item_selectedSticker_foreground"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"/>
+
+</FrameLayout>
