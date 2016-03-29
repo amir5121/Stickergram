@@ -1,7 +1,7 @@
 package com.amir.telegramstickerbuilder.base;
 
-import android.app.Application;
-import android.graphics.Point;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -9,14 +9,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 
 import com.amir.telegramstickerbuilder.R;
-import com.amir.telegramstickerbuilder.views.NavDrawer;
+import com.amir.telegramstickerbuilder.navdrawer.NavDrawer;
 
 public abstract class BaseActivity extends BaseAuthenticatedActivity {
+    private static final String SETTING = "SETTING";
+    private static final String HAS_CASHED_PACK_STICKERS = "HAS_CASHED_PACK_STICKERS";
+    private static final String HAS_CASHED_PHONE_STICKERS = "HAS_CASHED_PHONE_STICKERS";
+    public static final String EDIT_IMAGE_URI = "EDIT_IMAGE_URI";
+
+    private SharedPreferences preferences;
+
     protected Toolbar toolbar;
     protected NavDrawer navDrawer;
-    protected static boolean payed = false;
 
     public static boolean isTablet;
+    public static boolean isInLandscape;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,6 +31,9 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         isTablet = (metrics.widthPixels / metrics.density) >= 600;
+        isInLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
     }
 
     @Override
@@ -44,7 +54,24 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         navDrawer.create();
     }
 
-    public static boolean getPaymentStatus() {
-        return payed;
+    public boolean hasCashedPhoneStickersOnce() {
+        return preferences.getBoolean(HAS_CASHED_PHONE_STICKERS, false);
     }
+
+    public void setPhoneStickerCashStatus(boolean status) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(HAS_CASHED_PHONE_STICKERS, status);
+        editor.apply();
+    }
+
+    public boolean hasCashedPackStickers() {
+        return preferences.getBoolean(HAS_CASHED_PACK_STICKERS, false);
+    }
+
+    public void setPackCashStatus(boolean status) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(HAS_CASHED_PACK_STICKERS, status);
+        editor.apply();
+    }
+
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/phone_loading_dialog_total_sticker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="0"
+            android:textColor="@color/progress_text_percentage"
+            android:textSize="20sp" />
+
+
+        <TextView
+            android:id="@+id/phone_loading_dialog_explanation2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/stickers_so_far"
+            android:textColor="@color/progress_text_percentage"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_layout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/phone_loading_dialog_text_percentage"
+        android:text="0%"
+        android:textColor="@color/progress_text_percentage"
+        android:textSize="30sp" />
+
+</RelativeLayout>

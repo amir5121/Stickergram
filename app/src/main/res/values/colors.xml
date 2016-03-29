@@ -2,13 +2,16 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="selected_item_background">#12000000</color>
+    <color name="colorAccent">#061b86</color>
+    <color name="selected_nav_drawer_item_background">#12000000</color>
     <color name="list_item_nav_drawer_selected_item_text_color">#2195F3</color>
     <color name="nav_drawer_background">#fff</color>
-    <color name="loading_background">#8f33337b</color>
-    <color name="progress_text_percentage">#55eeeeee</color>
+    <color name="loading_background">#c833337b</color>
+    <color name="progress_text_percentage">#c65e5e5e</color>
     <color name="icon_sticker_name_background">#773467b3</color>
-    <color name="icon_sticker_list_background">#88c3fa</color>
+    <color name="icon_sticker_list_background">#d457a6fa</color>
     <color name="detailed_sticker_fragment_background">#517aec</color>
+    <color name="no_user_sticker_founded">#c9be35f9</color>
+    <color name="no_user_sticker_founded_text">#11f1f2</color>
+    <color name="selected_item_foreground">#ae0648ff</color>
 </resources>

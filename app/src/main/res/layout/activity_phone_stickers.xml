@@ -14,40 +14,6 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <FrameLayout
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/include_toolbar"
-            android:background="@color/loading_background"
-            android:clickable="true">
-
-            <TextView
-                android:id="@+id/activity_phone_stickers_progress_files_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/progress_text_percentage"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <!--<ProgressBar-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:indeterminate="true" />-->
-
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/activity_phone_stickers_progressPercentage"
-            android:textColor="@color/progress_text_percentage"
-            android:textStyle="bold"
-            android:textSize="40sp" />
-
-        </FrameLayout>
-
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/activity_phone_stickers_swipeRefresh"
             android:layout_width="match_parent"
@@ -55,12 +21,13 @@
             android:layout_below="@id/include_toolbar">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/activity_users_stickers_list"
+                android:id="@+id/activity_phone_stickers_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/include_toolbar"
-                android:padding="10dp"
+                android:padding="2dp"
                 android:scrollbars="vertical" />
+
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </RelativeLayout>

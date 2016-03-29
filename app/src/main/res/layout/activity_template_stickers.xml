@@ -14,6 +14,7 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
+
         <FrameLayout
             android:id="@+id/activity_template_sticker_fragment_container"
             android:layout_below="@id/include_toolbar"

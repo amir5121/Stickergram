@@ -63,11 +63,11 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignRight="@id/view_horizontal"
                 android:layout_marginBottom="2dp"
+                android:clickable="false"
                 android:gravity="center"
                 android:padding="2dp"
                 android:text="@string/your_stickers"
                 android:textColor="#eeeeee"
-                android:clickable="false"
                 android:textSize="18sp" />
 
             <ImageView
@@ -80,8 +80,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@id/view_horizontal"
                 android:layout_toRightOf="@id/view_horizontal"
-                android:background="@color/colorAccent"
-                android:clickable="true" />
+                android:background="@color/icon_sticker_list_background"
+                android:clickable="true"
+                android:foreground="?android:selectableItemBackground"
+                android:padding="20dp"
+                android:src="@drawable/phone" />
 
             <ImageView
                 android:id="@+id/activity_main_template_stickers"
@@ -123,6 +126,7 @@
                 android:layout_toRightOf="@id/view_horizontal"
                 android:background="@color/colorPrimaryDark"
                 android:clickable="true" />
+            <!--TODO: Picker icon-->
         </RelativeLayout>
 
 

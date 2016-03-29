@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.amir.telegramstickerbuilder.Single.StickerItem;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
 
 import java.io.File;
@@ -23,38 +22,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 public class Loader {
-    public static boolean hasLoadedOnce = false;
     private static final int THUMBNAIL_IMAGE_QUALITY = 85;
-
-    public static final String USER_STICKER_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
-    public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
-//    public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "messenger" + File.separator + "cache" + File.separator;
-
-//    public static void loadPhoneStickers(DataSource dataSource, BaseActivity activity) {
-//        File files[] = new File(PHONE_STICKERS_DIRECTORY).listFiles();
-//
-//        int length = files.length;
-//        for (int i = 0; i < length; i++) {
-//            String name = files[i].getName();
-//            if (name.contains(".webp") && name.charAt(1) == '_') {
-//                String thumbDirectory = activity.getCacheDir().getAbsolutePath() + File.separator + name;
-//                StickerItem item = new StickerItem(
-//                        files[i].getAbsolutePath(),
-//                        generateThumbnail(files[i].getAbsolutePath(), thumbDirectory),
-//                        StickerItem.TYPE_IN_PHONE,
-//                        false,
-//                        true);
-//                dataSource.update(item);
-////                PhoneStickersActivity.progressStatus = (i / length) * 100;
-//            }
-//        }
-//        Log.e("Loader", "hasLoadedOnce been set to true");
-//        hasLoadedOnce = true;
-//
-//    }
-
-    private void loadUsersStickers() {
-    }
 
     public static void gainPermission(BaseActivity activity) {
         if (ContextCompat.checkSelfPermission(activity,
@@ -116,33 +84,34 @@ public class Loader {
         }
         return true;
     }
-//
-//    public static String generateThumbnail(String fromDirectory, String toDirectory) {
-//        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(fromDirectory), 100, 100);
-//        FileOutputStream outStream = null;
-//
-//        try {
-//            outStream = new FileOutputStream(toDirectory);
-//            if (bitmap != null) {
-//                bitmap.compress(Bitmap.CompressFormat.WEBP, THUMBNAIL_IMAGE_QUALITY, outStream);
-//                return toDirectory;
-//            } else {
-//                return null;
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            return null;
-//        } finally {
-//            try {
-//                if (outStream != null)
-//                    outStream.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
-    public static Bitmap generateThumbnail(Bitmap regionalBitmap){
+    public static String generateThumbnail(String fromDirectory, String toDirectory) {
+        Bitmap regionalBitmap = BitmapFactory.decodeFile(fromDirectory);
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth() / 3, regionalBitmap.getHeight() / 3);
+        FileOutputStream outStream = null;
+
+        try {
+            outStream = new FileOutputStream(toDirectory);
+            if (bitmap != null) {
+                bitmap.compress(Bitmap.CompressFormat.PNG, THUMBNAIL_IMAGE_QUALITY, outStream);
+                return toDirectory;
+            } else {
+                return null;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (outStream != null)
+                    outStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Bitmap generateThumbnail(Bitmap regionalBitmap) {
         return ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth(), regionalBitmap.getHeight());
     }
 }

@@ -3,14 +3,16 @@ package com.amir.telegramstickerbuilder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.amir.telegramstickerbuilder.Icon.IconItem;
-import com.amir.telegramstickerbuilder.Icon.IconListFragment;
-import com.amir.telegramstickerbuilder.StickerPack.IconPackDetailedFragment;
+import com.amir.telegramstickerbuilder.sticker.icon.IconItem;
+import com.amir.telegramstickerbuilder.sticker.icon.IconListFragment;
+import com.amir.telegramstickerbuilder.sticker.pack.IconPackDetailedFragment;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
-import com.amir.telegramstickerbuilder.views.MainNavDrawer;
+import com.amir.telegramstickerbuilder.navdrawer.MainNavDrawer;
 
 public class TemplateStickersActivity extends BaseActivity implements IconListFragment.OnIconSelectedListener {
     public static final String ICON_STICKER_ITEM_FOLDER = "ICON_STICKER_ITEM_FOLDER";
+
+    private String folder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -18,87 +20,58 @@ public class TemplateStickersActivity extends BaseActivity implements IconListFr
         setContentView(R.layout.activity_template_stickers);
         setNavDrawer(new MainNavDrawer(this));
 
-        if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
-            if (savedInstanceState != null){
-                return;
-            }
+        if (savedInstanceState != null) {
+            saveState(savedInstanceState.getString(ICON_STICKER_ITEM_FOLDER, "Bunny"));
+            return;
+        }
 
-            IconListFragment templateIconListFragment = new IconListFragment();
+        if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
+
+            IconListFragment iconListFragment = new IconListFragment();
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.activity_template_sticker_fragment_container, templateIconListFragment)
+                    .add(R.id.activity_template_sticker_fragment_container, iconListFragment)
                     .commit();
-            // new AsyncGen().execute();
         }
     }
 
     @Override
-    public void OnStickerSelectedListener(IconItem item) {
-        IconPackDetailedFragment iconStickerDetailedFragment;
-        if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
-            iconStickerDetailedFragment = new IconPackDetailedFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ICON_STICKER_ITEM_FOLDER, item.getFolder());
-            iconStickerDetailedFragment.setArguments(bundle);
-
-            getSupportFragmentManager().
-                    beginTransaction().
-                    replace(R.id.activity_template_sticker_fragment_container, iconStickerDetailedFragment).
-                    addToBackStack(null).
-                    commit();
-
-            iconStickerDetailedFragment.refresh(item.getFolder());
-        } else {
-            iconStickerDetailedFragment =
-                    (IconPackDetailedFragment) getSupportFragmentManager().findFragmentById(R.id.activity_template_stickers_detailed_fragment);
-
-            iconStickerDetailedFragment.refresh(item.getFolder());
-        }
+    public void OnIconSelectedListener(IconItem item) {
+        folder = item.getFolder(); //is used to hold the state
+        //what happening here is the same as saveState
+        instantiateFragment(item.getFolder());
 
     }
 
-//    public class AsyncGen extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            try {
-//                int width;
-//                int height;
-//                String folders[] = getAssets().list("");
-//                Log.e(getClass().getSimpleName(), String.valueOf(folders.length));
-//                for (String folder : folders) {
-//                    Log.e(getClass().getSimpleName(), folder);
-//                    String files[] = getAssets().list(folder);
-//                    for (String file : files) {
-//                        String fileName = folder + File.separator + file;
-//                        Log.e(getClass().getSimpleName(), fileName);
-//                        InputStream stream = getAssets().open(fileName);
-//                        Bitmap bitmap = BitmapFactory.decodeStream(stream);
-//                        stream.close();
-//                        if (bitmap != null) {
-//                            width = bitmap.getWidth();
-//                            height = bitmap.getHeight();
-//                            bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height);
-//                            File file1 = new File(Environment.getExternalStorageDirectory() + File.separator + "TSB" + File.separator + folder + File.separator + "thumb" + file);
-//                            if (!file1.getParentFile().exists())
-//                                file1.getParentFile().mkdirs();
-//
-//                            if (!file1.exists()) {
-//                                file1.createNewFile();
-//                            }
-//
-//                            OutputStream outputStream = new FileOutputStream(file1);
-//                            bitmap.compress(Bitmap.CompressFormat.WEBP, 60, outputStream);
-//                            outputStream.close();
-//                        }
-//                    }
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
+    private void saveState(String folder) {
+        this.folder = folder;
+        instantiateFragment(folder);
+    }
+
+    private void instantiateFragment(String folder) {
+        IconPackDetailedFragment iconPackDetailedFragment;
+        if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
+            iconPackDetailedFragment = new IconPackDetailedFragment();
+
+            getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.activity_template_sticker_fragment_container, iconPackDetailedFragment).
+                    addToBackStack(null).
+                    commit();
+
+            iconPackDetailedFragment.refresh(folder);
+        } else {
+            iconPackDetailedFragment =
+                    (IconPackDetailedFragment) getSupportFragmentManager().findFragmentById(R.id.activity_template_stickers_detailed_fragment);
+
+            iconPackDetailedFragment.refresh(folder);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ICON_STICKER_ITEM_FOLDER, folder);
+    }
 }

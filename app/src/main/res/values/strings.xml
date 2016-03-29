@@ -8,4 +8,10 @@
     <string name="this_might_take_some_time">This might take some time!</string>
     <string name="phone_stickers">Phone Stickers</string>
     <string name="template_stickers">Template Stickers</string>
+    <string name="preparing_for_the_first_load">Preparing for the first load :)</string>
+    <string name="first_load">Preparing for the first load!</string>
+    <string name="stickers_so_far">Sticker were found so far</string>
+    <string name="you_haven_t_build_any_sticker">You haven\'t build any Sticker :(</string>
+    <string name="choose_an_image">Choose an image to start working with</string>
+    <string name="could_not_make_file">Could not make the file</string>
 </resources>
