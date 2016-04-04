@@ -11,11 +11,15 @@ import android.util.DisplayMetrics;
 import com.amir.telegramstickerbuilder.R;
 import com.amir.telegramstickerbuilder.navdrawer.NavDrawer;
 
+import java.io.File;
+
 public abstract class BaseActivity extends BaseAuthenticatedActivity {
     private static final String SETTING = "SETTING";
     private static final String HAS_CASHED_PACK_STICKERS = "HAS_CASHED_PACK_STICKERS";
     private static final String HAS_CASHED_PHONE_STICKERS = "HAS_CASHED_PHONE_STICKERS";
     public static final String EDIT_IMAGE_URI = "EDIT_IMAGE_URI";
+    public static final String EDIT_IMAGE_DIR_IN_ASSET = "EDIT_IMAGE_DIR_IN_ASSET";
+    public static String BASE_THUMBNAIL_DIRECTORY;
 
     private SharedPreferences preferences;
 
@@ -25,6 +29,8 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static boolean isTablet;
     public static boolean isInLandscape;
 
+    //TODO: i think you might need to change the minimum sdk to a higher version find a device to test
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         isTablet = (metrics.widthPixels / metrics.density) >= 600;
         isInLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
+        BASE_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_";
         preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
     }
 

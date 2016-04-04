@@ -3,10 +3,12 @@ package com.amir.telegramstickerbuilder.sticker.pack;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amir.telegramstickerbuilder.infrastructure.Loader;
 import com.amir.telegramstickerbuilder.sticker.icon.IconItem;
 import com.amir.telegramstickerbuilder.R;
 import com.amir.telegramstickerbuilder.base.BaseFragment;
@@ -53,14 +55,14 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
 
     @Override
     public void onClick(View view) {
-        if (view.getTag() instanceof IconItem) {
-            listener.OnIconClicked((IconItem) view.getTag());
+        if (view.getTag() instanceof PackItem) {
+            listener.OnIconClicked((PackItem) view.getTag());
         }
 
     }
 
     public interface OnStickerClickListener {
-        void OnIconClicked(IconItem item);
+        void OnIconClicked(PackItem item);
     }
 
     public void refresh() {

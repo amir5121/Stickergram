@@ -13,9 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.amir.telegramstickerbuilder.base.BaseActivity;
+import com.amir.telegramstickerbuilder.infrastructure.Loader;
 import com.amir.telegramstickerbuilder.sticker.icon.IconItem;
 import com.amir.telegramstickerbuilder.R;
 import com.amir.telegramstickerbuilder.base.BaseFragment;
+
+import java.io.IOException;
 
 public class IconPackDetailedFragment extends BaseFragment implements IconPackAdapter.OnStickerClickListener {
     RecyclerView recyclerView;
@@ -38,8 +41,9 @@ public class IconPackDetailedFragment extends BaseFragment implements IconPackAd
     }
 
     @Override
-    public void OnIconClicked(IconItem item) {
+    public void OnIconClicked(PackItem item) {
 
+        Loader.loadStickerDialog(item, (BaseActivity) getActivity());
     }
 
     public void refresh(String folder) {

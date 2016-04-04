@@ -30,7 +30,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
             throw new ClassCastException(activity.toString()
                     + "Must implement AsyncPhoneTaskListener");
         }
-        baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_";
+        baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_";//todo: use externalCashDirectory
         this.activity = activity;
     }
 
@@ -55,7 +55,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
 
         for (int i = 0; i < length; i++) {
             String name = files[i].getName();
-            if (!dataSource.contain(files[i].getAbsolutePath()))
+            if (!dataSource.contain(files[i].getAbsolutePath()))//TODO: what if the file was deleted from the memory and it's address was still in the sharedPreferences
                 if (name.contains(".webp") && name.charAt(1) == '_') {
                     thumbDirectory = baseThumbDir + name;
                     dataSource.update(new StickerItem(

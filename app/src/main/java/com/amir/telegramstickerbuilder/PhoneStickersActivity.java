@@ -8,19 +8,22 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.amir.telegramstickerbuilder.base.BaseActivity;
 import com.amir.telegramstickerbuilder.infrastructure.AsyncTaskPhoneAdapter;
+import com.amir.telegramstickerbuilder.infrastructure.Loader;
 import com.amir.telegramstickerbuilder.navdrawer.MainNavDrawer;
 import com.amir.telegramstickerbuilder.sticker.single.SingleStickersAdapter;
 import com.amir.telegramstickerbuilder.sticker.single.StickerItem;
 
 import java.io.File;
 
-public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener {
+public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener{
     public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
     private static final String IS_REFRESHING = "IS_REFRESHING";
     private static final int THUMBNAIL_IMAGE_QUALITY = 85;
@@ -85,7 +88,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void OnStickerClicked(StickerItem item) {
-
+        Loader.loadStickerDialog(item.getUri(), this);
     }
 
     @Override

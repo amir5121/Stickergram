@@ -32,7 +32,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconViewHolder> implements
 
     @Override
     public IconViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.icon_sticker_item, parent, false);
+        View view = inflater.inflate(R.layout.item_icon_sticker, parent, false);
         view.setOnClickListener(this);
         return new IconViewHolder(view);
     }

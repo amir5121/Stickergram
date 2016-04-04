@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
         int itemId = view.getId();
+        //TODO: Animation
 
         if (itemId == R.id.activity_main_user_stickers_button) {
             //todo: Gain permission
@@ -90,7 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else if (itemId == R.id.activity_main_template_stickers) {
             Loader.gainPermission(this);
             if (Loader.checkPermission(this)) {
-                startActivity(new Intent(this, TemplateStickersActivity.class));
+                    startActivity(new Intent(this, TemplateStickersActivity.class));
             } else {
                 Toast.makeText(this, getResources().getString(R.string.need_permission), Toast.LENGTH_LONG).show();
             }
@@ -149,7 +150,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             if (tempOutPutFile.exists())
                 tempOutPutFile.delete();
             if (!tempOutPutFile.createNewFile()) {
-                Toast.makeText(this, getResources().getString(R.string.could_not_make_file),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.could_not_make_file), Toast.LENGTH_SHORT).show();
                 return;
             }
         } catch (IOException e) {

@@ -2,7 +2,10 @@ package com.amir.telegramstickerbuilder.sticker.single;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
+
+import java.io.File;
 
 public class StickerItem {
     private final String stickerDirectory;
@@ -63,5 +66,9 @@ public class StickerItem {
 
     public Bitmap getThumbBitmap() {
         return BitmapFactory.decodeFile(thumbDirectory);
+    }
+
+    public Uri getUri() {
+        return Uri.fromFile(new File(getStickerDirectory()));
     }
 }

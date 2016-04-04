@@ -12,6 +12,7 @@ import android.view.View;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
 import com.amir.telegramstickerbuilder.infrastructure.AsyncTaskPhoneAdapter;
 import com.amir.telegramstickerbuilder.infrastructure.AsyncTaskUserAdapter;
+import com.amir.telegramstickerbuilder.infrastructure.Loader;
 import com.amir.telegramstickerbuilder.navdrawer.MainNavDrawer;
 import com.amir.telegramstickerbuilder.sticker.single.SingleStickersAdapter;
 import com.amir.telegramstickerbuilder.sticker.single.StickerItem;
@@ -79,7 +80,7 @@ public class UserStickersActivity extends BaseActivity implements SingleStickers
 
     @Override
     public void OnStickerClicked(StickerItem item) {
-
+        Loader.loadStickerDialog(item.getUri(), this);
     }
 
     @Override

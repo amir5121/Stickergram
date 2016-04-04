@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
@@ -8,30 +9,136 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include layout="@layout/include_toolbar"
-            android:id="@+id/include_toolbar"/>
-        <TextView
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/include_toolbar" />
+
+        <View
+            android:id="@+id/view_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/activity_edit_image_style_button"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_below="@id/include_toolbar"
-            android:text="Amir"
-            android:textSize="35sp"
-            android:textStyle="bold"
-            android:id="@+id/amir"
-            android:background="?android:selectableItemBackground"
-            android:foreground="#77977990"/>
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/view_horizontal"
+            android:layout_toStartOf="@id/view_horizontal"
+            android:background="@color/detailed_sticker_fragment_background"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="20dp"
+            android:text="@string/style" />
 
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_below="@id/amir"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/phone"
-            android:id="@+id/activity_edit_image_image"
-            android:scaleType="centerInside"/>
+
+        <Button
+            android:id="@+id/activity_edit_image_font_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/activity_edit_image_style_button"
+            android:layout_toLeftOf="@id/view_horizontal"
+            android:layout_toStartOf="@id/view_horizontal"
+            android:background="@color/icon_sticker_list_background"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="20dp"
+            android:text="@string/font" />
+
+
+        <Button
+            android:id="@+id/activity_edit_image_text_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/activity_edit_image_font_button"
+            android:layout_toLeftOf="@id/view_horizontal"
+            android:layout_toStartOf="@id/view_horizontal"
+            android:background="@color/crop__button_bar"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="20dp"
+            android:text="@string/text" />
+
+        <RelativeLayout
+            android:id="@+id/activity_edit_image_main_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/activity_edit_image_text_button"
+            android:layout_below="@id/include_toolbar"
+            android:background="@color/colorPrimary">
+
+            <RelativeLayout
+                android:id="@+id/activity_edit_image_images_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="#fff">
+                <!--this is the container don't delete it-->
+            </RelativeLayout>
+
+            <app.minimize.com.seek_bar_compat.SeekBarCompat
+                android:id="@+id/activity_edit_image_size_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:background="@color/size_seek_bar_background_color"
+                android:maxHeight="300sp"
+                android:visibility="gone"
+                app:progressBackgroundColor="#000"
+                app:progressColor="#01579B"
+                app:thumbAlpha="1.0"
+                app:thumbColor="#FF4444" />
+
+            <!--TODO: background for the image should be a vector image to represent the transparency and stop the confusion-->
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/activity_edit_image_move_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/view_horizontal"
+            android:layout_toRightOf="@id/view_horizontal"
+            android:background="@color/detailed_sticker_fragment_background"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="20dp"
+            android:text="@string/move" />
+
+        <Button
+            android:id="@+id/activity_edit_image_tilt_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/activity_edit_image_move_button"
+            android:layout_toEndOf="@id/view_horizontal"
+            android:layout_toRightOf="@id/view_horizontal"
+            android:background="@color/icon_sticker_list_background"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="20dp"
+            android:text="@string/tilt" />
+
+        <Button
+            android:id="@+id/activity_edit_image_size_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/activity_edit_image_tilt_button"
+            android:layout_toEndOf="@id/view_horizontal"
+            android:layout_toRightOf="@id/view_horizontal"
+            android:background="@color/crop__button_bar"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="20dp"
+            android:text="@string/size" />
+
     </RelativeLayout>
+
     <include layout="@layout/include_nav_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

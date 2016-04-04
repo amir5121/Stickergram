@@ -37,6 +37,7 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
         }
         this.activity = activity;
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -45,6 +46,7 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
 
     @Override
     protected Void doInBackground(Context... contexts) {
+        //TODO: the cash you save will be deleted if device runs on low storage
         try {
             String folders[] = contexts[0].getAssets().list("");
             int filesChecked = 0; // used to set percentage in the dialog
@@ -54,8 +56,10 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
                     InputStream inputStream = contexts[0].getAssets().open(folder + File.separator + file);
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     if (bitmap != null) {
-                        File thumbFile = new File(contexts[0].getCacheDir() + File.separator + "thumb_" + folder + "_" + file);
-//                            Log.e(getClass().getSimpleName(), File.separator + "thumb_" + folder + "_" + files[i]);
+
+                        // replacing webp with png and compressing as a png so on low api transparent remain transparent and doesn't turn black because they don't support webp
+                        File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + folder + "_" + file).replace(".webp", ".png"));
+
                         if (!thumbFile.getParentFile().exists())
                             if (!thumbFile.getParentFile().mkdirs())
                                 Log.e(getClass().getSimpleName(), "failed");
@@ -65,9 +69,8 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
                                 Log.e(getClass().getSimpleName(), "failed");
 
                         OutputStream outputStream = new FileOutputStream(thumbFile);
-                        ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3).compress(Bitmap.CompressFormat.WEBP, 85, outputStream);
-//                            Log.e(getClass().getSimpleName(), String.valueOf(bitmap.getWidth() / 4) + " " + String.valueOf(bitmap.getHeight() / 4));
-                        publishProgress((filesChecked++ * 100) / 219); // there are 219 sticker in the assets folder dividing bu 217 so we get 100%
+                        ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);
+                        publishProgress((filesChecked++ * 100) / 213); // there are 213 sticker in the assets folder dividing bu 217 so we get 100%
                     }
                 }
             }

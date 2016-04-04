@@ -2,27 +2,41 @@ package com.amir.telegramstickerbuilder.infrastructure;
 
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.amir.telegramstickerbuilder.EditImageActivity;
+import com.amir.telegramstickerbuilder.R;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
+import com.amir.telegramstickerbuilder.sticker.pack.PackItem;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
 public class Loader {
     private static final int THUMBNAIL_IMAGE_QUALITY = 85;
+    private static final String TAG = "LOADER";
 
     public static void gainPermission(BaseActivity activity) {
         if (ContextCompat.checkSelfPermission(activity,
@@ -114,4 +128,98 @@ public class Loader {
     public static Bitmap generateThumbnail(Bitmap regionalBitmap) {
         return ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth(), regionalBitmap.getHeight());
     }
+
+    public static void loadStickerDialog(final Uri uri, final BaseActivity activity) {
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == Dialog.BUTTON_POSITIVE){
+                    Intent intent = new Intent(activity, EditImageActivity.class);
+                    intent.putExtra(BaseActivity.EDIT_IMAGE_URI, uri);
+                    //// TODO: Animation
+                    activity.startActivity(intent);
+                }
+            }
+        };
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
+
+        if (stickerImage != null) {
+            stickerImage.setImageURI(uri);
+        }
+        else Log.e("Loader", "dialog_single_item_image was null");
+
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setView(view)
+                .setTitle(activity.getString(R.string.edit_this_sticker))
+                .setNegativeButton(activity.getString(R.string.no), listener)
+                .setPositiveButton(activity.getString(R.string.yes), listener)
+                .create();
+
+        dialog.getWindow().getAttributes().width = ActionBar.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().getAttributes().height = ActionBar.LayoutParams.MATCH_PARENT;
+
+        dialog.show();
+    }
+    public static void loadStickerDialog(final PackItem item, final BaseActivity activity) {
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == Dialog.BUTTON_POSITIVE){
+                    Intent intent = new Intent(activity, EditImageActivity.class);
+                    intent.putExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET, item.getDirInAsset());
+                    //// TODO: Animation
+                    activity.startActivity(intent);
+                }
+            }
+        };
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
+
+        Bitmap bitmap = null;
+        try {
+            InputStream inputStream = item.getInputStream();
+            bitmap = BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (stickerImage != null)
+            stickerImage.setImageBitmap(bitmap);
+        else Log.e("Loader", "dialog_single_item_image was null");
+
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setView(view)
+                .setTitle(activity.getString(R.string.edit_this_sticker))
+                .setNegativeButton(activity.getString(R.string.no), listener)
+                .setPositiveButton(activity.getString(R.string.yes), listener)
+                .create();
+
+        dialog.show();
+    }
+
+    public static void saveBitmap(Bitmap mainBitmap) {
+        OutputStream outputStream = null;
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/amir.png");
+        try {
+            if (file.exists()) {
+                file.delete();
+                file.createNewFile();
+            } else file.createNewFile();
+            outputStream = new FileOutputStream(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (outputStream == null)
+            Log.e(TAG, "outPutStream was null");
+        else
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            mainBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+
+    }
+
+
 }

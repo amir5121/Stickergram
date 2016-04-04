@@ -10,7 +10,6 @@
         android:scaleType="fitCenter"
         android:id="@+id/item_pack_sticker_image"
         android:layout_gravity="center"
-        android:clickable="true"
         android:background="?android:selectableItemBackground"/>
 
     <ImageView

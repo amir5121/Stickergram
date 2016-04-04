@@ -18,6 +18,7 @@ public class IconPackViewHolder extends RecyclerView.ViewHolder {
 
     public void populate(PackItem item) {
         itemView.setTag(item);
+        //todo: what if thumbnails were deleted
         iconImageView.setImageBitmap(item.getThumbnail());
     }
 }

@@ -14,4 +14,7 @@
     <color name="no_user_sticker_founded">#c9be35f9</color>
     <color name="no_user_sticker_founded_text">#11f1f2</color>
     <color name="selected_item_foreground">#ae0648ff</color>
+    <color name="size_seek_bar_background_color">#8f001248</color>
+    <color name="size_seek_bar_progress_color">#283593</color>
+    <color name="size_seek_bar_thumb_color">#01579B</color>
 </resources>

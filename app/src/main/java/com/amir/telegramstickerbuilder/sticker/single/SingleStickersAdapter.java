@@ -54,8 +54,8 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
     @Override
     public void onClick(View view) {
         if (view.getTag() instanceof StickerItem) {
-            StickerItem note = (StickerItem) view.getTag();
-            listener.OnStickerClicked(note);
+            StickerItem item = (StickerItem) view.getTag();
+            listener.OnStickerClicked(item);
         }
     }
 

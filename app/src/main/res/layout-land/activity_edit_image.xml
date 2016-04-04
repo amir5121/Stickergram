@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.amir.telegramstickerbuilder.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/include_toolbar" />
+
+        <View
+            android:id="@+id/view_horizontal"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar"
+            android:layout_toLeftOf="@id/view_horizontal"
+            android:layout_toStartOf="@id/view_horizontal"
+            android:background="@color/colorPrimaryDark">
+
+            <!--TODO: background for the image should be a vector image to represent the transparency and stop the confusion-->
+
+            <RelativeLayout
+                android:id="@+id/activity_edit_image_images_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar"
+            android:layout_toEndOf="@id/view_horizontal"
+            android:layout_toRightOf="@id/view_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/activity_edit_image_text_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/crop__button_bar"
+                android:text="@string/text" />
+
+            <Button
+                android:id="@+id/activity_edit_image_font_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/icon_sticker_list_background"
+                android:text="@string/font" />
+
+
+            <Button
+                android:id="@+id/activity_edit_image_style_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/detailed_sticker_fragment_background"
+                android:text="@string/style" />
+
+            <Button
+                android:id="@+id/activity_edit_image_size_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/crop__button_bar"
+                android:text="@string/size" />
+
+            <Button
+                android:id="@+id/activity_edit_image_tilt_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/icon_sticker_list_background"
+                android:text="@string/tilt" />
+
+
+            <Button
+                android:id="@+id/activity_edit_image_move_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/detailed_sticker_fragment_background"
+                android:text="@string/move" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/include_nav_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+
+import com.amir.telegramstickerbuilder.base.BaseActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,34 +24,35 @@ public class PackItem {
     public PackItem(Context context, String folder, String name) {
         this.context = context;
         this.folder = folder;
-        this.name = name + ".webp";
-        thumbnail = BitmapFactory.decodeFile(context.getCacheDir() + File.separator + "thumb_" + folder + "_" + name + ".webp");
+        this.name = name + ".png";
+        thumbnail = BitmapFactory.decodeFile(BaseActivity.BASE_THUMBNAIL_DIRECTORY + folder + "_" + this.name);
+//        Log.e(getClass().getSimpleName(), "path: "+ context.getCacheDir() + File.separator + "thumb_" + folder + "_" + this.name);
+        //the thumbnail was made in the first load
     }
 
     public Bitmap getThumbnail() {
         return thumbnail;
     }
-//
-//    public Bitmap getItemThumbnail() {
-//        Bitmap bitmap = null;
-//        try {
-//            InputStream inputStream = context.getAssets().open(folder + File.separator + name);
-//            Log.e(getClass().getCanonicalName(), folder + File.separator + name);
-//            bitmap = BitmapFactory.decodeStream(inputStream);
-//            inputStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        int width = 100;
-//        int height = 100;
-//        if (bitmap != null) {
-//            width = bitmap.getWidth();
-//            height = bitmap.getHeight();
-//        }
-//        return ThumbnailUtils.extractThumbnail(bitmap, width, height);
-//    }
 
     public String getFolder() {
         return folder;
+    }
+
+    public InputStream getInputStream() throws IOException {
+        return context.getAssets().open((folder + File.separator + name).replace(".png", ".webp"));
+    }
+
+    public String getDirInAsset() {
+        return(folder + File.separator + name).replace(".png", ".webp");
+    }
+
+    public Bitmap getBitmap() {
+        InputStream inputStream = null;
+        try {
+            inputStream = getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return BitmapFactory.decodeStream(inputStream);
     }
 }
