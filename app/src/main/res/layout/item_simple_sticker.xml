@@ -7,19 +7,19 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="120dp"
         android:background="@color/icon_sticker_list_background">
 
         <ImageView
             android:id="@+id/simple_sticker_item_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="?android:selectableItemBackground"
             android:padding="4dp"
-            android:layout_margin="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/phone" />
+
         <!--todo: change the foreground color instead of overlaying another imageView on top-->
 
         <!--<ImageView-->

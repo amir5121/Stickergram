@@ -22,7 +22,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconViewHolder> implements
         this.listener = listener;
         this.inflater = activity.getLayoutInflater();
         try {
-            items = activity.getAssets().list("");
+            items = activity.getAssets().list("Stickers");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconViewHolder> implements
 
     @Override
     public int getItemCount() {
-        return items.length - 3;
+        return items.length ;
     }
 
     @Override

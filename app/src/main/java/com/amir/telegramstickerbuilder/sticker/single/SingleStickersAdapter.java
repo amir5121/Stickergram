@@ -68,11 +68,11 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
         return true;
     }
 
-    public void add(StickerItem item) {
-        dataSource.update(item);
-        items.add(item);
-        notifyItemInserted(items.indexOf(item));
-    }
+//    public void add(StickerItem item) {
+//        dataSource.update(item);
+//        items.add(item);
+//        notifyItemInserted(items.indexOf(item));
+//    }
 
     public void refreshPhoneSticker() {
         items = dataSource.getAllPhoneStickers();

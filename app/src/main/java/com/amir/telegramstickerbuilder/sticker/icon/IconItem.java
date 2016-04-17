@@ -26,7 +26,7 @@ public class IconItem {
     public Bitmap getBitmapIcon() {
         Bitmap bitmap = null;
         try {
-            InputStream inputStream = context.getAssets().open(folder + File.separator + "8.webp");
+            InputStream inputStream = context.getAssets().open("Stickers/" + folder + File.separator + "8.webp");
             bitmap = BitmapFactory.decodeStream(inputStream);
             bitmap = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3);
             inputStream.close();

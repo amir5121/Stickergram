@@ -69,7 +69,7 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
 //        InputStream inputStream;
         try {
             AssetManager assets = fragment.getActivity().getAssets();
-            String files[] = assets.list(folder);
+            String files[] = assets.list("Stickers/" + folder);
             for (String file : files) {
 //                inputStream = assets.open(folder + File.separator + file);
 //                items.add(Drawable.createFromStream(inputStream, null));

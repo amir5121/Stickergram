@@ -37,7 +37,7 @@ public class TemplateStickersActivity extends BaseActivity implements IconListFr
     }
 
     @Override
-    public void OnIconSelectedListener(IconItem item) {
+    public void OnIconSelected(IconItem item) {
         folder = item.getFolder(); //is used to hold the state
         //what happening here is the same as saveState
         instantiateFragment(item.getFolder());

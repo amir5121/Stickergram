@@ -23,7 +23,7 @@ import com.amir.telegramstickerbuilder.sticker.single.StickerItem;
 
 import java.io.File;
 
-public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener{
+public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener {
     public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
     private static final String IS_REFRESHING = "IS_REFRESHING";
     private static final int THUMBNAIL_IMAGE_QUALITY = 85;
@@ -123,8 +123,12 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void onTaskFinishedListener() {
-        if (dialog != null)
-            dialog.hide();
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+            Log.e(getClass().getSimpleName(), "taskFinished set the dialog to null");
+        }
+
         if (swipeRefresh != null)
             swipeRefresh.setRefreshing(false);
         setPhoneStickerCashStatus(true);
@@ -151,7 +155,12 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     }
 
     private void instantiateLoadingDialog() {
-        loadingDialogView = getLayoutInflater().inflate(R.layout.dialog_phone_stickers_loading, null);
+        loadingDialogView = getLayoutInflater().inflate(R.layout.dialog_phone_stickers_loading, null, false);
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+            Log.e(getClass().getSimpleName(), "instantiateDialog dialog was set to null");
+        }
         dialog = new AlertDialog.Builder(PhoneStickersActivity.this)
                 .setView(loadingDialogView)
                 .setCancelable(false)
@@ -162,4 +171,13 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         loadingStickersCount = (TextView) loadingDialogView.findViewById(R.id.phone_loading_dialog_total_sticker);
     }
 
+    @Override
+    protected void onDestroy() {
+        if (dialog != null) {
+            Log.e(getClass().getSimpleName(), "onDestroy dialog was set to null");
+            dialog.dismiss();
+            dialog = null;
+        }
+        super.onDestroy();
+    }
 }

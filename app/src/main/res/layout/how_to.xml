@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/how_to_add_new_font"
+    android:textSize="20sp"
+    android:layout_margin="5dp"
+    android:textColor="#333"
+    android:paddingTop="20dp"
+    android:paddingStart="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingEnd="20dp"/>

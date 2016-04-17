@@ -40,11 +40,11 @@ public class IconListFragment extends BaseFragment implements IconAdapter.OnStic
 
     @Override
     public void OnIconClicked(IconItem item) {
-        ((OnIconSelectedListener) getActivity()).OnIconSelectedListener(item);
+        ((OnIconSelectedListener) getActivity()).OnIconSelected(item);
     }
 
     public interface OnIconSelectedListener {
-        void OnIconSelectedListener(IconItem item);
+        void OnIconSelected(IconItem item);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class IconListFragment extends BaseFragment implements IconAdapter.OnStic
             mCallback = (OnIconSelectedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + "Must implement OnIconSelectedListener");
+                    + "Must implement OnIconSelected");
         }
     }
 

@@ -33,7 +33,7 @@ public class DataSource {
         editor.putBoolean(item.getStickerDirectory() + BOOLEAN, item.isVisible());
         editor.putInt(item.getStickerDirectory() + INT, item.getType());
 
-        editor.apply();
+        editor.commit();
     }
 
     public boolean remove(StickerItem item) {
@@ -53,7 +53,6 @@ public class DataSource {
         }
         return false;
     }
-
 
     //** Returns all of the stickers that are saved in telegram directory (basically all of the user's stickers that telegram has cashed*//
     public List<StickerItem> getAllPhoneStickers() {

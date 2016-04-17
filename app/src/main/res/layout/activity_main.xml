@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_below="@id/include_toolbar"
-            android:background="#00266422"
+            android:background="#555"
             android:contentDescription="@string/entry_image"
             android:scaleType="centerCrop" />
 

@@ -2,7 +2,6 @@ package com.amir.telegramstickerbuilder.infrastructure;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -39,14 +38,14 @@ public class TextViewDraw {
         paint.setColor(item.getTextColor());
         textView.setTextColor(item.getTextColor());
 
-        paint.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getdX(), item.getShadow().getdY(), item.getShadow().getColor());
-        textView.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getdX(), item.getShadow().getdY(), item.getShadow().getColor());
+        paint.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getDx(), item.getShadow().getDy(), item.getShadow().getColor());
+        textView.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getDx(), item.getShadow().getDy(), item.getShadow().getColor());
 
 //        paint.setAlpha(item.getAlpha());
 //        textView.setAlpha(item.getAlpha());
 
-        paint.setTypeface(item.getFont());
-        textView.setTypeface(item.getFont());
+        paint.setTypeface(item.getFont().getTypeface());
+        textView.setTypeface(item.getFont().getTypeface());
 
         float heightScale = (float) bitmap.getHeight() / relativeLayout.getHeight();
         float widthScale = (float) bitmap.getWidth() / relativeLayout.getWidth();

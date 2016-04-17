@@ -33,11 +33,11 @@ public class Shadow {
         return color;
     }
 
-    public int getdX() {
+    public int getDx() {
         return dX;
     }
 
-    public int getdY() {
+    public int getDy() {
         return dY;
     }
 

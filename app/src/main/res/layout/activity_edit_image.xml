@@ -7,9 +7,11 @@
     android:layout_height="match_parent"
     tools:context="com.amir.telegramstickerbuilder.MainActivity">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <include
@@ -28,16 +30,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@id/view_horizontal"
-            android:layout_toStartOf="@id/view_horizontal"
             android:background="@color/detailed_sticker_fragment_background"
             android:foreground="?android:selectableItemBackground"
-            android:padding="20dp"
             android:text="@string/style" />
 
 
         <Button
-            android:id="@+id/activity_edit_image_font_button"
+            android:id="@+id/include_buttons_font_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,15 +46,15 @@
             android:background="@color/icon_sticker_list_background"
             android:foreground="?android:selectableItemBackground"
             android:padding="20dp"
-            android:text="@string/font" />
+            android:text="@string/fontItem" />
 
 
         <Button
-            android:id="@+id/activity_edit_image_text_button"
+            android:id="@+id/include_buttons_text_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/activity_edit_image_font_button"
+            android:layout_above="@id/include_buttons_font_button"
             android:layout_toLeftOf="@id/view_horizontal"
             android:layout_toStartOf="@id/view_horizontal"
             android:background="@color/crop__button_bar"
@@ -64,59 +63,86 @@
             android:text="@string/text" />
 
         <RelativeLayout
-            android:id="@+id/activity_edit_image_main_container"
+            android:id="@+id/activity_edit_image_main_image_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/activity_edit_image_text_button"
+            android:layout_height="match_parent"
             android:layout_below="@id/include_toolbar"
-            android:background="@color/colorPrimary">
+            android:layout_above="@id/include_buttons_text_button"
+            android:layout_centerInParent="true">
 
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/activity_edit_image_images_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="#fff">
-                <!--this is the container don't delete it-->
-            </RelativeLayout>
+                android:background="#999fff">
+                <!--this is the imageContainer for the images don't delete it-->
+            </FrameLayout>
 
-            <app.minimize.com.seek_bar_compat.SeekBarCompat
-                android:id="@+id/activity_edit_image_size_seek_bar"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:background="@color/size_seek_bar_background_color"
-                android:maxHeight="300sp"
-                android:visibility="gone"
-                app:progressBackgroundColor="#000"
-                app:progressColor="#01579B"
-                app:thumbAlpha="1.0"
-                app:thumbColor="#FF4444" />
-
+            <!--TODO: if the image is taller than it is wide set it's height to match_parent other -->
             <!--TODO: background for the image should be a vector image to represent the transparency and stop the confusion-->
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/activity_edit_image_move_button"
-            style="?android:attr/borderlessButtonStyle"
+
+        <LinearLayout
+            android:id="@+id/activity_edit_image_move_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/view_horizontal"
-            android:layout_toRightOf="@id/view_horizontal"
-            android:background="@color/detailed_sticker_fragment_background"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="20dp"
-            android:text="@string/move" />
+            android:layout_above="@id/include_buttons_text_button"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_up_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/move_button_background"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_up_arrow" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_down_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/move_button_background"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_down_arrow"
+                android:text="@string/move" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_left_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/move_button_background"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_left_arrow"
+                android:text="@string/move" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_right_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_right_arrow"
+                android:background="@color/move_button_background"
+                android:foreground="?android:selectableItemBackground"
+                android:text="@string/move" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/activity_edit_image_tilt_button"
+            android:id="@+id/include_buttons_tilt_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/activity_edit_image_move_button"
+            android:layout_above="@id/activity_edit_image_style_button"
             android:layout_toEndOf="@id/view_horizontal"
             android:layout_toRightOf="@id/view_horizontal"
             android:background="@color/icon_sticker_list_background"
@@ -125,17 +151,55 @@
             android:text="@string/tilt" />
 
         <Button
-            android:id="@+id/activity_edit_image_size_button"
+            android:id="@+id/include_buttons_size_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/activity_edit_image_tilt_button"
+            android:layout_above="@id/include_buttons_tilt_button"
             android:layout_toEndOf="@id/view_horizontal"
             android:layout_toRightOf="@id/view_horizontal"
             android:background="@color/crop__button_bar"
             android:foreground="?android:selectableItemBackground"
             android:padding="20dp"
             android:text="@string/size" />
+
+
+        <app.minimize.com.seek_bar_compat.SeekBarCompat
+            android:id="@+id/activity_edit_image_size_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_above="@id/include_buttons_text_button"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="55dp"
+            android:background="@color/size_seek_bar_background_color"
+            android:maxHeight="60sp"
+            android:visibility="gone"
+            app:progressBackgroundColor="#000"
+            app:progressColor="#01579B"
+            app:thumbAlpha="1.0"
+            app:thumbColor="#FF4444" />
+
+        <app.minimize.com.seek_bar_compat.SeekBarCompat
+            android:id="@+id/activity_edit_image_tilt_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_above="@id/include_buttons_text_button"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="55dp"
+            android:background="#5542A5F5"
+            android:max="360"
+            android:visibility="gone"
+            android:maxHeight="60sp"
+            app:progressBackgroundColor="#555"
+            app:progressColor="#311B92"
+            app:thumbAlpha="1.0"
+            app:thumbColor="#1A237E" />
 
     </RelativeLayout>
 

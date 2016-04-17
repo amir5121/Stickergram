@@ -30,7 +30,7 @@ public class TextProcess {
 
 //    public Bitmap getTextBitmap() {
 //        TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-//        textPaint.setShadowLayer(textItem.getShadow().getRadius(), textItem.getShadow().getdX(), textItem.getShadow().getdY(), textItem.getShadow().getColor());
+//        textPaint.setShadowLayer(textItem.getShadow().getRadius(), textItem.getShadow().getDx(), textItem.getShadow().getDy(), textItem.getShadow().getColor());
 //        textPaint.setTextSize(textItem.getSize());
 //        textPaint.setAlpha(textItem.getAlpha());
 //        textPaint.setTypeface(textItem.getFont());
@@ -116,12 +116,12 @@ public class TextProcess {
     }
 
 
-//    public static Bitmap bitmapOverBitmap(Bitmap mainBitmap, Bitmap textBitmap, Position position, Context context) {
+//    public static Bitmap bitmapOverBitmap(Bitmap textLayer, Bitmap textBitmap, Position position, Context context) {
 //        float scale = context.getResources().getDisplayMetrics().density;
-//        mainBitmap = mainBitmap.copy(Bitmap.Config.ARGB_8888, true);
-//        Canvas canvas = new Canvas(mainBitmap);
+//        textLayer = textLayer.copy(Bitmap.Config.ARGB_8888, true);
+//        Canvas canvas = new Canvas(textLayer);
 //        canvas.drawBitmap(textBitmap, position.getTop() * scale, position.getLeft() * scale, new Paint());
-//        return mainBitmap;
+//        return textLayer;
 //    }
 
 //    public static Bitmap drawText(String text, int textWidth, int textSize) {
@@ -207,11 +207,11 @@ public class TextProcess {
 //
 //        textView.setTextSize(item.getSize());
 //
-//        textView.setRotation(item.getRotation());
+//        textView.setTilt(item.getTilt());
 //
 //        textView.setAlpha(item.getAlpha());
 //
-//        textView.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getdX(), item.getShadow().getdY(), item.getShadow().getColor());
+//        textView.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getDx(), item.getShadow().getDy(), item.getShadow().getColor());
 //
 ////        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
 ////            textView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -224,7 +224,7 @@ public class TextProcess {
 //        float scale = context.getResources().getDisplayMetrics().density;
 //
 //        TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-//        textPaint.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getdX(), item.getShadow().getdY(), item.getShadow().getColor());
+//        textPaint.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getDx(), item.getShadow().getDy(), item.getShadow().getColor());
 //        textPaint.setTextSize(item.getSize());
 //        textPaint.setAlpha(item.getAlpha());
 //        textPaint.setTypeface(item.getFont());
@@ -276,8 +276,8 @@ public class TextProcess {
 //        paint.setColor(item.getTextColor());
 ////        paint.setColor(Color.WHITE);
 ////        paint.setColor(Color.rgb(61, 61, 61));
-//        paint.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getdX(), item.getShadow().getdY(), item.getShadow().getColor());
-//        Log.e(TAG, "radius: " + item.getShadow().getRadius() + " dx: " + item.getShadow().getdX() + " dy: " + item.getShadow().getdY() + " color: " + item.getShadow().getColor());
+//        paint.setShadowLayer(item.getShadow().getRadius(), item.getShadow().getDx(), item.getShadow().getDy(), item.getShadow().getColor());
+//        Log.e(TAG, "radius: " + item.getShadow().getRadius() + " dx: " + item.getShadow().getDx() + " dy: " + item.getShadow().getDy() + " color: " + item.getShadow().getColor());
 ////        paint.setShadowLayer(2, 5, 5, Color.parseColor("#c9be35f9"));
 //        Log.e(TAG, "color: " + Color.parseColor("#c9be35f9"));
 //        paint.setAlpha(item.getAlpha());

@@ -10,7 +10,6 @@ import com.amir.telegramstickerbuilder.R;
 public class IconPackViewHolder extends RecyclerView.ViewHolder {
     ImageView iconImageView;
 
-
     public IconPackViewHolder(View itemView) {
         super(itemView);
         iconImageView = (ImageView) itemView.findViewById(R.id.item_pack_sticker_image);

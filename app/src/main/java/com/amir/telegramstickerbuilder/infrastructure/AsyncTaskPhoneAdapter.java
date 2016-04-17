@@ -1,5 +1,6 @@
 package com.amir.telegramstickerbuilder.infrastructure;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,7 +13,7 @@ import com.amir.telegramstickerbuilder.sticker.single.StickerItem;
 import java.io.File;
 
 public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Integer, Void> {
-    BaseActivity activity;
+    Context context;
     AsyncPhoneTaskListener listener;
     String baseThumbDir;
     int percent;
@@ -30,44 +31,61 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
             throw new ClassCastException(activity.toString()
                     + "Must implement AsyncPhoneTaskListener");
         }
-        baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_";//todo: use externalCashDirectory
-        this.activity = activity;
+        if (activity.getExternalCacheDir() != null)
+            baseThumbDir = activity.getExternalCacheDir().getAbsolutePath() + File.separator + "phone_";
+        else baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_";
+        //todo: use externalCashDirectory
+        this.context = activity;
     }
 
     @Override
     protected void onPreExecute() {
 //        super.onPreExecute();
+        Log.e(getClass().getSimpleName(), "PreExe called");
         listener.onTaskStartListener();
     }
 
     @Override
-    protected Void doInBackground(SingleStickersAdapter... params) {
+    protected synchronized Void doInBackground(SingleStickersAdapter... params) {
         //Todo: what happen if the directory doesn't exist
         File folder = new File(PhoneStickersActivity.PHONE_STICKERS_DIRECTORY);
-        if (!folder.exists()){
-            Toast.makeText(activity, PhoneStickersActivity.PHONE_STICKERS_DIRECTORY, Toast.LENGTH_LONG).show();
+        if (!folder.exists()) {
+            Toast.makeText(context, PhoneStickersActivity.PHONE_STICKERS_DIRECTORY, Toast.LENGTH_LONG).show();
             return null;
         }
+        int temp = 0;
+        percent = 0;
         File files[] = folder.listFiles();
         int length = files.length;
         String thumbDirectory;
         DataSource dataSource = params[0].getDataSource();
 
-        for (int i = 0; i < length; i++) {
-            String name = files[i].getName();
-            if (!dataSource.contain(files[i].getAbsolutePath()))//TODO: what if the file was deleted from the memory and it's address was still in the sharedPreferences
-                if (name.contains(".webp") && name.charAt(1) == '_') {
+        System.gc();
+        int i = 0;
+        for (File file : files) {
+            i++;
+            String name = file.getName();
+//            Log.e(getClass().getSimpleName(), name);
+            //TODO: what if the file was deleted from the memory and it's address was still in the sharedPreferences
+            //TODO: add all the directories to a new set and update the old one also write an updateSet method so you don't have any redundant sticker that doesn't exist
+//            Log.e(getClass().getSimpleName(), name);
+            if (!dataSource.contain(file.getAbsolutePath()))
+                if (name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp")) {
                     thumbDirectory = baseThumbDir + name;
                     dataSource.update(new StickerItem(
-                            files[i].getAbsolutePath(),
-                            Loader.generateThumbnail(files[i].getAbsolutePath(), thumbDirectory),
+                            file.getAbsolutePath(),
+                            Loader.generateThumbnail(file.getAbsolutePath(), thumbDirectory),
                             StickerItem.IN_PHONE,
                             false,
                             true));
                     foundedStickersCount++;
                 }
             percent = (100 * i) / length;
-            publishProgress(percent, foundedStickersCount);
+            if (temp == percent) {
+                Log.e(getClass().getSimpleName(), "Called " + percent);
+                temp++;
+                publishProgress(percent, foundedStickersCount);
+            }
         }
 
         if (foundedStickersCount == 0)
@@ -78,18 +96,19 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-        if (activity != null)
+        if (context != null)
+//            Log.e(getClass().getSimpleName(), "was updated");
             listener.onTaskUpdateListener(values[0], values[1]);
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        if (activity != null)
+        if (context != null)
             listener.onTaskFinishedListener();
     }
 
     public void detach() {
-        activity = null;
+        context = null;
     }
 
     public interface AsyncPhoneTaskListener {

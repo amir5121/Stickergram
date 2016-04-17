@@ -23,7 +23,7 @@ public class PackItem {
 
     public PackItem(Context context, String folder, String name) {
         this.context = context;
-        this.folder = folder;
+        this.folder ="Stickers/" + folder;
         this.name = name + ".png";
         thumbnail = BitmapFactory.decodeFile(BaseActivity.BASE_THUMBNAIL_DIRECTORY + folder + "_" + this.name);
 //        Log.e(getClass().getSimpleName(), "path: "+ context.getCacheDir() + File.separator + "thumb_" + folder + "_" + this.name);
@@ -39,11 +39,11 @@ public class PackItem {
     }
 
     public InputStream getInputStream() throws IOException {
-        return context.getAssets().open((folder + File.separator + name).replace(".png", ".webp"));
+        return context.getAssets().open(( folder + File.separator + name).replace(".png", ".webp"));
     }
 
     public String getDirInAsset() {
-        return(folder + File.separator + name).replace(".png", ".webp");
+        return (folder + File.separator + name).replace(".png", ".webp");
     }
 
     public Bitmap getBitmap() {

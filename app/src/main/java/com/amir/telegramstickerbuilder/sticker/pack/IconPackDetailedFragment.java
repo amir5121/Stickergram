@@ -36,7 +36,7 @@ public class IconPackDetailedFragment extends BaseFragment implements IconPackAd
         view = inflater.inflate(R.layout.fragment_icon_detailed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.template_sticker_icon_detailed_list);
 
-        refresh(folder); // this guy set the adapter
+        refresh(folder); // this guy sets the adapter
         return view;
     }
 

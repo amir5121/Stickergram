@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
+    private static final String STICKERS = "Stickers";
     AsyncFirstTaskListener listener;
     BaseActivity activity;
 
@@ -48,12 +49,12 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
     protected Void doInBackground(Context... contexts) {
         //TODO: the cash you save will be deleted if device runs on low storage
         try {
-            String folders[] = contexts[0].getAssets().list("");
-            int filesChecked = 0; // used to set percentage in the dialog
+            String folders[] = contexts[0].getAssets().list(STICKERS);
+            int filesChecked = 0; // used to set percentage// in the dialog
             for (String folder : folders) {
-                String files[] = contexts[0].getAssets().list(folder);
+                String files[] = contexts[0].getAssets().list(STICKERS + File.separator + folder);
                 for (String file : files) {
-                    InputStream inputStream = contexts[0].getAssets().open(folder + File.separator + file);
+                    InputStream inputStream = contexts[0].getAssets().open(STICKERS + File.separator + folder + File.separator + file);
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     if (bitmap != null) {
 
@@ -66,7 +67,7 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
 
                         if (!thumbFile.exists())
                             if (!thumbFile.createNewFile())
-                                Log.e(getClass().getSimpleName(), "failed");
+                                Log.e(getClass().getSimpleName(), "File creation was failed");
 
                         OutputStream outputStream = new FileOutputStream(thumbFile);
                         ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);

@@ -29,7 +29,9 @@ public class AsyncTaskUserAdapter extends AsyncTask<SingleStickersAdapter, Integ
             throw new ClassCastException(activity.toString()
                     + "Must implement AsyncPhoneTaskListener");
         }
-        baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "user";
+        if (activity.getExternalCacheDir() != null)
+            baseThumbDir = activity.getExternalCacheDir().getAbsolutePath() + File.separator + "user";
+        else baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "user";
         this.activity = activity;
     }
 

@@ -64,6 +64,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         if (isInLandscape)
             topImage.setVisibility(View.GONE);
+
+//        for (int i = 1575; i < 2000; i++){
+//            System.out.print((char) i );
+//            System.out.println(" " + i);
+//        }
+//        Log.e(getClass().getSimpleName(), String.valueOf(Loader.isPersian("amir")));
+//        Log.e(getClass().getSimpleName(), String.valueOf(Loader.isPersian("یب یسشب یبش یب سش")));
+//        Log.e(getClass().getSimpleName(), String.valueOf(Loader.isPersian("354")));
+//        Log.e(getClass().getSimpleName(), String.valueOf(Loader.isPersian("")));
+//        Log.e(getClass().getSimpleName(), String.valueOf(Loader.isPersian("پ")));
+//        System.out.println((int)'گ');
+//        System.out.println((int)'چ');
+//        System.out.println((int)'ژ');
+
+
     }
 
     @Override
@@ -91,7 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else if (itemId == R.id.activity_main_template_stickers) {
             Loader.gainPermission(this);
             if (Loader.checkPermission(this)) {
-                    startActivity(new Intent(this, TemplateStickersActivity.class));
+                startActivity(new Intent(this, TemplateStickersActivity.class));
             } else {
                 Toast.makeText(this, getResources().getString(R.string.need_permission), Toast.LENGTH_LONG).show();
             }

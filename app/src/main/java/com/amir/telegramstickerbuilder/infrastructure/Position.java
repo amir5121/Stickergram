@@ -40,4 +40,12 @@ public class Position {
         else
             return myView.getTop() + getRelativeTop((View) myView.getParent());
     }
+
+    public void setTop(float top) {
+        this.top = top;
+    }
+
+    public void setLeft(float left) {
+        this.left = left;
+    }
 }

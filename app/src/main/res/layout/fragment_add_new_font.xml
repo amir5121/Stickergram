@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:id="@+id/add_new_font_fragment_add_font_button"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_toLeftOf="@id/view_vertical"
+        android:layout_toStartOf="@id/view_vertical"
+        android:padding="5dp"
+        android:src="@drawable/ic_add_font" />
+
+    <ImageButton
+        android:id="@+id/add_new_font_fragment_how_to"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_toEndOf="@id/view_vertical"
+        android:layout_toRightOf="@id/view_vertical"
+        android:padding="5dp"
+        android:src="@drawable/ic_how_to" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/add_new_font_fragment_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/add_new_font_fragment_add_font_button"
+        android:layout_marginBottom="40dp"
+        android:scrollbars="vertical" />
+
+
+    <FrameLayout
+        android:id="@+id/add_new_font_fragment_loading_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/loadingFrame">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</RelativeLayout>
