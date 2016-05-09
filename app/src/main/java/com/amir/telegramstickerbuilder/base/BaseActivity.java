@@ -3,6 +3,7 @@ package com.amir.telegramstickerbuilder.base;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +20,13 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     private static final String HAS_CASHED_PHONE_STICKERS = "HAS_CASHED_PHONE_STICKERS";
     public static final String EDIT_IMAGE_URI = "EDIT_IMAGE_URI";
     public static final String EDIT_IMAGE_DIR_IN_ASSET = "EDIT_IMAGE_DIR_IN_ASSET";
+    public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    public static String STICKER_CASH_DIR;
+    public static String FONT_DIRECTORY;
     public static String BASE_THUMBNAIL_DIRECTORY;
+    public static String USER_STICKERS_DIRECTORY;
+    public static String STICKERGRAM = "/Stickergram";
+    public static boolean isPaid;
 
     private SharedPreferences preferences;
 
@@ -39,8 +46,12 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         isTablet = (metrics.widthPixels / metrics.density) >= 600;
         isInLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-        BASE_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_";
+        BASE_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_Stickers";
+        USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
+        FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
+        STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
         preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
+        isPaid  = false;
     }
 
     @Override

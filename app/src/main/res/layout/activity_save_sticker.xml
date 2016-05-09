@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include_toolbar"
+        layout="@layout/include_toolbar" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/choose_the_package_to_save_in"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <fragment
+        android:id="@+id/activity_save_sticker_user_stickers_fragment"
+        android:name="com.amir.telegramstickerbuilder.sticker.icon.UserIconListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_icon_list" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lighter_blue"
+        android:textColor="#eee"
+        android:padding="5dp"
+        android:text="@string/every_sticker_must_be_saved_in_a_package_you_have_the_choice_os_choosing_an_existing_pack_or_creating_a_new_one"
+        android:gravity="center"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/activity_save_sticker_create_new_pack"
+        style="@style/EditActivityButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_blue"
+        android:text="@string/create_new_package"
+        android:textColor="#fff" />
+
+</LinearLayout>

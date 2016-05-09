@@ -14,11 +14,10 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewGroupCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -32,10 +31,10 @@ import com.amir.telegramstickerbuilder.EditImageActivity;
 import com.amir.telegramstickerbuilder.R;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
 import com.amir.telegramstickerbuilder.sticker.pack.PackItem;
-import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.pavelsikun.vintagechroma.ChromaDialog;
+import com.pavelsikun.vintagechroma.IndicatorMode;
+import com.pavelsikun.vintagechroma.OnColorSelectedListener;
+import com.pavelsikun.vintagechroma.colormode.ColorMode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,6 +53,8 @@ public class Loader {
 
     public static final int TEXT_COLOR = 0;
     public static final int TEXT_SHADOW_COLOR = 1;
+    public static final int TEXT_BACKGROUND_COLOR = 2;
+    public static final int TEXT_STROKE_COLOR = 3;
 
     public static void gainPermission(BaseActivity activity) {
         if (
@@ -122,7 +123,7 @@ public class Loader {
 
     public static String generateThumbnail(String fromDirectory, String toDirectory) {
         Bitmap regionalBitmap = BitmapFactory.decodeFile(fromDirectory);
-        Bitmap bitmap = ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth() / 3, regionalBitmap.getHeight() / 3);
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth() / 4, regionalBitmap.getHeight() / 4);
         FileOutputStream outStream = null;
 
         try {
@@ -158,8 +159,9 @@ public class Loader {
                 if (which == Dialog.BUTTON_POSITIVE) {
                     Intent intent = new Intent(activity, EditImageActivity.class);
                     intent.putExtra(BaseActivity.EDIT_IMAGE_URI, uri);
-                    //// TODO: Animation
+                    // TODO: Animation
                     activity.startActivity(intent);
+                    activity.finish();
                 }
             }
         };
@@ -205,6 +207,7 @@ public class Loader {
         try {
             InputStream inputStream = item.getInputStream();
             bitmap = BitmapFactory.decodeStream(inputStream);
+            if (inputStream != null) inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -222,9 +225,9 @@ public class Loader {
         dialog.show();
     }
 
-    public static void saveBitmap(Bitmap mainBitmap) {
+    public static void saveBitmapToCache(Bitmap mainBitmap, EditImageActivity editImageActivity) {
         OutputStream outputStream = null;
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/amir.png");
+        File file = new File(BaseActivity.STICKER_CASH_DIR);
         try {
             if (file.exists()) {
                 file.delete();
@@ -239,7 +242,6 @@ public class Loader {
         else
 //                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             mainBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-
     }
 
     public static String makeACopyToFontFolder(Uri uri, BaseActivity activity) throws IOException {
@@ -326,7 +328,7 @@ public class Loader {
 
         float scale = context.getResources().getDisplayMetrics().density;
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (50 * scale));
-        params.addRule(RelativeLayout.ABOVE, R.id.activity_edit_image_buttons_container);
+        params.addRule(RelativeLayout.ABOVE, R.id.include_buttons_scroll_view);
         params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (55 * scale));
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             params.setMarginStart((int) (10 * scale));
@@ -339,41 +341,75 @@ public class Loader {
         return seekBar;
     }
 
-    public static void setColor(Context context, final TouchImageView touchImageView, final int type) {
+    public static void setColor(BaseActivity activity, final TouchImageView touchImageView, final int type) {
 
-        ColorPickerDialogBuilder
-                .with(context)
-                .setTitle(context.getString(R.string.choose_color))
-                .initialColor(
-                        (type == TEXT_COLOR) ?
-                                touchImageView.getTextItem().getTextColor() :
-                                touchImageView.getTextItem().getShadow().getColor())
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(12)
-                .setOnColorSelectedListener(new OnColorSelectedListener() {
+        int initialColor = 0;
+        if (type == TEXT_COLOR)
+            initialColor = touchImageView.getTextItem().getTextColor();
+        else if (type == TEXT_SHADOW_COLOR)
+            initialColor = touchImageView.getTextItem().getShadow().getColor();
+        else if (type == TEXT_BACKGROUND_COLOR)
+            initialColor = touchImageView.getTextItem().getBackgroundColor();
+        else if (type == TEXT_STROKE_COLOR)
+            initialColor = touchImageView.getTextItem().getTextStrokeColor();
+        else
+            Log.e(TAG, "there are no such a type");
+
+        new ChromaDialog.Builder()
+                .initialColor(initialColor)
+                .colorMode(ColorMode.ARGB)
+                .indicatorMode(IndicatorMode.DECIMAL)
+                .onColorSelected(new OnColorSelectedListener() {
                     @Override
-                    public void onColorSelected(int selectedColor) {
-//                        toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
-                    }
-                })
-                .setPositiveButton("ok", new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                        changeBackgroundColor(selectedColor);
+                    public void onColorSelected(@ColorInt int color) {
                         if (type == TEXT_COLOR)
-                            touchImageView.getTextItem().setTextColor(selectedColor);
-                        else
-                            touchImageView.getTextItem().getShadow().setColor(selectedColor);
+                            touchImageView.getTextItem().setTextColor(color);
+                        else if (type == TEXT_SHADOW_COLOR)
+                            touchImageView.getTextItem().getShadow().setColor(color);
+                        else if (type == TEXT_BACKGROUND_COLOR)
+                            touchImageView.getTextItem().setBackgroundColor(color);
+                        else if (type == TEXT_STROKE_COLOR)
+                            touchImageView.getTextItem().setTextStrokeColor(color);
                         touchImageView.updateTextView();
+
                     }
                 })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .build()
-                .show();
+                .create()
+                .show(activity.getSupportFragmentManager(), "ChromaDialog");
+//        ColorPickerDialogBuilder
+//                .with(context)
+//                .setTitle(context.getString(R.string.choose_color))
+//                .initialColor(initialColor)
+//                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+//                .density(12)
+//                .setOnColorSelectedListener(new OnColorSelectedListener() {
+//                    @Override
+//                    public void onColorSelected(int selectedColor) {
+////                        toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+//                    }
+//                })
+//                .setPositiveButton(context.getString(R.string.ok), new ColorPickerClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+////                        changeBackgroundColor(selectedColor);
+//                        if (type == TEXT_COLOR)
+//                            touchImageView.getTextItem().setTextColor(selectedColor);
+//                        else if (type == TEXT_SHADOW_COLOR)
+//                            touchImageView.getTextItem().getShadow().setColor(selectedColor);
+//                        else if (type == TEXT_BACKGROUND_COLOR)
+//                            touchImageView.getTextItem().setBackgroundColor(selectedColor);
+//                        else if (type == TEXT_STROKE_COLOR)
+//                            touchImageView.getTextItem().setTextStrokeColor(selectedColor);
+//                        touchImageView.updateTextView();
+//                    }
+//                })
+//                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                    }
+//                })
+//                .build()
+//                .show();
     }
 
     public static boolean isPersian(String string) {
@@ -383,5 +419,18 @@ public class Loader {
                 return true;
         }
         return false;
+    }
+
+
+    public static boolean isTelegramInstalled(Context context) {
+        String packageName = BaseActivity.TELEGRAM_PACKAGE;
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+//            }
+        }
     }
 }

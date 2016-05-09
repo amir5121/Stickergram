@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Telegram Sticker Builder</string>
+    <string name="app_name">Stickergram</string>
     <string name="home">Home</string>
     <string name="exit">Exit</string>
     <string name="entry_image">Entry Image</string>
@@ -12,11 +12,11 @@
     <string name="first_load">Preparing for the first load!</string>
     <string name="stickers_so_far">Sticker were found so far</string>
     <string name="you_haven_t_build_any_sticker">You haven\'t build any Sticker :(</string>
-    <string name="choose_an_image">Choose an image to start working with</string>
+    <string name="choose_an_image">Choose an image </string>
     <string name="could_not_make_file">Could not make the file</string>
     <string name="edit_this_sticker">Do you want to edit this Sticker?</string>
     <string name="yes">Yes</string>
-    <string name="no">No!</string>
+    <string name="no">No</string>
     <string name="text">Text</string>
     <string name="style">Style</string>
     <string name="fontItem">Font</string>
@@ -41,9 +41,35 @@
     <string name="couldn_t_add_the_font">Couldn\'t add the font!</string>
     <string name="text_color">Text Color</string>
     <string name="choose_color">Choose color</string>
-    <string name="shadow_color">Shadow Color</string>
+    <string name="shadow_color">Color</string>
     <string name="shadow_radius">Radius</string>
     <string name="shadow_dx">dx</string>
     <string name="shadow_dy">dy</string>
     <string name="shadow">Shadow:</string>
+    <string name="text_background">Text Background</string>
+    <string name="stroke_color">Stroke Color</string>
+    <string name="stroke_width">Stroke Width</string>
+    <string name="telegram_sticker">Telegram Stickers</string>
+    <string name="sticker_from_picture">Sticker from Picture</string>
+    <string name="choose_the_package_to_save_in">Choose the package to save in</string>
+    <string name="create_new_package">Create new Package</string>
+    <string name="stickergram">Stickergram</string>
+    <string name="made">Made with</string>
+    <string name="press_back_button_again" >Tap back button in order to exit</string>
+    <string name="package_name">Package name</string>
+    <string name="Folder">Folder</string>
+    <string name="every_sticker_must_be_in_a_pack">Every Sticker must be saved in a package</string>
+    <string name="every_sticker_must_be_saved_in_a_package_you_have_the_choice_os_choosing_an_existing_pack_or_creating_a_new_one">Every Sticker must be saved in a package. You can either choose an existing pack or create a new package</string>
+    <string name="by_hitting_done_your_sticker_will_be_saved_to_the_newly_created_package">By hitting Done your sticker will be saved to the newly created package</string>
+    <string name="are_you_sure_you_are_finished_editing_this_sticker">Are you sure You are finished editing this Sticker?</string>
+    <string name="upgrade_to_pro_to_delete_this_lable">Upgrade to pro to delete this lable</string>
+    <string name="couldn_t_find_telegram_cash_directory">Couldn\'t find Telegram cache directory. Is Telegram installed?</string>
+    <string name="telegram_has_not_cashed_any_stickers">Telegram has not cashed any Stickers \nSwipe down to refresh</string>
+    <string name="delete">Delete</string>
+    <string name="do_you_want_to_delete_this_sticker">Do you want to delete this Sticker?</string>
+    <string name="telegram_is_not_installed">Telegram is not installed, you cant create sticker</string>
+    <string name="do_you_want_to_send_this_sticker">Send this Sticker</string>
+    <string name="note_in_order_to_use_any_of_these_sticker_in_telegram_you_must_create_your_sticker_pack_and_add_these_stickers_to_the_pack">Note: In order to use any of these sticker in telegram you must create your sticker pack and add these Stickers to the pack</string>
+    <string name="for_more_info_press_on_how_to_button">For more info press on \'How to\' button</string>
+    <string name="how_to">How to</string>
 </resources>

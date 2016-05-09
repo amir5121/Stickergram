@@ -10,7 +10,9 @@
         android:scaleType="fitCenter"
         android:id="@+id/item_pack_sticker_image"
         android:layout_gravity="center"
-        android:background="?android:selectableItemBackground"/>
+        android:padding="5dp"
+        android:background="@drawable/sticker_item_background"
+        android:foreground="?android:selectableItemBackground"/>
 
     <ImageView
         android:layout_width="match_parent"

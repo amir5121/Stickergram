@@ -1,6 +1,7 @@
 package com.amir.telegramstickerbuilder.sticker.single;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
     private final OnStickerClickListener listener;
     private final LayoutInflater inflater;
 
-    public List<StickerItem> items;
+    private List<StickerItem> items;
     private DataSource dataSource;
 
 
@@ -76,12 +77,20 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
 
     public void refreshPhoneSticker() {
         items = dataSource.getAllPhoneStickers();
+//        if (items.size() > 0)
+        Log.e(getClass().getSimpleName(), "size: " + items.size());
         notifyItemRangeChanged(0, items.size());
+        notifyDataSetChanged();
     }
 
     public void refreshUserSticker() {
         items = dataSource.getAllUserStickers();
-        notifyItemRangeChanged(0, items.size());
+        if (items.size() > 0)
+            notifyItemRangeChanged(0, items.size());
+    }
+
+    public List<StickerItem> getItems() {
+        return items;
     }
 
     public interface OnStickerClickListener {

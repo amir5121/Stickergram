@@ -44,6 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         setNavDrawer(new MainNavDrawer(this));
 
+        //todo: let the user to choose an empty bitmap choosing the aspect ratio
+
         userStickersButton = findViewById(R.id.activity_main_user_stickers_button);
         phoneStickersButton = findViewById(R.id.activity_main_phone_stickers);
         templateStickerButton = findViewById(R.id.activity_main_template_stickers);
@@ -55,14 +57,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             callAsyncTaskPhoneAdapter();
         }
 
-        if (userStickersButton != null && phoneStickersButton != null && templateStickerButton != null && scratchButton != null) {
+        if (userStickersButton != null &&
+                phoneStickersButton != null &&
+                templateStickerButton != null &&
+                scratchButton != null &&
+                topImage != null) {
             userStickersButton.setOnClickListener(this);
             phoneStickersButton.setOnClickListener(this);
             templateStickerButton.setOnClickListener(this);
             scratchButton.setOnClickListener(this);
+            topImage.setOnClickListener(this);
         }
 
-        if (isInLandscape)
+        if (isInLandscape && topImage != null)
             topImage.setVisibility(View.GONE);
 
 //        for (int i = 1575; i < 2000; i++){
@@ -95,7 +102,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         if (itemId == R.id.activity_main_user_stickers_button) {
             //todo: Gain permission
-            startActivity(new Intent(this, UserStickersActivity.class));
+            Loader.gainPermission(this);
+            if (Loader.checkPermission(this)) {
+                startActivity(new Intent(this, UserStickersActivity.class));
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.need_permission), Toast.LENGTH_LONG).show();
+            }
         } else if (itemId == R.id.activity_main_phone_stickers) {
             Loader.gainPermission(this);
             if (Loader.checkPermission(this)) {
@@ -112,6 +124,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         } else if (itemId == R.id.activity_main_start_scratch_stickers) {
             instantiateChooser();
+        } else if (itemId == R.id.activity_main_image) {
+
+            final String appName = "org.telegram.messenger";
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/stickers"));
+//            myIntent.setType("text/plain");
+            myIntent.setPackage(appName);
+//            myIntent.putExtra(Intent.EXTRA_TEXT, "Hi");
+//            startActivity(Intent.createChooser(myIntent, "Share with"));
+            startActivity(myIntent);
+//
+//            Intent telegram = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/stickers"));
+//            telegram.setPackage(appName);
+//            startActivity(telegram);
         }
     }
 

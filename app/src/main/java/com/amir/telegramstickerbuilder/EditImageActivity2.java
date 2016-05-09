@@ -159,7 +159,7 @@
 //            for (TouchImageView imageItem : items) {
 //                canvas.drawBitmap(imageItem.getFinishedBitmap(), 0, 0, null);
 //            }
-//            Loader.saveBitmap(mainBitmap);
+//            Loader.saveBitmapToCache(mainBitmap);
 //            //todo: finish off the activity
 //            return true;
 //        }

@@ -14,33 +14,15 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/include_toolbar"
-            android:background="@color/no_user_sticker_founded"
-            android:visibility="gone"
-            android:id="@+id/no_sticker_found_frame">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/you_haven_t_build_any_sticker"
-                android:textSize="25sp"
-                android:padding="10dp"
-                android:textColor="@color/no_user_sticker_founded_text" />
+        <FrameLayout
+            android:id="@+id/activity_user_stickers_fragment_container"
+            android:layout_below="@id/include_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </FrameLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/activity_user_stickers_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/include_toolbar"
-            android:padding="2dp"
-            android:scrollbars="vertical" />
 
     </RelativeLayout>
 

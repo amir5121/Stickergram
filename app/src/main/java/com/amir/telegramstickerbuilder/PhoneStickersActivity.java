@@ -11,8 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amir.telegramstickerbuilder.base.BaseActivity;
 import com.amir.telegramstickerbuilder.infrastructure.AsyncTaskPhoneAdapter;
@@ -27,9 +27,12 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
     private static final String IS_REFRESHING = "IS_REFRESHING";
     private static final int THUMBNAIL_IMAGE_QUALITY = 85;
+    private static final String STICKER_COUNT = "STICKER_COUNT";
+    private static final String PERCENT = "PERCENT";
 
     TextView loadingTextPercentage;
     TextView loadingStickersCount;
+    TextView noStickerText;
     View loadingDialogView;
     AlertDialog dialog;
     RecyclerView recyclerView;
@@ -37,6 +40,9 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     SwipeRefreshLayout swipeRefresh;
     AsyncTaskPhoneAdapter task;
 
+    int stickerCount = 0;
+    int percent = 0;
+    Bundle savedInstanceState;
     boolean wasRefreshing = false;
 
     @Override
@@ -44,9 +50,11 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_stickers);
         setNavDrawer(new MainNavDrawer(this));
+        this.savedInstanceState = savedInstanceState;
 
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.activity_phone_stickers_swipeRefresh);
         recyclerView = (RecyclerView) findViewById(R.id.activity_phone_stickers_list);
+        noStickerText = (TextView) findViewById(R.id.activity_phone_stickers_no_cached_text);
 
         if (swipeRefresh != null) {
             swipeRefresh.setOnRefreshListener(this);
@@ -77,6 +85,13 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         if (!hasCashedPhoneStickersOnce())
             callAsyncTaskPhoneAdapter();
 
+        if (savedInstanceState != null && loadingTextPercentage != null && loadingStickersCount != null) {
+            percent = savedInstanceState.getInt(PERCENT);
+            stickerCount = savedInstanceState.getInt(STICKER_COUNT);
+            loadingTextPercentage.setText(percent + "%");
+            loadingStickersCount.setText(String.valueOf(stickerCount));
+        }
+
     }
 
     @Override
@@ -88,7 +103,12 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void OnStickerClicked(StickerItem item) {
-        Loader.loadStickerDialog(item.getUri(), this);
+        if (item.getBitmap() != null)
+            Loader.loadStickerDialog(item.getUri(), this);
+        else {
+            setPhoneStickerCashStatus(false);
+            callAsyncTaskPhoneAdapter();
+        }
     }
 
     @Override
@@ -109,42 +129,60 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     }
 
     @Override
-    public void onTaskDismissedListener() {
-        //TODO: What happen if there are no stickers in the directory
-    }
-
-    @Override
     public void onTaskUpdateListener(int percent, int stickerCount) {
         if (loadingTextPercentage != null && loadingStickersCount != null) {
             loadingTextPercentage.setText(percent + "%");
             loadingStickersCount.setText(String.valueOf(stickerCount));
         }
+
+        this.percent = percent;
+        this.stickerCount = stickerCount;
     }
 
     @Override
     public void onTaskFinishedListener() {
+        if (noStickerText != null) noStickerText.setVisibility(View.GONE);
+        manageView();
+    }
+
+    private void manageView() {
         if (dialog != null) {
             dialog.dismiss();
             dialog = null;
-            Log.e(getClass().getSimpleName(), "taskFinished set the dialog to null");
         }
 
         if (swipeRefresh != null)
             swipeRefresh.setRefreshing(false);
         setPhoneStickerCashStatus(true);
         adapter.refreshPhoneSticker();
+    }
 
+    @Override
+    public void onNoCashDirectoryListener() {
+        //todo: make sure telegram app is installed
+        Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    @Override
+    public void onNoStickerWereFoundListener() {
+        if (noStickerText != null)
+            noStickerText.setVisibility(View.VISIBLE);
+        manageView();
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(IS_REFRESHING, swipeRefresh.isRefreshing());
+        outState.putInt(STICKER_COUNT, stickerCount);
+        outState.putInt(PERCENT, percent);
         super.onSaveInstanceState(outState);
     }
 
     private void callAsyncTaskPhoneAdapter() {
         task = (AsyncTaskPhoneAdapter) getLastCustomNonConfigurationInstance();
+
         if (task == null) {
             task = new AsyncTaskPhoneAdapter(this);
             task.execute(adapter);

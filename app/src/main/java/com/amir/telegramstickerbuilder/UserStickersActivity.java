@@ -1,120 +1,98 @@
 package com.amir.telegramstickerbuilder;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 
 import com.amir.telegramstickerbuilder.base.BaseActivity;
-import com.amir.telegramstickerbuilder.infrastructure.AsyncTaskPhoneAdapter;
-import com.amir.telegramstickerbuilder.infrastructure.AsyncTaskUserAdapter;
-import com.amir.telegramstickerbuilder.infrastructure.Loader;
 import com.amir.telegramstickerbuilder.navdrawer.MainNavDrawer;
-import com.amir.telegramstickerbuilder.sticker.single.SingleStickersAdapter;
-import com.amir.telegramstickerbuilder.sticker.single.StickerItem;
+import com.amir.telegramstickerbuilder.sticker.icon.AssetIconListFragment;
+import com.amir.telegramstickerbuilder.sticker.icon.IconItem;
+import com.amir.telegramstickerbuilder.sticker.icon.UserIconListFragment;
+import com.amir.telegramstickerbuilder.sticker.pack.UserIconPackDetailedFragment;
 
-public class UserStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, AsyncTaskUserAdapter.AsyncUserTaskListener {
-    public static final String USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TSB/User/";
-    //ToDo: put a dot in the directory so the user don't see the stickers in the gallery
+public class UserStickersActivity extends BaseActivity implements AssetIconListFragment.OnIconSelectedListener {
+    public static final String ICON_STICKER_ITEM_FOLDER = "ICON_STICKER_ITEM_FOLDER";
+    private static final String DETAILED_ICON_FRAGMENT = "DETAILED_ICON_FRAGMENT";
+    private static final String ICONS_FRAGMENT = "ICONS_FRAGMENT";
 
-    RecyclerView recyclerView;
-    View noStickerFrame;
-    SingleStickersAdapter adapter;
-    AsyncTaskUserAdapter task;
-    View loadingDialogView;
-    AlertDialog dialog;
+    private String folder;
 
+    //todo: add explosm to the stickers
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_stickers);
         setNavDrawer(new MainNavDrawer(this));
 
-        recyclerView = (RecyclerView) findViewById(R.id.activity_user_stickers_list);
-
-        if (recyclerView == null)
-            Log.e(getClass().getSimpleName(), "RecyclerView is null");
-
-        if (recyclerView != null) {
-            adapter = new SingleStickersAdapter(this, this);
-            adapter.refreshPhoneSticker();
-
-            if (isTablet)
-                recyclerView.setLayoutManager(new GridLayoutManager(UserStickersActivity.this, 5));
-            else
-                recyclerView.setLayoutManager(new GridLayoutManager(UserStickersActivity.this, 3));
-
-            recyclerView.setAdapter(adapter);
+        if (savedInstanceState != null) {
+            saveState(savedInstanceState.getString(ICON_STICKER_ITEM_FOLDER, null));
+            return;
         }
 
-        task = (AsyncTaskUserAdapter) getLastCustomNonConfigurationInstance();
-        if (task == null) {
-            task = new AsyncTaskUserAdapter(UserStickersActivity.this);
-            task.execute(adapter);
+        if (findViewById(R.id.activity_user_stickers_fragment_container) != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.activity_user_stickers_fragment_container, new UserIconListFragment(), ICONS_FRAGMENT)
+                    .commit();
+        }
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            folder = intent.getStringExtra(SavingStickerActivity.EXTRA_FOLDER);
+            if (folder != null) {
+                getSupportFragmentManager().popBackStackImmediate();
+                instantiateFragment(folder);
+            }
+        }
+    }
+
+    @Override
+    public void OnIconSelected(IconItem item) {
+        folder = item.getFolder(); //is used to hold the state
+        //what happening here is the same as saveState
+        instantiateFragment(item.getFolder());
+    }
+
+    private void saveState(String folder) {
+        this.folder = folder;
+        if (folder == null) {
+            if (findViewById(R.id.activity_user_stickers_fragment_container) != null)
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.activity_user_stickers_fragment_container, new UserIconListFragment(), ICONS_FRAGMENT)
+                        .commit();
+            return;
+        }
+        instantiateFragment(folder);
+    }
+
+    private void instantiateFragment(String folder) {
+        UserIconPackDetailedFragment userIconPackDetailedFragment;
+        if (findViewById(R.id.activity_user_stickers_fragment_container) != null) {
+            userIconPackDetailedFragment = new UserIconPackDetailedFragment();
+
+            while (getSupportFragmentManager().getBackStackEntryCount() >= 1)
+                getSupportFragmentManager().popBackStackImmediate();
+
+            getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.activity_user_stickers_fragment_container, userIconPackDetailedFragment, DETAILED_ICON_FRAGMENT).
+                    addToBackStack(null).
+                    commit();
+
+            userIconPackDetailedFragment.refresh(folder);
         } else {
-            instantiateLoadingDialog();
-            task.attach(this);
+            userIconPackDetailedFragment =
+                    (UserIconPackDetailedFragment) getSupportFragmentManager().findFragmentById(R.id.activity_template_stickers_detailed_fragment);
+
+            userIconPackDetailedFragment.refresh(folder);
         }
-
     }
 
     @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        if (task != null)
-            task.detach();
-        return (task);
-    }
-
-    private void instantiateLoadingDialog() {
-        loadingDialogView = getLayoutInflater().inflate(R.layout.dialog_simple_loading, null, false);
-        dialog = new AlertDialog.Builder(UserStickersActivity.this)
-                .setView(loadingDialogView)
-                .setCancelable(false)
-                .create();
-        dialog.show();
-    }
-
-    @Override
-    public void OnStickerClicked(StickerItem item) {
-        Loader.loadStickerDialog(item.getUri(), this);
-    }
-
-    @Override
-    public void OnStickerLongClicked(StickerItem item) {
-
-    }
-
-    @Override
-    public void onTaskStartListener() {
-        instantiateLoadingDialog();
-    }
-
-    @Override
-    public void onTaskDismissedListener() {
-        //TODO: What happen if there are no sticker in the directory
-        Log.e(getClass().getSimpleName(), "onTaskDismissedListener was called");
-
-        if (recyclerView != null)
-            recyclerView.setVisibility(View.GONE);
-
-        noStickerFrame = findViewById(R.id.no_sticker_found_frame);
-        if (noStickerFrame != null)
-            noStickerFrame.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    public void onTaskFinishedListener() {
-
-        if (dialog != null)
-            dialog.hide();
-        if (adapter != null)
-            adapter.refreshUserSticker();
-        else
-            Log.e(getClass().getSimpleName(), "adapter is null");
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ICON_STICKER_ITEM_FOLDER, folder);
     }
 }

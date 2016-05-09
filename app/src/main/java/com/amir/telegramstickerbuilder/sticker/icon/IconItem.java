@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.util.Log;
+
+import com.amir.telegramstickerbuilder.base.BaseActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +17,11 @@ public class IconItem {
     private final String folder;
     private final Context context;
 
-    public IconItem(Context context, String folder) {
-        this.folder = folder;
+    public static final int TYPE_ASSET = 1;
+    public static final int TYPE_USER = 2;
+
+    public IconItem(Context context, String name) {
+        this.folder = name;
         this.context = context;
     }
 
@@ -23,7 +29,7 @@ public class IconItem {
         return folder;
     }
 
-    public Bitmap getBitmapIcon() {
+    public Bitmap getBitmapIconFromAsset() {
         Bitmap bitmap = null;
         try {
             InputStream inputStream = context.getAssets().open("Stickers/" + folder + File.separator + "8.webp");
@@ -36,4 +42,16 @@ public class IconItem {
         return bitmap;
     }
 
+    public Bitmap getBitmapFromExternalStorage() {
+        String pathName = BaseActivity.USER_STICKERS_DIRECTORY + folder + "/0.png";
+        Bitmap bitmap = BitmapFactory.decodeFile(pathName);
+        if (bitmap == null)
+            Log.e(getClass().getSimpleName(),
+                    "bitmap for the file in " + pathName + " was null");
+        return bitmap;
+    }
+
+    public String getFolderDirInExternalStorage() {
+        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator;
+    }
 }

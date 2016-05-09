@@ -4,8 +4,8 @@
 
     <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR"></uses-permission>
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.amir.telegramstickerbuilder.MainActivity" >
+        <activity android:name="com.amir.telegramstickerbuilder.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,23 +21,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserStickersActivity"/>
+        <activity android:name=".UserStickersActivity" />
 
-        <activity android:name=".PhoneStickersActivity"/>
+        <activity android:name=".SavingStickerActivity"/>
 
-        <activity android:name=".TemplateStickersActivity"/>
+        <activity android:name=".PhoneStickersActivity" />
 
-        <activity android:name=".EditImageActivity"/>
+        <activity android:name=".TemplateStickersActivity" />
 
-        <activity android:name=".EditImageActivity2"/>
+        <activity
+            android:name=".EditImageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
+        <activity android:name=".HowToActivity"/>
 
         <activity android:name=".ClickedFontActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.ttf" />

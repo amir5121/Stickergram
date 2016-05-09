@@ -14,13 +14,14 @@ import com.amir.telegramstickerbuilder.EditImageActivity;
 @SuppressLint("ViewConstructor")
 public class TouchImageView extends ImageView {
     private final int layerId;
-
+    private TextItem textItem;
+    private boolean isFirstTapOnStrokeColor;
+    private boolean isFirstTapOnShadowColor;
     EditImageActivity activity;
     int scaledWidth;
     int scaledHeight;
     float widthScale;
     float heightScale;
-    private TextItem textItem;
 
     Bitmap latestTextLayer;
     Bitmap textLayer;
@@ -36,6 +37,8 @@ public class TouchImageView extends ImageView {
         this.textLayer = Bitmap.createBitmap(mainBitmap.getWidth(), mainBitmap.getHeight(), mainBitmap.getConfig());
 //        setImageBitmap(textItem.getFullTextBitmap());
         setImageBitmap(textItem.getFullTextBitmap2(textLayer));
+        isFirstTapOnStrokeColor = true;
+        isFirstTapOnShadowColor = true;
 
     }
 
@@ -43,6 +46,21 @@ public class TouchImageView extends ImageView {
         return textItem;
     }
 
+    public void setFirstTapOnShadowColor(boolean firstTapOnShadowColor) {
+        isFirstTapOnShadowColor = firstTapOnShadowColor;
+    }
+
+    public void setFirstTapOnStrokeColor(boolean firstTapOnStrokeColor) {
+        isFirstTapOnStrokeColor = firstTapOnStrokeColor;
+    }
+
+    public boolean isFirstTapOnShadowColor() {
+        return isFirstTapOnShadowColor;
+    }
+
+    public boolean isFirstTapOnStrokeColor() {
+        return isFirstTapOnStrokeColor;
+    }
 
     public void setLayoutParams() {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -82,8 +100,8 @@ public class TouchImageView extends ImageView {
 //        setImageBitmap(textItem.getFullTextBitmap());
         } else {
             Position actualPosition = new Position(
-                    position.getTop() * heightScale ,
-                    position.getLeft() * widthScale );
+                    position.getTop() * heightScale,
+                    position.getLeft() * widthScale);
             textItem.setPosition(actualPosition);
             setImageBitmap(textItem.getFullTextBitmap2(textLayer));
 
@@ -233,6 +251,11 @@ public class TouchImageView extends ImageView {
 
     public void setTextTilt(int textTilt) {
         textItem.setTilt(textTilt);
+        updateTextView();
+    }
+
+    public void setTextItem(TextItem textItem) {
+        this.textItem = textItem;
         updateTextView();
     }
 

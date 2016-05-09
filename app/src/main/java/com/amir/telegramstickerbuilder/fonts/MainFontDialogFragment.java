@@ -23,8 +23,6 @@ import java.util.List;
 
 public class MainFontDialogFragment extends DialogFragment {
 
-    private TextItem textItem;
-
     public MainFontDialogFragment() {
     }
 

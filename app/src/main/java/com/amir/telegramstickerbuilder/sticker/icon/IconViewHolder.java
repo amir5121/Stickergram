@@ -2,6 +2,7 @@ package com.amir.telegramstickerbuilder.sticker.icon;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,14 +20,19 @@ public class IconViewHolder extends RecyclerView.ViewHolder {
         iconNameTextView = (TextView) itemView.findViewById(R.id.template_sticker_icon_item_stickerName);
     }
 
-    public void populate(IconItem item) {
-        Bitmap bitmap = item.getBitmapIcon();
+    public void populate(IconItem item, int type) {
+        Bitmap bitmap = null;
+        if (type == IconItem.TYPE_ASSET)
+            bitmap = item.getBitmapIconFromAsset();
+        else if (type == IconItem.TYPE_USER)
+            bitmap = item.getBitmapFromExternalStorage();
         itemView.setTag(item);
+        iconNameTextView.setText(item.getFolder());
         if (bitmap == null) {
+            Log.e(getClass().getSimpleName(), "bitmap was null");
             return;
         }
         iconImageView.setImageBitmap(bitmap);
-        iconNameTextView.setText(item.getFolder());
-
+//        Log.e(getClass().getSimpleName(), "??????????item name: " + item.getFolder());
     }
 }

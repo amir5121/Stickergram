@@ -3,7 +3,6 @@ package com.amir.telegramstickerbuilder.infrastructure;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.amir.telegramstickerbuilder.PhoneStickersActivity;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
@@ -11,8 +10,13 @@ import com.amir.telegramstickerbuilder.sticker.single.SingleStickersAdapter;
 import com.amir.telegramstickerbuilder.sticker.single.StickerItem;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
-public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Integer, Void> {
+public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Integer, Integer> {
+    private static final Integer NON_EXISTENCE_CACHE_FOLDER_VALUE = -1;
+    private static final Integer SUCCESS_VALUE = 0;
+    private static final Integer NO_ITEM_VALUE = 1;
     Context context;
     AsyncPhoneTaskListener listener;
     String baseThumbDir;
@@ -34,24 +38,19 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
         if (activity.getExternalCacheDir() != null)
             baseThumbDir = activity.getExternalCacheDir().getAbsolutePath() + File.separator + "phone_";
         else baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_";
-        //todo: use externalCashDirectory
         this.context = activity;
     }
 
     @Override
     protected void onPreExecute() {
-//        super.onPreExecute();
-        Log.e(getClass().getSimpleName(), "PreExe called");
         listener.onTaskStartListener();
     }
 
     @Override
-    protected synchronized Void doInBackground(SingleStickersAdapter... params) {
-        //Todo: what happen if the directory doesn't exist
+    protected synchronized Integer doInBackground(SingleStickersAdapter... params) {
         File folder = new File(PhoneStickersActivity.PHONE_STICKERS_DIRECTORY);
         if (!folder.exists()) {
-            Toast.makeText(context, PhoneStickersActivity.PHONE_STICKERS_DIRECTORY, Toast.LENGTH_LONG).show();
-            return null;
+            return NON_EXISTENCE_CACHE_FOLDER_VALUE;
         }
         int temp = 0;
         percent = 0;
@@ -59,18 +58,22 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
         int length = files.length;
         String thumbDirectory;
         DataSource dataSource = params[0].getDataSource();
+        Set<String> updateSet = new HashSet<>();
+        int filesChecked = 0;
 
-        System.gc();
-        int i = 0;
+        if (length == 0) {
+            dataSource.updateSet(updateSet);
+            return NO_ITEM_VALUE;
+        }
+
         for (File file : files) {
-            i++;
+//            Log.e(getClass().getSimpleName(), file.getName());
+            filesChecked++;
             String name = file.getName();
-//            Log.e(getClass().getSimpleName(), name);
-            //TODO: what if the file was deleted from the memory and it's address was still in the sharedPreferences
-            //TODO: add all the directories to a new set and update the old one also write an updateSet method so you don't have any redundant sticker that doesn't exist
-//            Log.e(getClass().getSimpleName(), name);
-            if (!dataSource.contain(file.getAbsolutePath()))
-                if (name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp")) {
+
+            if (name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp")) {
+                updateSet.add(file.getAbsolutePath());
+                if (!dataSource.contain(file.getAbsolutePath())) {
                     thumbDirectory = baseThumbDir + name;
                     dataSource.update(new StickerItem(
                             file.getAbsolutePath(),
@@ -78,20 +81,25 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
                             StickerItem.IN_PHONE,
                             false,
                             true));
-                    foundedStickersCount++;
                 }
-            percent = (100 * i) / length;
-            if (temp == percent) {
-                Log.e(getClass().getSimpleName(), "Called " + percent);
-                temp++;
-                publishProgress(percent, foundedStickersCount);
+                foundedStickersCount++;
+                percent = (100 * filesChecked) / length;
+//                Log.e(getClass().getSimpleName(), String.valueOf(percent));
+                if (temp == percent) {
+                    temp++;
+                    publishProgress(percent, foundedStickersCount);
+                }
             }
         }
+        Log.e(getClass().getSimpleName(), "updateSet size" + updateSet.size());
+        dataSource.updateSet(updateSet);
+        if (foundedStickersCount == 0) {
+            return NO_ITEM_VALUE;
+        }
 
-        if (foundedStickersCount == 0)
-            listener.onTaskDismissedListener();
-
-        return null;
+//        dataSource.updateSet(updateSet);
+//        Log.e(getClass().getSimpleName(), "all the way through");
+        return SUCCESS_VALUE;
     }
 
     @Override
@@ -102,10 +110,15 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        if (context != null)
+    protected void onPostExecute(Integer aVoid) {
+        if (aVoid.equals(NON_EXISTENCE_CACHE_FOLDER_VALUE))
+            listener.onNoCashDirectoryListener();
+        else if (aVoid.equals(NO_ITEM_VALUE))
+            listener.onNoStickerWereFoundListener();
+        else if (aVoid.equals(SUCCESS_VALUE))
             listener.onTaskFinishedListener();
     }
+
 
     public void detach() {
         context = null;
@@ -114,10 +127,12 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
     public interface AsyncPhoneTaskListener {
         void onTaskStartListener();
 
-        void onTaskDismissedListener();
-
         void onTaskUpdateListener(int percent, int stickerCount);
 
         void onTaskFinishedListener();
+
+        void onNoCashDirectoryListener();
+
+        void onNoStickerWereFoundListener();
     }
 }

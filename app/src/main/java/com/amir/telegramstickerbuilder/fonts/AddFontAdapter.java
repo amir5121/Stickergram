@@ -19,8 +19,7 @@ public class AddFontAdapter extends FontAdapter {
     public void setItems() {
         if (fontItems.size() > 0)
             fontItems.clear();
-        String path = Environment.getExternalStorageDirectory().toString() + "/TSB/fonts";
-        File f = new File(path);
+        File f = new File(BaseActivity.FONT_DIRECTORY);
         File files[] = f.listFiles();
         if (files != null) {
             for (File file : files) {

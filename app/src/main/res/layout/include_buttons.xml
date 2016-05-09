@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/include_buttons_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="219dp"
     android:layout_alignParentBottom="true">
 
     <LinearLayout
@@ -12,70 +13,94 @@
 
         <Button
             android:id="@+id/include_buttons_text_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="@dimen/edit_activity_button_padding"
-            android:text="@string/text" />
+            style="@style/EditActivityButton"
+            android:background="#F3E5F5"
+            android:text="@string/text"
+            android:textColor="@color/text_button_color" />
 
 
         <Button
             android:id="@+id/include_buttons_size_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/light_blue"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="@dimen/edit_activity_button_padding"
-            android:text="@string/size" />
+            android:background="#E1BEE7"
+            android:text="@string/size"
+            style="@style/EditActivityButton"
+            android:textColor="@color/size_button_color"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/include_buttons_tilt_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/dark_blue"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="@dimen/edit_activity_button_padding"
-            android:text="@string/tilt" />
+            android:background="#CE93D8"
+            android:text="@string/tilt"
+            style="@style/EditActivityButton"
+            android:textColor="@color/tilt_button_color"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/include_buttons_font_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="@dimen/edit_activity_button_padding"
-            android:text="@string/fontItem" />
+            android:background="#BA68C8"
+            android:text="@string/fontItem"
+            style="@style/EditActivityButton"
+            android:textColor="@color/font_button_color"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/include_buttons_text_color"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/light_blue"
-            android:foreground="?android:selectableItemBackground"
-            android:padding="@dimen/edit_activity_button_padding"
-            android:text="@string/text_color" />
+            android:background="#AB47BC"
+            android:text="@string/text_color"
+            style="@style/EditActivityButton"
+            android:textColor="@color/text_color_button_color"
+            android:textSize="16sp" />
 
 
         <Button
-            android:id="@+id/include_buttons_shadow_color"
+            android:id="@+id/include_buttons_text_background"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_blue"
+            android:background="#9C27B0"
             android:foreground="?android:selectableItemBackground"
             android:padding="@dimen/edit_activity_button_padding"
-            android:text="@string/shadow_color" />
+            android:text="@string/text_background"
+            android:textColor="@color/text_background_button_color"
+            android:textSize="16sp" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="#8E24AA"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/include_buttons_text_stroke_color"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:foreground="?android:selectableItemBackground"
+                android:padding="@dimen/edit_activity_button_padding"
+                android:text="@string/stroke_color"
+                android:textColor="@color/stroke_button_color" />
+
+
+            <Button
+                android:id="@+id/include_buttons_text_stroke_width"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:foreground="?android:selectableItemBackground"
+                android:padding="@dimen/edit_activity_button_padding"
+                android:text="@string/stroke_width"
+                android:textColor="@color/stroke_button_color" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7B1FA2"
             android:orientation="horizontal">
 
             <TextView
@@ -85,7 +110,19 @@
                 android:clickable="false"
                 android:gravity="center"
                 android:text="@string/shadow"
-                android:textColor="#555" />
+                android:textColor="#eee" />
+
+
+            <Button
+                android:id="@+id/include_buttons_shadow_color"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:foreground="?android:selectableItemBackground"
+                android:padding="@dimen/edit_activity_button_padding"
+                android:text="@string/shadow_color"
+                android:textColor="@color/shadow_button_color" />
 
             <Button
                 android:id="@+id/include_buttons_shadow_radius"
@@ -95,7 +132,8 @@
                 android:layout_weight="1"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
-                android:text="@string/shadow_radius" />
+                android:text="@string/shadow_radius"
+                android:textColor="@color/shadow_button_color" />
 
             <Button
                 android:id="@+id/include_buttons_shadow_dx"
@@ -105,7 +143,8 @@
                 android:layout_weight="1"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
-                android:text="@string/shadow_dx" />
+                android:text="@string/shadow_dx"
+                android:textColor="@color/shadow_button_color" />
 
             <Button
                 android:id="@+id/include_buttons_shadow_dy"
@@ -115,7 +154,9 @@
                 android:layout_weight="1"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
-                android:text="@string/shadow_dy" />
+                android:text="@string/shadow_dy"
+                android:textColor="@color/shadow_button_color" />
+
         </LinearLayout>
 
     </LinearLayout>

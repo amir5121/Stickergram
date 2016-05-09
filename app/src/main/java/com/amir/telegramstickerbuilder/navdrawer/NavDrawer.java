@@ -33,12 +33,11 @@ public class NavDrawer {
         if (navDrawerView != null && BaseActivity.isInLandscape)
             navDrawerView.findViewById(R.id.include_nav_drawer_top_image).setVisibility(View.GONE);
 
-
         if (drawerLayout == null || navDrawerView == null)
             throw new RuntimeException("To use this class you must have views with ids of drawer_layout and nav_drawer");
 
         Toolbar toolbar = activity.getToolbar();
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setNavigationIcon(R.drawable.ic_hamburger);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="EditActivityButton" parent="Widget.AppCompat.Button">
+        <item name="android:borderlessButtonStyle">?android:attr/borderlessButtonStyle</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <item name="android:padding">@dimen/edit_activity_button_padding</item>
+    </style>
 </resources>

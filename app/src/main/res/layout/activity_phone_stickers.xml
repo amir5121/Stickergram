@@ -30,6 +30,16 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
+        <TextView
+            android:id="@+id/activity_phone_stickers_no_cached_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar"
+            android:gravity="center"
+            android:text="@string/telegram_has_not_cashed_any_stickers"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
     <include layout="@layout/include_nav_drawer" />

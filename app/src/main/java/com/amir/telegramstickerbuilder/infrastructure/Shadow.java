@@ -17,11 +17,11 @@ public class Shadow {
         this.color = color;
     }
 
-    public void setdX(int dX) {
+    public void setDx(int dX) {
         this.dX = dX;
     }
 
-    public void setdY(int dY) {
+    public void setDy(int dY) {
         this.dY = dY;
     }
 
