@@ -63,9 +63,6 @@ public class TextProcess {
 //        staticLayout.draw(canvas);
 //
 //        canvas.restore();
-//        //todo: note setting locale on the textPaint might come handy to support persian
-//
-//        //todo: on the imageView responsible for this bitmap set: rotation
 //
 //        return bitmap;
 //    }
@@ -258,9 +255,6 @@ public class TextProcess {
 //        staticLayout.draw(canvas);
 //
 //        canvas.restore();
-//        //todo: note setting locale on the textPaint might come handy to support persian
-//
-//        //todo: on the imageView responsible for this bitmap set: rotation
 //
 //        return bitmap;
 //    }

@@ -14,15 +14,13 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-
         <FrameLayout
             android:id="@+id/activity_user_stickers_fragment_container"
-            android:layout_below="@id/include_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar">
 
         </FrameLayout>
-
 
     </RelativeLayout>
 

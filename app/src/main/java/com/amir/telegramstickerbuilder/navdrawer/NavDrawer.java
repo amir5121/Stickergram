@@ -31,7 +31,7 @@ public class NavDrawer {
         navDrawerView = (ViewGroup) activity.findViewById(R.id.nav_drawer);
 
         if (navDrawerView != null && BaseActivity.isInLandscape)
-            navDrawerView.findViewById(R.id.include_nav_drawer_top_image).setVisibility(View.GONE);
+            navDrawerView.findViewById(R.id.include_nav_drawer_top_text_view).setVisibility(View.GONE);
 
         if (drawerLayout == null || navDrawerView == null)
             throw new RuntimeException("To use this class you must have views with ids of drawer_layout and nav_drawer");

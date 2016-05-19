@@ -147,7 +147,6 @@ public class DataSource {
     public void updateSet(Set<String> updateSet) {
         Log.e(getClass().getSimpleName(), "update set was called");
 //        Log.e(getClass().getSimpleName(), "stickerDirectories size: " + stickerDirectories.size());
-        //todo: do some search and delete redundant extra info from shared preferences
         Set<String> temp = new HashSet<>(stickerDirectories);
 //        temp.addAll(stickerDirectories);
 //        Log.e(getClass().getSimpleName(), String.valueOf(stickerDirectories.size()));

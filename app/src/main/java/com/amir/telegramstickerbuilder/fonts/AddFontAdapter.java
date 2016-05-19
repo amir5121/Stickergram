@@ -28,7 +28,6 @@ public class AddFontAdapter extends FontAdapter {
                     fontItems.add(new FontItem(file.getName(), font));
             }
         }
-        //todo: what if there are no fonts founded there
     }
 
 }

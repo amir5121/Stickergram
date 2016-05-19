@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.amir.telegramstickerbuilder.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/phone_sticker_background_color"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_toolbar" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="@string/help"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:background="@color/faq_text_background"/>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="What's a Sticker?" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="Sticker is simple image that is uploaded to Telegram server and can be shared easily from within the Telegram app." />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="What's a Pack?" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="A pack is a package that contain a number of Stickers. Every Sticker must be contain within a pack." />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="What can i do with this app?" />
+
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="You can easily edit and create new images and use them as Stickers." />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="What's a Bot?" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="A bot is basically another computer program that runs on Telegram server and you can interact with it." />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="How can i use my stickers in Telegram?" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="1.First you need to activate the @Stickers bot which is responsible for converting images to Stickers:\n(press the below button and hit start in the conversation that opens.)" />
+
+                <Button
+                    android:id="@+id/activity_faq_activate_bot"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/activate_stickers_bot"
+                    android:textColor="#fff" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="2.The bot will ask for commands. As every Sticker must be contained within a pack you need to create a new pack and add your sticker to it.\n\n(By hitting the below button you will be guided to @Stickers bot and the appropriate command will be copied to your clipboard then you need to paste the command and send it to the bot)" />
+
+
+                <Button
+                    android:id="@+id/activity_faq_new_pack"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/create_new_package"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="3.The bot will now ask you to give your new pack a name. (Send the name of the pack to the bot)" />
+
+
+                <Button
+                    android:id="@+id/activity_faq_go_to_bot1"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/go_to_bot"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="4. After sending the name of the pack to the bot you need send an emoji to the bot. (Send any emoji)" />
+
+
+                <Button
+                    android:id="@+id/activity_faq_go_to_bot2"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/go_to_bot"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="5. After sending the emoji you need to send the images you've created to the bot.\n\nNote that after sending every sticker you will be asked to send another emoji." />
+
+                <Button
+                    android:id="@+id/activity_faq_go_to_user_pack"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/my_stickers"
+                    android:textColor="#fff" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="6. When you were done adding Stickers (sending emojies and images) to the pack you will need to publish the pack. In order to publish a pack you need to send the publish command to the app.\n\n(By hitting the bellow button the publish command will be copied to your clipboard and you will be guided to the Bot then paste the command and send it to the bot)" />
+
+
+                <Button
+                    android:id="@+id/activity_faq_publish"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/publish"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Stickers.\n\n*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can't be '55555' or 'Stickergram app' or '@Stickergram' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name)." />
+
+                <Button
+                    android:id="@+id/activity_faq_go_to_bot3"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/go_to_bot"
+                    android:textColor="#fff" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="What if i wanted to add Sticker to an existing pack that i have published earlier?" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="The @Stickers bot provide a '/addsticker' command for just this propose. For example if i have a sticker that i published with this link 'telegram.me/addstickers/stickergramApp' and i want to add another sticker to that pack i should write this command:\n'/addsticker telegram.me/addstickers/stickergramApp'\n then send an emoji and the sticker itself afterward." />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="What if i wanted to delete a Sticker from a published pack?" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="The @Stickers bot provide a '/delsticker' command for just this propose. For example if i have a sticker that i published with this link 'telegram.me/addstickers/stickergramApp' and i want to deleete a sticker from that pack i should write this command:\n'/delsticker telegram.me/addstickers/stickergramApp'\n then send the sticker from within the Telegram." />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <include layout="@layout/include_nav_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

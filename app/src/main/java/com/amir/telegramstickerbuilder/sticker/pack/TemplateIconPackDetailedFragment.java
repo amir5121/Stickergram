@@ -36,6 +36,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment implements Ic
         view = inflater.inflate(R.layout.fragment_icon_detailed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.template_sticker_icon_detailed_list);
         folderText = (TextView) view.findViewById(R.id.fragment_icon_detailed_text_folder);
+        if (folderText != null) folderText.setVisibility(View.GONE);
         refresh(folder); // this guy sets the adapter
         return view;
     }
@@ -50,12 +51,19 @@ public class TemplateIconPackDetailedFragment extends BaseFragment implements Ic
         Log.e(getClass().getSimpleName(), "item was long clicked");
     }
 
+    @Override
+    public void folderDeleted() {
+        //empty
+        //will never be called in this fragment
+    }
+
     public void refresh(String folder) {
         this.folder = folder;
 
-        if (folderText != null) {
+        if (folderText != null && folder != null) {
             folderText.setText(folder);
-            Log.e(getClass().getSimpleName(), "Folder was: " + folder);
+            folderText.setVisibility(View.VISIBLE);
+//            Log.e(getClass().getSimpleName(), "Folder was: " + folder);
         } else Log.e(getClass().getSimpleName(), "folderText was null");
         if (folder == null) return;
         if (recyclerView != null) {

@@ -115,4 +115,20 @@ public class SavingStickerActivity extends BaseActivity implements IconListFragm
             e.printStackTrace();
         }
     }
+
+    private long mBackPressed;
+
+    @Override
+    public void onBackPressed() {
+        if (mBackPressed + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+            return;
+        } else {
+            Toast.makeText(getBaseContext(), getString(R.string.you_will_lose_progress), Toast.LENGTH_SHORT).show();
+        }
+
+        mBackPressed = System.currentTimeMillis();
+    }
+
+
 }

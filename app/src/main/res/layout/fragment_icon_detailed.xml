@@ -1,34 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/detailed_sticker_fragment_background">
+    android:layout_height="match_parent"
+    android:background="@color/phone_sticker_background_color">
 
     <TextView
         android:id="@+id/fragment_icon_detailed_text_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Folder"
+        android:background="@color/colorPrimary"
         android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="#fff"
         android:padding="5dp"
-        android:background="@color/colorPrimary"/>
+        android:text="@string/Folder"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/fragment_icon_detailed_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_icon_detailed_text_folder"
+        android:orientation="horizontal"
+        android:background="#39333333"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_info"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/my_circle"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="#fff"
+            android:text="@string/important_note"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/fragment_icon_detailed_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:id="@+id/fragment_icon_detailed_progressBar"
         android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@id/fragment_icon_detailed_text_folder"
         android:id="@+id/template_sticker_icon_detailed_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="2dp"
+        android:layout_below="@id/fragment_icon_detailed_note"
         android:scrollbars="vertical" />
 </RelativeLayout>
 

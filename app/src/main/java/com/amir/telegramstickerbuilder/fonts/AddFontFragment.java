@@ -46,8 +46,6 @@ public class AddFontFragment extends BaseFragment implements View.OnClickListene
         howToButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
 
-
-        //todo: let the user to add new fonts to the app by simply clicking the on the font file
         return view;
     }
 
@@ -79,6 +77,7 @@ public class AddFontFragment extends BaseFragment implements View.OnClickListene
         if (data != null) {
             try {
                 String filePath = Loader.makeACopyToFontFolder(data.getData(), (BaseActivity) getActivity());
+                Log.e(getClass().getSimpleName(), "file path: " + filePath);
                 if (filePath == null)
                     Log.e(getClass().getSimpleName(), "Failed to make a copy of the font!");
             } catch (IOException e) {

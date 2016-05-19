@@ -20,6 +20,7 @@ public class TextItem {
     public static final int TEXT_BOLD = 0;
     public static final int TEXT_ITALIC = 1;
     public static final int TEXT_NORMAL = 2;
+//    public static final int DEFAULT_TEXT_COLOR = 1430537284;
 
 
     public int hostWidth;
@@ -60,6 +61,7 @@ public class TextItem {
         strokeWidth = 0;
 
         selectedColor = Color.parseColor("#55444444");
+//        Log.e(getClass().getSimpleName(), String.valueOf(selectedColor));
         isSelected = false;
         this.text = text;
         alpha = 1;
@@ -73,7 +75,7 @@ public class TextItem {
         textColor = Color.YELLOW;
         alignment = Layout.Alignment.ALIGN_OPPOSITE;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-            textDirection = View.TEXT_DIRECTION_LTR; //todo: textDirection must be assigned based on the sdk version
+            textDirection = View.TEXT_DIRECTION_LTR;
     }
 
     public void setSelected(boolean selected) {
@@ -202,10 +204,12 @@ public class TextItem {
 
         textWidth = (int) mPaint.measureText(text, 0, text.length()) + 10;
 //        textWidth = (int) textPaint.measureText(text, 0, text.length());
-        textHeight = (getTextHeight(text, textWidth, size, font.getTypeface()) + ((shadow.getDy() >= 0) ? shadow.getDy() : 0)) + 10;
+        textHeight = getTextHeight(text, textWidth, size, font.getTypeface()) + shadow.getDy() + 10;
 
-        if (Loader.isPersian(getText()))
-            textHeight += textHeight / 3;
+//        if (Loader.isPersian(getText()))
+        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight);
+        textHeight += textHeight / 3;
+        textWidth += textWidth / 5;
 
 //        StaticLayout staticLayout = new StaticLayout(
 //                text,
@@ -241,8 +245,8 @@ public class TextItem {
         area = new TextArea(position, textWidth, textHeight);
 
         Bitmap bitmap = Bitmap.createBitmap(
-                (int) (textWidth + ((shadow.getDx() > 0) ? shadow.getDx() * (scale + 0.5) : 0)) + 5,
-                textHeight + 10,
+                (int) (textWidth + ((shadow.getDx() > 0) ? shadow.getDx() * (scale + 0.5) : 0) + strokeWidth),
+                (int) (textHeight + strokeWidth),
                 Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(backgroundColor);
@@ -251,9 +255,10 @@ public class TextItem {
         mPaint.setColor(textStrokeColor);
         mPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
 
-        int yOffSet = size - (size / 10) + 3; //this line is weird but it work. let it be
+        int yOffSet = (int) (size - (size / 15) + strokeWidth / 2); //this line is weird but it work. let it be
 
-        float xOffSet = 10;
+//        float xOffSet = (size / 2) + strokeWidth / 2;
+        float xOffSet = bitmap.getWidth() / 2 - (textWidth / 2) + size / 2 + strokeWidth / 2;
         canvas.drawText(text, xOffSet, yOffSet, mPaint);
 
 //        mPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
@@ -302,10 +307,6 @@ public class TextItem {
 //        canvas.drawBitmap(bitmap, matrix, null);
 
         canvas.restore();
-        //todo: note setting locale on the textPaint might come handy to support persian
-
-        //todo: on the imageView responsible for this bitmap set: tilt
-
         return bitmap;
     }
 
@@ -322,7 +323,7 @@ public class TextItem {
         } else {
             Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(fullTextBitmap);
-            canvas.drawBitmap(getTextBitmap(), position.getLeft(), position.getTop(), null);//todo: position must be reversed to work correctly for the unselcted method
+            canvas.drawBitmap(getTextBitmap(), position.getLeft(), position.getTop(), null);
             return fullTextBitmap;
         }
     }
@@ -348,7 +349,7 @@ public class TextItem {
 //
 //            textCanvas.save();
 //            textCanvas.restore();
-//            canvas.drawBitmap(tempTextBitmap, position.getLeft(), position.getTop(), null);//todo: position must be reversed to work correctly for the unselcted method
+//            canvas.drawBitmap(tempTextBitmap, position.getLeft(), position.getTop(), null);
 //            canvas.save();
 //            canvas.restore();
 //            return fullTextBitmap;

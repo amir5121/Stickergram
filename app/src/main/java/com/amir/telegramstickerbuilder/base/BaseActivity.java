@@ -21,6 +21,10 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static final String EDIT_IMAGE_URI = "EDIT_IMAGE_URI";
     public static final String EDIT_IMAGE_DIR_IN_ASSET = "EDIT_IMAGE_DIR_IN_ASSET";
     public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    public static final String PNG = ".png";
+    public static final String NEED_ROTATION = "NEED_ROTATION";
+    public static final String STICKERS = "Stickers/";
+    public static String TEMP_OUTPUT_DIRECTORY;
     public static String STICKER_CASH_DIR;
     public static String FONT_DIRECTORY;
     public static String BASE_THUMBNAIL_DIRECTORY;
@@ -50,6 +54,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
         STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
+        TEMP_OUTPUT_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath();
         preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
         isPaid  = false;
     }

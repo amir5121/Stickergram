@@ -8,29 +8,30 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/icon_sticker_list_background">
 
         <include
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
         <fragment
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
             android:id="@+id/activity_template_stickers_list_fragment"
             android:name="com.amir.telegramstickerbuilder.sticker.icon.UserIconListFragment"
-            tools:layout="@layout/fragment_icon_list"
-            android:layout_below="@id/include_toolbar"/>
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar"
+            tools:layout="@layout/fragment_icon_list" />
 
         <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/activity_template_stickers_detailed_fragment"
             android:name="com.amir.telegramstickerbuilder.sticker.pack.UserIconPackDetailedFragment"
-            tools:layout="@layout/fragment_icon_detailed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@id/include_toolbar"
+            android:layout_toEndOf="@id/activity_template_stickers_list_fragment"
             android:layout_toRightOf="@id/activity_template_stickers_list_fragment"
-            android:layout_toEndOf="@id/activity_template_stickers_list_fragment"/>
+            tools:layout="@layout/fragment_icon_detailed" />
 
     </RelativeLayout>
 

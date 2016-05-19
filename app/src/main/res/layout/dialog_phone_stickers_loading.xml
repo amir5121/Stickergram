@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="0"
-            android:textColor="@color/progress_text_percentage"
+            android:textColor="@color/dialog_text_color"
             android:textSize="20sp" />
 
 
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="@string/stickers_so_far"
-            android:textColor="@color/progress_text_percentage"
+            android:textColor="@color/dialog_text_color"
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -39,7 +39,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/phone_loading_dialog_text_percentage"
         android:text="0%"
-        android:textColor="@color/progress_text_percentage"
+        android:textColor="@color/dialog_text_color"
         android:textSize="30sp"
         android:padding="5dp"
         android:layout_marginBottom="10dp"

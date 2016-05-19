@@ -3,6 +3,7 @@ package com.amir.telegramstickerbuilder.infrastructure;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,10 +11,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.ActivityCompat;
@@ -55,8 +59,13 @@ public class Loader {
     public static final int TEXT_SHADOW_COLOR = 1;
     public static final int TEXT_BACKGROUND_COLOR = 2;
     public static final int TEXT_STROKE_COLOR = 3;
+    public static final int USER_STICKER_GAIN_PERMISSION = 100;
+    public static final int PHONE_STICKERS_GAIN_PERMISSION = 101;
+    public static final int TEMPLATE_STICKERS_GAIN_PERMISSION = 102;
+    public static final int FROM_SCRATCH_GAIN_PERMISSION = 103;
+    public static final int EDIT_ACTIVITY_GAIN_PERMISSION = 104;
 
-    public static void gainPermission(BaseActivity activity) {
+    public static void gainPermission(BaseActivity activity, int requestCode) {
         if (
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                         ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
@@ -75,7 +84,7 @@ public class Loader {
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(activity,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -225,8 +234,8 @@ public class Loader {
         dialog.show();
     }
 
-    public static void saveBitmapToCache(Bitmap mainBitmap, EditImageActivity editImageActivity) {
-        OutputStream outputStream = null;
+    public static void saveBitmapToCache(Bitmap mainBitmap) {
+        OutputStream outputStream;
         File file = new File(BaseActivity.STICKER_CASH_DIR);
         try {
             if (file.exists()) {
@@ -234,25 +243,39 @@ public class Loader {
                 file.createNewFile();
             } else file.createNewFile();
             outputStream = new FileOutputStream(file);
+            outputStream.close();
+            InputStream inputStream;
+            int i = 0;
+            do {
+                Bitmap temp = reduceImageSize(mainBitmap, i);
+                outputStream = new FileOutputStream(file);
+                temp.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                inputStream = new FileInputStream(file);
+                Log.e("fileSize: " + TAG, String.valueOf(inputStream.available()));
+                i++;
+            } while (inputStream.available() >= 357376); // decreasing size to please the Telegram
+            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (outputStream == null)
-            Log.e(TAG, "outPutStream was null");
-        else
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            mainBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+    }
+
+    private static Bitmap reduceImageSize(Bitmap mainBitmap, int i) {
+        int height = mainBitmap.getHeight();
+        int width = mainBitmap.getWidth();
+        Log.e(TAG, String.valueOf(1 + (i / 10.0)));
+        Bitmap temp = Bitmap.createScaledBitmap(mainBitmap, (int) (width / (1 + (i / 10.0))), (int) (height / (1 + (i / 10.0))), false);
+        return Bitmap.createScaledBitmap(temp, width, height, false);
     }
 
     public static String makeACopyToFontFolder(Uri uri, BaseActivity activity) throws IOException {
-        Log.e(TAG, "fileName: " + getFileName(uri, activity));
+//        Log.e(TAG, "fileName: " + getFileName(uri, activity));
         String fileName = getFileName(uri, activity);
         if (!fileName.toLowerCase().contains(".ttf")) {
             Toast.makeText(activity, activity.getString(R.string.choose_a_font), Toast.LENGTH_LONG).show();
             return null;
         }
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/TSB/fonts/" + getFileName(uri, activity));// you can also use app's internal cache to store the file
-
+        File file = new File(BaseActivity.FONT_DIRECTORY + getFileName(uri, activity));// you can also use app's internal cache to store the file
         if (!file.getParentFile().exists()) {
             if (!file.getParentFile().mkdirs())
                 return null;
@@ -269,11 +292,12 @@ public class Loader {
         }
 
         FileOutputStream fos = new FileOutputStream(file);
+//        Log.e(TAG, "copying");
         InputStream is = activity.getContentResolver().openInputStream(uri);
 //        Log.e(getClass().getSimpleName(), String.valueOf(uri.getQueryParameterNames()));
         if (is == null) return null;
         byte[] buffer = new byte[1024];
-        int len = 0;
+        int len;
         try {
             len = is.read(buffer);
             while (len != -1) {
@@ -308,6 +332,7 @@ public class Loader {
                 result = result.substring(cut + 1);
             }
         }
+        Log.e(TAG, "result : " + result);
         return result;
     }
 
@@ -432,5 +457,65 @@ public class Loader {
             return false;
 //            }
         }
+    }
+
+    public static float capturedRotationFix(String absolutePath)  {
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(absolutePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = 0;
+        if (ei != null) {
+            orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        }
+
+        Log.e(TAG, "orientation: " + orientation);
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return 90;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return 180;
+            // etc.
+        }
+        return 0;
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+//        Bitmap source = BitmapFactory.decodeFile(path);
+//        Log.e(TAG, "path : " + path);
+        if (source == null)
+            return null;
+        Bitmap retVal;
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        retVal = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+//        int index = path.lastIndexOf('.');
+//        path = path.substring(0, index) + BaseActivity.PNG;
+//        try {
+//            OutputStream outputStream = new FileOutputStream(path);
+//            retVal.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+//            outputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return retVal;
+    }
+
+    public static String getRealPathFromURI(Uri contentURI, ContentResolver contentResolver) {
+        String result;
+        Cursor cursor = contentResolver.query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 }

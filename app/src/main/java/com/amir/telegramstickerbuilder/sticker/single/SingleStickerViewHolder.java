@@ -17,7 +17,6 @@ public class SingleStickerViewHolder extends RecyclerView.ViewHolder{
     }
 
     public void populate(StickerItem item){
-        //TODO: might need setOnclickListener
         itemView.setTag(item);
         stickerImageView.setImageBitmap(item.getThumbBitmap());
 

@@ -3,6 +3,7 @@ package com.amir.telegramstickerbuilder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -90,14 +92,12 @@ public class EditImageActivity
     List<TouchImageView> items;
     Position offsetPosition;
 
-    //todo: don't let the text to move outside of the image view container
     //todo: removeThumb the useless layer count variable
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_image);
-        setNavDrawer(new MainNavDrawer(this));
         items = new ArrayList<>();
 
         mainBitmap = getBitmapFromExtra();
@@ -116,7 +116,11 @@ public class EditImageActivity
             label = new TouchImageView[2];
             addLabel();
         }
-        //todo: get layerCount and selectedLayer from the savedInstanceState and pass it to touchImageView
+
+//        Log.e(getClass().getSimpleName(), String.valueOf(mainBitmap.getAllocationByteCount()));
+//        Log.e(getClass().getSimpleName(), "byteCount:" + String.valueOf(mainBitmap.getByteCount()));
+//        mainBitmap.setDensity(100);
+//        Log.e(getClass().getSimpleName(), "byteCount:" + String.valueOf(mainBitmap.getByteCount()));
     }
 
     @Override
@@ -126,11 +130,32 @@ public class EditImageActivity
             getNewTextDialog(true);
             return true;
         } else if (itemId == R.id.menu_edit_image_save) {
-            instantiateSavingDialog();
+            if (Loader.checkPermission(this))
+                instantiateSavingDialog();
+            else {
+                Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
+                Loader.gainPermission(this, Loader.EDIT_ACTIVITY_GAIN_PERMISSION);
+            }
             return true;
         }
         return false;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        if (requestCode == Loader.EDIT_ACTIVITY_GAIN_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                instantiateSavingDialog();
+                Log.e(getClass().getSimpleName(), "called");
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 
     private void instantiateSavingDialog() {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_finish_editing, null);
@@ -149,7 +174,8 @@ public class EditImageActivity
                         canvas.drawBitmap(label[0].getFinishedBitmap(), 0, 0, null);
                         canvas.drawBitmap(label[1].getFinishedBitmap(), 0, 0, null);
                     }
-                    Loader.saveBitmapToCache(mainBitmap, EditImageActivity.this); // the SavingStickerActivity uses the cached image for the saving process
+                    //TODO: check whether there is enough space left on the device
+                    Loader.saveBitmapToCache(mainBitmap); // the SavingStickerActivity uses the cached image for the saving process
                     finish();
                     startActivity(new Intent(EditImageActivity.this, SavingStickerActivity.class));
                 }
@@ -201,9 +227,9 @@ public class EditImageActivity
             } else if (itemId == R.id.include_buttons_shadow_radius) {
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
             } else if (itemId == R.id.include_buttons_shadow_dx) {
-                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx() + 50, shadowDxSeekBar);
+                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
             } else if (itemId == R.id.include_buttons_shadow_dy) {
-                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy() + 50, shadowDySeekBar);
+                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
             } else if (itemId == R.id.include_buttons_text_background) {
                 Loader.setColor(this, selectedLayer, Loader.TEXT_BACKGROUND_COLOR);
             } else if (itemId == R.id.include_buttons_text_stroke_color) {
@@ -214,7 +240,8 @@ public class EditImageActivity
             } else if (itemId == R.id.include_buttons_text_stroke_width) {
                 setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
             }
-        } else Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
+        } else
+            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -259,10 +286,10 @@ public class EditImageActivity
                 selectedLayer.getTextItem().getShadow().setRadius(progress);
                 selectedLayer.updateTextView();
             } else if (seekBar == shadowDySeekBar) {
-                selectedLayer.getTextItem().getShadow().setDy(progress - 50);
+                selectedLayer.getTextItem().getShadow().setDy(progress);
                 selectedLayer.updateTextView();
             } else if (seekBar == shadowDxSeekBar) {
-                selectedLayer.getTextItem().getShadow().setDx(progress - 50);
+                selectedLayer.getTextItem().getShadow().setDx(progress);
                 selectedLayer.updateTextView();
             } else if (seekBar == strokeWidthSeekBar) {
                 selectedLayer.getTextItem().setStrokeWidth(progress);
@@ -317,6 +344,7 @@ public class EditImageActivity
     @Nullable
     public Bitmap getBitmapFromExtra() {
         Uri imageUri = getIntent().getParcelableExtra(BaseActivity.EDIT_IMAGE_URI);
+        int rotation = getIntent().getIntExtra(BaseActivity.NEED_ROTATION, 0);
         Bitmap imageBitmap = null;
         try {
             if (imageUri == null) {
@@ -335,6 +363,7 @@ public class EditImageActivity
         }
         int mainWidth = imageBitmap.getWidth();
         int mainHeight = imageBitmap.getHeight();
+        imageBitmap = Loader.rotateImage(imageBitmap, rotation);
         Bitmap resBitmap;
         if (mainWidth != 512 && mainHeight != 512) {
             float scale;
@@ -473,7 +502,7 @@ public class EditImageActivity
         }
         if (sizeSeekBar != null) {
             sizeSeekBar.setOnSeekBarChangeListener(this);
-            sizeSeekBar.setMax(mainBitmap.getWidth());
+            sizeSeekBar.setMax(mainBitmap.getWidth() / 2);
         }
         if (tiltSeekBar != null) {
             tiltSeekBar.setProgress(180);
@@ -484,11 +513,11 @@ public class EditImageActivity
             shadowRadius.setOnSeekBarChangeListener(this);
         }
         if (shadowDxSeekBar != null) {
-            shadowDxSeekBar.setProgress(55);
+            shadowDxSeekBar.setProgress(0);
             shadowDxSeekBar.setOnSeekBarChangeListener(this);
         }
         if (shadowDySeekBar != null) {
-            shadowDySeekBar.setProgress(55);
+            shadowDySeekBar.setProgress(0);
             shadowDySeekBar.setOnSeekBarChangeListener(this);
         }
         if (strokeWidthSeekBar != null) {
@@ -505,6 +534,11 @@ public class EditImageActivity
         if (!asNewText) {
             editText.setText(selectedLayer.getTextItem().getText());
             editText.setSelection(selectedLayer.getTextItem().getText().length());
+            editText.setTypeface(selectedLayer.getTextItem().getFont().getTypeface());
+//            editText.setTextColor(selectedLayer.getTextItem().getTextColor());
+        } else {
+//            editText.setTextColor(TextItem.DEFAULT_TEXT_COLOR);
+            editText.setTypeface(Typeface.MONOSPACE);
         }
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
@@ -720,23 +754,27 @@ public class EditImageActivity
         textItem.setBackgroundColor(ContextCompat.getColor(this, R.color.stickergram_label_background));
         textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF));
         textItem.setStrokeWidth(10);
-        textItem.setSize(30);
+        textItem.setSize(32);
         textItem.setTextColor(ContextCompat.getColor(this, R.color.stickergram_label_color));
         textItem.setTextStrokeColor(ContextCompat.getColor(this, R.color.stickergram_label_stroke_color));
         Bitmap bitmap = textItem.getTextBitmap();
         int stickergramHeight = bitmap.getHeight();
         int stickergramWidth = bitmap.getWidth();
-        textItem.setPosition(new Position(mainBitmap.getHeight() - stickergramHeight, mainBitmap.getWidth() - stickergramWidth));
+//        textItem.setPosition(new Position(mainBitmap.getHeight() - stickergramHeight, mainBitmap.getWidth() - stickergramWidth));
+
+        int top = mainBitmap.getHeight() - stickergramHeight + 7;
+        textItem.setPosition(new Position(top, 0));
         label[0].setTextItem(textItem);
         textLayerContainer.addView(label[0]);
         label[1] = new TouchImageView(this, new TextItem(getString(R.string.made), this, mainBitmap), 0, mainBitmap);
-        textItem.setSize(13);
+        textItem.setSize(18);
         textItem.setText(getString(R.string.made));
         textItem.setStrokeWidth(3);
         textItem.setBackgroundColor(0);
         bitmap = textItem.getTextBitmap();
-        textItem.setPosition(new Position(mainBitmap.getHeight() - bitmap.getHeight() / 2 - stickergramHeight,
-                mainBitmap.getWidth() - stickergramWidth / 2 - bitmap.getWidth() / 2));
+//        textItem.setPosition(new Position(0,0));
+        textItem.setPosition(new Position(top - bitmap.getHeight() / 2.3f,
+                stickergramWidth / 2 - bitmap.getWidth() / 2));
         label[1].setTextItem(textItem);
         textLayerContainer.addView(label[1]);
 

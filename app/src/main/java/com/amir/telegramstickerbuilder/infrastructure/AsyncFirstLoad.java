@@ -47,7 +47,6 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
 
     @Override
     protected Void doInBackground(Context... contexts) {
-        //TODO: the cash you save will be deleted if device runs on low storage
         try {
             String folders[] = contexts[0].getAssets().list(STICKERS);
             int filesChecked = 0; // used to set percentage// in the dialog

@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_drawer"
     android:layout_width="250dp"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/nav_drawer"
     android:layout_gravity="start"
-    android:background="@color/nav_drawer_background">
+    android:background="@color/nav_drawer_background"
+    android:orientation="vertical">
 
-    <View
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="200dp"-->
+    <!--android:id="@+id/include_nav_drawer_top_image"-->
+    <!--android:background="@color/colorPrimary"/>-->
+    <!---->
+    <TextView
+        android:id="@+id/include_nav_drawer_top_text_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/include_nav_drawer_top_image"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/nav_drawer_top_background"
+        android:gravity="center"
+        android:text="@string/stickergram"
+        android:textColor="#fff"
+        android:textSize="35sp" />
 
     <ScrollView
+        android:id="@+id/include_nav_drawer_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <LinearLayout
+            android:id="@+id/include_nav_drawer_top_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/include_nav_drawer_top_items"/>
+            android:orientation="vertical" />
 
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/include_nav_drawer_bottom_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/include_nav_drawer_bottom_items"/>
+        android:orientation="vertical" />
 
 </LinearLayout>

@@ -293,7 +293,6 @@ public class TouchImageView extends ImageView {
 ////                listener.whoHasBeenTapped(new Position((int) (event.getX() * widthScale), (int) (event.getY() * heightScale)));
 ////                textButton.setText(String.valueOf((int) event.getX()) + "yeay");
 ////                sizeButton.setText(String.valueOf((int) event.getY()) + "yeay");
-//                //todo: check out onDraw
 //                break;
 //            }
 //

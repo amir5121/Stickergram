@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#012241">
 
     <TextView
         android:layout_width="match_parent"
@@ -11,6 +11,7 @@
         android:layout_centerVertical="true"
         android:text="@string/your_font_was_added_to_the_app"
         android:textSize="20sp"
+        android:textColor="#fff"
         android:padding="10dp"
         android:id="@+id/activity_clicked_font_text"/>
 
@@ -22,6 +23,7 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:text="@string/ok"
         android:layout_marginTop="50dp"
+        android:textColor="#012241"
         android:background="@color/light_blue"
         android:foreground="?selectableItemBackground"
         android:id="@+id/activity_clicked_font_ok_button"/>

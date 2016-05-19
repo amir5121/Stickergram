@@ -14,7 +14,6 @@ import com.amir.telegramstickerbuilder.base.BaseFragment;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> implements View.OnClickListener, View.OnLongClickListener {
@@ -46,7 +45,6 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
 
     @Override
     public void onBindViewHolder(IconPackViewHolder holder, int position) {
-        Log.e(getClass().getSimpleName(), "position: " + position);
         holder.populate(new PackItem(
                 fragment.getContext(),
                 folder,
@@ -71,7 +69,6 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
     public boolean onLongClick(View view) {
         if (view.getTag() instanceof PackItem) {
             lastLongClickedItem = (PackItem) view.getTag();
-            Log.e(getClass().getSimpleName(), "OnLongClick: " + lastLongClickedItem.getDir());
             listener.OnLongClicked(lastLongClickedItem);
             return true;
         }
@@ -83,14 +80,18 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
         lastLongClickedItem.removeThumb();
 
         int i = items.indexOf(dir);
-        Log.e(getClass().getSimpleName(), "i: " + i);
         items.remove(i);
         notifyItemRemoved(i);
         renameAllFilesAfterThisPosition(i);
-//        Log.e(getClass().getSimpleName(), "i after: " + i);
-//        notifyItemRangeChanged(0,items.size());
         refresh();
-//        notifyItemRange();
+        if (items.isEmpty()) {
+            File file = new File(BaseActivity.USER_STICKERS_DIRECTORY + folder);
+            if (file.exists()) {
+                file.delete();
+                listener.folderDeleted();
+//                Log.e(getClass().getSimpleName(), folder + "was deleted");
+            }
+        }
     }
 
     private void renameAllFilesAfterThisPosition(int i) {
@@ -98,13 +99,10 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
         while (i < length) {
             String currentName = BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + (i + 1) + ".png";
             File file = new File(currentName);
-            Log.e(getClass().getSimpleName(), "from: " + file.getAbsolutePath());
             if (file.exists()) {
                 String newName = BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + i + ".png";
                 File temp = new File(newName);
-//                items.set(items.indexOf(currentName), newName);
                 notifyItemChanged(i);
-                Log.e(getClass().getSimpleName(), "to: " + temp.getAbsolutePath());
                 file.renameTo(temp);
             }
             File thumbFile = new File(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + (i + 1) + ".png");
@@ -118,13 +116,15 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
         void OnIconClicked(PackItem item);
 
         void OnLongClicked(PackItem item);
+
+        void folderDeleted();
     }
 
     public void refresh() {
         if (type == PackItem.TYPE_TEMPLATE) {
             try {
                 AssetManager assets = fragment.getActivity().getAssets();
-                String files[] = assets.list("Stickers/" + folder);
+                String files[] = assets.list(BaseActivity.STICKERS + folder);
                 for (String file : files) {
                     items.add(folder + File.separator + file);
                 }
@@ -132,28 +132,22 @@ public class IconPackAdapter extends RecyclerView.Adapter<IconPackViewHolder> im
                 e.printStackTrace();
             }
         } else if (type == PackItem.TYPE_USER) {
+
             File folder = new File(BaseActivity.USER_STICKERS_DIRECTORY + this.folder + File.separator);
-//            Log.e(getClass().getSimpleName(), BaseActivity.USER_STICKERS_DIRECTORY + this.folder + File.separator);
             if (folder.exists()) {
                 if (folder.isDirectory()) {
                     items = null;
                     items = new ArrayList<>();
                     File[] files = folder.listFiles();
-                    for (int i = 0; i < files.length; i++) {
-                        items.add(BaseActivity.USER_STICKERS_DIRECTORY + this.folder + File.separator + i + ".png");
+                    for (int i = 0; i < files.length; i++) { //lol ikr you are like why wouldn't list the files in that directory and i'm like cuz listing the file won't return to you a sorted list which is required in order for the delete function work properly
+                        items.add(BaseActivity.USER_STICKERS_DIRECTORY + this.folder + File.separator + i + BaseActivity.PNG);
                     }
-//                    for (File file : files) {
-//                        items.add(file.getAbsolutePath());
-////                        Log.e(getClass().getSimpleName(), file.getAbsolutePath());
-//                    }
-//                    Collections.sort(items);
                 } else
                     Log.e(getClass().getSimpleName(), folder.getAbsolutePath() + "was not a directory");
             } else Log.e(getClass().getSimpleName(), folder.getAbsolutePath() + "didn't exist");
         }
-//        Collections.sort(items);
-        for (String item : items)
-            Log.e(getClass().getSimpleName(), item);
+//        for (String item : items)
+//            Log.e(getClass().getSimpleName(), item);
     }
 
     public void notifyItemRange() {

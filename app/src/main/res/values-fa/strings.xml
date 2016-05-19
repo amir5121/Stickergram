@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ابر استیکرساز تلگرام</string>
+    <string name="app_name">استیکرگرام</string>
     <string name="add_font">افزودن فونت</string>
     <string name="add_new_text">افزودن متن جدید</string>
     <string name="cancel">لغو</string>
@@ -21,7 +21,6 @@
     <string name="home">خانه</string>
     <string name="how_to_add_font">چگونه فونت جدید اضافه کنید</string>
     <string name="move">حرکت</string>
-    <string name="need_permission">برای دسترسی به استیکرهای تلگرام نیاز به خواندن حافظه است</string>
     <string name="new_text">متن جدید</string>
     <string name="no">نه</string>
     <string name="ok">خب</string>
@@ -54,5 +53,5 @@
     <string name="choose_the_package_to_save_in">به کدام پک اضافه کنم؟</string>
     <string name="create_new_package">پک جدبد بساز</string>
     <string name="made">ساخته شده با</string>
-    <string name="stickergram">ابر استیکرساز تلگرام</string>
+    <string name="stickergram">استیکرگرام</string>
 </resources>

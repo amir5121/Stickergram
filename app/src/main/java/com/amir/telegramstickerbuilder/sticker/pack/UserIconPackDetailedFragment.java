@@ -21,16 +21,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amir.telegramstickerbuilder.EditImageActivity;
 import com.amir.telegramstickerbuilder.HowToActivity;
 import com.amir.telegramstickerbuilder.R;
+import com.amir.telegramstickerbuilder.UserStickersActivity;
 import com.amir.telegramstickerbuilder.base.BaseActivity;
 import com.amir.telegramstickerbuilder.base.BaseFragment;
 import com.amir.telegramstickerbuilder.infrastructure.Loader;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class UserIconPackDetailedFragment extends BaseFragment implements IconPackAdapter.OnStickerClickListener {
     RecyclerView recyclerView;
@@ -47,6 +45,7 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
         view = inflater.inflate(R.layout.fragment_icon_detailed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.template_sticker_icon_detailed_list);
         folderText = (TextView) view.findViewById(R.id.fragment_icon_detailed_text_folder);
+        if (folderText != null) folderText.setVisibility(View.GONE);
         refresh(folder); // this guy sets the adapter
         return view;
     }
@@ -64,9 +63,10 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
                         intent.setType("application/pdf");
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
                         startActivity(intent);
+                        Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
                     } else
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed), Toast.LENGTH_LONG).show();
-                } else if (which == Dialog.BUTTON_NEUTRAL){
+                } else if (which == Dialog.BUTTON_NEUTRAL) {
                     activity.finish();
                     startActivity(new Intent(activity, HowToActivity.class));
                 }
@@ -100,7 +100,7 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-                    Log.e(getClass().getSimpleName(), item.getDir());
+//                    Log.e(getClass().getSimpleName(), item.getDir());
                     File file = new File(item.getDir());
                     if (file.exists()) {
                         file.delete();
@@ -127,13 +127,20 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
         deleteDialog.show();
     }
 
+    @Override
+    public void folderDeleted() {
+        ((UserStickersActivity) getActivity()).popBackStack();
+    }
+
     public void refresh(String folder) {
         this.folder = folder;
+        if (folder == null) return;
+
         if (folderText != null) {
             folderText.setText(folder);
-//            Log.e(getClass().getSimpleName(), "Folder was: " + folder);
-        } else Log.e(getClass().getSimpleName(), "folderText was null");
-        if (folder == null) return;
+            folderText.setVisibility(View.VISIBLE);
+        }
+
         if (recyclerView != null) {
             adapter = new IconPackAdapter(this, this, folder, PackItem.TYPE_USER);
             if (BaseActivity.isTablet || BaseActivity.isInLandscape)

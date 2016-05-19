@@ -124,7 +124,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void onTaskStartListener() {
-        if (!hasCashedPhoneStickersOnce()) //to not to show the loading dialog if user is doing a swipeRefresh
+        if (!hasCashedPhoneStickersOnce()) //to not to show the loading firstLoadingDialog if user is doing a swipeRefresh
             instantiateLoadingDialog();
     }
 
@@ -161,6 +161,8 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     public void onNoCashDirectoryListener() {
         //todo: make sure telegram app is installed
         Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
+//        if (!Loader.isTelegramInstalled(this))
+//            Toast.makeText(this,getString(R.string.telegram_is_not_installed))
         finish();
     }
 
@@ -197,7 +199,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         if (dialog != null) {
             dialog.dismiss();
             dialog = null;
-            Log.e(getClass().getSimpleName(), "instantiateDialog dialog was set to null");
+            Log.e(getClass().getSimpleName(), "instantiateDialog firstLoadingDialog was set to null");
         }
         dialog = new AlertDialog.Builder(PhoneStickersActivity.this)
                 .setView(loadingDialogView)
@@ -210,9 +212,9 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (dialog != null) {
-            Log.e(getClass().getSimpleName(), "onDestroy dialog was set to null");
+            Log.e(getClass().getSimpleName(), "onDestroy firstLoadingDialog was set to null");
             dialog.dismiss();
             dialog = null;
         }

@@ -47,6 +47,10 @@ public class UserStickersActivity extends BaseActivity implements AssetIconListF
         }
     }
 
+    public void popBackStack(){//in case the folder was deleted this method gets called
+        getSupportFragmentManager().popBackStackImmediate();
+    }
+
     @Override
     public void OnIconSelected(IconItem item) {
         folder = item.getFolder(); //is used to hold the state

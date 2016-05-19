@@ -9,8 +9,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="5dp"
-        android:text="@string/note_in_order_to_use_any_of_these_sticker_in_telegram_you_must_create_your_sticker_pack_and_add_these_stickers_to_the_pack"
-        android:textSize="16sp" />
+        android:text="@string/note_in_order_to_use_any_of_these_sticker_in_telegram"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

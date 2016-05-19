@@ -65,7 +65,6 @@ public class PackItem {
                 ThumbnailUtils.extractThumbnail(tempBitmap, tempBitmap.getWidth() / 3, tempBitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);
                 outputStream.close();
             } catch (IOException e) {
-                Log.e(getClass().getSimpleName(), "exception was trown");
                 e.printStackTrace();
             }
         }

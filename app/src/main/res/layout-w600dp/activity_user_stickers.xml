@@ -8,11 +8,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/icon_sticker_list_background">
 
         <include
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
+
 
         <fragment
             android:layout_width="150dp"

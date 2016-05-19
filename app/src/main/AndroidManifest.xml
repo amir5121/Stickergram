@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.amir.telegramstickerbuilder">
 
-    <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR"></uses-permission>
+    <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
+
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -23,7 +25,9 @@
 
         <activity android:name=".UserStickersActivity" />
 
-        <activity android:name=".SavingStickerActivity"/>
+        <activity
+            android:name=".SavingStickerActivity"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".PhoneStickersActivity" />
 
@@ -36,7 +40,7 @@
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
-        <activity android:name=".HowToActivity"/>
+        <activity android:name=".HowToActivity" />
 
         <activity android:name=".ClickedFontActivity">
             <intent-filter>
