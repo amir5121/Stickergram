@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
+    <ScrollView
+        android:id="@+id/dialog_send_sticker_note_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="@string/note_in_order_to_use_any_of_these_sticker_in_telegram"
-        android:textSize="18sp" />
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_info" />
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/for_more_info_press_on_how_to_button"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/dialog_send_sticker_big_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/note_in_order_to_use_any_of_these_sticker_in_telegram"
+                android:textColor="@color/dialog_text_color"
+                android:textSize="17sp" />
+
+            <ImageView
+                android:id="@+id/dialog_send_sticker_info_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dialog_send_sticker_big_note"
+                android:src="@drawable/ic_info" />
+
+            <TextView
+                android:id="@+id/dialog_send_sticker_info_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dialog_send_sticker_big_note"
+                android:layout_toEndOf="@id/dialog_send_sticker_info_icon"
+                android:layout_toRightOf="@id/dialog_send_sticker_info_icon"
+                android:padding="5dp"
+                android:text="@string/for_more_info_press_on_how_to_button"
+                android:textSize="15sp" />
+        </RelativeLayout>
+    </ScrollView>
 
     <ImageView
         android:id="@+id/dialog_send_sticker_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/dialog_send_sticker_note_container"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:scaleType="fitCenter">
-
-    </ImageView>
-
-</LinearLayout>
+        android:scaleType="fitCenter" />
+</RelativeLayout>

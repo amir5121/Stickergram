@@ -82,4 +82,7 @@
     <string name="choose_the_stickers_bot">Choose the @Stickers Bot</string>
     <string name="need_permission_to_look_for_your_stickers">Need permision to access your Stickers</string>
     <string name="need_permission_to_save_the_sticker">Need permission to save the Sticker</string>
+    <string name="there_was_a_problem_getting_the_picture">There was a problem getting the picture.</string>
+    <string name="add_new_text_or_set_a_text_selected">Add new Text or set a text selected</string>
+    <string name="name_can_not_contain_symbols">Name can not contain symbols</string>
 </resources>

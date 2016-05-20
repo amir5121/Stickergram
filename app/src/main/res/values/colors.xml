@@ -44,12 +44,13 @@
     <color name="sticker_item_background_selected">#8afddfdf</color>
     <color name="lighter_blue">#9942a5f5</color>
     <color name="main_activity_text_color">#ffffff</color>
-    <color name="main_activity_background_color">#42a5f5</color>
-    <color name="dialog_text_color">#42a5f5</color>
+    <color name="main_activity_background_color">#2196f3</color>
+    <color name="dialog_text_color">#0277bd</color>
     <color name="nav_drawer_top_background">#2196f3</color>
     <color name="faqAnswerColor">#eee</color>
     <color name="faqQuestionColor">#fff</color>
     <color name="phone_sticker_background_color">#1976d2</color>
     <color name="faq_text_background" >#42a5f5</color>
-    <color name="activity_main_image_button_background" >#2196f3</color>
+    <color name="activity_main_buttons_background" >#2196f3</color>
+    <color name="edit_activity_button_overlay_layer_background_color">#992196f3</color>
 </resources>

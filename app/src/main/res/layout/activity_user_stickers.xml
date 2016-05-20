@@ -4,6 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/icon_sticker_list_background"
     tools:context=".UserStickersActivity">
 
     <RelativeLayout
@@ -14,11 +15,16 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
+
+        <include
+            android:id="@+id/include_detailed_note"
+            layout="@layout/include_detailed_note" />
+
         <FrameLayout
             android:id="@+id/activity_user_stickers_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/include_toolbar">
+            android:layout_below="@id/include_detailed_note">
 
         </FrameLayout>
 

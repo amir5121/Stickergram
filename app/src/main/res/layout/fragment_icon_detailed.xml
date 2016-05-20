@@ -16,35 +16,6 @@
         android:textColor="#fff"
         android:textSize="18sp" />
 
-    <LinearLayout
-        android:id="@+id/fragment_icon_detailed_note"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_icon_detailed_text_folder"
-        android:orientation="horizontal"
-        android:background="#39333333"
-        android:layout_margin="5dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_info"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginEnd="2dp"
-            android:background="@drawable/my_circle"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:textColor="#fff"
-            android:text="@string/important_note"
-            android:textSize="18sp" />
-    </LinearLayout>
-
     <ProgressBar
         android:id="@+id/fragment_icon_detailed_progressBar"
         android:layout_width="wrap_content"
@@ -57,7 +28,7 @@
         android:id="@+id/template_sticker_icon_detailed_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fragment_icon_detailed_note"
+        android:layout_below="@id/fragment_icon_detailed_text_folder"
         android:scrollbars="vertical" />
 </RelativeLayout>
 

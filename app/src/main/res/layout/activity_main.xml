@@ -4,34 +4,37 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.amir.telegramstickerbuilder.MainActivity">
+    tools:context="com.amir.stickergram.MainActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/main_activity_background_color"
+        android:orientation="vertical"
         android:paddingBottom="5dp">
 
         <include
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <ImageView
-            android:id="@+id/activity_main_image"
+        <TextView
+            android:id="@+id/activity_main_text"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_below="@id/include_toolbar"
-            android:background="@color/nav_drawer_top_background"
-            android:clickable="true"
-            android:contentDescription="@string/entry_image"
-            android:scaleType="centerCrop" />
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="@string/stickergram"
+            android:textColor="#fff"
+            android:textSize="45sp"
+            android:typeface="serif" />
 
         <RelativeLayout
             android:id="@+id/main_activity_buttons"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/activity_main_image"
-            android:background="@color/activity_main_image_button_background">
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@color/activity_main_buttons_background">
 
             <View
                 android:id="@+id/view_horizontal"
@@ -164,25 +167,10 @@
                 android:text="@string/sticker_from_picture"
                 android:textColor="@color/main_activity_text_color"
                 android:textSize="18sp" />
-            <!--TODO: Picker icon-->
+
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/activity_main_top_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/main_activity_buttons"
-            android:layout_below="@id/include_toolbar"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="@string/stickergram"
-            android:textColor="#fff"
-            android:textSize="45sp"
-            android:typeface="serif" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <include layout="@layout/include_nav_drawer" />
 

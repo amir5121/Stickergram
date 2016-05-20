@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.amir.telegramstickerbuilder.MainActivity">
+    tools:context="com.amir.stickergram.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,12 +19,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/faq_text_background"
             android:gravity="center"
             android:padding="3dp"
             android:text="@string/help"
             android:textColor="#fff"
-            android:textSize="16sp"
-            android:background="@color/faq_text_background"/>
+            android:textSize="16sp" />
 
 
         <ScrollView
@@ -209,7 +209,7 @@
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
-                    android:text="What if i wanted to add Sticker to an existing pack that i have published earlier?" />
+                    android:text="What if i wanted to add Sticker to a published pack?" />
 
                 <TextView
                     style="@style/HowToAnswer"

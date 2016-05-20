@@ -5,6 +5,7 @@
     android:padding="10dp"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="10dp"
+    android:textColor="@color/dialog_text_color"
     android:text="@string/are_you_sure_you_are_finished_editing_this_sticker"
     android:textSize="17sp"
     android:gravity="center"/>

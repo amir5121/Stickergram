@@ -102,15 +102,20 @@
     </LinearLayout>
 
 
-    <View
-        android:id="@+id/activity_edit_image_scroll_view_hider"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/activity_edit_image_buttons_overlay_layer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/activity_edit_image_move_container"
-        android:background="#88ffffff"
+        android:background="@color/edit_activity_button_overlay_layer_background_color"
         android:clickable="true"
-        android:visibility="gone" />
+        android:gravity="center"
+        android:text="@string/add_new_text_or_set_a_text_selected"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:visibility="gone"/>
 
 
     <!--<app.minimize.com.seek_bar_compat.SeekBarCompat-->
