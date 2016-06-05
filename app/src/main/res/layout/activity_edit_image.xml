@@ -3,7 +3,7 @@
     android:id="@+id/activity_edit_image_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#012241"
+    android:background="#1565c0"
     android:orientation="vertical">
 
     <include
@@ -36,6 +36,12 @@
             android:background="#888">
 
             <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/chess"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
                 android:id="@+id/activity_edit_image_main_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -44,7 +50,6 @@
             <!--this is the imageContainer for the images don't delete it-->
         </FrameLayout>
 
-        <!--TODO: if the image is taller than it is wide set it's height to match_parent other -->
         <!--TODO: background for the image should be a vector image to represent the transparency and stop the confusion-->
 
     </RelativeLayout>
@@ -101,7 +106,6 @@
 
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/activity_edit_image_buttons_overlay_layer"
         android:layout_width="match_parent"
@@ -112,48 +116,14 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/add_new_text_or_set_a_text_selected"
-        android:textStyle="bold"
         android:textColor="#fff"
         android:textSize="20sp"
-        android:visibility="gone"/>
+        android:textStyle="bold"
+        android:visibility="gone" />
 
-
-    <!--<app.minimize.com.seek_bar_compat.SeekBarCompat-->
-    <!--android:id="@+id/activity_edit_image_size_seek_bar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_above="@id/activity_edit_image_buttons_container"-->
-    <!--android:layout_marginStart="10dp"-->
-    <!--android:layout_marginRight="10dp"-->
-    <!--android:layout_marginEnd="10dp"-->
-    <!--android:layout_marginLeft="10dp"-->
-    <!--android:layout_marginBottom="55dp"-->
-    <!--android:background="@color/size_seek_bar_background_color"-->
-    <!--android:maxHeight="60sp"-->
-    <!--android:visibility="gone"-->
-    <!--app:progressBackgroundColor="#000"-->
-    <!--app:progressColor="#01579B"-->
-    <!--app:thumbAlpha="1.0"-->
-    <!--app:thumbColor="#FF4444" />-->
-
-    <!--<app.minimize.com.seek_bar_compat.SeekBarCompat-->
-    <!--android:id="@+id/activity_edit_image_tilt_seek_bar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_above="@id/activity_edit_image_buttons_container"-->
-    <!--android:layout_marginStart="10dp"-->
-    <!--android:layout_marginRight="10dp"-->
-    <!--android:layout_marginEnd="10dp"-->
-    <!--android:layout_marginLeft="10dp"-->
-    <!--android:layout_marginBottom="55dp"-->
-    <!--android:background="@color/tilt_seek_bar_background_color"-->
-    <!--android:max="360"-->
-    <!--android:visibility="gone"-->
-    <!--android:maxHeight="60sp"-->
-    <!--app:progressBackgroundColor="@color/tilt_seek_bar_progress_background_color"-->
-    <!--app:progressColor="@color/tilt_seek_bar_progress_color"-->
-    <!--app:thumbAlpha="1.0"-->
-    <!--app:thumbColor="#1A237E" />-->
+    <include
+        android:id="@+id/include_pro_note_container"
+        layout="@layout/include_pro_note" />
 
 </RelativeLayout>
 
