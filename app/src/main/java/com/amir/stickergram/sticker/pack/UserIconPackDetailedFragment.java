@@ -49,6 +49,8 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
         if (folderText != null) folderText.setVisibility(View.GONE);
         refresh(folder); // this guy sets the adapter
         return view;
+
+        //todo: showcase of long press and press
     }
 
     @Override
@@ -66,7 +68,7 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
                         startActivity(intent);
                         Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
                     } else
-                        Toast.makeText(activity, getString(R.string.telegram_is_not_installed), Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();
                 } else if (which == Dialog.BUTTON_NEUTRAL) {
                     activity.finish();
                     startActivity(new Intent(activity, HowToActivity.class));
@@ -84,7 +86,7 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
                 params.addRule(RelativeLayout.END_OF, R.id.dialog_send_sticker_note_container);
             }
             stickerImage.setLayoutParams(params);
-            RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(250, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams((int) (200 * BaseActivity.density), ViewGroup.LayoutParams.WRAP_CONTENT);
             View noteText = view.findViewById(R.id.dialog_send_sticker_note_container);
             if (noteText != null) noteText.setLayoutParams(params2);
         }
@@ -143,11 +145,10 @@ public class UserIconPackDetailedFragment extends BaseFragment implements IconPa
     @Override
     public void folderDeleted() {
         //restarting the activity without animation
-        //thats the way to do it
+        //that's the way to do it
         getActivity().finish();
         startActivity(new Intent(getActivity(), UserStickersActivity.class));
         getActivity().overridePendingTransition(0, 0);
-        //todo: what happens to the iconFragment when a folder is deleted
     }
 
     public void refresh(String folder) {

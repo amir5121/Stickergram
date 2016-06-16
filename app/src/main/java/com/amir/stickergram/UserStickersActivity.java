@@ -1,12 +1,16 @@
 package com.amir.stickergram;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
 import com.amir.stickergram.sticker.icon.AssetIconListFragment;
 import com.amir.stickergram.sticker.icon.IconItem;
@@ -23,15 +27,21 @@ public class UserStickersActivity extends BaseActivity implements AssetIconListF
     private boolean publishNoteIsHidden;
     View publishNoteContainer;
 
-
-    //todo: add explosm to the stickers
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!Loader.checkPermission(this)) {
+            Loader.gainPermission(this, Loader.USER_STICKER_GAIN_PERMISSION);
+            return;
+        }
+
         setContentView(R.layout.activity_user_stickers);
         setNavDrawer(new MainNavDrawer(this));
 
         setUpView();
+
+
         if (savedInstanceState != null) {
             if (publishNoteContainer != null) {
                 publishNoteIsHidden = savedInstanceState.getBoolean(PUBLISH_NOTE_STATUS, false);
@@ -76,9 +86,9 @@ public class UserStickersActivity extends BaseActivity implements AssetIconListF
 
     @Override
     public void OnIconSelected(IconItem item) {
-        folder = item.getFolder(); //is used to hold the state
+        folder = item.getFolder(); //folder is used to hold the state
         //what happening here is the same as saveState
-        instantiateFragment(item.getFolder());
+        instantiateFragment(folder);
     }
 
     private void saveState(String folder) {
@@ -139,4 +149,31 @@ public class UserStickersActivity extends BaseActivity implements AssetIconListF
         }
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == Loader.USER_STICKER_GAIN_PERMISSION) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //restarting the activity
+                finish();
+                startActivity(new Intent(this, UserStickersActivity.class));
+                this.overridePendingTransition(0, 0);
+
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
+
+            } else {
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                this.overridePendingTransition(0, 0);
+                Toast.makeText(this, getResources().getString(R.string.need_permission_to_look_for_your_stickers), Toast.LENGTH_LONG).show();
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
+
+            return;
+        }
+    }
 }

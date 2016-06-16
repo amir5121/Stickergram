@@ -16,7 +16,8 @@ public class TemplateStickersActivity extends BaseActivity implements AssetIconL
 
     private String folder;
 
-    //todo: add explosm to the stickers
+    //todo: add explosem stickers hahaha
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

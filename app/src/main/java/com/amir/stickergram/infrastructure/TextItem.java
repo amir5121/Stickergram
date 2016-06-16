@@ -15,10 +15,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
+import com.amir.stickergram.base.BaseActivity;
+
 public class TextItem {
     public static final int TEXT_BOLD = 0;
     public static final int TEXT_ITALIC = 1;
     public static final int TEXT_NORMAL = 2;
+    public static final Typeface DEFAULT_FONT = Typeface.SERIF;
 //    public static final int DEFAULT_TEXT_COLOR = 1430537284;
 
 
@@ -49,8 +52,8 @@ public class TextItem {
     Matrix matrix;
     private float strokeWidth;
 
-    public TextItem(String text, Context context, Bitmap hostBitmap) {
-        scale = context.getResources().getDisplayMetrics().density;
+    public TextItem(String text, Bitmap hostBitmap) {
+        scale = BaseActivity.density;
 
         this.hostBitmap = hostBitmap.copy(hostBitmap.getConfig(), true);
         hostWidth = hostBitmap.getWidth();
@@ -60,18 +63,17 @@ public class TextItem {
         strokeWidth = 0;
 
         selectedColor = Color.parseColor("#55444444");
-//        Log.e(getClass().getSimpleName(), String.valueOf(selectedColor));
         isSelected = false;
         this.text = text;
         alpha = 1;
         backgroundColor = Color.TRANSPARENT;
-        font = new FontItem("Mono Space", Typeface.MONOSPACE);
+        font = new FontItem("Mono Space", DEFAULT_FONT);
         gravity = Gravity.NO_GRAVITY;
-        position = new Position(10, 10);
+        position = new Position(50, 50);
         tilt = 180;
         shadow = new Shadow(Color.BLACK, 0, 0, 0);
         size = 50;
-        textColor = Color.YELLOW;
+        textColor = Color.parseColor("#1565c0");
         alignment = Layout.Alignment.ALIGN_OPPOSITE;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
             textDirection = View.TEXT_DIRECTION_LTR;
@@ -150,7 +152,7 @@ public class TextItem {
     }
 
     public TextArea getArea() {
-        getTextBitmap();
+        getTextBitmap(); //updating the area
         return area;
     }
 
@@ -188,64 +190,29 @@ public class TextItem {
         mPaint.setAlpha(alpha);
         mPaint.setTypeface(font.getTypeface());
 
-//        mPaint.setStyle(Paint.Style.STROKE);
-//        TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-//        textPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
-//        textPaint.setTextSize(size);
-//        textPaint.setAlpha(alpha);
-//        textPaint.setTypeface(font.getTypeface());
-//        textPaint.setColor(textColor);
-//        textPaint.setStyle(textStyle);
-
         Rect bound = new Rect();
         mPaint.getTextBounds(text, 0, text.length(), bound);
-//        textPaint.getTextBounds(text, 0, text.length(), bound);
 
+        //todo: play around to get a more prefect area for your text plzz don't hardcode values like you are doing with below line
+        //todo: let the user change the text padding
         textWidth = (int) mPaint.measureText(text, 0, text.length()) + 10;
-//        textWidth = (int) textPaint.measureText(text, 0, text.length());
-        textHeight = getTextHeight(text, textWidth, size, font.getTypeface()) + shadow.getDy() + 10;
-
-//        if (Loader.isPersian(getText()))
-        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight);
+//        Log.e(getClass().getSimpleName(), "textWidth: " + textWidth);
+        textHeight = getTextHeight(text, textWidth, size, font.getTypeface()) + 10;
+//        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight);
         textHeight += textHeight / 3;
-        textWidth += textWidth / 5;
 
-//        StaticLayout staticLayout = new StaticLayout(
-//                text,
-//                textPaint,
-//                textWidth,
-//                alignment,
-//                1.0f,
-//                1.0f,
-//                true);
+        int padding = 20;
+        if (Loader.isPersian(text))
+            padding += size/10;
 
+        int bitmapWidth = (int) (textWidth + shadow.getDx() + strokeWidth + padding);
+        int bitmapHeight = (int) (textHeight + shadow.getDy() + strokeWidth + padding);
 
-////        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight + " textWidth: " + textWidth);
-////        float actualTilt = Math.abs(tilt - 180);
-////        float remain = actualTilt % 90;
-
-////        Log.e(getClass().getSimpleName(), "remain: " + remain);
-////        actualTilt = (actualTilt >= 90 && actualTilt != 180) ? 90 - actualTilt % 90 : actualTilt;
-////        if (actualTilt == 180) actualTilt = 0;
-////        Log.e(getClass().getSimpleName(), "actualTilt: " + actualTilt);
-//        // / ((textWidth * ((tilt - 180) / 180)) + 1);
-////        if (actualTilt > 90) actualTilt = actualTilt/45;
-//
-////        float v = actualTilt / 90;
-////        Log.e(getClass().getSimpleName(), "v: " + v);
-////        Log.e(getClass().getSimpleName(), "  ------ textHeight: " + textHeight + " textWidth " + textWidth);
-////        int tempTextWidth = textWidth;
-////        textWidth = (int) (textWidth + (textHeight * v) - (textWidth * v));
-////        textHeight = (int) (textHeight + (tempTextWidth * v) - (textHeight * v));
-////        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight + " textWidth " + textWidth);
-//
-//
-////        area = new TextArea(position, textWidth, textHeight);
-        area = new TextArea(position, textWidth, textHeight);
+        area = new TextArea(position, bitmapWidth, bitmapHeight);
 
         Bitmap bitmap = Bitmap.createBitmap(
-                (int) (textWidth + ((shadow.getDx() > 0) ? shadow.getDx() * (scale + 0.5) : 0) + strokeWidth),
-                (int) (textHeight + strokeWidth),
+                bitmapWidth,
+                bitmapHeight,
                 Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(backgroundColor);
@@ -254,138 +221,45 @@ public class TextItem {
         mPaint.setColor(textStrokeColor);
         mPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
 
-        int yOffSet = (int) (size - (size / 15) + strokeWidth / 2); //this line is weird but it work. let it be
-
+//        int yOffSet = (int) (size - (size / 15) + strokeWidth / 2 + padding / 2); //todo: this line is weird but it work. let it be.... no don't let it be it ain't working correctly on different fonts
+//        int yOffSet = (int) (strokeWidth / 2 + textWidth/2);
+        int yOffSet = (int) (strokeWidth / 2 + textHeight / 1.5);
 //        float xOffSet = (size / 2) + strokeWidth / 2;
-        float xOffSet = bitmap.getWidth() / 2 - (textWidth / 2) + size / 2 + strokeWidth / 2;
+//        float xOffSet = bitmap.getWidth() / 2 - (textWidth / 2) + size / 2 + strokeWidth / 2 ;
+        float xOffSet = (int) (10 + strokeWidth / 2 + padding / 2);
         canvas.drawText(text, xOffSet, yOffSet, mPaint);
 
-//        mPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
         mPaint.setShadowLayer(0, 0, 0, 0);//removing the shadow to avoid redrawing it
         mPaint.setColor(textColor);
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawText(text, xOffSet, yOffSet, mPaint);
         canvas.save();
 
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setColor(textStrokeColor);
-//        paint.setStrokeWidth(strokeWidth);
-//        paint.setTypeface(font.getTypeface());
-//        paint.setTextAlign(A);
-//        canvas.drawPaint(paint);
-//        canvas.save();
-
-////        canvas.translate(-textWidth, -textHeight);
-
-////
-////        Bitmap copy = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-////
-////        Canvas newCanvas = new Canvas(copy);
-////        Matrix matrix = new Matrix();
-////        matrix.setRotate (tilt - 180, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
-////        newCanvas.setMatrix(matrix);
-////
-////        canvas.drawBitmap(copy,0,0,null);
-//
-////        canvas.rotate(tilt - 180, textWidth / 2, textHeight / 2);
-////        canvas.rotate(tilt - 180, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
-////        canvas.translate((-(textWidth / 2) * v), (textHeight / 2) * v);
-//
-////        canvas.translate(textWidth, textHeight);
-////        canvas.rotate(tilt - 180, textWidth + bound.exactCenterX(), textHeight + bound.exactCenterY());
-////        canvas.translate(-textWidth, -textHeight);
-//
-////        Log.e(getClass().getSimpleName(), "x: " + (-(textWidth / 2) * v) + " y: " + (textHeight / 3) * v);
-
-////        canvas.drawBitmap(bitmap, 0, 0, textPaint);
-////        staticLayout.draw(canvas);
-
-//        Matrix matrix = new Matrix();
-//        matrix.setRotate(tilt - 180, bitmap.getWidth()/2, bitmap.getHeight()/2);
-//        newCanvas.setMatrix(matrix);
-//        canvas.drawBitmap(bitmap, matrix, null);
-
         canvas.restore();
         return bitmap;
     }
 
-    public Bitmap getFullTextBitmap() {
-        if (isSelected) {
-            Bitmap tempTextBitmap = getTextBitmap();
-            Canvas canvas = new Canvas(tempTextBitmap);
-            canvas.drawColor(selectedColor);
-            Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
-            Canvas mainCanvas = new Canvas(fullTextBitmap);
-            mainCanvas.drawBitmap(tempTextBitmap, position.getLeft(), position.getTop(), null);
-            return fullTextBitmap;
-
-        } else {
-            Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(fullTextBitmap);
-            canvas.drawBitmap(getTextBitmap(), position.getLeft(), position.getTop(), null);
-            return fullTextBitmap;
-        }
-    }
-
-    public Bitmap getFullTextBitmap2(Bitmap hostBitmap) {
+    public Bitmap getFullTextBitmap(Bitmap hostBitmap) {
         Bitmap tempTextBitmap = getTextBitmap();
         Bitmap fullTextBitmap = hostBitmap.copy(hostBitmap.getConfig(), true);
         Canvas canvas = new Canvas(fullTextBitmap);
-//        Log.e(getClass().getSimpleName(), "-----tilt = " + (tilt - 180));
         Canvas textCanvas = new Canvas(tempTextBitmap);
         matrix = new Matrix();
-        matrix.postRotate(tilt - 180, textWidth / 2, textHeight / 2);
+//        matrix.postRotate(tilt - 180, textWidth / 2, textHeight / 2);
+        matrix.postRotate(tilt - 180, tempTextBitmap.getWidth() / 2, tempTextBitmap.getHeight() / 2);
         matrix.postTranslate(position.getLeft(), position.getTop());
-//        textCanvas.setMatrix(matrix);
         if (isSelected) {
-//            textCanvas.rotate(tilt - 180, textWidth / 2, textHeight / 2);
             textCanvas.drawColor(selectedColor);
             textCanvas.save();
             textCanvas.restore();
         }
-//        else {
-//            Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
-//
-//            textCanvas.save();
-//            textCanvas.restore();
-//            canvas.drawBitmap(tempTextBitmap, position.getLeft(), position.getTop(), null);
-//            canvas.save();
-//            canvas.restore();
-//            return fullTextBitmap;
-//        }
-//            Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
-//            Bitmap fullTextBitmap = Bitmap.createBitmap(textWidth, textHeight, Bitmap.Config.ARGB_8888);
-//            Canvas mainCanvas = new Canvas(fullTextBitmap);
-//            mainCanvas.drawBitmap(tempTextBitmap, position.getLeft(), position.getTop(), null);
-//        RotateBitmap(tempTextBitmap, tilt - 180);
-
         canvas.drawBitmap(tempTextBitmap, matrix, new Paint());
-//        canvas.drawBitmap(tempTextBitmap, position.getLeft(), position.getTop(), null);
         canvas.save();
         canvas.restore();
         return fullTextBitmap;
     }
 
-//    public Point getRotatedPoint(Point point) {
-//        float[] startPoints = new float[2];
-//
-//        startPoints[0] = point.x;
-//        startPoints[1] = point.y;
-//
-//        matrix.setRotate(tilt + 180, textWidth / 2, textHeight / 2);
-//        matrix.mapPoints(startPoints);
-//
-//        return point;
-//
-//    }
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle, source.getWidth() / 2, source.getHeight() / 2);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-    public static int getTextHeight(String text, int maxWidth, float textSize, Typeface typeface) {
+    public int getTextHeight(String text, int maxWidth, float textSize, Typeface typeface) {
 //        http://egoco.de/post/19077604048/calculating-the-height-of-text-in-android
         TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
         paint.setTextSize(textSize);
@@ -402,7 +276,10 @@ public class TextItem {
         }
 
         Rect bounds = new Rect();
-        paint.getTextBounds("Py", 0, 2, bounds);
+        paint.getTextBounds(this.text, 0, this.text.length(), bounds);
+//        if (Loader.isPersian(text))
+//            paint.getTextBounds("اغ", 0, 2, bounds);
+//        else paint.getTextBounds("Py", 0, 2, bounds);
         return (int) Math.floor(lineCount * bounds.height());
     }
 

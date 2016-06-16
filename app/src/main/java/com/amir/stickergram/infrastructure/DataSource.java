@@ -108,9 +108,6 @@ public class DataSource {
     }
 
     private boolean removeDirectoryFromSet(String stickerDirectory) {
-//        stickerDirectories = preferences.getStringSet(DIRECTORIES, null);
-//        if (stickerDirectories != null) {
-//        Log.e(getClass().getSimpleName(), "made it all the way here");
         if (stickerDirectories.contains(stickerDirectory)) {
             stickerDirectories.remove(stickerDirectory);
             SharedPreferences.Editor editor = preferences.edit();
@@ -118,15 +115,12 @@ public class DataSource {
             editor.apply();
             return true;
         }
-//        }
         return false;
     }
 
     public boolean remove(String dir) {
         if (stickerDirectories.contains(dir)) {
-//            Log.e(getClass().getSimpleName(), "removeThumb: " + dir);
             SharedPreferences.Editor editor = preferences.edit();
-//            editor.removeThumb(item.getStickerDirectory());
             String thumbDir = preferences.getString(dir + THUMB_DIR_STRING, null);
             if (thumbDir != null) {
                 File thumbFile = new File(thumbDir);
@@ -145,35 +139,18 @@ public class DataSource {
     }
 
     public void updateSet(Set<String> updateSet) {
-        Log.e(getClass().getSimpleName(), "update set was called");
-//        Log.e(getClass().getSimpleName(), "stickerDirectories size: " + stickerDirectories.size());
-        Set<String> temp = new HashSet<>(stickerDirectories);
-//        temp.addAll(stickerDirectories);
-//        Log.e(getClass().getSimpleName(), String.valueOf(stickerDirectories.size()));
-
-        for (String existence : temp) {
-            if (!updateSet.contains(existence)) {
-//                Log.e(getClass().getSimpleName(), "before removeThumb: " + updateSet.contains(existence) + " " + existence);
-//                stickerDirectories.removeThumb(existence);
-                remove(existence);
-//                Log.e(getClass().getSimpleName(), "after removeThumb: " + updateSet.contains(existence) + " " + existence);
+        Set<String> temp = null;
+        if (stickerDirectories != null)
+            temp = new HashSet<>(stickerDirectories);
+        if (temp != null) {
+            for (String existence : temp) {
+                if (!updateSet.contains(existence)) {
+                    remove(existence);
+                }
             }
         }
-//        Log.v(getClass().getSimpleName(), "temp size" + temp.size());
-//        stickerDirectories = updateSet;
         SharedPreferences.Editor editor = preferences.edit();
         editor.putStringSet(DIRECTORIES, updateSet);
         editor.apply();
-
-//        Log.e(getClass().getSimpleName(), String.valueOf(stickerDirectories.size()));
-//        i = 0;
-//        for (String existence : updateSet) {
-//            Log.e(getClass().getSimpleName(), i++ + existence);
-//        }
-//        SharedPreferences.Editor editor = preferences.edit();
-//        stickerDirectories = updateSet;
-//        editor.putStringSet(DIRECTORIES, stickerDirectories);
-//        editor.apply();
-//        Log.e(getClass().getSimpleName(), "updateSet size: " + stickerDirectories.size());
     }
 }

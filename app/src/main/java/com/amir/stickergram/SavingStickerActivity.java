@@ -1,6 +1,5 @@
 package com.amir.stickergram;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +23,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.shape.CircleShape;
 
 public class SavingStickerActivity extends BaseActivity implements IconListFragment.OnIconSelectedListener, View.OnClickListener {
     public static final String EXTRA_FOLDER = "EXTRA_FOLDER";
@@ -39,6 +44,15 @@ public class SavingStickerActivity extends BaseActivity implements IconListFragm
         if (createNewPackButton != null) {
             createNewPackButton.setOnClickListener(this);
         }
+
+        new MaterialShowcaseView.Builder(this)
+                .setDelay(400)
+                .setTarget(createNewPackButton)
+                .setContentText(R.string.you_can_create_new_package)
+                .setDismissText(R.string.ok)
+                .setDismissOnTouch(true)
+                .singleUse("AMIR")
+                .show();
     }
 
     @Override
@@ -84,16 +98,32 @@ public class SavingStickerActivity extends BaseActivity implements IconListFragm
                         @Override
                         public void onClick(View view) {
                             String text = editText.getText().toString();
-                            if (!text.equals("") &&
+                            File stickerDirectories = new File(USER_STICKERS_DIRECTORY);
+                            List stickers = null;
+                            if (stickerDirectories.exists())
+                                stickers = Arrays.asList(stickerDirectories.list());
+
+                            if (stickers != null && stickers.contains(text)) {
+                                View nameAlreadyExistText = newTextDialogView.findViewById(R.id.dialog_new_package_already_exist);
+                                if (nameAlreadyExistText != null)
+                                    nameAlreadyExistText.setVisibility(View.VISIBLE);
+                            } else if (!text.equals("") &&
                                     !text.contains("!") &&
                                     !text.contains("'") &&
                                     !text.contains("/") &&
                                     !text.contains("%") &&
                                     !text.contains("#") &&
+                                    !text.contains("*") &&
+                                    !text.contains("\\") &&
+                                    !text.contains(":") &&
+                                    !text.contains("|") &&
+                                    !text.contains("<") &&
+                                    !text.contains(">") &&
                                     !text.contains("?")) {
                                 //todo: look around
+                                Log.e(getClass().getSimpleName(), "Made it to here");
                                 File folder = new File(BaseActivity.USER_STICKERS_DIRECTORY + text + File.separator);
-                                if (!folder.mkdirs())
+                                if (folder.mkdirs())
                                     goToStickerPack(text);
                                 newTextDialog.dismiss();
                             } else {
@@ -144,12 +174,12 @@ public class SavingStickerActivity extends BaseActivity implements IconListFragm
             files = folder.listFiles();
         else throw new RuntimeException("Invalid Folder");
         try {
-            File cashedSticker = new File(BaseActivity.STICKER_CASH_DIR);
+            File cashedSticker = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
             if (cashedSticker.exists() && cashedSticker.isFile()) {
                 Loader.copyFile(cashedSticker,
                         new File(dir + files.length + ".png"));
 
-                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.STICKER_CASH_DIR);
+                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.TEMP_STICKER_CASH_DIR);
                 File thumbFile =
                         new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + stickerFolder + "_" + files.length + ".png"));
                 if (!thumbFile.getParentFile().exists())

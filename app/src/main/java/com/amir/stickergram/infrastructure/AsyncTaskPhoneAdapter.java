@@ -14,9 +14,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Integer, Integer> {
-    private static final Integer NON_EXISTENCE_CACHE_FOLDER_VALUE = -1;
-    private static final Integer SUCCESS_VALUE = 0;
-    private static final Integer NO_ITEM_VALUE = 1;
+    private static final Integer CACHE_DIRECTORY_DID_NOT_EXIST = -1;
+    private static final Integer ITEMS_WERE_ADDED = 0;
+    private static final Integer NO_ITEM_IN_CACHE_DIRECTORY = 1;
+    private static final Integer NEED_PERMISSION = 2;
     Context context;
     AsyncPhoneTaskListener listener;
     String baseThumbDir;
@@ -48,58 +49,66 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
 
     @Override
     protected synchronized Integer doInBackground(SingleStickersAdapter... params) {
+        if (!Loader.checkPermission((BaseActivity) context))
+            return NEED_PERMISSION;
+
         File folder = new File(PhoneStickersActivity.PHONE_STICKERS_DIRECTORY);
         if (!folder.exists()) {
-            return NON_EXISTENCE_CACHE_FOLDER_VALUE;
+            return CACHE_DIRECTORY_DID_NOT_EXIST;
         }
         int temp = 0;
         percent = 0;
         File files[] = folder.listFiles();
         int length = files.length;
-        String thumbDirectory;
         DataSource dataSource = params[0].getDataSource();
         Set<String> updateSet = new HashSet<>();
         int filesChecked = 0;
-
         if (length == 0) {
             dataSource.updateSet(updateSet);
-            return NO_ITEM_VALUE;
+            return NO_ITEM_IN_CACHE_DIRECTORY;
         }
-
         for (File file : files) {
 //            Log.e(getClass().getSimpleName(), file.getName());
             filesChecked++;
             String name = file.getName();
 
-            if (name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp")) {
+            if (name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp") && file.exists()) {
                 updateSet.add(file.getAbsolutePath());
                 if (!dataSource.contain(file.getAbsolutePath())) {
-                    thumbDirectory = baseThumbDir + name;
-                    dataSource.update(new StickerItem(
-                            file.getAbsolutePath(),
-                            Loader.generateThumbnail(file.getAbsolutePath(), thumbDirectory),
-                            StickerItem.IN_PHONE,
-                            false,
-                            true));
+                    String thumbDirectory = Loader.generateThumbnail(file.getAbsolutePath(), baseThumbDir + name);
+                    if (thumbDirectory != null)
+                        dataSource.update(new StickerItem(
+                                file.getAbsolutePath(),
+                                Loader.generateThumbnail(file.getAbsolutePath(), thumbDirectory),
+                                StickerItem.IN_PHONE,
+                                false,
+                                true));
                 }
                 foundedStickersCount++;
-                percent = (100 * filesChecked) / length;
-//                Log.e(getClass().getSimpleName(), String.valueOf(percent));
-                if (temp == percent) {
-                    temp++;
-                    publishProgress(percent, foundedStickersCount);
-                }
+
+                /*
+                todo: concurrentModificationException on Nexus 5 take a look
+                todo: it might be because of to many calls to shared preferences do it all at once ...
+                todo: gather them up and write another method to do it all at once not requiring too many applies
+                */
+            }
+            percent = (100 * filesChecked) / length;
+            if (temp == percent) {
+                Log.e(getClass().getSimpleName(), String.valueOf(percent));
+                temp++;
+                publishProgress(percent, foundedStickersCount);
             }
         }
         Log.e(getClass().getSimpleName(), "updateSet size" + updateSet.size());
         dataSource.updateSet(updateSet);
         if (foundedStickersCount == 0) {
-            return NO_ITEM_VALUE;
+            return NO_ITEM_IN_CACHE_DIRECTORY;
         }
 
 //        dataSource.updateSet(updateSet);
 //        Log.e(getClass().getSimpleName(), "all the way through");
-        return SUCCESS_VALUE;
+        return ITEMS_WERE_ADDED;
+
     }
 
     @Override
@@ -111,12 +120,14 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
 
     @Override
     protected void onPostExecute(Integer aVoid) {
-        if (aVoid.equals(NON_EXISTENCE_CACHE_FOLDER_VALUE))
+        if (aVoid.equals(CACHE_DIRECTORY_DID_NOT_EXIST))
             listener.onNoCashDirectoryListener();
-        else if (aVoid.equals(NO_ITEM_VALUE))
+        else if (aVoid.equals(NO_ITEM_IN_CACHE_DIRECTORY))
             listener.onNoStickerWereFoundListener();
-        else if (aVoid.equals(SUCCESS_VALUE))
+        else if (aVoid.equals(ITEMS_WERE_ADDED))
             listener.onTaskFinishedListener();
+        else if (aVoid.equals(NEED_PERMISSION))
+            listener.onRequestReadWritePermission();
     }
 
 
@@ -134,5 +145,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
         void onNoCashDirectoryListener();
 
         void onNoStickerWereFoundListener();
+
+        void onRequestReadWritePermission();
     }
 }

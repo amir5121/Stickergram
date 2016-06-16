@@ -14,6 +14,8 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class AssetIconListFragment extends IconListFragment implements IconAdapter.OnStickerClickListener {
 
@@ -28,8 +30,8 @@ public class AssetIconListFragment extends IconListFragment implements IconAdapt
         if (recyclerView != null) {
             adapter = new IconAdapter((BaseActivity) getActivity(), this, IconItem.TYPE_ASSET) {
                 @Override
-                public String[] getItems() throws IOException {
-                    return getActivity().getAssets().list("Stickers");
+                public List<String> getItems() throws IOException {
+                    return Arrays.asList(getActivity().getAssets().list("Stickers"));
                 }
             };
             if (BaseActivity.isInLandscape || MainActivity.isTablet)

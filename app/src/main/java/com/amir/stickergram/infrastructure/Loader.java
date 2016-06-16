@@ -12,14 +12,18 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.amir.stickergram.ContactActivity;
 import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
@@ -38,6 +43,7 @@ import com.pavelsikun.vintagechroma.ChromaDialog;
 import com.pavelsikun.vintagechroma.IndicatorMode;
 import com.pavelsikun.vintagechroma.OnColorSelectedListener;
 import com.pavelsikun.vintagechroma.colormode.ColorMode;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -131,6 +137,8 @@ public class Loader {
 
     public static String generateThumbnail(String fromDirectory, String toDirectory) {
         Bitmap regionalBitmap = BitmapFactory.decodeFile(fromDirectory);
+        if (regionalBitmap == null) return null;
+//        if (regionalBitmap == null) Log.e(TAG, "regionalBitmap was null");
         Bitmap bitmap = ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth() / 4, regionalBitmap.getHeight() / 4);
         FileOutputStream outStream = null;
 
@@ -155,10 +163,6 @@ public class Loader {
         }
     }
 
-    public static Bitmap generateThumbnail(Bitmap regionalBitmap) {
-        return ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.getWidth(), regionalBitmap.getHeight());
-    }
-
     public static void loadStickerDialog(final Uri uri, final BaseActivity activity) {
 
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -179,7 +183,7 @@ public class Loader {
 
         if (stickerImage != null) {
             stickerImage.setImageURI(uri);
-        } else Log.e("Loader", "dialog_single_item_image was null");
+        } else Log.e(TAG, "dialog_single_item_image was null");
 
         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(view)
@@ -235,12 +239,12 @@ public class Loader {
 
     public static void saveBitmapToCache(Bitmap mainBitmap) {
         OutputStream outputStream;
-        File file = new File(BaseActivity.STICKER_CASH_DIR);
+        File file = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
         try {
             if (file.exists()) {
                 file.delete();
-                file.createNewFile();
-            } else file.createNewFile();
+            }
+            file.createNewFile();
             outputStream = new FileOutputStream(file);
             outputStream.close();
             InputStream inputStream;
@@ -321,7 +325,9 @@ public class Loader {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
         if (result == null) {
@@ -368,16 +374,32 @@ public class Loader {
     public static void setColor(BaseActivity activity, final TouchImageView touchImageView, final int type) {
 
         int initialColor = 0;
-        if (type == TEXT_COLOR)
-            initialColor = touchImageView.getTextItem().getTextColor();
-        else if (type == TEXT_SHADOW_COLOR)
-            initialColor = touchImageView.getTextItem().getShadow().getColor();
-        else if (type == TEXT_BACKGROUND_COLOR)
-            initialColor = touchImageView.getTextItem().getBackgroundColor();
-        else if (type == TEXT_STROKE_COLOR)
-            initialColor = touchImageView.getTextItem().getTextStrokeColor();
-        else
-            Log.e(TAG, "there are no such a type");
+        switch (type) {
+            case TEXT_COLOR:
+                initialColor = touchImageView.getTextItem().getTextColor();
+                break;
+            case TEXT_SHADOW_COLOR:
+                initialColor = touchImageView.getTextItem().getShadow().getColor();
+                break;
+            case TEXT_BACKGROUND_COLOR:
+                initialColor = touchImageView.getTextItem().getBackgroundColor();
+                break;
+            case TEXT_STROKE_COLOR:
+                initialColor = touchImageView.getTextItem().getTextStrokeColor();
+                break;
+            default:
+                Log.e(TAG, "there are no such a type");
+        }
+//        if (type == TEXT_COLOR)
+//            initialColor = touchImageView.getTextItem().getTextColor();
+//        else if (type == TEXT_SHADOW_COLOR)
+//            initialColor = touchImageView.getTextItem().getShadow().getColor();
+//        else if (type == TEXT_BACKGROUND_COLOR)
+//            initialColor = touchImageView.getTextItem().getBackgroundColor();
+//        else if (type == TEXT_STROKE_COLOR)
+//            initialColor = touchImageView.getTextItem().getTextStrokeColor();
+//        else
+//            Log.e(TAG, "there are no such a type");
 
         new ChromaDialog.Builder()
                 .initialColor(initialColor)
@@ -456,7 +478,7 @@ public class Loader {
         }
     }
 
-    public static float capturedRotationFix(String absolutePath)  {
+    public static float capturedRotationFix(String absolutePath) {
         ExifInterface ei = null;
         try {
             ei = new ExifInterface(absolutePath);
@@ -480,25 +502,12 @@ public class Loader {
     }
 
     public static Bitmap rotateImage(Bitmap source, float angle) {
-//        Bitmap source = BitmapFactory.decodeFile(path);
-//        Log.e(TAG, "path : " + path);
         if (source == null)
             return null;
-        Bitmap retVal;
 
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
-        retVal = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-//        int index = path.lastIndexOf('.');
-//        path = path.substring(0, index) + BaseActivity.PNG;
-//        try {
-//            OutputStream outputStream = new FileOutputStream(path);
-//            retVal.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-//            outputStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        return retVal;
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     public static String getRealPathFromURI(Uri contentURI, ContentResolver contentResolver) {
@@ -515,4 +524,54 @@ public class Loader {
         }
         return result;
     }
+
+    public static void copyFile(InputStream in, OutputStream out) {
+        byte[] buffer = new byte[1024];
+        int read;
+        try {
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void crop(Uri source, Uri destiny, BaseActivity activity) {
+        UCrop.Options options = new UCrop.Options();
+        options.setActiveWidgetColor(BaseActivity.LIGHT_BLUE);
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        options.setCropFrameColor(BaseActivity.DARK_BLUE);
+        options.setDimmedLayerColor(BaseActivity.TRANSPARENT_DARK_BLUE);
+        options.setFreeStyleCropEnabled(true);
+        options.setStatusBarColor(BaseActivity.DARK_BLUE);
+        options.setToolbarColor(BaseActivity.LIGHT_BLUE);
+        UCrop.of(source, destiny).withOptions(options).start(activity);
+    }
+
+    public static long freeMemory() {
+        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+        long free;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            free = (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong()) / 1048576;
+        } else {
+            free = (statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+        }
+
+        Log.e(TAG, "Free memory: " + free);
+        return free;
+    }
+
+
+    public static void joinToStickergramChannel(BaseActivity activity) {
+        if (Loader.isAppInstalled(activity, BaseActivity.TELEGRAM_PACKAGE)) {
+            //todo: set difference based on the persian or english version
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/stickergramApp"));
+            myIntent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
+            activity.startActivity(myIntent);
+        } else
+            Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
+    }
+
+
 }

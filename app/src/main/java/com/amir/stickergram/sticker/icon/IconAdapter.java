@@ -9,13 +9,14 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 
 import java.io.IOException;
+import java.util.List;
 
 public abstract class IconAdapter extends RecyclerView.Adapter<IconViewHolder> implements View.OnClickListener {
     private final BaseActivity activity;
     private final OnStickerClickListener listener;
     private final LayoutInflater inflater;
     private final int type;
-    public String items[];
+    public List<String> items;
 
     public IconAdapter(BaseActivity activity, OnStickerClickListener listener, int type) {
         this.activity = activity;
@@ -29,7 +30,7 @@ public abstract class IconAdapter extends RecyclerView.Adapter<IconViewHolder> i
         }
     }
 
-    public abstract String[] getItems() throws IOException;
+    public abstract List<String> getItems() throws IOException;
 
     @Override
     public IconViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,18 +42,19 @@ public abstract class IconAdapter extends RecyclerView.Adapter<IconViewHolder> i
     @Override
     public void onBindViewHolder(IconViewHolder holder, int position) {
         if (type == IconItem.TYPE_USER) {
-            String name = items[position];
-            int i = name.lastIndexOf("/") + 1;
-            name = name.substring(i, name.length());
-//            Log.e(getClass().getSimpleName(), "name: " + name);
-            holder.populate(new IconItem(activity, name), type);
+            String name = items.get(position);
+            if (name != null) {
+                int i = name.lastIndexOf("/") + 1;
+                name = name.substring(i, name.length());
+                holder.populate(new IconItem(activity, name), type);
+            }
         } else if (type == IconItem.TYPE_ASSET)
-            holder.populate(new IconItem(activity, items[position]), type);
+            holder.populate(new IconItem(activity, items.get(position)), type);
     }
 
     @Override
     public int getItemCount() {
-        return items.length;
+        return items.size();
     }
 
     @Override

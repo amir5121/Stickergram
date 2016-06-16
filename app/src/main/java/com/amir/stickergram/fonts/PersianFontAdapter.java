@@ -9,7 +9,6 @@ import java.util.List;
 
 
 import android.graphics.Typeface;
-import android.os.Environment;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -37,17 +36,16 @@ public class PersianFontAdapter extends FontAdapter {
         String folder = "Fonts/per";
         fonts = activity.getAssets().list(folder);
         folder += "/";
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TSB/.cash/";
         List<FontItem> fontItems = new ArrayList<>();
         for (String font : fonts) {
             InputStream inputStream = activity.getAssets().open(folder + font);
 
-            File f = new File(path);
+            File f = new File(BaseActivity.CACHE_DIR);
             if (!f.exists()) {
                 if (!f.mkdirs())
                     return null;
             }
-            String outPath = path + font;
+            String outPath = BaseActivity.CACHE_DIR + font;
             try {
                 byte[] buffer = new byte[inputStream.available()];
                 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outPath));

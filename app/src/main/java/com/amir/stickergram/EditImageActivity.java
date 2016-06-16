@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
@@ -59,7 +60,8 @@ public class EditImageActivity
     int layerCount;
     TouchImageView[] label;
 
-    View buttonsDeactiveLayer;
+    View buttonsDeactivateLayer;
+    View proNoteCloseButton;
     Button sizeButton;
     Button tiltButton;
     Button shadowDx;
@@ -89,8 +91,8 @@ public class EditImageActivity
 
     List<TouchImageView> items;
     Position offsetPosition;
-
-    //todo: removeThumb the useless layer count variable
+    private View buyNoteContainer;
+    private TextView buyNoteText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +103,7 @@ public class EditImageActivity
         mainBitmap = getBitmapFromExtra();
         if (mainBitmap == null) {
             Log.e(getClass().getSimpleName(), "mainBitmap was null");
-            Toast.makeText(this,getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -111,16 +113,18 @@ public class EditImageActivity
         layerCount = 0;
         selectedLayer = null;
 
-        if (!BaseActivity.isPaid) {
+        if (!isPaid) {
             label = new TouchImageView[2];
             addLabel();
         }
+
+        getNewTextDialog(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_edit_image_add_new_note) {
+        if (itemId == R.id.menu_edit_image_add_new_text) {
             getNewTextDialog(true);
             return true;
         } else if (itemId == R.id.menu_edit_image_save) {
@@ -134,22 +138,6 @@ public class EditImageActivity
         }
         return false;
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
-
-        if (requestCode == Loader.EDIT_ACTIVITY_GAIN_PERMISSION) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                instantiateSavingDialog();
-                Log.e(getClass().getSimpleName(), "called");
-            } else {
-                Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
 
     private void instantiateSavingDialog() {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_finish_editing, null);
@@ -168,10 +156,12 @@ public class EditImageActivity
                         canvas.drawBitmap(label[0].getFinishedBitmap(), 0, 0, null);
                         canvas.drawBitmap(label[1].getFinishedBitmap(), 0, 0, null);
                     }
-                    //TODO: check whether there is enough space left on the device
-                    Loader.saveBitmapToCache(mainBitmap); // the SavingStickerActivity uses the cached image for the saving process
-                    finish();
-                    startActivity(new Intent(EditImageActivity.this, SavingStickerActivity.class));
+                    if (Loader.freeMemory() > 2) {
+                        Loader.saveBitmapToCache(mainBitmap); // the SavingStickerActivity uses the cached image for the saving process
+                        finish();
+                        startActivity(new Intent(EditImageActivity.this, SavingStickerActivity.class));
+                    } else
+                        Toast.makeText(EditImageActivity.this, getString(R.string.failed_to_save_the_sticker), Toast.LENGTH_LONG).show();
                 }
                 if (which == Dialog.BUTTON_NEGATIVE) {
                 }
@@ -190,43 +180,56 @@ public class EditImageActivity
     @Override
     public void onClick(View view) {
         int itemId = view.getId();
-        if (selectedLayer != null) {
+
+        if (itemId == R.id.include_pro_note_close) {
+            if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
+        } else if (itemId == R.id.include_pro_note_text)
+            requestProVersion();
+        else if (itemId == R.id.activity_edit_image_buttons_overlay_layer)
+            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
+        else if (selectedLayer != null) {
             if (itemId == R.id.include_buttons_size_button) {
                 setVisibleSeekBar(selectedLayer.getTextSize(), sizeSeekBar);
             } else if (itemId == R.id.include_buttons_text_button) {
                 getNewTextDialog(false);
             } else if (itemId == R.id.include_buttons_tilt_button) {
+                if (!isPaid) buyProNote(getString(R.string.tilt), true);
                 setVisibleSeekBar(selectedLayer.getTextItem().getTilt(), tiltSeekBar);
             } else if (itemId == R.id.activity_edit_image_move_up_button) {
-                moveUp();
+                selectedLayer.getTextItem().moveUp();
+                selectedLayer.updateTextView();
             } else if (itemId == R.id.activity_edit_image_move_down_button) {
-                moveDown();
+                selectedLayer.getTextItem().moveDown();
+                selectedLayer.updateTextView();
             } else if (itemId == R.id.activity_edit_image_move_left_button) {
-                moveLeft();
+                selectedLayer.getTextItem().moveLeft();
+                selectedLayer.updateTextView();
             } else if (itemId == R.id.activity_edit_image_move_right_button) {
-                moveRight();
+                selectedLayer.getTextItem().moveRight();
+                selectedLayer.updateTextView();
             } else if (itemId == R.id.include_buttons_font_button) {
                 MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
                 mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
             } else if (itemId == R.id.include_buttons_text_color) {
                 Loader.setColor(this, selectedLayer, Loader.TEXT_COLOR);
             } else if (itemId == R.id.include_buttons_shadow_color) {
-                if (selectedLayer.isFirstTapOnShadowColor()) {
-                    selectedLayer.getTextItem().getShadow().setRadius(5);
-                    selectedLayer.getTextItem().getShadow().setDx(5);
-                    selectedLayer.getTextItem().getShadow().setDy(5);
-                }
-                selectedLayer.setFirstTapOnShadowColor(false);
+                manageShadowsFirstTap();
                 Loader.setColor(this, selectedLayer, Loader.TEXT_SHADOW_COLOR);
             } else if (itemId == R.id.include_buttons_shadow_radius) {
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
             } else if (itemId == R.id.include_buttons_shadow_dx) {
+                if (!isPaid) buyProNote(getString(R.string.shadow_position), true);
+                manageShadowsFirstTap();
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
             } else if (itemId == R.id.include_buttons_shadow_dy) {
+                if (!isPaid) buyProNote(getString(R.string.shadow_position), true);
+                manageShadowsFirstTap();
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
             } else if (itemId == R.id.include_buttons_text_background) {
                 Loader.setColor(this, selectedLayer, Loader.TEXT_BACKGROUND_COLOR);
             } else if (itemId == R.id.include_buttons_text_stroke_color) {
+                if (!isPaid)
+                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors), false);
                 if (selectedLayer.isFirstTapOnStrokeColor())
                     selectedLayer.getTextItem().setStrokeWidth(5);
                 selectedLayer.setFirstTapOnStrokeColor(false);
@@ -238,14 +241,30 @@ public class EditImageActivity
             Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
     }
 
+    private void manageShadowsFirstTap() {
+        if (selectedLayer.isFirstTapOnShadowColor()) {
+            selectedLayer.getTextItem().getShadow().setRadius(5);
+            selectedLayer.getTextItem().getShadow().setDx(5);
+            selectedLayer.getTextItem().getShadow().setDy(5);
+        }
+        selectedLayer.setFirstTapOnShadowColor(false);
+    }
+
+    private void buyProNote(String string, boolean shouldConcat) {
+        if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.VISIBLE);
+        String text = string + (shouldConcat ? (" " + getString(R.string.effect_will_not_be_applied_in_this_version_buy_the_pro)) : "");
+        if (buyNoteText != null) buyNoteText.setText(text);
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN: {
                 Position pos = new Position(event.getY(), event.getX());
-                if (label[0].isItMe(pos) != null || label[1].isItMe(pos) != null)
-                    Toast.makeText(this, getString(R.string.upgrade_to_pro_to_delete_this_lable), Toast.LENGTH_LONG).show();
+                if (label != null)
+                    if (label[0].isItMe(pos) != null || label[1].isItMe(pos) != null)
+                        Toast.makeText(this, getString(R.string.upgrade_to_pro_to_delete_this_label), Toast.LENGTH_LONG).show();
                 for (int i = items.size() - 1; i >= 0; i--) {
                     offsetPosition = items.get(i).isItMe(new Position(event.getY(), event.getX()));
                     if (offsetPosition != null) {
@@ -272,23 +291,20 @@ public class EditImageActivity
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (selectedLayer != null) {
-            if (progress > 5 && seekBar == sizeSeekBar)
-                selectedLayer.setTextSize(progress);
-            else if (seekBar == tiltSeekBar)
-                selectedLayer.setTextTilt(progress);
-            else if (seekBar == shadowRadius && progress > 0) {
+            if (progress > 5 && seekBar == sizeSeekBar) {
+                selectedLayer.getTextItem().setSize(progress);
+            } else if (seekBar == tiltSeekBar) {
+                selectedLayer.getTextItem().setTilt(progress);
+            } else if (seekBar == shadowRadius && progress > 0) {
                 selectedLayer.getTextItem().getShadow().setRadius(progress);
-                selectedLayer.updateTextView();
             } else if (seekBar == shadowDySeekBar) {
                 selectedLayer.getTextItem().getShadow().setDy(progress);
-                selectedLayer.updateTextView();
             } else if (seekBar == shadowDxSeekBar) {
                 selectedLayer.getTextItem().getShadow().setDx(progress);
-                selectedLayer.updateTextView();
             } else if (seekBar == strokeWidthSeekBar) {
                 selectedLayer.getTextItem().setStrokeWidth(progress);
-                selectedLayer.updateTextView();
             }
+            selectedLayer.updateTextView();
         }
     }
 
@@ -345,6 +361,9 @@ public class EditImageActivity
                 String dirInAsset = getIntent().getStringExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET);
                 imageBitmap = BitmapFactory.decodeStream(getAssets().open(dirInAsset));
             } else {
+//                String imageDir = Loader.getRealPathFromURI(imageUri, getContentResolver());
+//                Log.e(getClass().getSimpleName(), "imageDir: " + imageDir);
+//                imageBitmap = BitmapFactory.decodeFile(imageDir);
                 imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
             }
         } catch (IOException e) {
@@ -381,7 +400,7 @@ public class EditImageActivity
         if (textLayerContainer == null)
             throw new RuntimeException("Container was null add activity_edit_image_relative_layout_container to the view");
 
-        buttonsDeactiveLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
+        buttonsDeactivateLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
         textAlphaButton = (Button) findViewById(R.id.include_buttons_shadow_radius);
         textButton = (Button) findViewById(R.id.include_buttons_text_button);
         fontButton = (Button) findViewById(R.id.include_buttons_font_button);
@@ -399,6 +418,9 @@ public class EditImageActivity
         moveLeftButton = (ImageButton) findViewById(R.id.activity_edit_image_move_left_button);
         moveRightButton = (ImageButton) findViewById(R.id.activity_edit_image_move_right_button);
         stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
+        buyNoteContainer = findViewById(R.id.include_pro_note_container);
+        buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
+        proNoteCloseButton = findViewById(R.id.include_pro_note_close);
 
         ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
         RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
@@ -466,7 +488,10 @@ public class EditImageActivity
                 mainContainer
         );
 
+        if (buyNoteContainer != null && !isPaid) buyNoteContainer.setVisibility(View.VISIBLE);
+        if (buttonsDeactivateLayer != null) buttonsDeactivateLayer.setOnClickListener(this);
         if (textColorButton != null) textColorButton.setOnClickListener(this);
+        if (proNoteCloseButton != null) proNoteCloseButton.setOnClickListener(this);
         if (sizeButton != null) sizeButton.setOnClickListener(this);
         if (textAlphaButton != null) textAlphaButton.setOnClickListener(this);
         if (tiltButton != null) tiltButton.setOnClickListener(this);
@@ -478,6 +503,7 @@ public class EditImageActivity
         if (shadowDx != null) shadowDx.setOnClickListener(this);
         if (shadowDy != null) shadowDy.setOnClickListener(this);
         if (shadowColorButton != null) shadowColorButton.setOnClickListener(this);
+        if (buyNoteText != null) buyNoteText.setOnClickListener(this);
         if (moveUpButton != null) {
             moveUpButton.setOnClickListener(this);
 //            moveUpButton.setOnLongClickListener(this);
@@ -529,20 +555,19 @@ public class EditImageActivity
             editText.setText(selectedLayer.getTextItem().getText());
             editText.setSelection(selectedLayer.getTextItem().getText().length());
             editText.setTypeface(selectedLayer.getTextItem().getFont().getTypeface());
-//            editText.setTextColor(selectedLayer.getTextItem().getTextColor());
         } else {
-//            editText.setTextColor(TextItem.DEFAULT_TEXT_COLOR);
-            editText.setTypeface(Typeface.MONOSPACE);
+            editText.setTypeface(TextItem.DEFAULT_FONT);
         }
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
 //                    Log.e(getClass().getSimpleName(),editText.getText().toString() );
-                    if (asNewText && !editText.getText().toString().equals("")) {
+                    String text = editText.getText().toString();
+                    if (asNewText && !text.equals("")) {
                         TouchImageView touchItem =
                                 new TouchImageView(EditImageActivity.this,
-                                        new TextItem("", EditImageActivity.this, mainBitmap),
+                                        new TextItem("", mainBitmap),
                                         ++layerCount,
                                         mainBitmap);
                         setSelectedLayer(touchItem);
@@ -550,8 +575,11 @@ public class EditImageActivity
                         textLayerContainer.addView(touchItem);
                     }
                     if (selectedLayer != null) {
-                        selectedLayer.updateText(editText.getText().toString());
-                        if (editText.getText().toString().equals("")) {
+                        int textLengthTemp = text.length();
+                        if (textLengthTemp >= 1 && textLengthTemp <= 4 && text.charAt(textLengthTemp - 1) != ' ')
+                            text += " ";
+                        selectedLayer.updateText(text);
+                        if (text.equals("")) {
                             items.remove(items.indexOf(selectedLayer));
                             setLayerUnselected();
                         }
@@ -572,9 +600,8 @@ public class EditImageActivity
     }
 
     private void setLayerUnselected() {
-//        if (items.size() == 1)
-//            return;
         if (selectedLayer != null) {
+            if (!isPaid) selectedLayer.notPaid();
             selectedLayer.setAsSelected(false);
             sizeSeekBar.setVisibility(View.GONE);
             tiltSeekBar.setVisibility(View.GONE);
@@ -614,7 +641,7 @@ public class EditImageActivity
                 textBackgroundColor != null &&
                 strokeWidthButton != null &&
                 strokeColorButton != null &&
-                buttonsDeactiveLayer != null) {
+                buttonsDeactivateLayer != null) {
             textAlphaButton.setEnabled(!deactivate);
             textColorButton.setEnabled(!deactivate);
             sizeButton.setEnabled(!deactivate);
@@ -628,13 +655,13 @@ public class EditImageActivity
             strokeColorButton.setEnabled(!deactivate);
             strokeWidthButton.setEnabled(!deactivate);
             if (deactivate) {
-                buttonsDeactiveLayer.setVisibility(View.VISIBLE);
+                buttonsDeactivateLayer.setVisibility(View.VISIBLE);
                 moveUpButton.setVisibility(View.GONE);
                 moveDownButton.setVisibility(View.GONE);
                 moveLeftButton.setVisibility(View.GONE);
                 moveRightButton.setVisibility(View.GONE);
             } else {
-                buttonsDeactiveLayer.setVisibility(View.GONE);
+                buttonsDeactivateLayer.setVisibility(View.GONE);
                 moveUpButton.setVisibility(View.VISIBLE);
                 moveDownButton.setVisibility(View.VISIBLE);
                 moveLeftButton.setVisibility(View.VISIBLE);
@@ -655,52 +682,6 @@ public class EditImageActivity
 
         seekBar.setProgress(progress);
         seekBar.setVisibility(View.VISIBLE);
-    }
-//
-//    @Override
-//    public boolean onLongClick(View view) {
-//        int itemId = view.getId();
-//        if (itemId == R.id.activity_edit_image_move_up_button) {
-//            moveUpWhilePressed();
-//            return true;
-//        } else if (itemId == R.id.activity_edit_image_move_down_button) {
-//            return true;
-//        } else if (itemId == R.id.activity_edit_image_move_right_button) {
-//            return true;
-//        } else if (itemId == R.id.activity_edit_image_move_left_button) {
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    private void moveUpWhilePressed() {
-//        boolean isPressed = true;
-//        while (isPressed) {
-//            isPressed = moveUpButton.isPressed();
-//            Log.e(getClass().getSimpleName(), "move up was called");
-//            moveUp();
-//
-//        }
-//    }
-
-    private void moveRight() {
-        selectedLayer.getTextItem().moveRight();
-        selectedLayer.updateTextView();
-    }
-
-    private void moveLeft() {
-        selectedLayer.getTextItem().moveLeft();
-        selectedLayer.updateTextView();
-    }
-
-    private void moveDown() {
-        selectedLayer.getTextItem().moveDown();
-        selectedLayer.updateTextView();
-    }
-
-    private void moveUp() {
-        selectedLayer.getTextItem().moveUp();
-        selectedLayer.updateTextView();
     }
 
     @Override
@@ -743,7 +724,7 @@ public class EditImageActivity
 
 
     private void addLabel() {
-        label[0] = new TouchImageView(this, new TextItem(getString(R.string.stickergram), this, mainBitmap), 0, mainBitmap);
+        label[0] = new TouchImageView(this, new TextItem(getString(R.string.stickergram), mainBitmap), 0, mainBitmap);
         TextItem textItem = label[0].getTextItem();
         textItem.setBackgroundColor(ContextCompat.getColor(this, R.color.stickergram_label_background));
         textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF));
@@ -756,22 +737,36 @@ public class EditImageActivity
         int stickergramWidth = bitmap.getWidth();
 //        textItem.setPosition(new Position(mainBitmap.getHeight() - stickergramHeight, mainBitmap.getWidth() - stickergramWidth));
 
-        int top = mainBitmap.getHeight() - stickergramHeight + 7;
+        int top = mainBitmap.getHeight() - stickergramHeight + 30;
         textItem.setPosition(new Position(top, 0));
         label[0].setTextItem(textItem);
         textLayerContainer.addView(label[0]);
-        label[1] = new TouchImageView(this, new TextItem(getString(R.string.made), this, mainBitmap), 0, mainBitmap);
+        label[1] = new TouchImageView(this, new TextItem(getString(R.string.made), mainBitmap), 0, mainBitmap);
         textItem.setSize(18);
         textItem.setText(getString(R.string.made));
         textItem.setStrokeWidth(3);
         textItem.setBackgroundColor(0);
         bitmap = textItem.getTextBitmap();
 //        textItem.setPosition(new Position(0,0));
-        textItem.setPosition(new Position(top - bitmap.getHeight() / 2.3f,
+        textItem.setPosition(new Position(top - bitmap.getHeight() / 3f,
                 stickergramWidth / 2 - bitmap.getWidth() / 2));
         label[1].setTextItem(textItem);
         textLayerContainer.addView(label[1]);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        if (requestCode == Loader.EDIT_ACTIVITY_GAIN_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                instantiateSavingDialog();
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }

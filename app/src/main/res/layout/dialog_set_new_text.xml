@@ -4,5 +4,7 @@
     android:layout_height="wrap_content"
     android:hint="@string/enter_your_text"
     android:inputType="text"
+    android:textColor="@color/dialog_text_color"
+    android:textColorHint="@color/dialog_text_hint_color"
     android:maxLines="1"
     android:textSize="20sp" />

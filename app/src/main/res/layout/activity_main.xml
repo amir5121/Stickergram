@@ -24,6 +24,8 @@
             android:layout_weight="3"
             android:gravity="center"
             android:padding="15dp"
+            android:shadowColor="#aa444444"
+            android:shadowRadius="20"
             android:text="@string/stickergram"
             android:textColor="#fff"
             android:textSize="45sp"
@@ -59,6 +61,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignRight="@id/view_horizontal"
                 android:clickable="true"
+                android:foreground="?android:selectableItemBackground"
                 android:scaleType="centerInside"
                 android:src="@drawable/user" />
 
@@ -75,7 +78,9 @@
                 android:gravity="center"
                 android:padding="2dp"
                 android:paddingTop="5dp"
-                android:text="@string/your_stickers"
+                android:shadowColor="#aa444444"
+                android:shadowRadius="20"
+                android:text="@string/my_stickers"
                 android:textColor="@color/main_activity_text_color"
                 android:textSize="18sp" />
 
@@ -94,8 +99,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/phone" />
 
-            <!--todo: provide other qualities dor the phone icon-->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,6 +111,8 @@
                 android:clickable="false"
                 android:gravity="center"
                 android:padding="2dp"
+                android:shadowColor="#aa444444"
+                android:shadowRadius="20"
                 android:text="@string/telegram_sticker"
                 android:textColor="@color/main_activity_text_color"
                 android:textSize="18sp" />
@@ -123,6 +128,7 @@
                 android:layout_alignRight="@id/view_horizontal"
                 android:layout_alignTop="@id/view_vertical"
                 android:clickable="true"
+                android:foreground="?android:selectableItemBackground"
                 android:src="@drawable/template" />
 
             <TextView
@@ -136,6 +142,8 @@
                 android:clickable="false"
                 android:gravity="center"
                 android:padding="2dp"
+                android:shadowColor="#aa444444"
+                android:shadowRadius="20"
                 android:text="@string/template_stickers"
                 android:textColor="@color/main_activity_text_color"
                 android:textSize="18sp" />
@@ -151,7 +159,8 @@
                 android:layout_toEndOf="@id/view_horizontal"
                 android:layout_toRightOf="@id/view_horizontal"
                 android:clickable="true"
-                android:src="@drawable/from_scratch" />
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/scissor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -164,6 +173,8 @@
                 android:clickable="false"
                 android:gravity="center"
                 android:padding="2dp"
+                android:shadowColor="#aa444444"
+                android:shadowRadius="20"
                 android:text="@string/sticker_from_picture"
                 android:textColor="@color/main_activity_text_color"
                 android:textSize="18sp" />

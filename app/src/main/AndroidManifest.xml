@@ -3,9 +3,7 @@
     package="com.amir.stickergram">
 
     <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
-
     <uses-permission android:name="com.android.vending.BILLING" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -15,34 +13,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.amir.stickergram.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.amir.stickergram.UserStickersActivity" />
-
+        <activity android:name=".UserStickersActivity" />
         <activity
-            android:name="com.amir.stickergram.SavingStickerActivity"
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".SavingStickerActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name="com.amir.stickergram.PhoneStickersActivity" />
-
-        <activity android:name="com.amir.stickergram.TemplateStickersActivity" />
-
+        <activity android:name=".PhoneStickersActivity" />
+        <activity android:name=".TemplateStickersActivity" />
         <activity
-            android:name="com.amir.stickergram.EditImageActivity"
+            android:name=".EditImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-
-        <activity android:name="com.amir.stickergram.HowToActivity" />
-
-        <activity android:name="com.amir.stickergram.ClickedFontActivity">
+        <activity android:name=".ContactActivity" />
+        <activity android:name=".HowToActivity" />
+        <activity android:name=".ClickedFontActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

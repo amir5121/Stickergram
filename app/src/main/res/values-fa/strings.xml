@@ -26,7 +26,6 @@
     <string name="ok">خب</string>
     <string name="persian">فارسی</string>
     <string name="phone_stickers">استیکرهای گوشی</string>
-    <string name="preparing_for_the_first_run">اماده سازی برای اولین اجرا</string>
     <string name="save">ذخیره</string>
     <string name="select_a_text">لطفا اول یک متن را انتخاب کنید</string>
     <string name="shadow">سایه:</string>
@@ -37,17 +36,14 @@
     <string name="size">سایز</string>
     <string name="stickers_so_far">تا به حال پیدا شده</string>
     <string name="stroke_color">رنگ حاله</string>
-    <string name="style">استیل</string>
     <string name="template_stickers">قالب ها</string>
     <string name="text">متن</string>
     <string name="text_background">پس زمینه ی متن</string>
     <string name="text_color">رنگ متن</string>
-    <string name="this_might_take_some_time">ممکنه زمان ببره</string>
     <string name="tilt">چرخش </string>
     <string name="yes">آره</string>
-    <string name="you_haven_t_build_any_sticker">تا کنون استیکری نساخته اید</string>
     <string name="your_font_was_added_to_the_app">فونت شما به برنامه اضافه شد</string>
-    <string name="your_stickers">استیکر های شما</string>
+    <string name="my_stickers">استیکر های شما</string>
     <string name="telegram_sticker">استیکرهای تلگرام</string>
     <string name="sticker_from_picture">استیکر از عکس</string>
     <string name="choose_the_package_to_save_in">به کدام پک اضافه کنم؟</string>

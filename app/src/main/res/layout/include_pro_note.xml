@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/include_pro_note_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/include_toolbar"
+    android:layout_margin="10dp"
+    android:background="#BB2196f3"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/include_pro_note_text"
+        android:clickable="true"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/buy_the_pro_version_for_full_functionality"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:src="@drawable/ic_close"
+        android:id="@+id/include_pro_note_close"
+        android:clickable="true"/>
+
+</LinearLayout>

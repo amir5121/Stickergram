@@ -15,7 +15,7 @@
             layout="@layout/include_toolbar" />
 
         <fragment
-            android:layout_width="150dp"
+            android:layout_width="@dimen/icon_fragment_landscape_width"
             android:layout_height="match_parent"
             android:id="@+id/activity_template_stickers_list_fragment"
             android:name="com.amir.stickergram.sticker.icon.AssetIconListFragment"

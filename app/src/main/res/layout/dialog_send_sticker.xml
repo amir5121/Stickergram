@@ -5,7 +5,7 @@
 
     <ScrollView
         android:id="@+id/dialog_send_sticker_note_container"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <RelativeLayout
@@ -39,16 +39,18 @@
                 android:layout_toRightOf="@id/dialog_send_sticker_info_icon"
                 android:padding="5dp"
                 android:text="@string/for_more_info_press_on_how_to_button"
+                android:textColor="@color/dialog_text_color"
                 android:textSize="15sp" />
         </RelativeLayout>
     </ScrollView>
 
     <ImageView
         android:id="@+id/dialog_send_sticker_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_below="@id/dialog_send_sticker_note_container"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
         android:scaleType="fitCenter" />
+
 </RelativeLayout>

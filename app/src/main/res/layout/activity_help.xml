@@ -42,7 +42,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="Sticker is simple image that is uploaded to Telegram server and can be shared easily from within the Telegram app." />
+                    android:text="Sticker is an image that is uploaded to Telegram server (Using the @Stickers bot) and can be shared easily from within the Telegram app." />
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
@@ -59,7 +59,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="You can easily edit and create new images and use them as Stickers." />
+                    android:text="This app helps you create Stickers more easily and faster." />
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
@@ -67,7 +67,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="A bot is basically another computer program that runs on Telegram server and you can interact with it." />
+                    android:text="A bot is another computer program that runs on Telegram servers and you can communicate with it. You will use @Stickers bot to create your stickers on Telegram." />
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
@@ -75,7 +75,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="1.First you need to activate the @Stickers bot which is responsible for converting images to Stickers:\n(press the below button and hit start in the conversation that opens.)" />
+                    android:text="After you created your sticker in this app you need to send them to Telegram.\nHere is how to do it... \n\n1.First you need to activate the @Stickers bot\n press the below button and hit start in the conversation that opens." />
 
                 <Button
                     android:id="@+id/activity_faq_activate_bot"
@@ -93,7 +93,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="2.The bot will ask for commands. As every Sticker must be contained within a pack you need to create a new pack and add your sticker to it.\n\n(By hitting the below button you will be guided to @Stickers bot and the appropriate command will be copied to your clipboard then you need to paste the command and send it to the bot)" />
+                    android:text="2.The bot will ask for commands. As every Sticker must be contained within a pack you need to create a new pack and add your sticker to it.\n\n By hitting the below button you will be guided to @Stickers bot and pack creation command will be copied to your clipboard then paste it and send it to the bot)" />
 
 
                 <Button
@@ -113,7 +113,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="3.The bot will now ask you to give your new pack a name. (Send the name of the pack to the bot)" />
+                    android:text="3. The bot will now ask you to give your new pack a name so send the name of the pack to the bot. This name can be anything." />
 
 
                 <Button
@@ -133,7 +133,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="4. After sending the name of the pack to the bot you need send an emoji to the bot. (Send any emoji)" />
+                    android:text="4. As every sticker has a corresponding emoji to it you need to send an emoji before sending every sticker so send any emoji that correspond to the sticker you are going to send. (Send any emoji)" />
 
 
                 <Button
@@ -153,7 +153,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="5. After sending the emoji you need to send the images you've created to the bot.\n\nNote that after sending every sticker you will be asked to send another emoji." />
+                    android:text="5. After sending the emoji send the sticker that you have created.\n\n while you want to add new stickers to pack do step 4 and 5" />
 
                 <Button
                     android:id="@+id/activity_faq_go_to_user_pack"
@@ -171,7 +171,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="6. When you were done adding Stickers (sending emojies and images) to the pack you will need to publish the pack. In order to publish a pack you need to send the publish command to the app.\n\n(By hitting the bellow button the publish command will be copied to your clipboard and you will be guided to the Bot then paste the command and send it to the bot)" />
+                    android:text="6. When you were done adding Stickers to the pack you will need to publish the pack. In order to publish a pack you need to send the publish command to the app.\n\n Hit the bellow button and paste and send the copied command to the Bot." />
 
 
                 <Button
@@ -191,7 +191,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Stickers.\n\n*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can't be '55555' or 'Stickergram app' or '@Stickergram' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name)." />
+                    android:text="7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Sticker pack.\n\n*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can't be '55555' or 'Stickergram app' or '@Stickergram' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name)." />
 
                 <Button
                     android:id="@+id/activity_faq_go_to_bot3"
@@ -208,12 +208,16 @@
                     android:textColor="#fff" />
 
                 <TextView
+                    style="@style/HowToAnswer"
+                    android:text="8. Hooray you published a new pack. The bot will give you a link which you can access your stickers from." />
+
+                <TextView
                     style="@style/HowToQuestionTextStyle"
                     android:text="What if i wanted to add Sticker to a published pack?" />
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="The @Stickers bot provide a '/addsticker' command for just this propose. For example if i have a sticker that i published with this link 'telegram.me/addstickers/stickergramApp' and i want to add another sticker to that pack i should write this command:\n'/addsticker telegram.me/addstickers/stickergramApp'\n then send an emoji and the sticker itself afterward." />
+                    android:text="Use the \n'/addsticker' + 'link to your stickers' \ncommand to add sticker to a published pack. For example if i have a sticker that i published with this link 'telegram.me/addstickers/stickergramApp' and i want to add another sticker to that pack i should write this command:\n'/addsticker telegram.me/addstickers/stickergramApp'\n then send an emoji and the sticker itself afterward." />
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"

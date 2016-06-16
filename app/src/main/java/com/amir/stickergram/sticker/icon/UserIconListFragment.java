@@ -14,9 +14,13 @@ import android.view.ViewGroup;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class UserIconListFragment extends IconListFragment {
     int length;
@@ -32,11 +36,15 @@ public class UserIconListFragment extends IconListFragment {
         if (recyclerView != null) {
             adapter = new IconAdapter((BaseActivity) getActivity(), this, IconItem.TYPE_USER) {
                 @Override
-                public String[] getItems() throws IOException {
+                public List<String> getItems() throws IOException {
                     File file = new File(BaseActivity.USER_STICKERS_DIRECTORY);
                     if (!file.exists())
-                        file.mkdirs();
-                    //todo: gain permission cause you are making folder... probably a better idea to create the folder when the user hit create pack button
+                        if (Loader.checkPermission((BaseActivity) getActivity()))
+                            file.mkdirs();
+                        else {
+                            Loader.gainPermission((BaseActivity) getActivity(), 0);
+                            getActivity().finish();
+                        }
                     File[] files = file.listFiles();
                     if (files == null) {
                         Log.e(getClass().getSimpleName(), "files were null");
@@ -44,10 +52,11 @@ public class UserIconListFragment extends IconListFragment {
                         return null;
                     }
                     length = files.length;
-                    String[] directories = new String[length];
+                    List<String> directories = new ArrayList<>();
                     for (int i = 0; i < length; i++) {
-                        directories[i] = files[i].getAbsolutePath();
-//                        Log.e(getClass().getSimpleName(), "----" + directories[i]);
+                        if (!files[i].isFile()) {
+                            directories.add(files[i].getAbsolutePath());
+                        }
                     }
                     return directories;
                 }

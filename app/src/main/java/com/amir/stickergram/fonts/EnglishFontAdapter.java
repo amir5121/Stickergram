@@ -1,7 +1,6 @@
 package com.amir.stickergram.fonts;
 
 import android.graphics.Typeface;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
@@ -17,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnglishFontAdapter extends FontAdapter {
-    public EnglishFontAdapter(BaseActivity activity, OnFontClickListener listener, View lodingFrame) {
-        super(activity, listener, lodingFrame);
+    public EnglishFontAdapter(BaseActivity activity, OnFontClickListener listener, View loadingFrame) {
+        super(activity, listener, loadingFrame);
     }
 
     @Override
@@ -36,25 +35,23 @@ public class EnglishFontAdapter extends FontAdapter {
         fonts = activity.getAssets().list(folder);
         folder += "/";
 
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TSB/.cash/";
-
         List<FontItem> fontItems = new ArrayList<>();
         Log.e(getClass().getSimpleName(), "folder " + folder);
         Log.e(getClass().getSimpleName(), fonts.length + " length");
         for (String font : fonts) {
             InputStream inputStream = activity.getAssets().open(folder + font);
 
-            File f = new File(path);
+            File f = new File(BaseActivity.CACHE_DIR);
             if (!f.exists()) {
                 if (!f.mkdirs())
                     return null;
             }
-            String outPath = path + font;
+            String outPath = BaseActivity.CACHE_DIR + font;
             try {
                 byte[] buffer = new byte[inputStream.available()];
                 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outPath));
 
-                int l = 0;
+                int l;
                 while ((l = inputStream.read(buffer)) > 0) {
                     bos.write(buffer, 0, l);
                 }

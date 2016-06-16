@@ -17,7 +17,6 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="2dp"
         android:layout_marginStart="5dp"
-        android:background="@drawable/my_circle"
         android:clickable="true"
         android:src="@drawable/ic_info" />
 

@@ -1,6 +1,7 @@
 package com.amir.stickergram.navdrawer;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,8 +31,8 @@ public class NavDrawer {
         drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         navDrawerView = (ViewGroup) activity.findViewById(R.id.nav_drawer);
 
-        if (navDrawerView != null && BaseActivity.isInLandscape)
-            navDrawerView.findViewById(R.id.include_nav_drawer_top_text_view).setVisibility(View.GONE);
+//        if (navDrawerView != null && BaseActivity.isInLandscape)
+//            navDrawerView.findViewById(R.id.include_nav_drawer_top_text_view).setVisibility(View.GONE);
 
         if (drawerLayout == null || navDrawerView == null)
             throw new RuntimeException("To use this class you must have views with ids of drawer_layout and nav_drawer");
@@ -146,7 +147,7 @@ public class NavDrawer {
 
         @Override
         public void onClick(View v) {
-            navDrawer.setSelectedItem(this);
+//            navDrawer.setSelectedItem(this);
         }
     }
 

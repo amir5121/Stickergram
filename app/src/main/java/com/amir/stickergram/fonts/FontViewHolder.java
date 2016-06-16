@@ -87,9 +87,11 @@ public class FontViewHolder extends RecyclerView.ViewHolder {
             case "ZARGHAN.MOALA.ttf":
                 item.setName("زرقان ملا");
                 break;
+            case "IranNastaliq.ttf":
+                item.setName("ایران نسطعلیق");
+                break;
         }
         itemView.setTag(item);
-//        Log.e(getClass().getSimpleName(), "font populate was called");
         textView.setText(item.getName().replace(".ttf", ""));
         textView.setTypeface(item.getTypeface());
     }

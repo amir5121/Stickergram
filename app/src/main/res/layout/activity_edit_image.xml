@@ -50,8 +50,6 @@
             <!--this is the imageContainer for the images don't delete it-->
         </FrameLayout>
 
-        <!--TODO: background for the image should be a vector image to represent the transparency and stop the confusion-->
-
     </RelativeLayout>
 
     <LinearLayout

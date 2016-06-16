@@ -14,17 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerViewHolder> implements View.OnClickListener, View.OnLongClickListener {
-    private final BaseActivity activity;
-    private final OnStickerClickListener listener;
     private final LayoutInflater inflater;
 
     private List<StickerItem> items;
+    private OnStickerClickListener listener;
     private DataSource dataSource;
 
 
-    public SingleStickersAdapter(BaseActivity activity, OnStickerClickListener listener) {
-        this.activity = activity;
-        this.listener = listener;
+    public SingleStickersAdapter(BaseActivity activity) {
+        try {
+            this.listener = (OnStickerClickListener) activity;
+        } catch (ClassCastException e) {
+            Log.e(getClass().getSimpleName(), "must implement OnStickerClickListener");
+            e.printStackTrace();
+        }
         this.inflater = activity.getLayoutInflater();
         dataSource = new DataSource(activity);
         items = new ArrayList<>(); // things actually happen in refresh method
@@ -79,6 +82,8 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
         items = dataSource.getAllPhoneStickers();
 //        if (items.size() > 0)
         Log.e(getClass().getSimpleName(), "size: " + items.size());
+        if (items.size() == 0)
+        listener.OnNoItemExistedListener();
         notifyItemRangeChanged(0, items.size());
         notifyDataSetChanged();
     }
@@ -97,6 +102,8 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
         void OnStickerClicked(StickerItem item);
 
         void OnStickerLongClicked(StickerItem item);
+
+        void OnNoItemExistedListener();
     }
 
 }

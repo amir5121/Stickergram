@@ -1,8 +1,11 @@
 package com.amir.stickergram;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -26,7 +29,6 @@ import java.io.File;
 public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener {
     public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
     private static final String IS_REFRESHING = "IS_REFRESHING";
-    private static final int THUMBNAIL_IMAGE_QUALITY = 85;
     private static final String STICKER_COUNT = "STICKER_COUNT";
     private static final String PERCENT = "PERCENT";
 
@@ -65,7 +67,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
                     Color.parseColor("#FFFF4444"));
         }
         if (recyclerView != null) {
-            adapter = new SingleStickersAdapter(this, this);
+            adapter = new SingleStickersAdapter(this);
             adapter.refreshPhoneSticker();
             if (isTablet || isInLandscape)
                 recyclerView.setLayoutManager(new GridLayoutManager(PhoneStickersActivity.this, 5));
@@ -92,6 +94,8 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
             loadingStickersCount.setText(String.valueOf(stickerCount));
         }
 
+        //todo: showcase sweep refresh
+
     }
 
     @Override
@@ -114,6 +118,11 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     @Override
     public void OnStickerLongClicked(StickerItem item) {
 
+    }
+
+    @Override
+    public void OnNoItemExistedListener() {
+        if (noStickerText != null) noStickerText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -159,10 +168,9 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void onNoCashDirectoryListener() {
-        //todo: make sure telegram app is installed
         Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
-//        if (!Loader.isAppInstalled(this))
-//            Toast.makeText(this,getString(R.string.telegram_is_not_installed))
+        if (!Loader.isAppInstalled(this, TELEGRAM_PACKAGE))
+            Toast.makeText(this, getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -171,6 +179,11 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         if (noStickerText != null)
             noStickerText.setVisibility(View.VISIBLE);
         manageView();
+    }
+
+    @Override
+    public void onRequestReadWritePermission() {
+        Loader.gainPermission(this, Loader.PHONE_STICKERS_GAIN_PERMISSION);
     }
 
 
@@ -209,6 +222,34 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
         loadingTextPercentage = (TextView) loadingDialogView.findViewById(R.id.phone_loading_dialog_text_percentage);
         loadingStickersCount = (TextView) loadingDialogView.findViewById(R.id.phone_loading_dialog_total_sticker);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == Loader.PHONE_STICKERS_GAIN_PERMISSION) {
+//            Log.e(getClass().getSimpleName(), "------here");
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                finish();
+                startActivity(new Intent(this, PhoneStickersActivity.class));
+                this.overridePendingTransition(0, 0);
+
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
+
+            } else {
+                Log.e(getClass().getSimpleName(), "permission denied");
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                this.overridePendingTransition(0, 0);
+                Toast.makeText(this, getResources().getString(R.string.need_permission_to_look_for_your_stickers), Toast.LENGTH_LONG).show();
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
+
+            return;
+        }
     }
 
     @Override

@@ -22,4 +22,5 @@ public class TextArea {
     public float getWidth() {
         return width;
     }
+
 }
