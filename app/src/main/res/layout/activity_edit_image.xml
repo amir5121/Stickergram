@@ -6,15 +6,10 @@
     android:background="#1565c0"
     android:orientation="vertical">
 
+    <!--todo: see if it is possible to use linear layout -->
     <include
         android:id="@+id/include_toolbar"
         layout="@layout/include_toolbar" />
-
-    <View
-        android:id="@+id/view_horizontal"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true" />
 
     <include
         android:id="@+id/include_buttons_scroll_view"

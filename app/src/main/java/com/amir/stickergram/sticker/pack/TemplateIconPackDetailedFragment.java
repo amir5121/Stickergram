@@ -1,5 +1,7 @@
 package com.amir.stickergram.sticker.pack;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,9 +20,10 @@ import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseFragment;
 
-public class TemplateIconPackDetailedFragment extends BaseFragment implements IconPackAdapter.OnStickerClickListener {
+public class TemplateIconPackDetailedFragment extends BaseFragment implements DetailedPackAdapter.OnStickerClickListener {
+    public static final String EXPLOSM = "Explosm";
     RecyclerView recyclerView;
-    IconPackAdapter adapter;
+    DetailedPackAdapter adapter;
     View view;
     String folder;
     ProgressBar progressBar;
@@ -34,6 +38,23 @@ public class TemplateIconPackDetailedFragment extends BaseFragment implements Ic
         folderText = (TextView) view.findViewById(R.id.fragment_icon_detailed_text_folder);
         if (folderText != null) folderText.setVisibility(View.GONE);
         refresh(folder); // this guy sets the adapter
+        if (folder != null)
+            if (folder.equals(EXPLOSM)) {
+                Button linkButton = (Button) view.findViewById(R.id.fragment_icon_detailed_link_button);
+                if (linkButton != null) {
+                    linkButton.setVisibility(View.VISIBLE);
+                    linkButton.setText(getString(R.string.explosm_net));
+                    linkButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String url = "http://www.explosm.net";
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+                }
+            }
         return view;
     }
 
@@ -63,7 +84,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment implements Ic
         } else Log.e(getClass().getSimpleName(), "folderText was null");
         if (folder == null) return;
         if (recyclerView != null) {
-            adapter = new IconPackAdapter(this, this, folder, PackItem.TYPE_TEMPLATE);
+            adapter = new DetailedPackAdapter(this, this, folder, PackItem.TYPE_TEMPLATE);
             if (BaseActivity.isTablet || BaseActivity.isInLandscape)
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
             else

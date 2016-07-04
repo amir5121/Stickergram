@@ -3,6 +3,7 @@ package com.amir.stickergram.infrastructure;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,8 +12,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -21,9 +22,9 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -34,15 +35,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.amir.stickergram.ContactActivity;
 import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.sticker.pack.PackItem;
-import com.pavelsikun.vintagechroma.ChromaDialog;
-import com.pavelsikun.vintagechroma.IndicatorMode;
-import com.pavelsikun.vintagechroma.OnColorSelectedListener;
-import com.pavelsikun.vintagechroma.colormode.ColorMode;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.Locale;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
@@ -69,6 +70,7 @@ public class Loader {
     public static final int TEMPLATE_STICKERS_GAIN_PERMISSION = 102;
     public static final int FROM_SCRATCH_GAIN_PERMISSION = 103;
     public static final int EDIT_ACTIVITY_GAIN_PERMISSION = 104;
+    public static final String KEY = "mBRJaVxaA+9k4tiD5rYicw==:II8pAgeooHpABKf7BUOykr9cHLAFHQWFCie0coKLNBw=";
 
     public static void gainPermission(BaseActivity activity, int requestCode) {
         if (
@@ -208,6 +210,7 @@ public class Loader {
                     intent.putExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET, item.getDirInAsset());
                     //// TODO: Animation
                     activity.startActivity(intent);
+                    activity.finish();
                 }
             }
         };
@@ -373,89 +376,58 @@ public class Loader {
 
     public static void setColor(BaseActivity activity, final TouchImageView touchImageView, final int type) {
 
-        int initialColor = 0;
-        switch (type) {
-            case TEXT_COLOR:
-                initialColor = touchImageView.getTextItem().getTextColor();
-                break;
-            case TEXT_SHADOW_COLOR:
-                initialColor = touchImageView.getTextItem().getShadow().getColor();
-                break;
-            case TEXT_BACKGROUND_COLOR:
-                initialColor = touchImageView.getTextItem().getBackgroundColor();
-                break;
-            case TEXT_STROKE_COLOR:
-                initialColor = touchImageView.getTextItem().getTextStrokeColor();
-                break;
-            default:
-                Log.e(TAG, "there are no such a type");
-        }
-//        if (type == TEXT_COLOR)
-//            initialColor = touchImageView.getTextItem().getTextColor();
-//        else if (type == TEXT_SHADOW_COLOR)
-//            initialColor = touchImageView.getTextItem().getShadow().getColor();
-//        else if (type == TEXT_BACKGROUND_COLOR)
-//            initialColor = touchImageView.getTextItem().getBackgroundColor();
-//        else if (type == TEXT_STROKE_COLOR)
-//            initialColor = touchImageView.getTextItem().getTextStrokeColor();
-//        else
-//            Log.e(TAG, "there are no such a type");
+//        int initialColor = 0;
+//        switch (type) {
+//            case TEXT_COLOR:
+//                initialColor = touchImageView.getTextItem().getTextColor();
+//                break;
+//            case TEXT_SHADOW_COLOR:
+//                initialColor = touchImageView.getTextItem().getShadow().getColor();
+//                break;
+//            case TEXT_BACKGROUND_COLOR:
+//                initialColor = touchImageView.getTextItem().getBackgroundColor();
+//                break;
+//            case TEXT_STROKE_COLOR:
+//                initialColor = touchImageView.getTextItem().getTextStrokeColor();
+//                break;
+//            default:
+//                Log.e(TAG, "there are no such a type");
+//        }
 
-        new ChromaDialog.Builder()
-                .initialColor(initialColor)
-                .colorMode(ColorMode.ARGB)
-                .indicatorMode(IndicatorMode.DECIMAL)
-                .onColorSelected(new OnColorSelectedListener() {
+        ColorPickerDialogBuilder
+                .with(activity)
+                .setTitle(activity.getString(R.string.choose_color))
+                .initialColor(Color.WHITE)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
                     @Override
-                    public void onColorSelected(@ColorInt int color) {
-                        if (type == TEXT_COLOR)
-                            touchImageView.getTextItem().setTextColor(color);
-                        else if (type == TEXT_SHADOW_COLOR)
-                            touchImageView.getTextItem().getShadow().setColor(color);
-                        else if (type == TEXT_BACKGROUND_COLOR)
-                            touchImageView.getTextItem().setBackgroundColor(color);
-                        else if (type == TEXT_STROKE_COLOR)
-                            touchImageView.getTextItem().setTextStrokeColor(color);
-                        touchImageView.updateTextView();
-
+                    public void onColorSelected(int selectedColor) {
+//                        toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                     }
                 })
-                .create()
-                .show(activity.getSupportFragmentManager(), "ChromaDialog");
-//        ColorPickerDialogBuilder
-//                .with(context)
-//                .setTitle(context.getString(R.string.choose_color))
-//                .initialColor(initialColor)
-//                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-//                .density(12)
-//                .setOnColorSelectedListener(new OnColorSelectedListener() {
-//                    @Override
-//                    public void onColorSelected(int selectedColor) {
-////                        toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
-//                    }
-//                })
-//                .setPositiveButton(context.getString(R.string.ok), new ColorPickerClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-////                        changeBackgroundColor(selectedColor);
-//                        if (type == TEXT_COLOR)
-//                            touchImageView.getTextItem().setTextColor(selectedColor);
-//                        else if (type == TEXT_SHADOW_COLOR)
-//                            touchImageView.getTextItem().getShadow().setColor(selectedColor);
-//                        else if (type == TEXT_BACKGROUND_COLOR)
-//                            touchImageView.getTextItem().setBackgroundColor(selectedColor);
-//                        else if (type == TEXT_STROKE_COLOR)
-//                            touchImageView.getTextItem().setTextStrokeColor(selectedColor);
-//                        touchImageView.updateTextView();
-//                    }
-//                })
-//                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                    }
-//                })
-//                .build()
-//                .show();
+                .setPositiveButton(activity.getString(R.string.ok), new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+//                        changeBackgroundColor(selectedColor);
+                        if (type == TEXT_COLOR)
+                            touchImageView.getTextItem().setTextColor(selectedColor);
+                        else if (type == TEXT_SHADOW_COLOR)
+                            touchImageView.getTextItem().getShadow().setColor(selectedColor);
+                        else if (type == TEXT_BACKGROUND_COLOR)
+                            touchImageView.getTextItem().setBackgroundColor(selectedColor);
+                        else if (type == TEXT_STROKE_COLOR)
+                            touchImageView.getTextItem().setTextStrokeColor(selectedColor);
+                        touchImageView.updateTextView();
+                    }
+                })
+                .setNegativeButton(activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .build()
+                .show();
     }
 
     public static boolean isPersian(String string) {
@@ -504,7 +476,7 @@ public class Loader {
     public static Bitmap rotateImage(Bitmap source, float angle) {
         if (source == null)
             return null;
-
+        Log.e(TAG, "rotation: " + angle);
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
@@ -546,6 +518,8 @@ public class Loader {
         options.setFreeStyleCropEnabled(true);
         options.setStatusBarColor(BaseActivity.DARK_BLUE);
         options.setToolbarColor(BaseActivity.LIGHT_BLUE);
+        //todo: check what the below line does?
+//        options.setOvalDimmedLayer(true);
         UCrop.of(source, destiny).withOptions(options).start(activity);
     }
 
@@ -558,20 +532,130 @@ public class Loader {
             free = (statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
         }
 
-        Log.e(TAG, "Free memory: " + free);
         return free;
     }
 
 
     public static void joinToStickergramChannel(BaseActivity activity) {
         if (Loader.isAppInstalled(activity, BaseActivity.TELEGRAM_PACKAGE)) {
-            //todo: set difference based on the persian or english version
-            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/stickergramApp"));
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BaseActivity.LINK_TO_CHANNEL));
             myIntent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
             activity.startActivity(myIntent);
         } else
             Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * this method is used for multiple reasons
+     * <p/>
+     * if user choose to use an empty picture to make an sticker
+     * or if we need to make a file to override as
+     *
+     * @return
+     */
 
+    @NonNull
+    public static File generateEmptyBitmapFile(BaseActivity activity) {
+        File tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
+        InputStream in;
+        try {
+            in = activity.getAssets().open("empty.png");
+            if (in == null) Log.e(TAG, "inputStream was null in generateEmptyBitmapFile");
+            OutputStream os = new FileOutputStream(tempFile);
+            Loader.copyFile(in, os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tempFile;
+    }
+
+    public static boolean checkLuckyPatcher(Context context) {
+        if (isAppInstalled(context, "com.dimonvideo.luckypatcher")) {
+            return true;
+        }
+
+        if (isAppInstalled(context, "com.chelpus.lackypatch")) {
+            return true;
+        }
+
+        if (isAppInstalled(context, "com.android.vending.billing.InAppBillingService.LOCK")) {
+            return true;
+        }
+
+        if (isAppInstalled(context, "com.android.vending.billing.InAppBillingService.LACK")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void rate(BaseActivity activity) {
+        String appPackageName = activity.getPackageName();
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        try {
+            activity.startActivity(marketIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(activity, activity.getString(R.string.no_market_was_found), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void exit(final BaseActivity activity) {
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == Dialog.BUTTON_NEGATIVE) {
+                    rate(activity);
+                } else if (which == Dialog.BUTTON_POSITIVE) {
+                    activity.finish();
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(intent);
+                } else if (which == Dialog.BUTTON_NEUTRAL) {
+                    joinToStickergramChannel(activity);
+                }
+            }
+        };
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.are_sure_you_want_to_exit))
+                .setMessage(activity.getString(R.string.i_feel_you_might_wanna_rate_me))
+                .setPositiveButton(activity.getString(R.string.just_exit), listener)
+                .setNegativeButton(activity.getString(R.string.rate), listener)
+                .setNeutralButton(activity.getString(R.string.channel), listener)
+                .create();
+        dialog.show();
+
+    }
+
+    //todo: check onepf.com for publishing
+
+
+    public static void goToBotInTelegram(BaseActivity activity) {
+        if (Loader.isAppInstalled(activity, BaseActivity.TELEGRAM_PACKAGE)) {
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BaseActivity.LINK_TO_BOT));
+            myIntent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
+            activity.startActivity(myIntent);
+        } else
+            Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
+    }
+
+    public static boolean deviceLanguageIsPersian() {
+        return Locale.getDefault().getLanguage().equals("fa");
+    }
+
+
+    public static String convertToPersianNumber(String s) {
+        int length = s.length();
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            temp.append(Character.toString((char)(s.charAt(i) + 1728)));
+//            temp += Character.toString((char) ((int) s.charAt(i) + 1728));
+        }
+        return temp.toString();
+    }
 }

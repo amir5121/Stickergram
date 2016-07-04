@@ -49,5 +49,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--<style name="CustomColorPicker" parent="ColorPicker">-->
+        <!--<item name="cp_backgroundColor">#2196f3</item>-->
+        <!--<item name="cp_hexaDecimalTextColor">#ffffff</item>-->
+        <!--<item name="cp_colorComponentsTextColor">#ffffff</item>-->
+        <!--<item name="cp_positiveActionTextColor">#ffffff</item>-->
+        <!--<item name="cp_negativeActionTextColor">#ffffff</item>-->
+        <!--<item name="cp_sliderThumbColor">#accc</item>-->
+    <!--</style>-->
 
 </resources>

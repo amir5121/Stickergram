@@ -18,18 +18,18 @@
             layout="@layout/include_toolbar" />
 
         <TextView
-            android:id="@+id/activity_main_text"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:padding="15dp"
-            android:shadowColor="#aa444444"
-            android:shadowRadius="20"
-            android:text="@string/stickergram"
-            android:textColor="#fff"
-            android:textSize="45sp"
-            android:typeface="serif" />
+        android:id="@+id/activity_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:padding="15dp"
+        android:shadowColor="#aa444444"
+        android:shadowRadius="20"
+        android:text="@string/stickergram"
+        android:textColor="#fff"
+        android:textSize="45sp"
+        android:typeface="serif" />
 
         <RelativeLayout
             android:id="@+id/main_activity_buttons"

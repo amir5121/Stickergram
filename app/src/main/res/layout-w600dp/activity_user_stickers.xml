@@ -15,16 +15,25 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <include
-            android:id="@+id/include_detailed_note"
-            layout="@layout/include_detailed_note" />
+
+        <TextView
+            android:id="@+id/activity_user_stickers_no_sticker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_toolbar"
+            android:text="@string/you_haven_t_created_any_sticker"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
         <fragment
             android:id="@+id/activity_template_stickers_list_fragment"
-            android:name="com.amir.stickergram.sticker.icon.UserIconListFragment"
+            android:name="com.amir.stickergram.sticker.icon.UserIconListFragmentFragment"
             android:layout_width="@dimen/icon_fragment_landscape_width"
             android:layout_height="match_parent"
-            android:layout_below="@id/include_detailed_note"
+            android:layout_below="@id/activity_user_stickers_no_sticker"
             tools:layout="@layout/fragment_icon_list" />
 
         <fragment
@@ -32,7 +41,7 @@
             android:name="com.amir.stickergram.sticker.pack.UserIconPackDetailedFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/include_detailed_note"
+            android:layout_below="@id/activity_user_stickers_no_sticker"
             android:layout_toEndOf="@id/activity_template_stickers_list_fragment"
             android:layout_toRightOf="@id/activity_template_stickers_list_fragment"
             tools:layout="@layout/fragment_icon_detailed" />

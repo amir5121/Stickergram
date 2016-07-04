@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amir.stickergram.R;
+import com.amir.stickergram.infrastructure.Loader;
 
 public class IconViewHolder extends RecyclerView.ViewHolder {
     ImageView iconImageView;
@@ -27,7 +28,32 @@ public class IconViewHolder extends RecyclerView.ViewHolder {
         else if (type == IconItem.TYPE_USER)
             bitmap = item.getBitmapFromExternalStorage();
         itemView.setTag(item);
-        iconNameTextView.setText(item.getFolder());
+        if (Loader.deviceLanguageIsPersian()) {
+            switch (item.getFolder()) {
+                case "Board":
+                    iconNameTextView.setText("برد");
+                    break;
+                case "Bunny":
+                    iconNameTextView.setText("خرگوش");
+                    break;
+                case "Celebrities":
+                    iconNameTextView.setText("نامدار");
+                    break;
+                case "Explosm":
+                    iconNameTextView.setText("اکسپلوسم");
+                    break;
+                case "Greg":
+                    iconNameTextView.setText("امیر");
+                    break;
+                case "Troll":
+                    iconNameTextView.setText("ترول");
+                    break;
+                default:
+                    iconNameTextView.setText(item.getFolder());
+
+            }
+        } else
+            iconNameTextView.setText(item.getFolder());
         if (bitmap == null) {
             Log.e(getClass().getSimpleName(), "bitmap was null");
             return;

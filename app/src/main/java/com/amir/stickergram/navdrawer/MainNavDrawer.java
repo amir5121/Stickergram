@@ -1,16 +1,16 @@
 package com.amir.stickergram.navdrawer;
 
-import android.content.Intent;
 import android.view.View;
 
 import com.amir.stickergram.ContactActivity;
-import com.amir.stickergram.HowToActivity;
+import com.amir.stickergram.HelpActivity;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.PhoneStickersActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.TemplateStickersActivity;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Loader;
 
 public class MainNavDrawer extends NavDrawer {
     public MainNavDrawer(final BaseActivity activity) {
@@ -30,18 +30,22 @@ public class MainNavDrawer extends NavDrawer {
                 }
             });
         }
-        addItem(new ActivityNavDrawerItem(HowToActivity.class, activity.getString(R.string.help), R.drawable.ic_question, R.id.include_nav_drawer_bottom_items));
+        addItem(new ActivityNavDrawerItem(HelpActivity.class, activity.getString(R.string.help), R.drawable.ic_question, R.id.include_nav_drawer_bottom_items));
         addItem(new ActivityNavDrawerItem(ContactActivity.class, activity.getString(R.string.contact), R.drawable.ic_contact, R.id.include_nav_drawer_bottom_items));
+        addItem(new BaseNavDrawerItem(activity.getString(R.string.rate_us), R.drawable.ic_rate, R.id.include_nav_drawer_bottom_items) {
+            @Override
+            public void onClick(View v) {
+                super.onClick(v);
+                Loader.rate(activity);
+            }
+        });
         addItem(new BaseNavDrawerItem(activity.getString(R.string.exit), R.drawable.ic_exit, R.id.include_nav_drawer_bottom_items) {
             @Override
             public void onClick(View view) {
                 super.onClick(view);
-                activity.finish();
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                activity.startActivity(intent);
+                Loader.exit(activity);
             }
         });
+
     }
 }

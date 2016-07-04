@@ -15,16 +15,23 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-
-        <include
-            android:id="@+id/include_detailed_note"
-            layout="@layout/include_detailed_note" />
+        <TextView
+            android:id="@+id/activity_user_stickers_no_sticker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_toolbar"
+            android:text="@string/you_haven_t_created_any_sticker"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
         <FrameLayout
             android:id="@+id/activity_user_stickers_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/include_detailed_note">
+            android:layout_below="@id/activity_user_stickers_no_sticker">
 
         </FrameLayout>
 

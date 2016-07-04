@@ -1,22 +1,21 @@
 package com.amir.stickergram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.amir.stickergram.sticker.icon.IconItem;
-import com.amir.stickergram.sticker.icon.AssetIconListFragment;
+import com.amir.stickergram.sticker.icon.TemplateIconListFragmentFragment;
 import com.amir.stickergram.sticker.pack.TemplateIconPackDetailedFragment;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
 
-public class TemplateStickersActivity extends BaseActivity implements AssetIconListFragment.OnIconSelectedListener {
+public class TemplateStickersActivity extends BaseActivity implements TemplateIconListFragmentFragment.OnIconSelectedListener {
     public static final String ICON_STICKER_ITEM_FOLDER = "ICON_FOLDER";
     private static final String DETAILED_ICON_FRAGMENT = "DETAILED_ICON_FRAGMENT";
     private static final String ICONS_FRAGMENT = "ICONS_FRAGMENT";
 
     private String folder;
-
-    //todo: add explosem stickers hahaha
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class TemplateStickersActivity extends BaseActivity implements AssetIconL
         if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.activity_template_sticker_fragment_container, new AssetIconListFragment(), ICONS_FRAGMENT)
+                    .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragmentFragment(), ICONS_FRAGMENT)
                     .commit();
         }
 
@@ -45,13 +44,18 @@ public class TemplateStickersActivity extends BaseActivity implements AssetIconL
         instantiateFragment(item.getFolder());
     }
 
+    @Override
+    public void OnNoStickerWereFoundListener() {
+        //intentionally empty
+    }
+
     private void saveState(String folder) {
         this.folder = folder;
         if (folder == null) {
             if (findViewById(R.id.activity_template_sticker_fragment_container) != null)
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.activity_template_sticker_fragment_container, new AssetIconListFragment(), ICONS_FRAGMENT)
+                        .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragmentFragment(), ICONS_FRAGMENT)
                         .commit();
             return;
         }
@@ -85,5 +89,14 @@ public class TemplateStickersActivity extends BaseActivity implements AssetIconL
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ICON_STICKER_ITEM_FOLDER, folder);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (findViewById(R.id.activity_template_sticker_fragment_container) == null) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        } else
+            super.onBackPressed();
     }
 }

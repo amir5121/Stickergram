@@ -60,4 +60,10 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
         send.setData(uri);
         startActivity(Intent.createChooser(send, getString(R.string.send_an_email)));
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
+    }
 }

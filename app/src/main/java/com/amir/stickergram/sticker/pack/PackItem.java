@@ -7,8 +7,10 @@ import android.media.ThumbnailUtils;
 import android.util.Log;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +19,8 @@ import java.io.OutputStream;
 public class PackItem {
     public static final int TYPE_TEMPLATE = 1;
     public static final int TYPE_USER = 2;
-    public static final String WEBP = ".webp";
-    public static final String PNG = ".png";
+    public static final String WEBP = BaseActivity.WEBP;
+    public static final String PNG = BaseActivity.PNG;
 
     private final Context context;
     private final String folder;
@@ -37,6 +39,7 @@ public class PackItem {
 
     public Bitmap getThumbnail() {
         Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG);
+//        Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + WEBP);
         if (bitmap == null) {
             //this part should only very rarely get called (it will only get called when the cached thumb has been removed)
             Bitmap tempBitmap;
@@ -50,6 +53,7 @@ public class PackItem {
                 } else throw new RuntimeException("Undefined Type for the pack item");
 
                 File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG));
+//                File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + WEBP));
                 if (!thumbFile.getParentFile().exists())
                     if (!thumbFile.getParentFile().mkdirs())
                         Log.e(getClass().getSimpleName(), "failed");
@@ -60,7 +64,7 @@ public class PackItem {
 
                 OutputStream outputStream = new FileOutputStream(thumbFile);
                 if (tempBitmap != null)
-                ThumbnailUtils.extractThumbnail(tempBitmap, tempBitmap.getWidth() / 3, tempBitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);
+                    ThumbnailUtils.extractThumbnail(tempBitmap, tempBitmap.getWidth() / 3, tempBitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -90,6 +94,39 @@ public class PackItem {
 
     public String getDir() {
         return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG;
+//        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + WEBP;
+    }
+
+    public String getWebpDir() {
+        Bitmap tempBitmap = BitmapFactory.decodeFile(BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG);
+        if (tempBitmap == null) {
+            Log.e(getClass().getSimpleName(), "tempBitmap was null");
+            return null;
+        }
+        String dir = BaseActivity.WEBP_CASH_DIR;
+        try {
+            File file = new File(dir);
+            if (file.exists())
+                file.delete();
+            file.createNewFile();
+            tempBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(dir));
+//            int i = 0;
+//            OutputStream outputStream;
+//            InputStream inputStream;
+//            do {
+//                Bitmap temp = Loader.reduceImageSize(tempBitmap, i);
+//                outputStream = new FileOutputStream(file);
+//                temp.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+//                inputStream = new FileInputStream(file);
+////                Log.e(getClass().getSimpleName(), "fileSize: " + String.valueOf(inputStream.available()));
+//                i++;
+//            } while (inputStream.available() >= 357376);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.e(getClass().getSimpleName(), dir);
+        return dir;
     }
 
     public String getDirInAsset() {
@@ -97,13 +134,46 @@ public class PackItem {
     }
 
     public void removeThumb() {
-        if (type == TYPE_USER){
+        if (type == TYPE_USER) {
             File file = new File(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG);
+//            File file = new File(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + WEBP);
             if (file.exists())
                 file.delete();
         }
     }
-
+//
+//    public String convertToPng() {
+//        Bitmap tempBitmap = BitmapFactory.decodeFile(BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + WEBP);
+//        if (tempBitmap == null) {
+//            Log.e(getClass().getSimpleName(), "tempBitmap was null");
+//            return null;
+//        }
+//        String dir = BaseActivity.TEMP_OUTPUT_DIRECTORY + File.separator + folder + " " + name + PNG;
+//        try {
+//            File file = new File(dir);
+//            if (file.exists())
+//                file.delete();
+//            file.createNewFile();
+//            tempBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(dir));
+//            int i = 0;
+//            OutputStream outputStream;
+//            InputStream inputStream;
+//            do {
+//                Bitmap temp = Loader.reduceImageSize(tempBitmap, i);
+//                outputStream = new FileOutputStream(file);
+//                temp.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+//                inputStream = new FileInputStream(file);
+////                Log.e(getClass().getSimpleName(), "fileSize: " + String.valueOf(inputStream.available()));
+//                i++;
+//            } while (inputStream.available() >= 357376);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        Log.e(getClass().getSimpleName(), "tempFile: " + dir);
+//        return dir;
+//    }
+//
 //    public Bitmap getBitmap() {
 //        InputStream inputStream = null;
 //        try {

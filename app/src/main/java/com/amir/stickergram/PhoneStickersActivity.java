@@ -1,5 +1,6 @@
 package com.amir.stickergram;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -13,6 +14,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,8 +97,6 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
             loadingStickersCount.setText(String.valueOf(stickerCount));
         }
 
-        //todo: showcase sweep refresh
-
     }
 
     @Override
@@ -137,15 +138,25 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
             instantiateLoadingDialog();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onTaskUpdateListener(int percent, int stickerCount) {
-        if (loadingTextPercentage != null && loadingStickersCount != null) {
-            loadingTextPercentage.setText(percent + "%");
-            loadingStickersCount.setText(String.valueOf(stickerCount));
-        }
-
         this.percent = percent;
         this.stickerCount = stickerCount;
+
+        if (loadingTextPercentage != null && loadingStickersCount != null) {
+            String percentTemp = String.valueOf(percent);
+            String stickerCountTemp = String.valueOf(stickerCount);
+            if (Loader.deviceLanguageIsPersian()) {
+                percentTemp = Loader.convertToPersianNumber(percentTemp);
+                loadingTextPercentage.setText("% " + percentTemp);
+                stickerCountTemp = Loader.convertToPersianNumber(stickerCountTemp);
+            } else loadingTextPercentage.setText(percentTemp + " %");
+
+            loadingStickersCount.setText(stickerCountTemp);
+
+        }
+
     }
 
     @Override
@@ -260,5 +271,27 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
             dialog = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.phone_sticker_activity_menu_item, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.phone_sticker_activity_menu_item_refresh) {
+            onRefresh();
+            Toast.makeText(this, getString(R.string.sweep_refresh_is_also_available), Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

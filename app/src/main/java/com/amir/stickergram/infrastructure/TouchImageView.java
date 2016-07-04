@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -202,7 +203,7 @@ public class TouchImageView extends ImageView {
 
     public void notPaid() {
         textItem.setTilt(180);
-        textItem.setTextStrokeColor(Color.parseColor("#2196f3"));
+//        textItem.setTextStrokeColor(Color.parseColor(TextItem.DEFAULT_STROKE_COLOR));
         Shadow shadow = textItem.getShadow();
         shadow.setDx(0);
         shadow.setDy(0);

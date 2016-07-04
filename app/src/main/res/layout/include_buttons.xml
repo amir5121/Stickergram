@@ -3,8 +3,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/include_buttons_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="219dp"
-    android:layout_alignParentBottom="true">
+    android:layout_height="200dp"
+    android:layout_alignParentBottom="true"
+    android:isScrollContainer="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,40 +15,40 @@
         <Button
             android:id="@+id/include_buttons_text_button"
             style="@style/EditActivityButton"
-            android:background="#E3F2FD"
+            android:background="#1976D2"
             android:text="@string/text"
             android:textColor="@color/text_button_color" />
 
 
         <Button
             android:id="@+id/include_buttons_size_button"
-            android:background="#BBDEFB"
-            android:text="@string/size"
             style="@style/EditActivityButton"
+            android:background="#1E88E5"
+            android:text="@string/size"
             android:textColor="@color/size_button_color"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/include_buttons_tilt_button"
-            android:background="#90CAF9"
-            android:text="@string/tilt"
             style="@style/EditActivityButton"
+            android:background="#2196F3"
+            android:text="@string/tilt"
             android:textColor="@color/tilt_button_color"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/include_buttons_font_button"
+            style="@style/EditActivityButton"
             android:background="#64B5F6"
             android:text="@string/fontItem"
-            style="@style/EditActivityButton"
             android:textColor="@color/font_button_color"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/include_buttons_text_color"
+            style="@style/EditActivityButton"
             android:background="#42A5F5"
             android:text="@string/text_color"
-            style="@style/EditActivityButton"
             android:textColor="@color/text_color_button_color"
             android:textSize="16sp" />
 
@@ -71,12 +72,22 @@
             android:background="#1E88E5"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/drop_shadow"
+                android:textColor="#eee"
+                android:textSize="14sp" />
+
             <Button
                 android:id="@+id/include_buttons_text_stroke_color"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
                 android:text="@string/stroke_color"
@@ -88,7 +99,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
                 android:text="@string/stroke_width"
@@ -110,7 +121,8 @@
                 android:clickable="false"
                 android:gravity="center"
                 android:text="@string/shadow"
-                android:textColor="#eee" />
+                android:textColor="#eee"
+                android:textSize="14sp" />
 
 
             <Button

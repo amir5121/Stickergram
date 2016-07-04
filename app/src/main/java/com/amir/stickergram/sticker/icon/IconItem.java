@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class IconItem {
+    private static final String PNG = BaseActivity.PNG;
+    private static final String WEBP = BaseActivity.WEBP;
     private final String folder;
     private final Context context;
 
@@ -31,7 +33,7 @@ public class IconItem {
     public Bitmap getBitmapIconFromAsset() {
         Bitmap bitmap = null;
         try {
-            InputStream inputStream = context.getAssets().open("Stickers/" + folder + File.separator + "8.webp");
+            InputStream inputStream = context.getAssets().open(BaseActivity.STICKERS + folder + File.separator + "10" + WEBP);
             bitmap = BitmapFactory.decodeStream(inputStream);
             bitmap = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3);
             inputStream.close();
@@ -43,6 +45,7 @@ public class IconItem {
 
     public Bitmap getBitmapFromExternalStorage() {
         String pathName = BaseActivity.USER_STICKERS_DIRECTORY + folder + "/0.png";
+//        String pathName = BaseActivity.USER_STICKERS_DIRECTORY + folder + "/0" + WEBP;
         Bitmap bitmap = BitmapFactory.decodeFile(pathName);
         if (bitmap == null)
             Log.e(getClass().getSimpleName(),

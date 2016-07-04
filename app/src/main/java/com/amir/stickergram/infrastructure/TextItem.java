@@ -1,6 +1,5 @@
 package com.amir.stickergram.infrastructure;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,7 +10,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -22,6 +20,8 @@ public class TextItem {
     public static final int TEXT_ITALIC = 1;
     public static final int TEXT_NORMAL = 2;
     public static final Typeface DEFAULT_FONT = Typeface.SERIF;
+    public static final String DEFAULT_STROKE_COLOR = "#1565c0";
+    private static final String DEFAULT_TEXT_COLOR = "#ffffff";
 //    public static final int DEFAULT_TEXT_COLOR = 1430537284;
 
 
@@ -59,8 +59,8 @@ public class TextItem {
         hostWidth = hostBitmap.getWidth();
         hostHeight = hostBitmap.getHeight();
 
-        textStrokeColor = Color.parseColor("#ffffffff");
-        strokeWidth = 0;
+        textStrokeColor = Color.parseColor(DEFAULT_STROKE_COLOR);
+        strokeWidth = 10;
 
         selectedColor = Color.parseColor("#55444444");
         isSelected = false;
@@ -73,7 +73,7 @@ public class TextItem {
         tilt = 180;
         shadow = new Shadow(Color.BLACK, 0, 0, 0);
         size = 50;
-        textColor = Color.parseColor("#1565c0");
+        textColor = Color.parseColor(DEFAULT_TEXT_COLOR);
         alignment = Layout.Alignment.ALIGN_OPPOSITE;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
             textDirection = View.TEXT_DIRECTION_LTR;
@@ -193,17 +193,16 @@ public class TextItem {
         Rect bound = new Rect();
         mPaint.getTextBounds(text, 0, text.length(), bound);
 
-        //todo: play around to get a more prefect area for your text plzz don't hardcode values like you are doing with below line
-        //todo: let the user change the text padding
         textWidth = (int) mPaint.measureText(text, 0, text.length()) + 10;
 //        Log.e(getClass().getSimpleName(), "textWidth: " + textWidth);
         textHeight = getTextHeight(text, textWidth, size, font.getTypeface()) + 10;
 //        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight);
         textHeight += textHeight / 3;
 
-        int padding = 20;
-        if (Loader.isPersian(text))
-            padding += size/10;
+//        int padding = 0;
+        int padding = 20 + size / 10;
+//        if (Loader.isPersian(text))
+//            padding += size / 10;
 
         int bitmapWidth = (int) (textWidth + shadow.getDx() + strokeWidth + padding);
         int bitmapHeight = (int) (textHeight + shadow.getDy() + strokeWidth + padding);
@@ -221,12 +220,13 @@ public class TextItem {
         mPaint.setColor(textStrokeColor);
         mPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
 
-//        int yOffSet = (int) (size - (size / 15) + strokeWidth / 2 + padding / 2); //todo: this line is weird but it work. let it be.... no don't let it be it ain't working correctly on different fonts
+//        int yOffSet = (int) (size - (size / 15) + strokeWidth / 2 + padding / 2);
 //        int yOffSet = (int) (strokeWidth / 2 + textWidth/2);
-        int yOffSet = (int) (strokeWidth / 2 + textHeight / 1.5);
+        int yOffSet = (int) (strokeWidth / 2 + textHeight / 1.5 + padding / 2 + size / 12);
 //        float xOffSet = (size / 2) + strokeWidth / 2;
 //        float xOffSet = bitmap.getWidth() / 2 - (textWidth / 2) + size / 2 + strokeWidth / 2 ;
         float xOffSet = (int) (10 + strokeWidth / 2 + padding / 2);
+//        Log.e(getClass().getSimpleName(), "text height: " + textHeight);
         canvas.drawText(text, xOffSet, yOffSet, mPaint);
 
         mPaint.setShadowLayer(0, 0, 0, 0);//removing the shadow to avoid redrawing it
@@ -277,9 +277,6 @@ public class TextItem {
 
         Rect bounds = new Rect();
         paint.getTextBounds(this.text, 0, this.text.length(), bounds);
-//        if (Loader.isPersian(text))
-//            paint.getTextBounds("اغ", 0, 2, bounds);
-//        else paint.getTextBounds("Py", 0, 2, bounds);
         return (int) Math.floor(lineCount * bounds.height());
     }
 
@@ -325,7 +322,7 @@ public class TextItem {
         return strokeWidth;
     }
 
-    public void setStrokeWidth(int strokeWidth) {
+    public void setStrokeWidth(float strokeWidth) {
         this.strokeWidth = strokeWidth;
     }
 }

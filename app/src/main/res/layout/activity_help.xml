@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -17,220 +16,353 @@
 
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/faq_text_background"
-            android:gravity="center"
-            android:padding="3dp"
-            android:text="@string/help"
-            android:textColor="#fff"
-            android:textSize="16sp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/faq_text_background"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="@string/help"
+        android:textColor="#fff"
+        android:textSize="16sp" />
 
 
         <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+        style="@style/HowToQuestionTextStyle"
+        android:text="@string/what_s_a_sticker" />
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/sticker_is_an_image_that_is_uploaded_to_telegram" />
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" -->
+        <!--android:src="@drawable/stickergram_pic"/>-->
+
+        <TextView
+        style="@style/HowToQuestionTextStyle"
+        android:text="@string/what_s_a_pack" />
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/a_pack_is_a_package_that_contain_a_number" />
+
+        <TextView
+        style="@style/HowToQuestionTextStyle"
+        android:text="@string/what_can_i_do_with_this_app" />
+
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/this_app_helps_you_create_stickers_more_easily_and_faster" />
+
+        <TextView
+        style="@style/HowToQuestionTextStyle"
+        android:text="@string/what_s_a_bot" />
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/a_bot_is_another_computer_program_that_runs_on_telegram" />
+
+        <TextView
+        style="@style/HowToQuestionTextStyle"
+        android:text="@string/how_can_i_use_my_stickers_in_telegram" />
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/after_you_created_your_sticker_in_this_app_you_need_to" />
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/in_pack_creation_mode_your_stickers_will_be_saves_as_png_files_with_appropriate_file_and_image_size" />
+
+        <TextView
+        style="@style/HowToAnswer"
+        android:text="@string/i_have_explained_the_process_here" />
+
+        <Button
+        android:id="@+id/activity_help_watch_video"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginStart="25dp"
+        android:background="@color/default_button_background"
+        android:text="@string/watch_a_video_tutorial"
+        android:textColor="#fff" />
+
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_1_if_it_s_the_first_time_that_you_create_a_sticker_pack_you_need_to_activate" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/press_the_below_button_and_hit_start_in_the_conversation_that_opens" />
+
+        <Button
+            android:id="@+id/activity_faq_activate_bot"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/activate_stickers_bot"
+            android:textColor="#fff" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/first_start" />
 
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="What's a Sticker?" />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_2_the_bot_will_ask_for_commands_as_every_sticker" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="Sticker is an image that is uploaded to Telegram server (Using the @Stickers bot) and can be shared easily from within the Telegram app." />
-
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="What's a Pack?" />
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="A pack is a package that contain a number of Stickers. Every Sticker must be contain within a pack." />
-
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="What can i do with this app?" />
-
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="This app helps you create Stickers more easily and faster." />
-
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="What's a Bot?" />
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="A bot is another computer program that runs on Telegram servers and you can communicate with it. You will use @Stickers bot to create your stickers on Telegram." />
-
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="How can i use my stickers in Telegram?" />
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="After you created your sticker in this app you need to send them to Telegram.\nHere is how to do it... \n\n1.First you need to activate the @Stickers bot\n press the below button and hit start in the conversation that opens." />
-
-                <Button
-                    android:id="@+id/activity_faq_activate_bot"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/activate_stickers_bot"
-                    android:textColor="#fff" />
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="2.The bot will ask for commands. As every Sticker must be contained within a pack you need to create a new pack and add your sticker to it.\n\n By hitting the below button you will be guided to @Stickers bot and pack creation command will be copied to your clipboard then paste it and send it to the bot)" />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_creation_command_will_be_copied_to_your_clipboard_then_paste_it_and_send_it_to_the_bot" />
 
 
-                <Button
-                    android:id="@+id/activity_faq_new_pack"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/create_new_package"
-                    android:textColor="#fff" />
+        <Button
+            android:id="@+id/activity_faq_new_pack"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/create_new_package"
+            android:textColor="#fff" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/new_pack" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_3_the_bot_will_now_ask_you" />
 
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="3. The bot will now ask you to give your new pack a name so send the name of the pack to the bot. This name can be anything." />
+        <Button
+            android:id="@+id/activity_faq_go_to_bot1"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/go_to_bot"
+            android:textColor="#fff" />
 
 
-                <Button
-                    android:id="@+id/activity_faq_go_to_bot1"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/go_to_bot"
-                    android:textColor="#fff" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pack_name" />
 
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="4. As every sticker has a corresponding emoji to it you need to send an emoji before sending every sticker so send any emoji that correspond to the sticker you are going to send. (Send any emoji)" />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_4_as_every_sticker_has_a_corresponding" />
 
 
-                <Button
-                    android:id="@+id/activity_faq_go_to_bot2"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/go_to_bot"
-                    android:textColor="#fff" />
+        <Button
+            android:id="@+id/activity_faq_go_to_bot2"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/go_to_bot"
+            android:textColor="#fff" />
 
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="5. After sending the emoji send the sticker that you have created.\n\n while you want to add new stickers to pack do step 4 and 5" />
-
-                <Button
-                    android:id="@+id/activity_faq_go_to_user_pack"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/my_stickers"
-                    android:textColor="#fff" />
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="6. When you were done adding Stickers to the pack you will need to publish the pack. In order to publish a pack you need to send the publish command to the app.\n\n Hit the bellow button and paste and send the copied command to the Bot." />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/emoji" />
 
 
-                <Button
-                    android:id="@+id/activity_faq_publish"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/publish"
-                    android:textColor="#fff" />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_5_after_sending_the_emoji_send" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/while_you_want_to_add_new_stickers_to_pack_do_step_4_and_5" />
+
+        <Button
+            android:id="@+id/activity_faq_go_to_user_pack"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/my_stickers"
+            android:textColor="#fff" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/send_file" />
 
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Sticker pack.\n\n*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can't be '55555' or 'Stickergram app' or '@Stickergram' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name)." />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_6_when_you_were_done_adding_stickers_to_the_pack_you" />
 
-                <Button
-                    android:id="@+id/activity_faq_go_to_bot3"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/go_to_bot"
-                    android:textColor="#fff" />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/hit_the_bellow_button_and_paste_and_send_the_copied_command_to_the_bot" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="8. Hooray you published a new pack. The bot will give you a link which you can access your stickers from." />
 
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="What if i wanted to add Sticker to a published pack?" />
+        <Button
+            android:id="@+id/activity_faq_publish"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/publish"
+            android:textColor="#fff" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="Use the \n'/addsticker' + 'link to your stickers' \ncommand to add sticker to a published pack. For example if i have a sticker that i published with this link 'telegram.me/addstickers/stickergramApp' and i want to add another sticker to that pack i should write this command:\n'/addsticker telegram.me/addstickers/stickergramApp'\n then send an emoji and the sticker itself afterward." />
 
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
-                    android:text="What if i wanted to delete a Sticker from a published pack?" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/public_sticker" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="The @Stickers bot provide a '/delsticker' command for just this propose. For example if i have a sticker that i published with this link 'telegram.me/addstickers/stickergramApp' and i want to deleete a sticker from that pack i should write this command:\n'/delsticker telegram.me/addstickers/stickergramApp'\n then send the sticker from within the Telegram." />
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_7_after_sending_the_publish_command_you" />
 
-            </LinearLayout>
-        </ScrollView>
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only_have_english_alphabetic_characters_in_it_so_for_example_it_can_t_be_55555_or_stickergram_app_or_stickergram_and_it_must_at_least_be_5_character_and_not_in_use_by_others_bot_will_tell_you_if_the_short_name_has_been_taken_or_not_if_it_was_taken_you_need_to_pick_another_name" />
+
+        <Button
+            android:id="@+id/activity_faq_go_to_bot3"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:background="@color/default_button_background"
+            android:text="@string/go_to_bot"
+            android:textColor="#fff" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/short_name" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/_8_hooray_you_published_a_new_pack" />
+
+        <TextView
+            style="@style/HowToQuestionTextStyle"
+            android:text="@string/what_if_i_wanted_to_add_sticker_to_a_published_pack" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/use_the_n_addsticker_link_to_your_stickers_ncommand_to_add_sticker" />
+
+        <TextView
+            style="@style/HowToQuestionTextStyle"
+            android:text="@string/what_if_i_wanted_to_delete_a_sticker_from_a_published_pack" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/the_stickers_bot_provide_a_delsticker_command_for_just" />
+
     </LinearLayout>
+</ScrollView></LinearLayout>
 
-    <include layout="@layout/include_nav_drawer" />
+<include layout="@layout/include_nav_drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.DrawerLayout>

@@ -6,12 +6,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 
@@ -182,6 +184,7 @@ public class NavDrawer {
 
             activity.startActivity(new Intent(activity, targetActivity));
             activity.finish();
+
         }
     }
 

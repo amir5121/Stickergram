@@ -1,12 +1,14 @@
 package com.amir.stickergram.sticker.icon;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +27,7 @@ public abstract class IconAdapter extends RecyclerView.Adapter<IconViewHolder> i
         this.type = type;
         try {
             items = getItems();
+            if (items.size() == 0) listener.OnNoItemWereFoundListener();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,8 +51,9 @@ public abstract class IconAdapter extends RecyclerView.Adapter<IconViewHolder> i
                 name = name.substring(i, name.length());
                 holder.populate(new IconItem(activity, name), type);
             }
-        } else if (type == IconItem.TYPE_ASSET)
+        } else if (type == IconItem.TYPE_ASSET) {
             holder.populate(new IconItem(activity, items.get(position)), type);
+        }
     }
 
     @Override
@@ -67,5 +71,7 @@ public abstract class IconAdapter extends RecyclerView.Adapter<IconViewHolder> i
 
     public interface OnStickerClickListener {
         void OnIconClicked(IconItem item);
+
+        void OnNoItemWereFoundListener();
     }
 }

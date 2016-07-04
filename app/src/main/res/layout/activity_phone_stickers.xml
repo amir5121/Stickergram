@@ -41,8 +41,6 @@
             android:textSize="18sp"
             android:visibility="gone"/>
 
-        <!--todo: update the management-->
-
     </RelativeLayout>
 
     <include layout="@layout/include_nav_drawer" />

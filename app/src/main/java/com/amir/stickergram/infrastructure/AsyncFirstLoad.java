@@ -56,6 +56,7 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
 
                         // replacing webp with png and compressing it as a png so on devices with lower apis transparent background remain transparent and doesn't turn black
                         File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file).replace(".webp", ".png"));
+//                        File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file));
 
                         if (!thumbFile.getParentFile().exists())
                             if (!thumbFile.getParentFile().mkdirs())
@@ -67,7 +68,7 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
 
                         outputStream = new FileOutputStream(thumbFile);
                         ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);
-                        publishProgress((filesChecked++ * 100) / 213); // there are 213 sticker in the assets folder dividing bu 217 so we get 100%
+                        publishProgress((filesChecked++ * 100) / 225); // there are 213 sticker in the assets folder dividing bu 217 so we get 100%
                     }
                 }
             }
