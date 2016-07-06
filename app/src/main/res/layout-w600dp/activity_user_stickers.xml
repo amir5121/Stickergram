@@ -16,16 +16,19 @@
             layout="@layout/include_toolbar" />
 
 
+
         <TextView
             android:id="@+id/activity_user_stickers_no_sticker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/include_toolbar"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
             android:text="@string/you_haven_t_created_any_sticker"
             android:padding="5dp"
             android:layout_margin="5dp"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:visibility="gone"/>
 
         <fragment

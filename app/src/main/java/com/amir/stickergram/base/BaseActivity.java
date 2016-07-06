@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.amir.stickergram.AppType;
 import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.infrastructure.Loader;
@@ -31,28 +32,30 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static final String PNG = ".png";
     public static final String WEBP = ".webp";
     //    public static final String NEED_ROTATION = "NEED_ROTATION";
+    public static final String PHONE_STICKERS_DIRECTORY_TELEGRAM = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
+    public static final String PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.plus" + File.separator + "cache" + File.separator;
     public static final String STICKERS = "Stickers/";
     public static final String EMAIL = "StickergramApp@gmail.com";
-
-    public static final String LINK_TO_CHANNEL = "https://telegram.me/joinchat/Ap1t9T8jpiK4UY7SXbfwqQ";
-    public static final int PACKAGE_NAME_LENGTH_LIMIT = 50;
+    public static final String LINK_TO_CHANNEL = AppType.LINK_TO_CHANNEL;
     public static final String PERSIAN_FONT_DIRECTORY = "Fonts/per";
     public static final String ENGLISH_FONT_DIRECTORY = "Fonts/eng";
     public static final String PERSIAN_FONT_NAME = "per_font_names.txt";
     public static final String FONT_DIRECTORY_IN_ASSET = "Fonts/";
     public static final String LINK_TO_BOT = "https://telegram.me/stickers";
-    public static String WEBP_CASH_DIR;
+    public static final String ORG_TELEGRAM_PLUS_PACKAGE = "org.telegram.plus";
+    public static final String WEBP_CASH_DIR = AppType.WEBP_CASH_DIR;
+    //    public static final String TEMP_OUTPUT_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final int PACKAGE_NAME_LENGTH_LIMIT = 50;
+    public static final int LIGHT_BLUE = Color.parseColor("#2196f3");
+    public static final int DARK_BLUE = Color.parseColor("#1565c0");
+    public static final int TRANSPARENT_DARK_BLUE = Color.parseColor("#882196f3");
+    public static float density;
     public static String CACHE_DIR;
-    public static String TEMP_OUTPUT_DIRECTORY;
     public static String TEMP_STICKER_CASH_DIR;
     public static String FONT_DIRECTORY;
     public static String BASE_THUMBNAIL_DIRECTORY;
     public static String USER_STICKERS_DIRECTORY;
     public static String STICKERGRAM = "/Stickergram";
-    public static final int LIGHT_BLUE = Color.parseColor("#2196f3");
-    public static final int DARK_BLUE = Color.parseColor("#1565c0");
-    public static final int TRANSPARENT_DARK_BLUE = Color.parseColor("#882196f3");
-    public static float density;
 
     private SharedPreferences preferences;
 
@@ -61,6 +64,9 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
 
     public static boolean isTablet;
     public static boolean isInLandscape;
+    public static boolean isTelegramInstalled;
+    public static boolean isTelegramProInstalled;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,10 +80,11 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         BASE_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_Stickers";
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
-        WEBP_CASH_DIR = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.صفحهه ی چت را دوباره باز کنید.webp";
         TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + ".temp_sticker.png";
-        TEMP_OUTPUT_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath();
         CACHE_DIR = getCacheDir().getAbsolutePath() + "/";
+
+        isTelegramInstalled = Loader.isAppInstalled(this, TELEGRAM_PACKAGE);
+        isTelegramProInstalled = Loader.isAppInstalled(this, ORG_TELEGRAM_PLUS_PACKAGE);
 
         preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
 

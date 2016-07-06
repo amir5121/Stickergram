@@ -12,12 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amir.stickergram.BuildConfig;
+import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.util.IabHelper;
 import com.amir.stickergram.util.IabResult;
-import com.amir.stickergram.util.Inventory;
 import com.amir.stickergram.util.Purchase;
 import com.tozny.crypto.android.AesCbcWithIntegrity;
 
@@ -28,21 +27,21 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     //todo: lucky patcher http://stackoverflow.com/questions/13445598/lucky-patcher-how-can-i-protect-from-it
     //todo: read the comment on that answer
     private static final String TAG = "BaseAuthenticated";
-    private static final int REQUEST_BUY_PRO = 100001;
+    private static final int REQUEST_BUY_PRO = 1001;
     public static final String BUY_THE_AWESOME_STICKERGRAM_PRO_VERSION = "BuyTheAwesomeStickergramProVersion";
     private static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     public static boolean isPaid;
-    private static String HAS_BOUGHT_PRO;
+    private static String HAS_BOUGHT_PRO = "HAS_BOUGHT_PRO";
     IabHelper mHelper;
     static final String ITEM_SKU = "com.amir.stickergram.pro";
     private SharedPreferences preferences;
     public static boolean inAppBillingSetupOk = false;
     public static boolean isPaymentAppInstalled = false;
-    boolean mIsPremium = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkSignature(this);
 
         preferences = getSharedPreferences(BaseActivity.SETTING, MODE_PRIVATE);
         isPaid = getProStatus();
@@ -69,13 +68,12 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
                 }
             });
         }
-        checkSignature(this);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!mHelper.handleActivityResult(requestCode,
-                resultCode, data)) {
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -131,17 +129,17 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
 
     public void setBuyProTrue() {
-            Toast.makeText(this, getString(R.string.to_apply_the_effect_restart_the_app), Toast.LENGTH_LONG).show();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(HAS_BOUGHT_PRO, true);
-            editor.apply();
-            finish();
+        Toast.makeText(this, getString(R.string.thanks_purchasing_the_app), Toast.LENGTH_LONG).show();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(HAS_BOUGHT_PRO, true);
+        editor.apply();
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     public boolean getProStatus() {
 //        if (!BuildConfig.DEBUG) {
-            if (mIsPremium) return true;
-            return preferences.getBoolean(HAS_BOUGHT_PRO, false);
+        return preferences.getBoolean(HAS_BOUGHT_PRO, false);
 //        }
 //        return true;
 //        return preferences.getBoolean(HAS_BOUGHT_PRO, false);

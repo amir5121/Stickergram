@@ -730,12 +730,20 @@ public class EditImageActivity
 
 
     private void addLabel() {
+        int bitmapWidth = mainBitmap.getWidth();
+        float labelDecrementRatio = 1600.0f;
+        int strokeWidth = (bitmapWidth / 51) + Math.abs(bitmapWidth - 512) / 80;
+//        Log.e(getClass().getSimpleName(), "strokeWidth: " + strokeWidth);
+        int stickergramTextSize = (int) ((bitmapWidth / 18) + (labelDecrementRatio / bitmapWidth));
+        int madeWithTextSize = (int) ((bitmapWidth / 30) + (labelDecrementRatio / bitmapWidth));
+        Log.e(getClass().getSimpleName(), "stickergramTextSize: " + stickergramTextSize);
+        Log.e(getClass().getSimpleName(), "madeWithTextSize: " + madeWithTextSize);
         label[0] = new TouchImageView(this, new TextItem(getString(R.string.stickergram), mainBitmap), 0, mainBitmap);
         TextItem textItem = label[0].getTextItem();
 //        textItem.setBackgroundColor(ContextCompat.getColor(this, R.color.stickergram_label_background));
         textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF));
-        textItem.setStrokeWidth(10);
-        textItem.setSize(32);
+        textItem.setStrokeWidth(strokeWidth);
+        textItem.setSize(stickergramTextSize);
         textItem.setTextColor(ContextCompat.getColor(this, R.color.stickergram_label_color));
         textItem.setTextStrokeColor(ContextCompat.getColor(this, R.color.stickergram_label_stroke_color));
         Bitmap bitmap = textItem.getTextBitmap();
@@ -743,19 +751,19 @@ public class EditImageActivity
         int stickergramWidth = bitmap.getWidth();
 //        textItem.setPosition(new Position(mainBitmap.getHeight() - stickergramHeight, mainBitmap.getWidth() - stickergramWidth));
 
-        int top = mainBitmap.getHeight() - stickergramHeight + 15;
+        int top = mainBitmap.getHeight() - stickergramHeight + 20;
         textItem.setPosition(new Position(top, -15));
         label[0].setTextItem(textItem);
         textLayerContainer.addView(label[0]);
         label[1] = new TouchImageView(this, new TextItem(getString(R.string.made), mainBitmap), 0, mainBitmap);
-        textItem.setSize(20);
+        textItem.setSize(madeWithTextSize);
         textItem.setText(getString(R.string.made));
-        textItem.setStrokeWidth(3);
+        textItem.setStrokeWidth(4);
         textItem.setBackgroundColor(0);
         bitmap = textItem.getTextBitmap();
 //        textItem.setPosition(new Position(0,0));
         textItem.setPosition(new Position(top - bitmap.getHeight() / 3.3f,
-                stickergramWidth / 2 - bitmap.getWidth() / 2 - 7.5f));
+                stickergramWidth / 2 - bitmap.getWidth() / 2 - 15));
         label[1].setTextItem(textItem);
         textLayerContainer.addView(label[1]);
 

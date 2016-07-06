@@ -165,9 +165,10 @@ public class UserIconPackDetailedFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-                    if (Loader.isAppInstalled(getContext(), BaseActivity.TELEGRAM_PACKAGE)) {
+                    if (Loader.getActivePack() != null) {
+//                    if (BaseActivity.isTelegramInstalled) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
+                        intent.setPackage(Loader.getActivePack());
                         intent.setType("application/pdf");
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getWebpDir())));
                         startActivity(intent);
@@ -197,9 +198,10 @@ public class UserIconPackDetailedFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-                    if (Loader.isAppInstalled(getContext(), BaseActivity.TELEGRAM_PACKAGE)) {
+//                    if (BaseActivity.isTelegramInstalled) {
+                    if (Loader.getActivePack() != null) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
+                        intent.setPackage(Loader.getActivePack());
                         intent.setType("application/pdf");
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
                         startActivity(intent);

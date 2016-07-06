@@ -37,9 +37,8 @@
     <color name="stroke_width_seek_bar_background_color">#55445511</color>
     <color name="stroke_width_seek_bar_progress_color">#ffea00</color>
     <color name="stroke_width_seek_bar_thumb_color">#536dfe</color>
-    <color name="stickergram_label_background">#552196f3</color>
-    <color name="stickergram_label_stroke_color">#4477ff</color>
-    <color name="stickergram_label_color">#fff</color>
+    <color name="stickergram_label_stroke_color">#aa4477ff</color>
+    <color name="stickergram_label_color">#ddffffff</color>
     <color name="sticker_item_background">#560e7bff</color>
     <color name="sticker_item_background_selected">#8afddfdf</color>
     <color name="lighter_blue">#9942a5f5</color>

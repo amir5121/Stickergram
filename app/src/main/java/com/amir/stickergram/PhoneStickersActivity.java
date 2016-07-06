@@ -30,7 +30,6 @@ import com.amir.stickergram.sticker.single.StickerItem;
 import java.io.File;
 
 public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener {
-    public static final String PHONE_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
     private static final String IS_REFRESHING = "IS_REFRESHING";
     private static final String STICKER_COUNT = "STICKER_COUNT";
     private static final String PERCENT = "PERCENT";
@@ -180,7 +179,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     @Override
     public void onNoCashDirectoryListener() {
         Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
-        if (!Loader.isAppInstalled(this, TELEGRAM_PACKAGE))
+        if (!BaseActivity.isTelegramInstalled)
             Toast.makeText(this, getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
         finish();
     }

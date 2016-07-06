@@ -76,7 +76,7 @@
     <string name="there_was_a_problem_getting_the_picture">There was a problem loading the picture.</string>
     <string name="add_new_text_or_set_a_text_selected">Add a new Text or select a text</string>
     <string name="name_can_not_contain_symbols">Name can not contain symbols or be empty!</string>
-    <string name="buy_the_pro_version_for_full_functionality">Buy the pro version for full functionality</string>
+    <string name="buy_the_pro_version_for_full_functionality">To remove the label and use full functionality tap here</string>
     <string name="shadow_position">Shadow position</string>
     <string name="stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors">in free version stroke color is only available in blue</string>
     <string name="buy_pro">Buy pro version</string>
@@ -92,7 +92,6 @@
     <string name="low_storage">Internal storage is (almost) full the app is unstable please free up some memory!</string>
     <string name="failed_to_save_the_sticker">Failed to save the sticker please free up some memory!</string>
     <string name="this_name_already_exist">This name already exist.</string>
-    <string name="to_apply_the_effect_restart_the_app">To apply the effect restart the application</string>
     <string name="payment_was_unsuccessful">Payment was unsuccessful</string>
     <string name="copied">Command was copied!</string>
     <string name="telegram_is_not_installed">Telegram is not installed</string>
@@ -140,9 +139,9 @@
     <string name="_7_after_sending_the_publish_command_you">7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Sticker pack.</string>
     <string name="_8_hooray_you_published_a_new_pack">8. Hooray you published a new pack. The bot will give you a link which you can access your stickers from.</string>
     <string name="what_if_i_wanted_to_add_sticker_to_a_published_pack">What if i wanted to add Sticker to a published pack?</string>
-    <string name="use_the_n_addsticker_link_to_your_stickers_ncommand_to_add_sticker">Use the \n\'/addsticker\' + \'link to your pack\' \ncommand to add sticker to a published pack. For example if i have a sticker that i published with this link \'telegram.me/addstickers/stickergramApp\' and i want to add another sticker to that pack i should write this command:\n\'/addsticker telegram.me/addstickers/stickergramApp\'\n then send an emoji and the sticker itself afterward.</string>
+    <string name="use_the">Use the </string>
     <string name="what_if_i_wanted_to_delete_a_sticker_from_a_published_pack">What if i wanted to delete a Sticker from a published pack?</string>
-    <string name="the_stickers_bot_provide_a_delsticker_command_for_just">The @Stickers bot provide a \'/delsticker\' command for just this propose. For example if i have a sticker that i published with this link \'telegram.me/addstickers/stickergramApp\' and i want to deleete a sticker from that pack i should write this command:\n\'/delsticker telegram.me/addstickers/stickergramApp\'\n then send the sticker from within the Telegram.</string>
+    <string name="the_stickers_bot_provide_a_delsticker_command_for_just">The @Stickers bot provide a</string>
     <string name="what_does_the_pro_version_offer">What does the pro version offer?</string>
     <string name="send">Send</string>
     <string name="tilt_shadow_position_more_packages">You will be able to tilt your texts plus moving their shadow, and you can create more than two packages whitin the app. </string>
@@ -171,4 +170,16 @@
     <string name="note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only_have_english_alphabetic_characters_in_it_so_for_example_it_can_t_be_55555_or_stickergram_app_or_stickergram_and_it_must_at_least_be_5_character_and_not_in_use_by_others_bot_will_tell_you_if_the_short_name_has_been_taken_or_not_if_it_was_taken_you_need_to_pick_another_name">*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can\'t be \'55555\' or \'Stickergram app\' or \'@Stickergram\' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name).</string>
     <string name="add_to_pack">Add to pack?</string>
     <string name="add">Add</string>
+    <string name="addsticker_link_to_your_pack">\'/addsticker\' + \'link to your pack\'</string>
+    <string name="command_to_add_sticker_to_a_published_pack_for_example_if_i_have_a_sticker_that_i_published_with_this_link">command to add sticker to a published pack. For example if i have a sticker pack that i published with this link:</string>
+    <string name="addsticker_telegram_me_addstickers_stickergramapp">\'/addsticker telegram.me/addstickers/stickergramApp\'</string>
+    <string name="then_send_an_emoji_and_the_sticker_itself_afterward">then send an emoji and the sticker (in pack creation mode) itself afterward. Note that it after adding your sticker it might take up to an hour for your sticker to be added. if it was not added try removing and adding the pack.</string>
+    <string name="telegram_me_addstickers_stickergramapp">\'telegram.me/addstickers/stickergramApp\'</string>
+    <string name="and_i_want_to_add_another_sticker_to_that_pack_i_should_write_this_command">and i want to add another sticker to that pack i should write this command:</string>
+    <string name="delsticker">\'/delsticker\'</string>
+    <string name="command_for_just_this_propose_for_example_if_i_have_a_sticker_that_i_published_with_this_link">command for just this propose. For example if i have a sticker that i published with this link</string>
+    <string name="and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command">and i want to delete a sticker from that pack i should write this command:</string>
+    <string name="delsticker_telegram_me_addstickers_stickergramapp">\'/delsticker telegram.me/addstickers/stickergramApp\'</string>
+    <string name="then_send_the_sticker_from_within_the_telegram">then send the sticker from within the Telegram.</string>
+    <string name="thanks_purchasing_the_app">Thanks for purchasing the app.</string>
 </resources>

@@ -23,7 +23,6 @@ import android.os.StatFs;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -518,8 +517,8 @@ public class Loader {
         options.setFreeStyleCropEnabled(true);
         options.setStatusBarColor(BaseActivity.DARK_BLUE);
         options.setToolbarColor(BaseActivity.LIGHT_BLUE);
-        //todo: check what the below line does?
 //        options.setOvalDimmedLayer(true);
+        //todo: check what the below line does?
         UCrop.of(source, destiny).withOptions(options).start(activity);
     }
 
@@ -537,9 +536,9 @@ public class Loader {
 
 
     public static void joinToStickergramChannel(BaseActivity activity) {
-        if (Loader.isAppInstalled(activity, BaseActivity.TELEGRAM_PACKAGE)) {
+        if (Loader.getActivePack() != null) {
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BaseActivity.LINK_TO_CHANNEL));
-            myIntent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
+            myIntent.setPackage(Loader.getActivePack());
             activity.startActivity(myIntent);
         } else
             Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
@@ -636,9 +635,10 @@ public class Loader {
 
 
     public static void goToBotInTelegram(BaseActivity activity) {
-        if (Loader.isAppInstalled(activity, BaseActivity.TELEGRAM_PACKAGE)) {
+        if (Loader.getActivePack() != null) {
+//            if (BaseActivity.isTelegramInstalled) {
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BaseActivity.LINK_TO_BOT));
-            myIntent.setPackage(BaseActivity.TELEGRAM_PACKAGE);
+            myIntent.setPackage(Loader.getActivePack());
             activity.startActivity(myIntent);
         } else
             Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
@@ -653,9 +653,25 @@ public class Loader {
         int length = s.length();
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            temp.append(Character.toString((char)(s.charAt(i) + 1728)));
+            temp.append(Character.toString((char) (s.charAt(i) + 1728)));
 //            temp += Character.toString((char) ((int) s.charAt(i) + 1728));
         }
         return temp.toString();
+    }
+
+    @NonNull
+    public static String getActiveStickerDir() {
+        if (BaseActivity.isTelegramProInstalled)
+            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO;
+        else
+            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM;
+    }
+
+    public static String getActivePack() {
+        if (BaseActivity.isTelegramProInstalled)
+            return BaseActivity.ORG_TELEGRAM_PLUS_PACKAGE;
+        else if (BaseActivity.isTelegramInstalled)
+            return BaseActivity.TELEGRAM_PACKAGE;
+        return null;
     }
 }

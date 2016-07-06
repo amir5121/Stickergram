@@ -16,349 +16,399 @@
 
 
         <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/faq_text_background"
-        android:gravity="center"
-        android:padding="3dp"
-        android:text="@string/help"
-        android:textColor="#fff"
-        android:textSize="16sp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/faq_text_background"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="@string/help"
+            android:textColor="#fff"
+            android:textSize="16sp" />
 
 
         <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-        style="@style/HowToQuestionTextStyle"
-        android:text="@string/what_s_a_sticker" />
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/sticker_is_an_image_that_is_uploaded_to_telegram" />
-
-        <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" -->
-        <!--android:src="@drawable/stickergram_pic"/>-->
-
-        <TextView
-        style="@style/HowToQuestionTextStyle"
-        android:text="@string/what_s_a_pack" />
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/a_pack_is_a_package_that_contain_a_number" />
-
-        <TextView
-        style="@style/HowToQuestionTextStyle"
-        android:text="@string/what_can_i_do_with_this_app" />
-
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/this_app_helps_you_create_stickers_more_easily_and_faster" />
-
-        <TextView
-        style="@style/HowToQuestionTextStyle"
-        android:text="@string/what_s_a_bot" />
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/a_bot_is_another_computer_program_that_runs_on_telegram" />
-
-        <TextView
-        style="@style/HowToQuestionTextStyle"
-        android:text="@string/how_can_i_use_my_stickers_in_telegram" />
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/after_you_created_your_sticker_in_this_app_you_need_to" />
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/in_pack_creation_mode_your_stickers_will_be_saves_as_png_files_with_appropriate_file_and_image_size" />
-
-        <TextView
-        style="@style/HowToAnswer"
-        android:text="@string/i_have_explained_the_process_here" />
-
-        <Button
-        android:id="@+id/activity_help_watch_video"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginStart="25dp"
-        android:background="@color/default_button_background"
-        android:text="@string/watch_a_video_tutorial"
-        android:textColor="#fff" />
-
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_1_if_it_s_the_first_time_that_you_create_a_sticker_pack_you_need_to_activate" />
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/press_the_below_button_and_hit_start_in_the_conversation_that_opens" />
-
-        <Button
-            android:id="@+id/activity_faq_activate_bot"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/activate_stickers_bot"
-            android:textColor="#fff" />
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/first_start" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_2_the_bot_will_ask_for_commands_as_every_sticker" />
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_s_a_sticker" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_creation_command_will_be_copied_to_your_clipboard_then_paste_it_and_send_it_to_the_bot" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/sticker_is_an_image_that_is_uploaded_to_telegram" />
 
+                <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" -->
+                <!--android:src="@drawable/stickergram_pic"/>-->
 
-        <Button
-            android:id="@+id/activity_faq_new_pack"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/create_new_package"
-            android:textColor="#fff" />
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_s_a_pack" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/new_pack" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/a_pack_is_a_package_that_contain_a_number" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_3_the_bot_will_now_ask_you" />
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_can_i_do_with_this_app" />
 
 
-        <Button
-            android:id="@+id/activity_faq_go_to_bot1"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/go_to_bot"
-            android:textColor="#fff" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/this_app_helps_you_create_stickers_more_easily_and_faster" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_s_a_bot" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/a_bot_is_another_computer_program_that_runs_on_telegram" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/how_can_i_use_my_stickers_in_telegram" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/after_you_created_your_sticker_in_this_app_you_need_to" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/in_pack_creation_mode_your_stickers_will_be_saves_as_png_files_with_appropriate_file_and_image_size" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/i_have_explained_the_process_here" />
+
+                <Button
+                    android:id="@+id/activity_help_watch_video"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/watch_a_video_tutorial"
+                    android:textColor="#fff" />
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/pack_name" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_1_if_it_s_the_first_time_that_you_create_a_sticker_pack_you_need_to_activate" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/press_the_below_button_and_hit_start_in_the_conversation_that_opens" />
+
+                <Button
+                    android:id="@+id/activity_faq_activate_bot"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/activate_stickers_bot"
+                    android:textColor="#fff" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/first_start" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_2_the_bot_will_ask_for_commands_as_every_sticker" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_creation_command_will_be_copied_to_your_clipboard_then_paste_it_and_send_it_to_the_bot" />
 
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_4_as_every_sticker_has_a_corresponding" />
+                <Button
+                    android:id="@+id/activity_faq_new_pack"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/create_new_package"
+                    android:textColor="#fff" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/new_pack" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_3_the_bot_will_now_ask_you" />
 
 
-        <Button
-            android:id="@+id/activity_faq_go_to_bot2"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/go_to_bot"
-            android:textColor="#fff" />
+                <Button
+                    android:id="@+id/activity_faq_go_to_bot1"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/go_to_bot"
+                    android:textColor="#fff" />
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/emoji" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/pack_name" />
 
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_5_after_sending_the_emoji_send" />
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/while_you_want_to_add_new_stickers_to_pack_do_step_4_and_5" />
-
-        <Button
-            android:id="@+id/activity_faq_go_to_user_pack"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/my_stickers"
-            android:textColor="#fff" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/send_file" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_4_as_every_sticker_has_a_corresponding" />
 
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_6_when_you_were_done_adding_stickers_to_the_pack_you" />
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/hit_the_bellow_button_and_paste_and_send_the_copied_command_to_the_bot" />
-
-
-        <Button
-            android:id="@+id/activity_faq_publish"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/publish"
-            android:textColor="#fff" />
+                <Button
+                    android:id="@+id/activity_faq_go_to_bot2"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/go_to_bot"
+                    android:textColor="#fff" />
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/public_sticker" />
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_7_after_sending_the_publish_command_you" />
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only_have_english_alphabetic_characters_in_it_so_for_example_it_can_t_be_55555_or_stickergram_app_or_stickergram_and_it_must_at_least_be_5_character_and_not_in_use_by_others_bot_will_tell_you_if_the_short_name_has_been_taken_or_not_if_it_was_taken_you_need_to_pick_another_name" />
-
-        <Button
-            android:id="@+id/activity_faq_go_to_bot3"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="25dp"
-            android:background="@color/default_button_background"
-            android:text="@string/go_to_bot"
-            android:textColor="#fff" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/emoji" />
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/short_name" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_5_after_sending_the_emoji_send" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/_8_hooray_you_published_a_new_pack" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/while_you_want_to_add_new_stickers_to_pack_do_step_4_and_5" />
 
-        <TextView
-            style="@style/HowToQuestionTextStyle"
-            android:text="@string/what_if_i_wanted_to_add_sticker_to_a_published_pack" />
+                <Button
+                    android:id="@+id/activity_faq_go_to_user_pack"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/my_stickers"
+                    android:textColor="#fff" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/use_the_n_addsticker_link_to_your_stickers_ncommand_to_add_sticker" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/send_file" />
 
-        <TextView
-            style="@style/HowToQuestionTextStyle"
-            android:text="@string/what_if_i_wanted_to_delete_a_sticker_from_a_published_pack" />
 
-        <TextView
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_6_when_you_were_done_adding_stickers_to_the_pack_you" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/hit_the_bellow_button_and_paste_and_send_the_copied_command_to_the_bot" />
+
+
+                <Button
+                    android:id="@+id/activity_faq_publish"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/publish"
+                    android:textColor="#fff" />
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/public_sticker" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_7_after_sending_the_publish_command_you" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only_have_english_alphabetic_characters_in_it_so_for_example_it_can_t_be_55555_or_stickergram_app_or_stickergram_and_it_must_at_least_be_5_character_and_not_in_use_by_others_bot_will_tell_you_if_the_short_name_has_been_taken_or_not_if_it_was_taken_you_need_to_pick_another_name" />
+
+                <Button
+                    android:id="@+id/activity_faq_go_to_bot3"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/default_button_background"
+                    android:text="@string/go_to_bot"
+                    android:textColor="#fff" />
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/short_name" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/_8_hooray_you_published_a_new_pack" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_if_i_wanted_to_add_sticker_to_a_published_pack" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/use_the" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/addsticker_link_to_your_pack" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/command_to_add_sticker_to_a_published_pack_for_example_if_i_have_a_sticker_that_i_published_with_this_link" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/telegram_me_addstickers_stickergramapp" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/and_i_want_to_add_another_sticker_to_that_pack_i_should_write_this_command" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/addsticker_telegram_me_addstickers_stickergramapp" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/then_send_an_emoji_and_the_sticker_itself_afterward" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_if_i_wanted_to_delete_a_sticker_from_a_published_pack" />
+
+                <TextView
             style="@style/HowToAnswer"
             android:text="@string/the_stickers_bot_provide_a_delsticker_command_for_just" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/delsticker" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/command_for_just_this_propose_for_example_if_i_have_a_sticker_that_i_published_with_this_link" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/telegram_me_addstickers_stickergramapp" />
+
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command" />
+
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/delsticker_telegram_me_addstickers_stickergramapp" />
+
+        <TextView
+            style="@style/HowToAnswer"
+            android:text="@string/then_send_the_sticker_from_within_the_telegram" />
 
     </LinearLayout>
 </ScrollView></LinearLayout>

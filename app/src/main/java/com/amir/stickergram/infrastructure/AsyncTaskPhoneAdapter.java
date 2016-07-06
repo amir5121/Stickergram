@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.amir.stickergram.PhoneStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.sticker.single.SingleStickersAdapter;
 import com.amir.stickergram.sticker.single.StickerItem;
@@ -52,7 +51,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
         if (!Loader.checkPermission((BaseActivity) context))
             return NEED_PERMISSION;
 
-        File folder = new File(PhoneStickersActivity.PHONE_STICKERS_DIRECTORY);
+        File folder = new File(Loader.getActiveStickerDir());
         if (!folder.exists()) {
             return CACHE_DIRECTORY_DID_NOT_EXIST;
         }
@@ -94,12 +93,12 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
             }
             percent = (100 * filesChecked) / length;
             if (temp == percent) {
-                Log.e(getClass().getSimpleName(), String.valueOf(percent));
+//                Log.e(getClass().getSimpleName(), String.valueOf(percent));
                 temp++;
                 publishProgress(percent, foundedStickersCount);
             }
         }
-        Log.e(getClass().getSimpleName(), "updateSet size" + updateSet.size());
+        Log.e(getClass().getSimpleName(), "updateSet size " + updateSet.size());
         dataSource.updateSet(updateSet);
         if (foundedStickersCount == 0) {
             return NO_ITEM_IN_CACHE_DIRECTORY;

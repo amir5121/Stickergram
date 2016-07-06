@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">استیکرگرام</string>
     <string name="add_font">افزودن فونت</string>
@@ -51,7 +51,7 @@
     <string name="activate_stickers_bot">بت stickers رو فعال کن</string>
     <string name="add_new_text_or_set_a_text_selected">یه متن جدید اضافه کن یا یه متن رو انتخاب کن</string>
     <string name="buy_pro">خرید نسخه پیشرفته</string>
-    <string name="buy_the_pro_version_for_full_functionality">برای استفاده از همه ی قابلیت ها از نسخه پیشرفته استفاده کن!</string>
+    <string name="buy_the_pro_version_for_full_functionality">برای استفاده از همه ی قابلیت ها و حذف برچسب از نسخه پیشرفته استفاده کنید!</string>
     <string name="by_hitting_done_your">استیکر در پک جدید ذخیره می شه</string>
     <string name="cancel">بی خیال</string>
     <string name="are_you_sure_you_are_finished_editing_this_sticker">کارت با این استیکر تموم شد؟</string>
@@ -110,7 +110,6 @@
     <string name="this_name_already_exist">از این نام قبلا استفاده شده</string>
     <string name="tilt_effect">چرخش متن در نسخه رایگان ممکن  نیست </string>
     <string name="tilt_pro">چرخش</string>
-    <string name="to_apply_the_effect_restart_the_app">برای ایجاد تغییرات  دوباره وارد برنامه شو</string>
     <string name="upgrade_to_pro_to_delete_this_label">برای خذف این برچسب به نسخه پیشرفته ارتقا دهید</string>
     <string name="you_Can_only_create_one_pack_in_free_version">تو نسخه رایگان نمیشه بیشتر از دو پک ساخت</string>
     <string name="for_more_info_press_on_how_to_button">برای اطلاعات بیشتر راهنما رو بخون</string>
@@ -138,9 +137,8 @@
     <string name="how_can_i_use_my_stickers_in_telegram">چجوری می تونم استیکرهام رو برای اسنفاده در تلگرام تبدیل به پک کنم؟</string>
     <string name="send">ارسال</string>
     <string name="sticker_is_an_image_that_is_uploaded_to_telegram">استیکر یه عکس معولی هست که بر روی سرورهای تلگرام ذخیره می شه(با استفاده از بت Stickers) و به آسانی در تلگرام مورد استفاده قرار می گیره</string>
-    <string name="the_stickers_bot_provide_a_delsticker_command_for_just">بت Stickers دستور \'delsticker\' برای همین هدف فراهم میکنه. برای مثال اگر استیکری داشته باشید که با لینک \'telegram.me/addsrickers/stickergramApp\' منتشر شده باشد برای حذف استیکری از آن پک از دستور\n \'/delsticker telegram.me/addstickers/stickergramApp\' \nاستفاده می کنی و بعد اون استیکری که از اون پک می خوای پاک کنیو به بت بفرس.</string>
+    <string name="the_stickers_bot_provide_a_delsticker_command_for_just">بت Stickers دستور </string>
     <string name="this_app_helps_you_create_stickers_more_easily_and_faster">این برنامه در ساخت استیکر برای تلگرام بهتون کمک می کنه.</string>
-    <string name="use_the_n_addsticker_link_to_your_stickers_ncommand_to_add_sticker">از دستور\n\'/addsticker\' + \'لینک به پک مورد نظر\'\n برای اضافه کردن استیکر به پک های منتشر شده میتونی استفاده کنی. برای مثال اگر استیکری داشته باشی با این لینک: \n \'telegram.me/addstickers/stickergramApp\'\n و بخوای  یه استیکر دیگه به پک اضافه کنی باید این دستور رو به بت stickers بفرسم:\n\'/addsticker telegram.me/addstickers/stickergramApp\'</string>
     <string name="what_can_i_do_with_this_app">با این برنامه چکار می تونم انجام بدم؟</string>
     <string name="what_does_the_pro_version_offer">در نسخه رایگان چه چیزایی رو از دست می دم؟</string>
     <string name="what_if_i_wanted_to_add_sticker_to_a_published_pack">اگر بخوام به پکی که انتشار پیدا کرده استیکر اضافه کنم باید چه کار کنم؟</string>
@@ -171,4 +169,17 @@
     <string name="i_have_explained_the_process_here">من مراحل را اینجا توضیح دادم</string>
     <string name="in_pack_creation_mode_your_stickers_will_be_saves_as_png_files_with_appropriate_file_and_image_size">در حالت ساخت پک استیکر های شما با پسوند PNG با حجم و سایز مناسب ذخیره خواهند شد.</string>
     <string name="you_are_in_pack_creation_mode">شما در حالت ساخت پک هستید. برای اطلاعات (از راهنما قسمت \'چجوری می تونم استیکرهام رو برای اسنفاده در تلگرام تبدیل به پک کنم؟\' را بخوانید.</string>
+    <string name="use_the">از دستور </string>
+    <string name="addsticker_link_to_your_pack">\'/addsticker\' + \'لینک به پک مورد نظر\'</string>
+    <string name="command_to_add_sticker_to_a_published_pack_for_example_if_i_have_a_sticker_that_i_published_with_this_link">برای اضافه کردن استیکر به پک های منتشر شده میتونی استفاده کنی. برای مثال اگر استیکری داشته باشی با این لینک:</string>
+    <string name="telegram_me_addstickers_stickergramapp">\'telegram.me/addstickers/stickergramApp\'</string>
+    <string name="and_i_want_to_add_another_sticker_to_that_pack_i_should_write_this_command">و بخوای  یه استیکر دیگه به پک اضافه کنی باید این دستور رو به بت stickers بفرسی:</string>
+    <string name="addsticker_telegram_me_addstickers_stickergramapp">\'/addsticker telegram.me/addstickers/stickergramApp\'</string>
+    <string name="then_send_an_emoji_and_the_sticker_itself_afterward">بعد شکلک و استیکر خودتون رو (زمانی که در حالت ساخت پک هستید) به بت بفرستید. در نظر داشته باشید بعد از اضافه کردن استیکر به پک های که قبلا منتشر شدن باید یک ساعت صبر کنید تا تغییرات اعمال بشن اگر بعد از یک ساعت هنوز خبری از استیکر جدیدتون نبود یک بار پک رو حذف کنید و دوباره اضافش کنید.</string>
+    <string name="delsticker">\'/delsticker\'</string>
+    <string name="command_for_just_this_propose_for_example_if_i_have_a_sticker_that_i_published_with_this_link">برای همین هدف فراهم میکنه. برای مثال اگر استیکری داشته باشید که با لینک </string>
+    <string name="and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command">منتشر شده باشد برای حذف استیکری از آن پک از دستور</string>
+    <string name="delsticker_telegram_me_addstickers_stickergramapp">\'/delsticker telegram.me/addstickers/stickergramApp\' </string>
+    <string name="then_send_the_sticker_from_within_the_telegram">استفاده می کنی و بعد اون استیکری که از اون پک می خوای پاک کنیو به بت بفرس.</string>
+    <string name="thanks_purchasing_the_app">از خرید شما ممنونم.</string>
 </resources>
