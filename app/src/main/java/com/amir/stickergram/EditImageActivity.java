@@ -55,7 +55,10 @@ public class EditImageActivity
         View.OnClickListener,
         SeekBar.OnSeekBarChangeListener,
         EnglishFontsFragment.OnFontItemClicked {
+
+    //todo: scaler... scale any image while editing it by dragging the top left corner of the image
     private static final String MAIN_FONT_DIALOG_FRAGMENT_TAG = "MAIN_FONT_DIALOG_FRAGMENT_TAG";
+    public static final int MAX_TEXT_SIZE = 300;
     TouchImageView selectedLayer;
     int layerCount;
     TouchImageView[] label;
@@ -186,6 +189,10 @@ public class EditImageActivity
     @Override
     public void onClick(View view) {
         int itemId = view.getId();
+//
+//        if (itemId == R.id.lol){
+//            Log.e(getClass().getSimpleName(), "you are a total idiot");
+//        }
 
         if (itemId == R.id.include_pro_note_close) {
             if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
@@ -530,7 +537,8 @@ public class EditImageActivity
         }
         if (sizeSeekBar != null) {
             sizeSeekBar.setOnSeekBarChangeListener(this);
-            sizeSeekBar.setMax(mainBitmap.getWidth() / 2);
+            sizeSeekBar.setMax(MAX_TEXT_SIZE);
+
         }
         if (tiltSeekBar != null) {
             tiltSeekBar.setProgress(180);
@@ -577,6 +585,8 @@ public class EditImageActivity
                                         ++layerCount,
                                         mainBitmap);
                         setSelectedLayer(touchItem);
+//                        touchItem.setOnClickListener(EditImageActivity.this);
+//                        touchItem.setId(R.id.lol);
                         items.add(touchItem);
                         textLayerContainer.addView(touchItem);
                     }

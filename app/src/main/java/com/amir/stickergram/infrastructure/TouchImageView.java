@@ -2,6 +2,7 @@ package com.amir.stickergram.infrastructure;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -41,6 +42,8 @@ public class TouchImageView extends ImageView {
         setImageBitmap(textItem.getFullTextBitmap(textLayer));
         isFirstTapOnStrokeColor = true;
         isFirstTapOnShadowColor = true;
+
+//        setClickable(true);
 
     }
 

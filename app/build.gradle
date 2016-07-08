@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.amir.stickergram"
         minSdkVersion 17
-        targetSdkVersion 24
-        versionCode 13
-        versionName "1.2"
+        targetSdkVersion 23
+        versionCode 15
+        versionName "1.4"
     }
     productFlavors {
         fa {}
@@ -32,7 +32,8 @@ dependencies {
     compile 'com.minimize.library:seekbar-compat:0.2.4'
     compile 'com.android.support:design:24.0.0'
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
-    compile 'com.yalantis:ucrop:1.5.0'
+    compile 'com.isseiaoki:simplecropview:1.1.4'
     compile 'com.github.deano2390:MaterialShowcaseView:1.1.0'
     compile 'com.scottyab:aes-crypto:0.0.4'
+    compile 'com.github.aakira:expandable-layout:1.4.2@aar'
 }

@@ -50,12 +50,26 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--<style name="CustomColorPicker" parent="ColorPicker">-->
-        <!--<item name="cp_backgroundColor">#2196f3</item>-->
-        <!--<item name="cp_hexaDecimalTextColor">#ffffff</item>-->
-        <!--<item name="cp_colorComponentsTextColor">#ffffff</item>-->
-        <!--<item name="cp_positiveActionTextColor">#ffffff</item>-->
-        <!--<item name="cp_negativeActionTextColor">#ffffff</item>-->
-        <!--<item name="cp_sliderThumbColor">#accc</item>-->
+    <!--<item name="cp_backgroundColor">#2196f3</item>-->
+    <!--<item name="cp_hexaDecimalTextColor">#ffffff</item>-->
+    <!--<item name="cp_colorComponentsTextColor">#ffffff</item>-->
+    <!--<item name="cp_positiveActionTextColor">#ffffff</item>-->
+    <!--<item name="cp_negativeActionTextColor">#ffffff</item>-->
+    <!--<item name="cp_sliderThumbColor">#accc</item>-->
     <!--</style>-->
 
+    <style name="CropTypeButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
 </resources>

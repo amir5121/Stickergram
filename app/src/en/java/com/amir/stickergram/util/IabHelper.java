@@ -536,7 +536,6 @@ public class IabHelper {
             if (mPurchaseListener != null) mPurchaseListener.onIabPurchaseFinished(result, null);
             return true;
         }
-
         int responseCode = getResponseCodeFromIntent(data);
         String purchaseData = data.getStringExtra(RESPONSE_INAPP_PURCHASE_DATA);
         String dataSignature = data.getStringExtra(RESPONSE_INAPP_SIGNATURE);

@@ -42,7 +42,6 @@
             android:layout_height="2dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginRight="25dp"
             android:layout_marginTop="20dp"
             android:background="@color/selected_nav_drawer_item_background" />
 

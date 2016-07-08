@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/main_activity_background_color"
+        android:background="@color/default_background_color"
         android:orientation="vertical"
         android:paddingBottom="5dp">
 
@@ -17,19 +17,38 @@
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <TextView
-        android:id="@+id/activity_main_text"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:padding="15dp"
-        android:shadowColor="#aa444444"
-        android:shadowRadius="20"
-        android:text="@string/stickergram"
-        android:textColor="#fff"
-        android:textSize="45sp"
-        android:typeface="serif" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/activity_main_text_container"
+            android:layout_weight="3">
+
+            <TextView
+                android:id="@+id/activity_main_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:padding="5dp"
+                android:shadowColor="#aa444444"
+                android:shadowRadius="20"
+                android:text="@string/stickergram"
+                android:textColor="#fff"
+                android:textSize="45sp"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_main_text"
+                android:gravity="center"
+                android:padding="15dp"
+                android:shadowColor="#aa444444"
+                android:shadowRadius="20"
+                android:text="@string/join_the_channel"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/main_activity_buttons"
@@ -56,10 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/view_vertical"
                 android:layout_alignEnd="@id/view_horizontal"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignRight="@id/view_horizontal"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:scaleType="centerInside"
@@ -70,9 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/view_vertical"
                 android:layout_alignEnd="@id/view_horizontal"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@id/view_horizontal"
                 android:layout_marginBottom="7dp"
                 android:clickable="false"
                 android:gravity="center"
@@ -90,10 +105,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignBottom="@id/view_vertical"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@id/view_horizontal"
-                android:layout_toRightOf="@id/view_horizontal"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:scaleType="fitCenter"
@@ -103,9 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/view_vertical"
-                android:layout_alignLeft="@id/view_horizontal"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignStart="@id/view_horizontal"
                 android:layout_marginBottom="7dp"
                 android:clickable="false"
@@ -123,9 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/view_horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@id/view_horizontal"
                 android:layout_alignTop="@id/view_vertical"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
@@ -136,9 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/view_horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignRight="@id/view_horizontal"
                 android:clickable="false"
                 android:gravity="center"
                 android:padding="2dp"
@@ -154,10 +161,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/view_vertical"
                 android:layout_toEndOf="@id/view_horizontal"
-                android:layout_toRightOf="@id/view_horizontal"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:src="@drawable/scissor" />
@@ -165,10 +170,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/view_horizontal"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignStart="@id/view_horizontal"
                 android:clickable="false"
                 android:gravity="center"

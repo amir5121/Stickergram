@@ -7,6 +7,7 @@ import com.amir.stickergram.HelpActivity;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.PhoneStickersActivity;
 import com.amir.stickergram.R;
+import com.amir.stickergram.SettingActivity;
 import com.amir.stickergram.TemplateStickersActivity;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
@@ -39,6 +40,7 @@ public class MainNavDrawer extends NavDrawer {
                 Loader.rate(activity);
             }
         });
+        addItem(new ActivityNavDrawerItem(SettingActivity.class, activity.getString(R.string.setting), R.drawable.ic_settings, R.id.include_nav_drawer_bottom_items));
         addItem(new BaseNavDrawerItem(activity.getString(R.string.exit), R.drawable.ic_exit, R.id.include_nav_drawer_bottom_items) {
             @Override
             public void onClick(View view) {

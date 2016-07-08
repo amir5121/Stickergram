@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +49,8 @@ public class UserIconPackDetailedFragment extends BaseFragment
     LinearLayout publishNoteContainer;
     boolean publishNoteIsHidden;
     boolean isInPackCreationMode;
-    MenuItem modeChooser;
+    MenuItem modeChooserMenuItem;
+    TextView publishNoteText;
 
     @Nullable
     @Override
@@ -64,7 +64,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
         linkButton = (Button) view.findViewById(R.id.fragment_user_detailed_pack_pack_creation_mode);
 
         View publishNoteCloseButton = view.findViewById(R.id.include_detailed_note_close);
-        TextView publishNoteText = (TextView) view.findViewById(R.id.include_detailed_note_text);
+        publishNoteText = (TextView) view.findViewById(R.id.include_detailed_note_text);
         View publishIcon = view.findViewById(R.id.include_detailed_note_info_icon);
         publishNoteContainer = (LinearLayout) view.findViewById(R.id.include_detailed_note_container);
 
@@ -75,15 +75,16 @@ public class UserIconPackDetailedFragment extends BaseFragment
         if (publishNoteCloseButton != null &&
                 publishIcon != null &&
                 publishNoteText != null &&
-                linkButton != null) {
+                linkButton != null &&
+                publishNoteContainer != null) {
             publishNoteText.setOnClickListener(this);
             publishNoteText.setOnClickListener(this);
             publishNoteCloseButton.setOnClickListener(this);
             linkButton.setOnClickListener(this);
+            publishNoteContainer.setVisibility(View.GONE);
         }
         refresh(folder); // this guy sets the adapter
 //        isInPackCreationMode = true;
-        gotoPackCreationMode(false);
         return view;
 
         //todo: showcase of long press and press
@@ -91,14 +92,15 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.user_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.user_fragment_pack_creation_mode_option) {
-            modeChooser = item;
+            modeChooserMenuItem = item;
             Log.e(getClass().getSimpleName(), "isInPackCreationMode: " + isInPackCreationMode);
             if (isInPackCreationMode) {
                 gotoPackCreationMode(false);
@@ -135,18 +137,20 @@ public class UserIconPackDetailedFragment extends BaseFragment
     }
 
     private void gotoPackCreationMode(boolean flag) {
+        publishNoteContainer.setVisibility(View.VISIBLE);
         if (flag) {
-            if (modeChooser != null)
-                modeChooser.setTitle(getString(R.string.go_to_normal_mode));
+            if (modeChooserMenuItem != null)
+                modeChooserMenuItem.setTitle(getString(R.string.go_to_normal_mode));
             linkButton.setVisibility(View.VISIBLE);
             isInPackCreationMode = true;
-            publishNoteContainer.setVisibility(View.VISIBLE);
+            publishNoteText.setText(getString(R.string.you_are_in_pack_creation_mode));
         } else {
-            if (modeChooser != null)
-                modeChooser.setTitle(getString(R.string.go_to_pack_creation_mode));
+            if (modeChooserMenuItem != null)
+                modeChooserMenuItem.setTitle(getString(R.string.go_to_pack_creation_mode));
             linkButton.setVisibility(View.GONE);
             isInPackCreationMode = false;
-            publishNoteContainer.setVisibility(View.GONE);
+            publishNoteText.setText(getString(R.string.to_save_permanently));
+//            publishNoteContainer.setVisibility(View.GONE);
         }
     }
 
@@ -170,7 +174,10 @@ public class UserIconPackDetailedFragment extends BaseFragment
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setPackage(Loader.getActivePack());
                         intent.setType("application/pdf");
+//                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(new File(item.getWebpDir()).toString()));
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getWebpDir())));
+//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+//                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         startActivity(intent);
                     } else
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();
@@ -202,7 +209,8 @@ public class UserIconPackDetailedFragment extends BaseFragment
                     if (Loader.getActivePack() != null) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setPackage(Loader.getActivePack());
-                        intent.setType("application/pdf");
+                        intent.setType("text/plain");
+//                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(new File(item.getDir()).toString()));
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
                         startActivity(intent);
                         Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();

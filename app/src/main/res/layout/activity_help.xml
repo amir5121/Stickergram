@@ -37,16 +37,12 @@
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
-                    android:text="@string/what_s_a_sticker" />
+                    android:text="@string/what_can_i_do_with_this_app" />
+
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="@string/sticker_is_an_image_that_is_uploaded_to_telegram" />
-
-                <!--<ImageView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" -->
-                <!--android:src="@drawable/stickergram_pic"/>-->
+                    android:text="@string/this_app_helps_you_create_stickers_more_easily_and_faster" />
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
@@ -58,20 +54,19 @@
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
-                    android:text="@string/what_can_i_do_with_this_app" />
-
-
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/this_app_helps_you_create_stickers_more_easily_and_faster" />
-
-                <TextView
-                    style="@style/HowToQuestionTextStyle"
                     android:text="@string/what_s_a_bot" />
 
                 <TextView
                     style="@style/HowToAnswer"
                     android:text="@string/a_bot_is_another_computer_program_that_runs_on_telegram" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/how_can_i_save_my_stickers_on_telegram" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/create_a_sticker" />
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
@@ -381,38 +376,67 @@
                     android:text="@string/what_if_i_wanted_to_delete_a_sticker_from_a_published_pack" />
 
                 <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/the_stickers_bot_provide_a_delsticker_command_for_just" />
+                    style="@style/HowToAnswer"
+                    android:text="@string/the_stickers_bot_provide_a_delsticker_command_for_just" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/delsticker" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/delsticker" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/command_for_just_this_propose_for_example_if_i_have_a_sticker_that_i_published_with_this_link" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/command_for_just_this_propose_for_example_if_i_have_a_sticker_that_i_published_with_this_link" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/telegram_me_addstickers_stickergramapp" />
-
-
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/telegram_me_addstickers_stickergramapp" />
 
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/delsticker_telegram_me_addstickers_stickergramapp" />
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command" />
 
-        <TextView
-            style="@style/HowToAnswer"
-            android:text="@string/then_send_the_sticker_from_within_the_telegram" />
 
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/delsticker_telegram_me_addstickers_stickergramapp" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/then_send_the_sticker_from_within_the_telegram" />
+
+                <TextView
+                    style="@style/HowToQuestionTextStyle"
+                    android:text="@string/what_does_the_pro_version_offer" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/these_features_are_activated_in_the_pro_version" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/you_will_be_able_to_rotate_tilt_your_texts" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/move_the_shadow_of_the_text" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/label_will_be_removed_from_the_bottom_of_your_stickers" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/you_will_be_able_to_crop_your_images_circularly" />
+
+                <TextView
+                    style="@style/HowToAnswer"
+                    android:text="@string/and_you_can_create_more_than_2_pack_within_the_app" />
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-</ScrollView></LinearLayout>
 
-<include layout="@layout/include_nav_drawer" />
+    <include layout="@layout/include_nav_drawer" />
 
-    </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>

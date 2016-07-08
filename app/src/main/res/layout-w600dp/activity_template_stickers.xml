@@ -29,7 +29,6 @@
             android:name="com.amir.stickergram.sticker.pack.TemplateIconPackDetailedFragment"
             tools:layout="@layout/fragment_icon_detailed"
             android:layout_below="@id/include_toolbar"
-            android:layout_toRightOf="@id/activity_template_stickers_list_fragment"
             android:layout_toEndOf="@id/activity_template_stickers_list_fragment"/>
 
     </RelativeLayout>

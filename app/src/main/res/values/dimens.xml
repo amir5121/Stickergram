@@ -6,4 +6,5 @@
     <dimen name="height_of_the_button_scroll_view_on_tablet">300dp</dimen>
     <dimen name="icon_fragment_landscape_width">135dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_small">5dp</dimen>
 </resources>

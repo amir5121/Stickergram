@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,7 +35,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.amir.stickergram.CropActivity;
 import com.amir.stickergram.EditImageActivity;
+import com.amir.stickergram.MainActivity;
+import com.amir.stickergram.mode.Mode;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.sticker.pack.PackItem;
@@ -42,7 +46,6 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +55,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
@@ -70,6 +74,32 @@ public class Loader {
     public static final int FROM_SCRATCH_GAIN_PERMISSION = 103;
     public static final int EDIT_ACTIVITY_GAIN_PERMISSION = 104;
     public static final String KEY = "mBRJaVxaA+9k4tiD5rYicw==:II8pAgeooHpABKf7BUOykr9cHLAFHQWFCie0coKLNBw=";
+
+    public static final int PERSIAN_LANGUAGE = 1;
+    public static final int ENGLISH_LANGUAGE = 2;
+    public static final int SYSTEM_LANGUAGE = 3;
+
+    public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    public static final String MOBOGRAM_PACKAGE = "com.hanista.mobogram";
+    public static final String TELEGRAPH_PACKAGE = "ir.ilmili.telegraph";
+    public static final String TELEGRAM_PLUS_PACKAGE = "org.telegram.plus";
+    public static final String PERSIAN_TELEGRAM = "ir.persianfox.messenger";
+    public static final String ORANGE_TELEGRAM = "org.telegram.comorangetelegram";
+    public static final String PERSIAN_VOICE_TELEGRAM = "ir.rrgc.telegram";
+    public static final String MY_TELEGRAM = "ir.alimodaresi.mytelegram";
+    public static final String ANIWAYS = "com.aniways.anigram.messenger";
+    public static final String LAGATGRAM = "org.ilwt.lagatgram";
+
+    final static String availableFormats[] = {TELEGRAM_PACKAGE,
+            TELEGRAM_PLUS_PACKAGE,
+            MOBOGRAM_PACKAGE,
+            TELEGRAPH_PACKAGE,
+            PERSIAN_TELEGRAM,
+            PERSIAN_VOICE_TELEGRAM,
+            LAGATGRAM,
+            ORANGE_TELEGRAM,
+            MY_TELEGRAM,
+            ANIWAYS};
 
     public static void gainPermission(BaseActivity activity, int requestCode) {
         if (
@@ -440,6 +470,7 @@ public class Loader {
 
 
     public static boolean isAppInstalled(Context context, String packageName) {
+        if (packageName == null) return false;
         PackageManager pm = context.getPackageManager();
         try {
             pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
@@ -508,18 +539,22 @@ public class Loader {
         }
     }
 
-    public static void crop(Uri source, Uri destiny, BaseActivity activity) {
-        UCrop.Options options = new UCrop.Options();
-        options.setActiveWidgetColor(BaseActivity.LIGHT_BLUE);
-        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-        options.setCropFrameColor(BaseActivity.DARK_BLUE);
-        options.setDimmedLayerColor(BaseActivity.TRANSPARENT_DARK_BLUE);
-        options.setFreeStyleCropEnabled(true);
-        options.setStatusBarColor(BaseActivity.DARK_BLUE);
-        options.setToolbarColor(BaseActivity.LIGHT_BLUE);
-//        options.setOvalDimmedLayer(true);
-        //todo: check what the below line does?
-        UCrop.of(source, destiny).withOptions(options).start(activity);
+    public static void crop(Uri source, Uri destiny, MainActivity activity) {
+        Intent intent = new Intent(activity, CropActivity.class);
+        intent.putExtra(BaseActivity.CROP_SOURCE, source);
+        intent.putExtra(BaseActivity.CROP_DESTINY, destiny);
+        activity.startActivity(intent);
+//        UCrop.Options options = new UCrop.Options();
+//        options.setActiveWidgetColor(BaseActivity.LIGHT_BLUE);
+//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+//        options.setCropFrameColor(BaseActivity.DARK_BLUE);
+//        options.setDimmedLayerColor(BaseActivity.TRANSPARENT_DARK_BLUE);
+//        options.setFreeStyleCropEnabled(true);
+//        options.setStatusBarColor(BaseActivity.DARK_BLUE);
+//        options.setToolbarColor(BaseActivity.LIGHT_BLUE);
+////        options.setOvalDimmedLayer(true);
+//        //todo: check what the below line does?
+//        UCrop.of(source, destiny).withOptions(options).start(activity);
     }
 
     public static long freeMemory() {
@@ -661,17 +696,72 @@ public class Loader {
 
     @NonNull
     public static String getActiveStickerDir() {
-        if (BaseActivity.isTelegramProInstalled)
-            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO;
-        else
-            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM;
+        return BaseActivity.chosenMode.getCacheDir();
+//        if (BaseActivity.isTelegramProInstalled)
+//            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO;
+//        else
+//            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM;
     }
 
     public static String getActivePack() {
-        if (BaseActivity.isTelegramProInstalled)
-            return BaseActivity.ORG_TELEGRAM_PLUS_PACKAGE;
-        else if (BaseActivity.isTelegramInstalled)
-            return BaseActivity.TELEGRAM_PACKAGE;
-        return null;
+////        if (BaseActivity.isTelegramProInstalled)
+////            return BaseActivity.TELEGRAM_PLUS_PACKAGE;
+////        else if (BaseActivity.isTelegramInstalled)
+////            return BaseActivity.TELEGRAM_PACKAGE;
+        return BaseActivity.chosenMode.getPack();
     }
+
+    public static ArrayList<Mode> getAllAvailableModes(BaseActivity activity) {
+        ArrayList<Mode> modes = new ArrayList<>();
+
+        Mode tempMode;
+        for (String pack : availableFormats) {
+            tempMode = new Mode(pack, activity);
+            if (tempMode.isAvailable)
+                modes.add(tempMode);
+        }
+        return modes;
+    }
+
+    public static void setLocale(int lang, BaseActivity activity) {
+//        Locale myLocale = new Locale(lang);
+//        Resources res = activity.getResources();
+        String language = null;
+        switch (lang) {
+            case Loader.PERSIAN_LANGUAGE:
+                language = "fa";
+                break;
+            case Loader.ENGLISH_LANGUAGE:
+                language = "en";
+                break;
+            case Loader.SYSTEM_LANGUAGE:
+                language = Locale.getDefault().getLanguage();
+                break;
+        }
+        Log.e(TAG, "-------Language: " + language);
+        if (language != null) {
+            Locale locale = new Locale(language);
+
+//            Resources res = activity.getResources();
+//            DisplayMetrics dm = res.getDisplayMetrics();
+//            Configuration conf = res.getConfiguration();
+//            conf.locale = locale;
+//            conf.setLocale(new Locale(language));// = new Locale(lang);
+//            res.updateConfiguration(conf, dm);
+
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            config.setLocale(locale);
+//            else config.locale = locale;
+
+            activity.getBaseContext().getResources().updateConfiguration(config,
+                    activity.getBaseContext().getResources().getDisplayMetrics());
+//            Intent refresh = new Intent(activity, MainActivity.class);
+//            activity.startActivity(refresh);
+//            activity.finish();
+        }
+    }
+
+
 }

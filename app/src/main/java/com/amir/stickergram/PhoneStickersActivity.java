@@ -178,9 +178,10 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void onNoCashDirectoryListener() {
-        Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
-        if (!BaseActivity.isTelegramInstalled)
+        if (!chosenMode.isAvailable)
             Toast.makeText(this, getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
         finish();
     }
 

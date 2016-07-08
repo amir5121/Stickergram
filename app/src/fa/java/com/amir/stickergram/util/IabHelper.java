@@ -441,6 +441,7 @@ public class IabHelper {
         // end of async purchase operation that started on launchPurchaseFlow
         flagEndAsync();
 
+//        Log.e(getClass().getSimpleName(), "made it here);
         if (data == null) {
             logError("Null data in IAB activity result.");
             result = new IabResult(IABHELPER_BAD_RESPONSE, "Null data in IAB result");

@@ -19,7 +19,7 @@
         android:layout_toLeftOf="@id/view_vertical"
         android:layout_toStartOf="@id/view_vertical"
         android:padding="5dp"
-        android:src="@drawable/ic_add_font" />
+        android:src="@drawable/ic_add" />
 
     <ImageButton
         android:id="@+id/add_new_font_fragment_how_to"

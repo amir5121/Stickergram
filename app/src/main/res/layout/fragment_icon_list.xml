@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/include_toolbar"
-    android:background="@color/icon_sticker_list_background">
+    android:background="@color/icon_sticker_list_background"
+    android:elevation="5dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_template_list_list"

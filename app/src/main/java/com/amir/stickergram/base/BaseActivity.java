@@ -10,17 +10,21 @@ import android.os.Environment;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.amir.stickergram.AppType;
 import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.infrastructure.Loader;
+import com.amir.stickergram.mode.Mode;
 import com.amir.stickergram.navdrawer.NavDrawer;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public abstract class BaseActivity extends BaseAuthenticatedActivity {
     private static final String HAS_CASHED_PACK_STICKERS = "HAS_CASHED_PACK_STICKERS";
@@ -28,12 +32,12 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static final String SETTING = "SETTING";
     public static final String EDIT_IMAGE_URI = "EDIT_IMAGE_URI";
     public static final String EDIT_IMAGE_DIR_IN_ASSET = "EDIT_IMAGE_DIR_IN_ASSET";
-    public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+
     public static final String PNG = ".png";
     public static final String WEBP = ".webp";
     //    public static final String NEED_ROTATION = "NEED_ROTATION";
-    public static final String PHONE_STICKERS_DIRECTORY_TELEGRAM = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
-    public static final String PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.plus" + File.separator + "cache" + File.separator;
+//    public static final String PHONE_STICKERS_DIRECTORY_TELEGRAM = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.messenger" + File.separator + "cache" + File.separator;
+//    public static final String PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator + "org.telegram.plus" + File.separator + "cache" + File.separator;
     public static final String STICKERS = "Stickers/";
     public static final String EMAIL = "StickergramApp@gmail.com";
     public static final String LINK_TO_CHANNEL = AppType.LINK_TO_CHANNEL;
@@ -42,13 +46,16 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static final String PERSIAN_FONT_NAME = "per_font_names.txt";
     public static final String FONT_DIRECTORY_IN_ASSET = "Fonts/";
     public static final String LINK_TO_BOT = "https://telegram.me/stickers";
-    public static final String ORG_TELEGRAM_PLUS_PACKAGE = "org.telegram.plus";
     public static final String WEBP_CASH_DIR = AppType.WEBP_CASH_DIR;
     //    public static final String TEMP_OUTPUT_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final int PACKAGE_NAME_LENGTH_LIMIT = 50;
     public static final int LIGHT_BLUE = Color.parseColor("#2196f3");
     public static final int DARK_BLUE = Color.parseColor("#1565c0");
     public static final int TRANSPARENT_DARK_BLUE = Color.parseColor("#882196f3");
+    public static final String CROP_SOURCE = "CROP_SOURCE";
+    public static final String CROP_DESTINY = "CROP_DESTINY";
+    private static final String ACTIVE_PACK = "ACTIVE_PACK";
+    private static final String LANGUAGE = "LANGUAGE";
     public static float density;
     public static String CACHE_DIR;
     public static String TEMP_STICKER_CASH_DIR;
@@ -64,13 +71,27 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
 
     public static boolean isTablet;
     public static boolean isInLandscape;
-    public static boolean isTelegramInstalled;
-    public static boolean isTelegramProInstalled;
 
+    public static Mode chosenMode;
 
+    public int language = 0;
+
+    //    @Override
+//    protected void onStart() {
+//        preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
+//
+//
+//        super.onStart();
+//    }
+//
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
+
+        setLanguage(preferences.getInt(LANGUAGE, AppType.DEFAULT_LANGUAGE));
+        Log.e(getClass().getSimpleName(), "Language: " + language);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         isTablet = (metrics.widthPixels / metrics.density) >= 600;
@@ -81,13 +102,27 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
         TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + ".temp_sticker.png";
+        Log.e(getClass().getSimpleName(), TEMP_STICKER_CASH_DIR);
         CACHE_DIR = getCacheDir().getAbsolutePath() + "/";
 
-        isTelegramInstalled = Loader.isAppInstalled(this, TELEGRAM_PACKAGE);
-        isTelegramProInstalled = Loader.isAppInstalled(this, ORG_TELEGRAM_PLUS_PACKAGE);
+//        String defaultPack = Loader.getAllAvailableModes(this).get(0).getPack();
 
-        preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
+//        isTelegramInstalled = Loader.isAppInstalled(this, TELEGRAM_PACKAGE);
+//        isTelegramProInstalled = Loader.isAppInstalled(this, TELEGRAM_PLUS_PACKAGE);
 
+
+        chosenMode = new Mode(preferences.getString(ACTIVE_PACK, null), this);
+        if (chosenMode.getPack() == null) {
+            ArrayList<Mode> modes = Loader.getAllAvailableModes(this);
+            if (modes.size() > 0)//when one of the supported modes is installed
+                setDefaultMode(new Mode(modes.get(0).getPack(), this));
+            if (chosenMode.getPack() == null) {// if none of the supported modes is installed
+                setDefaultMode(new Mode(Loader.TELEGRAM_PACKAGE, this));
+                Log.e(getClass().getSimpleName(), "no type of supported telegram was found and chosenMode was defaulted to original telegram");
+            }
+        }
+
+        Log.e(getClass().getSimpleName(), "chosen pack is: " + chosenMode.getPack());
 
         if (Loader.freeMemory() < 50 && !hasCashedPhoneStickersOnce()) {
             Toast.makeText(this, getString(R.string.low_storage_finish), Toast.LENGTH_LONG).show();
@@ -101,9 +136,14 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
 
     }
 
+    //    public static Mode getModeInstante(){
+//        return chosenMode;
+//    }
+//
     private void setFont() {
         //todo: set font
-        //todo: http://stackoverflow.com/questions/5634245/how-to-add-external-fonts-to-android-application
+        //https://github.com/IsseiAoki/SimpleCropView/blob/master/simplecropview-sample/src/main/java/com/example/simplecropviewsample/FontUtils.java
+        //http://stackoverflow.com/questions/5634245/how-to-add-external-fonts-to-android-application
 //
 //        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Roboto/Roboto-Regular.ttf");
 //        for (View view : allViews) {
@@ -128,8 +168,12 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         super.setContentView(layoutResID);
 
         toolbar = (Toolbar) findViewById(R.id.include_toolbar);
-        if (toolbar != null)
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
+            ActionBar ab = getSupportActionBar();
+            if (ab!=null)
+                ab.setTitle(getString(R.string.app_name));
+        }
     }
 
     public Toolbar getToolbar() {
@@ -181,5 +225,23 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         }
     }
 
+    public void setDefaultMode(Mode mode) {
+        chosenMode = mode;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(ACTIVE_PACK, mode.getPack());
+        editor.apply();
+    }
+
+    public void setLanguage(int language) {
+        if (this.language != language) {
+            this.language = language;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(LANGUAGE, language);
+            editor.apply();
+
+//            Resources res = getResources();
+            Loader.setLocale(language, this);
+        }
+    }
 
 }

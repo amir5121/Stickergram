@@ -44,7 +44,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/activity_user_stickers_no_sticker"
             android:layout_toEndOf="@id/activity_template_stickers_list_fragment"
-            android:layout_toRightOf="@id/activity_template_stickers_list_fragment"
             tools:layout="@layout/fragment_icon_detailed" />
 
     </RelativeLayout>

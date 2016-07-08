@@ -36,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dialog_send_sticker_big_note"
                 android:layout_toEndOf="@id/dialog_send_sticker_info_icon"
-                android:layout_toRightOf="@id/dialog_send_sticker_info_icon"
                 android:padding="5dp"
                 android:text="@string/for_more_info_press_on_how_to_button"
                 android:textColor="@color/dialog_text_color"

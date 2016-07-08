@@ -22,10 +22,12 @@ import com.tozny.crypto.android.AesCbcWithIntegrity;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.Locale;
 
 public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     //todo: lucky patcher http://stackoverflow.com/questions/13445598/lucky-patcher-how-can-i-protect-from-it
     //todo: read the comment on that answer
+    //todo: https://code.google.com/p/android/issues/detail?id=203555 android N support
     private static final String TAG = "BaseAuthenticated";
     private static final int REQUEST_BUY_PRO = 1001;
     public static final String BUY_THE_AWESOME_STICKERGRAM_PRO_VERSION = "BuyTheAwesomeStickergramProVersion";
@@ -73,9 +75,11 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        if (inAppBillingSetupOk) {
+            if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } else super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void requestProVersion() {

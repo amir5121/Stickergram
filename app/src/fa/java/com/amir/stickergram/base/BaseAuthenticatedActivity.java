@@ -124,9 +124,11 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        if (inAppBillingSetupOk) {
+            if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } else super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void requestProVersion() {

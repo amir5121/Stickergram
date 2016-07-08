@@ -5,11 +5,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -26,12 +23,8 @@ import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.AsyncFirstLoad;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,8 +33,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, AsyncFirstLoad.AsyncFirstTaskListener {
-    private static final int REQUEST_SELECT_IMAGE = 100;
-    private static final int CROP_REQUEST = 101;
+    private static final int REQUEST_SELECT_IMAGE = 999;
     private static final String MAIN_ACTIVITY_SEQUENCE_ID = "MAIN_ACTIVITY_SEQUENCE_ID";
 
     AlertDialog pickAnImageDialog;
@@ -49,7 +41,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     View phoneStickersButton;
     View templateStickerButton;
     View scratchButton;
-    View topImage;
+    View topContainer;
     AlertDialog firstLoadingDialog;
     TextView firstLoadPercentageText;
     AsyncFirstLoad task;
@@ -61,6 +53,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//
+//        if (Locale.getDefault().getLanguage().equals("en")) {
+//            AppType.askForLanguage(this);
+//        }
+
         setContentView(R.layout.activity_main);
         setNavDrawer(new MainNavDrawer(this));
 
@@ -90,7 +88,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (pickAnImageDialog != null)
             pickAnImageDialog.dismiss();
 
-        runShowCase();
+        if (!BuildConfig.DEBUG && !isInLandscape)
+            runShowCase();
     }
 
     private void setUpView() {
@@ -98,53 +97,52 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         phoneStickersButton = findViewById(R.id.activity_main_phone_stickers);
         templateStickerButton = findViewById(R.id.activity_main_template_stickers);
         scratchButton = findViewById(R.id.activity_main_start_scratch_stickers);
-        topImage = findViewById(R.id.activity_main_text);
+        topContainer = findViewById(R.id.activity_main_text_container);
 
         if (userStickersButton != null &&
                 phoneStickersButton != null &&
                 templateStickerButton != null &&
                 scratchButton != null &&
-                topImage != null) {
+                topContainer != null) {
             userStickersButton.setOnClickListener(this);
             phoneStickersButton.setOnClickListener(this);
             templateStickerButton.setOnClickListener(this);
             scratchButton.setOnClickListener(this);
-            topImage.setOnClickListener(this);
+            topContainer.setOnClickListener(this);
 
 
-            if (isInLandscape && topImage != null)
-                topImage.setVisibility(View.GONE);
+            if (isInLandscape && topContainer != null)
+                topContainer.setVisibility(View.GONE);
 
         }
 
     }
 
     private void runShowCase() {
-        if (!isInLandscape) {
-            ShowcaseConfig config = new ShowcaseConfig();
-            config.setDelay(200); // half second between each showcase view
-            config.setDismissTextColor(LIGHT_BLUE);
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(200); // half second between each showcase view
+        config.setDismissTextColor(LIGHT_BLUE);
 
-            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, MAIN_ACTIVITY_SEQUENCE_ID);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, MAIN_ACTIVITY_SEQUENCE_ID);
 //        Log.e(getClass().getSimpleName(), "showcase is running");
 
-            sequence.setConfig(config);
+        sequence.setConfig(config);
 
-            sequence.addSequenceItem(userStickersButton,
-                    getString(R.string.your_stickers_explanation), getString(R.string.got_it));
+        sequence.addSequenceItem(userStickersButton,
+                getString(R.string.your_stickers_explanation), getString(R.string.got_it));
 
-            sequence.addSequenceItem(phoneStickersButton,
-                    getString(R.string.phone_stickers_explanation), getString(R.string.ok));
+        sequence.addSequenceItem(phoneStickersButton,
+                getString(R.string.phone_stickers_explanation), getString(R.string.ok));
 
-            sequence.addSequenceItem(templateStickerButton,
-                    getString(R.string.template_stickers_explanation), getString(R.string.okay));
+        sequence.addSequenceItem(templateStickerButton,
+                getString(R.string.template_stickers_explanation), getString(R.string.okay));
 
-            sequence.addSequenceItem(scratchButton,
-                    getString(R.string.scratch_stickers_explanation), getString(R.string.Let_s_go));
+        sequence.addSequenceItem(scratchButton,
+                getString(R.string.scratch_stickers_explanation), getString(R.string.Let_s_go));
 
 //        sequence.singleUse(null);
-            sequence.start();
-        }
+        sequence.start();
+
     }
 
     @Override
@@ -198,9 +196,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         } else if (itemId == R.id.dialog_from_scratch_choose_a_picture) {
             chooseOrCapturePicture();
-        } else if (itemId == R.id.activity_main_text) {
-            if (BuildConfig.DEBUG) {
-                setLocale("fa", MainActivity.class);
+        } else if (itemId == R.id.activity_main_text_container) {
+            Loader.joinToStickergramChannel(this);
+//            if (BuildConfig.DEBUG) {
+//                setLocale("fa", MainActivity.class);
+//            }
 //            Log.e(getClass().getSimpleName(), "clicked");
 //            File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/amir/");
 //            if (!folder.exists()) {
@@ -263,22 +263,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            } catch (GeneralSecurityException | IOException e) {
 //                e.printStackTrace();
 //            }
-            }
         }
+//        }
     }
-
-    public void setLocale(String lang, Class mClass) {
-//        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-//        conf.locale = myLocale;
-        conf.locale = new Locale(lang);
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, mClass);
-        startActivity(refresh);
-        finish();
-    }
+//
+//    public void setLocale(String lang, Class mClass) {
+////        Locale myLocale = new Locale(lang);
+//        Resources res = getResources();
+//        DisplayMetrics dm = res.getDisplayMetrics();
+//        Configuration conf = res.getConfiguration();
+////        conf.locale = myLocale;
+//        conf.setLocale(new Locale(lang));// = new Locale(lang);
+//        res.updateConfiguration(conf, dm);
+//        Intent refresh = new Intent(this, this.getClass());
+//        startActivity(refresh);
+//        finish();
+//
+//        Log.e(getClass().getSimpleName(), Locale.getDefault().getLanguage());
+//    }
 
 
     private void instantiateChooserDialog() {
@@ -369,13 +371,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-//            if (tempOutPutFile != null) tempOutPutFile.delete();
+        if (resultCode != RESULT_OK)
             return;
-        }
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_IMAGE) {
             Uri outputFile;
+            if (tempOutPutFile == null)
+                Log.e(getClass().getSimpleName(), "tempOutPutFile was null");
             Uri tempFileUri = Uri.fromFile(tempOutPutFile);
 
             if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE)))
@@ -388,11 +390,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            Log.e(getClass().getSimpleName(), "rotation: " + rotation);
             Loader.crop(outputFile, tempFileUri, this);
 
-        } else if (requestCode == UCrop.REQUEST_CROP) {
-            Intent intent = new Intent(this, EditImageActivity.class);
-            intent.putExtra(BaseActivity.EDIT_IMAGE_URI, Uri.fromFile(tempOutPutFile));
-//            intent.putExtra(BaseActivity.NEED_ROTATION, rotation);
-            startActivity(intent);
+//        } else if (requestCode == UCrop.REQUEST_CROP) {
+//            Intent intent = new Intent(this, EditImageActivity.class);
+//            intent.putExtra(BaseActivity.EDIT_IMAGE_URI, Uri.fromFile(tempOutPutFile));
+////            intent.putExtra(BaseActivity.NEED_ROTATION, rotation);
+//            startActivity(intent);
         }
     }
 
@@ -425,6 +427,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         List<ResolveInfo> otherImageCaptureActivities = getPackageManager().
                 queryIntentActivities(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 0);
 
+        if (tempOutPutFile == null)
+            Log.e(getClass().getSimpleName(), "tempOutPutFile was null in choose or cap");
+        else Log.e(getClass().getSimpleName(), "----tempOutPutFile was not null in choose or cap");
         for (ResolveInfo info : otherImageCaptureActivities) {
             Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             captureIntent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
