@@ -1,6 +1,7 @@
 package com.amir.stickergram.infrastructure;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -10,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -43,19 +45,19 @@ public class TextItem {
     private boolean isSelected;
     private int textStrokeColor;
 
-    private float scale;
+//    private float scale;
     private int selectedColor;
 
     private int textWidth;
     private int textHeight;
-    Bitmap hostBitmap;
+//    Bitmap hostBitmap;
     Matrix matrix;
     private float strokeWidth;
 
-    public TextItem(String text, Bitmap hostBitmap) {
-        scale = BaseActivity.density;
+    public TextItem(Bitmap hostBitmap) {
+//        scale = BaseActivity.density;
 
-        this.hostBitmap = hostBitmap.copy(hostBitmap.getConfig(), true);
+//        this.hostBitmap = hostBitmap.copy(hostBitmap.getConfig(), true);
         hostWidth = hostBitmap.getWidth();
         hostHeight = hostBitmap.getHeight();
 
@@ -64,7 +66,7 @@ public class TextItem {
 
         selectedColor = Color.parseColor("#55444444");
         isSelected = false;
-        this.text = text;
+        this.text = "";
         alpha = 1;
         backgroundColor = Color.TRANSPARENT;
         font = new FontItem("Mono Space", DEFAULT_FONT);
@@ -239,9 +241,11 @@ public class TextItem {
         return bitmap;
     }
 
-    public Bitmap getFullTextBitmap(Bitmap hostBitmap) {
+    public Bitmap getFullTextBitmap() {
+//        Log.e(getClass().getSimpleName(), "getFullTextBitmap");
         Bitmap tempTextBitmap = getTextBitmap();
-        Bitmap fullTextBitmap = hostBitmap.copy(hostBitmap.getConfig(), true);
+//        Bitmap fullTextBitmap = hostBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(fullTextBitmap);
         Canvas textCanvas = new Canvas(tempTextBitmap);
         matrix = new Matrix();

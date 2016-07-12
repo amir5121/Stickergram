@@ -4,10 +4,11 @@ public class Position {
     private float top;
     private float left;
 
-    public Position(float top, float left){
+    public Position(float top, float left) {
         this.top = top;
         this.left = left;
     }
+
     public float getLeft() {
         return left;
     }
@@ -22,5 +23,11 @@ public class Position {
 
     public void setLeft(float left) {
         this.left = left;
+    }
+
+    public void set(float left, float top) {
+        this.left = left;
+        this.top = top;
+
     }
 }

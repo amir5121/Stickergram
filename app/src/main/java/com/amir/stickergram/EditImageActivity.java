@@ -38,6 +38,7 @@ import com.amir.stickergram.fonts.EnglishFontsFragment;
 import com.amir.stickergram.fonts.MainFontDialogFragment;
 import com.amir.stickergram.infrastructure.FontItem;
 import com.amir.stickergram.infrastructure.Loader;
+import com.amir.stickergram.infrastructure.OnMainImageViewTouch;
 import com.amir.stickergram.infrastructure.Position;
 import com.amir.stickergram.infrastructure.TextItem;
 import com.amir.stickergram.infrastructure.TouchImageView;
@@ -61,7 +62,8 @@ public class EditImageActivity
     public static final int MAX_TEXT_SIZE = 300;
     TouchImageView selectedLayer;
     int layerCount;
-    TouchImageView[] label;
+
+    public FrameLayout textLayerContainer;
 
     View buttonsDeactivateLayer;
     View proNoteCloseButton;
@@ -86,22 +88,19 @@ public class EditImageActivity
     SeekBarCompat shadowRadius;
     SeekBarCompat shadowDxSeekBar;
     SeekBarCompat shadowDySeekBar;
-    SeekBarCompat strokeWidthSeekBar;
 
-    FrameLayout textLayerContainer;
+    SeekBarCompat strokeWidthSeekBar;
     RelativeLayout stickerContainer;
     Bitmap mainBitmap;
 
-    List<TouchImageView> items;
-    Position offsetPosition;
     private View buyNoteContainer;
     private TextView buyNoteText;
+    OnMainImageViewTouch helper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_image);
-        items = new ArrayList<>();
 
         mainBitmap = getBitmapFromExtra();
         if (mainBitmap == null) {
@@ -116,12 +115,10 @@ public class EditImageActivity
         layerCount = 0;
         selectedLayer = null;
 
-        if (!isPaid) {
-            label = new TouchImageView[2];
-            addLabel();
-        }
 
         getNewTextDialog(true);
+
+
     }
 
     @Override
@@ -146,18 +143,9 @@ public class EditImageActivity
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_finish_editing, null);
         ImageView finishedImage = (ImageView) newTextDialogView.findViewById(R.id.dialog_finish_editing_image);
         setLayerUnselected();
-        final Bitmap tempBitmap = mainBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        final Bitmap tempBitmap = helper.getFinishedBitmap();
 //        mainBitmap = mainBitmap.copy(Bitmap.Config.ARGB_8888, true);
 //        Canvas canvas = new Canvas(mainBitmap);
-        Canvas canvas = new Canvas(tempBitmap);
-
-        for (TouchImageView imageItem : items) {
-            canvas.drawBitmap(imageItem.getFinishedBitmap(), 0, 0, null);
-        }
-        if (label != null) {
-            canvas.drawBitmap(label[0].getFinishedBitmap(), 0, 0, null);
-            canvas.drawBitmap(label[1].getFinishedBitmap(), 0, 0, null);
-        }
 
         finishedImage.setImageBitmap(tempBitmap);
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -270,33 +258,7 @@ public class EditImageActivity
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        int action = event.getAction();
-        switch (action & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                Position pos = new Position(event.getY(), event.getX());
-                if (label != null)
-                    if (label[0].isItMe(pos) != null || label[1].isItMe(pos) != null)
-                        Toast.makeText(this, getString(R.string.upgrade_to_pro_to_delete_this_label), Toast.LENGTH_LONG).show();
-                for (int i = items.size() - 1; i >= 0; i--) {
-                    offsetPosition = items.get(i).isItMe(new Position(event.getY(), event.getX()));
-                    if (offsetPosition != null) {
-                        setSelectedLayer(items.get(i));
-                        break;
-                    } else {
-                        setLayerUnselected();
-                    }
-                }
-                break;
-            }
-
-            case MotionEvent.ACTION_MOVE: {
-                if (selectedLayer != null) {
-                    selectedLayer.updateTextPosition(new Position(event.getY(), event.getX()), offsetPosition);
-                }
-                break;
-            }
-        }
-
+        helper.onTouch(selectedLayer, event);
         return true;
     }
 
@@ -362,6 +324,7 @@ public class EditImageActivity
             params.setMarginStart(marginStart);
         params.setMargins(0, marginTop, 0, 0);
         textLayerContainer.setLayoutParams(params);
+        Log.e(getClass().getSimpleName(), "scale: " + scale);
     }
 
     @Nullable
@@ -404,164 +367,6 @@ public class EditImageActivity
 
     }
 
-    private void setUpView() {
-        textLayerContainer = (FrameLayout) findViewById(R.id.activity_edit_image_images_container);
-        if (textLayerContainer == null)
-            throw new RuntimeException("Container was null add activity_edit_image_relative_layout_container to the view");
-
-        buttonsDeactivateLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
-        textShadowRadius = (Button) findViewById(R.id.include_buttons_shadow_radius);
-        textButton = (Button) findViewById(R.id.include_buttons_text_button);
-        fontButton = (Button) findViewById(R.id.include_buttons_font_button);
-        sizeButton = (Button) findViewById(R.id.include_buttons_size_button);
-        textBackgroundColor = (Button) findViewById(R.id.include_buttons_text_background);
-        shadowDx = (Button) findViewById(R.id.include_buttons_shadow_dx);
-        shadowDy = (Button) findViewById(R.id.include_buttons_shadow_dy);
-        textColorButton = (Button) findViewById(R.id.include_buttons_text_color);
-        tiltButton = (Button) findViewById(R.id.include_buttons_tilt_button);
-        shadowColorButton = (Button) findViewById(R.id.include_buttons_shadow_color);
-        strokeWidthButton = (Button) findViewById(R.id.include_buttons_text_stroke_width);
-        strokeColorButton = (Button) findViewById(R.id.include_buttons_text_stroke_color);
-        moveUpButton = (ImageButton) findViewById(R.id.activity_edit_image_move_up_button);
-        moveDownButton = (ImageButton) findViewById(R.id.activity_edit_image_move_down_button);
-        moveLeftButton = (ImageButton) findViewById(R.id.activity_edit_image_move_left_button);
-        moveRightButton = (ImageButton) findViewById(R.id.activity_edit_image_move_right_button);
-        stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
-        buyNoteContainer = findViewById(R.id.include_pro_note_container);
-        buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
-        proNoteCloseButton = findViewById(R.id.include_pro_note_close);
-
-        ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
-        RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.include_buttons_scroll_view);
-        if (isTablet) {
-            if (scrollView != null) {
-                RelativeLayout.LayoutParams params =
-                        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.height_of_the_button_scroll_view_on_tablet));
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                scrollView.setLayoutParams(params);
-            }
-        }
-        if (mainImageView != null) {
-            mainImageView.setImageBitmap(mainBitmap);
-            mainImageView.setOnTouchListener(this);
-        }
-        sizeSeekBar = Loader.getSeekBar(this,
-                mainBitmap.getWidth() / 2,
-                ContextCompat.getColor(this, R.color.size_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.size_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.size_seek_bar_thumb_color),
-                0,
-                mainContainer
-        );
-        strokeWidthSeekBar = Loader.getSeekBar(this,
-                25,
-                ContextCompat.getColor(this, R.color.stroke_width_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.stroke_width_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.stroke_width_seek_bar_thumb_color),
-                0,
-                mainContainer
-        );
-        shadowDxSeekBar = Loader.getSeekBar(this,
-                100,
-                ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_thumb_color),
-                0,
-                mainContainer
-        );
-
-        shadowDySeekBar = Loader.getSeekBar(this,
-                100,
-                ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_thumb_color),
-                0,
-                mainContainer
-        );
-        tiltSeekBar = Loader.getSeekBar(this,
-                360,
-                ContextCompat.getColor(this, R.color.tilt_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.tilt_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.tilt_seek_bar_thumb_color),
-                0,
-                mainContainer
-        );
-
-        shadowRadius = Loader.getSeekBar(this,
-                20,
-                ContextCompat.getColor(this, R.color.text_alpha_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.text_alpha_tilt_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.text_alpha_seek_bar_thumb_color),
-                0,
-                mainContainer
-        );
-
-        if (buyNoteContainer != null && !isPaid) buyNoteContainer.setVisibility(View.VISIBLE);
-        if (buttonsDeactivateLayer != null) buttonsDeactivateLayer.setOnClickListener(this);
-        if (textColorButton != null) textColorButton.setOnClickListener(this);
-        if (proNoteCloseButton != null) proNoteCloseButton.setOnClickListener(this);
-        if (sizeButton != null) sizeButton.setOnClickListener(this);
-        if (textShadowRadius != null) textShadowRadius.setOnClickListener(this);
-        if (tiltButton != null) {
-            if (!isPaid)
-                tiltButton.setText(getString(R.string.tilt_pro));
-            tiltButton.setOnClickListener(this);
-        }
-        if (textButton != null) textButton.setOnClickListener(this);
-        if (textBackgroundColor != null) textBackgroundColor.setOnClickListener(this);
-        if (fontButton != null) fontButton.setOnClickListener(this);
-        if (strokeWidthButton != null) strokeWidthButton.setOnClickListener(this);
-        if (strokeColorButton != null) strokeColorButton.setOnClickListener(this);
-        if (shadowDx != null) {
-            if (!isPaid) shadowDx.setText(getString(R.string.shadow_dx_pro));
-            shadowDx.setOnClickListener(this);
-        }
-        if (shadowDy != null) {
-            if (!isPaid) shadowDy.setText(getString(R.string.shadow_dy_pro));
-            shadowDy.setOnClickListener(this);
-        }
-        if (shadowColorButton != null) shadowColorButton.setOnClickListener(this);
-        if (buyNoteText != null) buyNoteText.setOnClickListener(this);
-        if (moveUpButton != null) {
-            moveUpButton.setOnClickListener(this);
-        }
-        if (moveDownButton != null) {
-            moveDownButton.setOnClickListener(this);
-        }
-        if (moveLeftButton != null) {
-            moveLeftButton.setOnClickListener(this);
-        }
-        if (moveRightButton != null) {
-            moveRightButton.setOnClickListener(this);
-        }
-        if (sizeSeekBar != null) {
-            sizeSeekBar.setOnSeekBarChangeListener(this);
-            sizeSeekBar.setMax(MAX_TEXT_SIZE);
-
-        }
-        if (tiltSeekBar != null) {
-            tiltSeekBar.setProgress(180);
-            tiltSeekBar.setOnSeekBarChangeListener(this);
-        }
-        if (shadowRadius != null) {
-            shadowRadius.setProgress(2);
-            shadowRadius.setOnSeekBarChangeListener(this);
-        }
-        if (shadowDxSeekBar != null) {
-            shadowDxSeekBar.setProgress(0);
-            shadowDxSeekBar.setOnSeekBarChangeListener(this);
-        }
-        if (shadowDySeekBar != null) {
-            shadowDySeekBar.setProgress(0);
-            shadowDySeekBar.setOnSeekBarChangeListener(this);
-        }
-        if (strokeWidthSeekBar != null) {
-            strokeWidthSeekBar.setProgress(55);
-            strokeWidthSeekBar.setOnSeekBarChangeListener(this);
-        }
-        deactivateButtons(true);
-    }
 
     private void getNewTextDialog(final boolean asNewText) {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_set_new_text, null);
@@ -581,13 +386,13 @@ public class EditImageActivity
                     if (asNewText && !text.equals("")) {
                         TouchImageView touchItem =
                                 new TouchImageView(EditImageActivity.this,
-                                        new TextItem("", mainBitmap),
-                                        ++layerCount,
+//                                        new TextItem("", mainBitmap),
+//                                        ++layerCount,
                                         mainBitmap);
                         setSelectedLayer(touchItem);
 //                        touchItem.setOnClickListener(EditImageActivity.this);
 //                        touchItem.setId(R.id.lol);
-                        items.add(touchItem);
+                        helper.add(touchItem);
                         textLayerContainer.addView(touchItem);
                     }
                     if (selectedLayer != null) {
@@ -596,7 +401,7 @@ public class EditImageActivity
                             text += " ";
                         selectedLayer.updateText(text);
                         if (text.equals("")) {
-                            items.remove(items.indexOf(selectedLayer));
+                            helper.remove(selectedLayer);
                             setLayerUnselected();
                         }
                     }
@@ -615,7 +420,7 @@ public class EditImageActivity
         newTextDialog.show();
     }
 
-    private void setLayerUnselected() {
+    public void setLayerUnselected() {
         if (selectedLayer != null) {
             if (!isPaid) selectedLayer.notPaid();
             selectedLayer.setAsSelected(false);
@@ -738,47 +543,6 @@ public class EditImageActivity
         mBackPressed = System.currentTimeMillis();
     }
 
-
-    private void addLabel() {
-        int bitmapWidth = mainBitmap.getWidth();
-        float labelDecrementRatio = 1600.0f;
-        int strokeWidth = (bitmapWidth / 51) + Math.abs(bitmapWidth - 512) / 80;
-//        Log.e(getClass().getSimpleName(), "strokeWidth: " + strokeWidth);
-        int stickergramTextSize = (int) ((bitmapWidth / 18) + (labelDecrementRatio / bitmapWidth));
-        int madeWithTextSize = (int) ((bitmapWidth / 30) + (labelDecrementRatio / bitmapWidth));
-        Log.e(getClass().getSimpleName(), "stickergramTextSize: " + stickergramTextSize);
-        Log.e(getClass().getSimpleName(), "madeWithTextSize: " + madeWithTextSize);
-        label[0] = new TouchImageView(this, new TextItem(getString(R.string.stickergram), mainBitmap), 0, mainBitmap);
-        TextItem textItem = label[0].getTextItem();
-//        textItem.setBackgroundColor(ContextCompat.getColor(this, R.color.stickergram_label_background));
-        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF));
-        textItem.setStrokeWidth(strokeWidth);
-        textItem.setSize(stickergramTextSize);
-        textItem.setTextColor(ContextCompat.getColor(this, R.color.stickergram_label_color));
-        textItem.setTextStrokeColor(ContextCompat.getColor(this, R.color.stickergram_label_stroke_color));
-        Bitmap bitmap = textItem.getTextBitmap();
-        int stickergramHeight = bitmap.getHeight();
-        int stickergramWidth = bitmap.getWidth();
-//        textItem.setPosition(new Position(mainBitmap.getHeight() - stickergramHeight, mainBitmap.getWidth() - stickergramWidth));
-
-        int top = mainBitmap.getHeight() - stickergramHeight + 20;
-        textItem.setPosition(new Position(top, -15));
-        label[0].setTextItem(textItem);
-        textLayerContainer.addView(label[0]);
-        label[1] = new TouchImageView(this, new TextItem(getString(R.string.made), mainBitmap), 0, mainBitmap);
-        textItem.setSize(madeWithTextSize);
-        textItem.setText(getString(R.string.made));
-        textItem.setStrokeWidth(4);
-        textItem.setBackgroundColor(0);
-        bitmap = textItem.getTextBitmap();
-//        textItem.setPosition(new Position(0,0));
-        textItem.setPosition(new Position(top - bitmap.getHeight() / 3.3f,
-                stickergramWidth / 2 - bitmap.getWidth() / 2 - 15));
-        label[1].setTextItem(textItem);
-        textLayerContainer.addView(label[1]);
-
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -791,6 +555,166 @@ public class EditImageActivity
                 Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void setUpView() {
+        textLayerContainer = (FrameLayout) findViewById(R.id.activity_edit_image_images_container);
+        if (textLayerContainer == null)
+            throw new RuntimeException("Container was null add activity_edit_image_relative_layout_container to the view");
+
+        buttonsDeactivateLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
+        textShadowRadius = (Button) findViewById(R.id.include_buttons_shadow_radius);
+        textButton = (Button) findViewById(R.id.include_buttons_text_button);
+        fontButton = (Button) findViewById(R.id.include_buttons_font_button);
+        sizeButton = (Button) findViewById(R.id.include_buttons_size_button);
+        textBackgroundColor = (Button) findViewById(R.id.include_buttons_text_background);
+        shadowDx = (Button) findViewById(R.id.include_buttons_shadow_dx);
+        shadowDy = (Button) findViewById(R.id.include_buttons_shadow_dy);
+        textColorButton = (Button) findViewById(R.id.include_buttons_text_color);
+        tiltButton = (Button) findViewById(R.id.include_buttons_tilt_button);
+        shadowColorButton = (Button) findViewById(R.id.include_buttons_shadow_color);
+        strokeWidthButton = (Button) findViewById(R.id.include_buttons_text_stroke_width);
+        strokeColorButton = (Button) findViewById(R.id.include_buttons_text_stroke_color);
+        moveUpButton = (ImageButton) findViewById(R.id.activity_edit_image_move_up_button);
+        moveDownButton = (ImageButton) findViewById(R.id.activity_edit_image_move_down_button);
+        moveLeftButton = (ImageButton) findViewById(R.id.activity_edit_image_move_left_button);
+        moveRightButton = (ImageButton) findViewById(R.id.activity_edit_image_move_right_button);
+        stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
+        buyNoteContainer = findViewById(R.id.include_pro_note_container);
+        buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
+        proNoteCloseButton = findViewById(R.id.include_pro_note_close);
+
+        ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
+        helper = new OnMainImageViewTouch(this, mainBitmap, mainImageView);
+        RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.include_buttons_scroll_view);
+        if (isTablet) {
+            if (scrollView != null) {
+                RelativeLayout.LayoutParams params =
+                        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.height_of_the_button_scroll_view_on_tablet));
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                scrollView.setLayoutParams(params);
+            }
+        }
+        if (mainImageView != null) {
+//            mainImageView.setImageBitmap(mainBitmap);
+            mainImageView.setOnTouchListener(this);
+        }
+        sizeSeekBar = Loader.getSeekBar(this,
+                mainBitmap.getWidth() / 2,
+                ContextCompat.getColor(this, R.color.size_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.size_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.size_seek_bar_thumb_color),
+                0,
+                mainContainer
+        );
+        strokeWidthSeekBar = Loader.getSeekBar(this,
+                25,
+                ContextCompat.getColor(this, R.color.stroke_width_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.stroke_width_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.stroke_width_seek_bar_thumb_color),
+                0,
+                mainContainer
+        );
+        shadowDxSeekBar = Loader.getSeekBar(this,
+                100,
+                ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_thumb_color),
+                0,
+                mainContainer
+        );
+
+        shadowDySeekBar = Loader.getSeekBar(this,
+                100,
+                ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_thumb_color),
+                0,
+                mainContainer
+        );
+        tiltSeekBar = Loader.getSeekBar(this,
+                360,
+                ContextCompat.getColor(this, R.color.tilt_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.tilt_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.tilt_seek_bar_thumb_color),
+                0,
+                mainContainer
+        );
+
+        shadowRadius = Loader.getSeekBar(this,
+                20,
+                ContextCompat.getColor(this, R.color.text_alpha_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.text_alpha_tilt_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.text_alpha_seek_bar_thumb_color),
+                0,
+                mainContainer
+        );
+
+        if (buyNoteContainer != null && !isPaid) buyNoteContainer.setVisibility(View.VISIBLE);
+        if (buttonsDeactivateLayer != null) buttonsDeactivateLayer.setOnClickListener(this);
+        if (textColorButton != null) textColorButton.setOnClickListener(this);
+        if (proNoteCloseButton != null) proNoteCloseButton.setOnClickListener(this);
+        if (sizeButton != null) sizeButton.setOnClickListener(this);
+        if (textShadowRadius != null) textShadowRadius.setOnClickListener(this);
+        if (tiltButton != null) {
+            if (!isPaid)
+                tiltButton.setText(getString(R.string.tilt_pro));
+            tiltButton.setOnClickListener(this);
+        }
+        if (textButton != null) textButton.setOnClickListener(this);
+        if (textBackgroundColor != null) textBackgroundColor.setOnClickListener(this);
+        if (fontButton != null) fontButton.setOnClickListener(this);
+        if (strokeWidthButton != null) strokeWidthButton.setOnClickListener(this);
+        if (strokeColorButton != null) strokeColorButton.setOnClickListener(this);
+        if (shadowDx != null) {
+            if (!isPaid) shadowDx.setText(getString(R.string.shadow_dx_pro));
+            shadowDx.setOnClickListener(this);
+        }
+        if (shadowDy != null) {
+            if (!isPaid) shadowDy.setText(getString(R.string.shadow_dy_pro));
+            shadowDy.setOnClickListener(this);
+        }
+        if (shadowColorButton != null) shadowColorButton.setOnClickListener(this);
+        if (buyNoteText != null) buyNoteText.setOnClickListener(this);
+        if (moveUpButton != null) {
+            moveUpButton.setOnClickListener(this);
+        }
+        if (moveDownButton != null) {
+            moveDownButton.setOnClickListener(this);
+        }
+        if (moveLeftButton != null) {
+            moveLeftButton.setOnClickListener(this);
+        }
+        if (moveRightButton != null) {
+            moveRightButton.setOnClickListener(this);
+        }
+        if (sizeSeekBar != null) {
+            sizeSeekBar.setOnSeekBarChangeListener(this);
+            sizeSeekBar.setMax(MAX_TEXT_SIZE);
+
+        }
+        if (tiltSeekBar != null) {
+            tiltSeekBar.setProgress(180);
+            tiltSeekBar.setOnSeekBarChangeListener(this);
+        }
+        if (shadowRadius != null) {
+            shadowRadius.setProgress(2);
+            shadowRadius.setOnSeekBarChangeListener(this);
+        }
+        if (shadowDxSeekBar != null) {
+            shadowDxSeekBar.setProgress(0);
+            shadowDxSeekBar.setOnSeekBarChangeListener(this);
+        }
+        if (shadowDySeekBar != null) {
+            shadowDySeekBar.setProgress(0);
+            shadowDySeekBar.setOnSeekBarChangeListener(this);
+        }
+        if (strokeWidthSeekBar != null) {
+            strokeWidthSeekBar.setProgress(55);
+            strokeWidthSeekBar.setOnSeekBarChangeListener(this);
+        }
+        deactivateButtons(true);
     }
 
 }

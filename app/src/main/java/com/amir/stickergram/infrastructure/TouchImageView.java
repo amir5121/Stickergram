@@ -2,49 +2,38 @@ package com.amir.stickergram.infrastructure;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.amir.stickergram.EditImageActivity;
-
 @SuppressLint("ViewConstructor")
 public class TouchImageView extends ImageView {
-    private final int layerId;
+    //    private final int layerId;
     private TextItem textItem;
-    private boolean isFirstTapOnStrokeColor;
-    private boolean isFirstTapOnShadowColor;
-    EditImageActivity activity;
-    int scaledWidth;
-    int scaledHeight;
+    private boolean isFirstTapOnStrokeColor = true;
+    private boolean isFirstTapOnShadowColor = true;
+    //    int scaledWidth;
+//    int scaledHeight;
+    int mainBitmapWidth;
+    int mainBitmapHeight;
     float widthScale;
     float heightScale;
 
-    Bitmap latestTextLayer;
-    Bitmap textLayer;
-    Bitmap mainBitmap;
+//    Bitmap latestTextLayer;
+//    Bitmap textLayer;
 
-    public TouchImageView(Context context, TextItem textItem, int layerId, Bitmap mainBitmap) {
+    public TouchImageView(Context context, Bitmap mainBitmap) {
         super(context);
-        activity = (EditImageActivity) context;
-        this.textItem = textItem;
-        this.layerId = layerId;
+        this.textItem = new TextItem(mainBitmap);
+//        this.layerId = layerId;
         setLayoutParams();
-        this.mainBitmap = mainBitmap;
-        this.textLayer = Bitmap.createBitmap(mainBitmap.getWidth(), mainBitmap.getHeight(), mainBitmap.getConfig());
-//        setImageBitmap(textItem.getFullTextBitmap());
-        setImageBitmap(textItem.getFullTextBitmap(textLayer));
-        isFirstTapOnStrokeColor = true;
-        isFirstTapOnShadowColor = true;
-
-//        setClickable(true);
-
+        mainBitmapWidth = mainBitmap.getWidth();
+        mainBitmapHeight = mainBitmap.getHeight();
+//        this.textLayer = Bitmap.createBitmap(mainBitmapWidth, mainBitmapHeight, Bitmap.Config.ARGB_8888);
+        setImageBitmap(textItem.getFullTextBitmap());
     }
 
     public TextItem getTextItem() {
@@ -84,17 +73,6 @@ public class TouchImageView extends ImageView {
         heightScale = (float) textItem.hostHeight / getMeasuredHeight();
     }
 
-    public int getLayerId() {
-        return layerId;
-    }
-
-    public int[] getScaledMearsument() {
-        int[] measurement = new int[2];
-        measurement[0] = scaledWidth;
-        measurement[1] = scaledHeight;
-        return measurement;
-    }
-
     public void updateTextPosition(Position position, Position offsetPosition) {
         Position actualPosition;
 
@@ -108,12 +86,12 @@ public class TouchImageView extends ImageView {
                     position.getLeft() * widthScale);
         }
         textItem.setPosition(actualPosition);
-        setImageBitmap(textItem.getFullTextBitmap(textLayer));
+        setImageBitmap(textItem.getFullTextBitmap());
 
     }
 
     public void updateTextView() {
-        setImageBitmap(textItem.getFullTextBitmap(textLayer));
+        setImageBitmap(textItem.getFullTextBitmap());
     }
 
     public Position isItMe(Position position) {
@@ -150,22 +128,11 @@ public class TouchImageView extends ImageView {
         return null;
     }
 
-    @Override
-    public void setImageBitmap(Bitmap bm) {
-        latestTextLayer = bm;
-        Bitmap temp = Bitmap.createBitmap(mainBitmap.getWidth(), mainBitmap.getHeight(), mainBitmap.getConfig());
-        Canvas canvas = new Canvas(temp);
-        canvas.drawBitmap(bm, 0, 0, null);
-        canvas.save();
-        canvas.restore();
-        super.setImageBitmap(temp);
-    }
-
     public Bitmap getFinishedBitmap() {
         textItem.setSelected(false);
-        Bitmap temp = Bitmap.createBitmap(mainBitmap.getWidth(), mainBitmap.getHeight(), mainBitmap.getConfig());
+        Bitmap temp = Bitmap.createBitmap(mainBitmapWidth, mainBitmapHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(temp);
-        canvas.drawBitmap(latestTextLayer, 0, 0, null);
+        canvas.drawBitmap(textItem.getFullTextBitmap(), 0, 0, null);
         canvas.save();
         canvas.restore();
         return temp;
@@ -180,11 +147,6 @@ public class TouchImageView extends ImageView {
         }
     }
 
-//    public void setTextSize(int progress) {
-//        textItem.setSize(progress);
-//        updateTextView();
-//    }
-
     public int getTextSize() {
         return textItem.getSize();
     }
@@ -193,11 +155,6 @@ public class TouchImageView extends ImageView {
         textItem.setText(newText);
         updateTextView();
     }
-
-//    public void setTextTilt(int textTilt) {
-//        textItem.setTilt(textTilt);
-//        updateTextView();
-//    }
 
     public void setTextItem(TextItem textItem) {
         this.textItem = textItem;

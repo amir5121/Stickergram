@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amir.stickergram.BuildConfig;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.infrastructure.Loader;
@@ -183,7 +184,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     }
 
     public boolean getProStatus() {
-//        if (!BuildConfig.DEBUG) {
+//        if (BuildConfig.DEBUG) return true;
 //            if (mIsPremium) return true;
         return preferences.getBoolean(HAS_BOUGHT_PRO, false);
 //        }
