@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,13 +37,10 @@ import com.amir.stickergram.fonts.MainFontDialogFragment;
 import com.amir.stickergram.infrastructure.FontItem;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.infrastructure.OnMainImageViewTouch;
-import com.amir.stickergram.infrastructure.Position;
 import com.amir.stickergram.infrastructure.TextItem;
 import com.amir.stickergram.infrastructure.TouchImageView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
@@ -60,8 +55,8 @@ public class EditImageActivity
     //todo: scaler... scale any image while editing it by dragging the top left corner of the image
     private static final String MAIN_FONT_DIALOG_FRAGMENT_TAG = "MAIN_FONT_DIALOG_FRAGMENT_TAG";
     public static final int MAX_TEXT_SIZE = 300;
+    private static final String EDIT_IMAGE_STATE = "EDIT_IMAGE_STATE";
     TouchImageView selectedLayer;
-    int layerCount;
 
     public FrameLayout textLayerContainer;
 
@@ -112,14 +107,30 @@ public class EditImageActivity
 
         setUpView();
 
-        layerCount = 0;
         selectedLayer = null;
 
-
-        getNewTextDialog(true);
+        if (savedInstanceState != null) {
+            helper.recreateState(savedInstanceState.getBundle(EDIT_IMAGE_STATE));
+        } else getNewTextDialog(true);
 
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (helper != null) {
+            setLayerUnselected();
+            outState.putBundle(EDIT_IMAGE_STATE, helper.getSaveState());
+//            Log.e(getClass().getSimpleName(), "onSaveInstanceState");
+        }
+    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        helper.create
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -237,6 +248,8 @@ public class EditImageActivity
                 Loader.setColor(this, selectedLayer, Loader.TEXT_STROKE_COLOR);
             } else if (itemId == R.id.include_buttons_text_stroke_width) {
                 setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
+            } else if (itemId == R.id.activity_edit_image_main_frame_container) {
+                setLayerUnselected();
             }
         } else
             Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
@@ -324,7 +337,7 @@ public class EditImageActivity
             params.setMarginStart(marginStart);
         params.setMargins(0, marginTop, 0, 0);
         textLayerContainer.setLayoutParams(params);
-        Log.e(getClass().getSimpleName(), "scale: " + scale);
+//        Log.e(getClass().getSimpleName(), "scale: " + scale);
     }
 
     @Nullable
@@ -336,7 +349,10 @@ public class EditImageActivity
                 String dirInAsset = getIntent().getStringExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET);
                 imageBitmap = BitmapFactory.decodeStream(getAssets().open(dirInAsset));
             } else {
-                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                Log.e(getClass().getSimpleName(), "getBitmap from the extra: " + imageUri.toString());
+                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                if (imageBitmap == null)
+//                    imageBitmap = BitmapFactory.decodeFile(Loader.getRealPathFromURI(imageUri, getContentResolver()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -348,22 +364,23 @@ public class EditImageActivity
         }
         int mainWidth = imageBitmap.getWidth();
         int mainHeight = imageBitmap.getHeight();
+        Log.e(getClass().getSimpleName(), "mainWidth: " + mainWidth + " mainHeight: " + mainHeight);
 //        imageBitmap = Loader.rotateImage(imageBitmap, rotation);
-        Bitmap resBitmap;
-        if (mainWidth != 512 && mainHeight != 512) {
-            float scale;
-            if (mainHeight > mainWidth) {
-                scale = 512f / mainHeight;
-                resBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (mainWidth * scale), 512, false);
-            } else {
-                scale = 512f / mainWidth;
-
-                resBitmap = Bitmap.createScaledBitmap(imageBitmap, 512, (int) (mainHeight * scale), false);
-            }
-        } else {
-            resBitmap = imageBitmap;
-        }
-        return resBitmap;
+//        Bitmap resBitmap;
+//        if (mainWidth != 512 && mainHeight != 512) {
+//            float scale;
+//            if (mainHeight > mainWidth) {
+//                scale = 512f / mainHeight;
+//                resBitmap = Bitmap.createScaledBitmap(imageBitmap, (int) (mainWidth * scale), 512, false);
+//            } else {
+//                scale = 512f / mainWidth;
+//                resBitmap = Bitmap.createScaledBitmap(imageBitmap, 512, (int) (mainHeight * scale), false);
+//            }
+//        } else {
+//            Log.e(getClass().getSimpleName(), "both side were 512");
+//            resBitmap = imageBitmap;
+//        }
+        return imageBitmap;
 
     }
 
@@ -584,11 +601,12 @@ public class EditImageActivity
         buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
         proNoteCloseButton = findViewById(R.id.include_pro_note_close);
 
+
         ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
         helper = new OnMainImageViewTouch(this, mainBitmap, mainImageView);
         RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
         ScrollView scrollView = (ScrollView) findViewById(R.id.include_buttons_scroll_view);
-        if (isTablet) {
+        if (isTablet && !isInLandscape) {
             if (scrollView != null) {
                 RelativeLayout.LayoutParams params =
                         new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.height_of_the_button_scroll_view_on_tablet));
@@ -644,13 +662,14 @@ public class EditImageActivity
 
         shadowRadius = Loader.getSeekBar(this,
                 20,
-                ContextCompat.getColor(this, R.color.text_alpha_seek_bar_background_color),
-                ContextCompat.getColor(this, R.color.text_alpha_tilt_seek_bar_progress_color),
-                ContextCompat.getColor(this, R.color.text_alpha_seek_bar_thumb_color),
+                ContextCompat.getColor(this, R.color.shadow_radius_seek_bar_background_color),
+                ContextCompat.getColor(this, R.color.shadow_radius_tilt_seek_bar_progress_color),
+                ContextCompat.getColor(this, R.color.shadow_radius_seek_bar_thumb_color),
                 0,
                 mainContainer
         );
 
+        if (stickerContainer != null) stickerContainer.setOnClickListener(this);
         if (buyNoteContainer != null && !isPaid) buyNoteContainer.setVisibility(View.VISIBLE);
         if (buttonsDeactivateLayer != null) buttonsDeactivateLayer.setOnClickListener(this);
         if (textColorButton != null) textColorButton.setOnClickListener(this);
@@ -668,11 +687,9 @@ public class EditImageActivity
         if (strokeWidthButton != null) strokeWidthButton.setOnClickListener(this);
         if (strokeColorButton != null) strokeColorButton.setOnClickListener(this);
         if (shadowDx != null) {
-            if (!isPaid) shadowDx.setText(getString(R.string.shadow_dx_pro));
             shadowDx.setOnClickListener(this);
         }
         if (shadowDy != null) {
-            if (!isPaid) shadowDy.setText(getString(R.string.shadow_dy_pro));
             shadowDy.setOnClickListener(this);
         }
         if (shadowColorButton != null) shadowColorButton.setOnClickListener(this);

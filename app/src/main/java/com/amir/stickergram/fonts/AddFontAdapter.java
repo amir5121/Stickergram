@@ -24,7 +24,7 @@ public class AddFontAdapter extends FontAdapter {
             for (File file : files) {
                 Typeface font = Typeface.createFromFile(file.getPath());
                 if (font != null)
-                    fontItems.add(new FontItem(file.getName(), font));
+                    fontItems.add(new FontItem(file.getName(), font, FontItem.STORAGE, file.getAbsolutePath()));
             }
         }
     }

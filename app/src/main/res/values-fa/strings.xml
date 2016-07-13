@@ -92,8 +92,6 @@
     <string name="scratch_stickers_explanation">و در نهایت در قسمت می تونی با عکس دلخواه خودت استیکر بسازی و یا از یه عکس خالی استفاده کنی</string>
     <string name="send_an_email">ارسال ایمیل</string>
     <string name="send_mail">ارسال ایمیل</string>
-    <string name="shadow_dx_pro">X</string>
-    <string name="shadow_dy_pro">Y</string>
     <string name="shadow_position">مکان سایه</string>
     <string name="shadow_position_effect">مکان سایه در ورژن رایگان کار نمی کند</string>
     <string name="sticker_name">نام استیکر</string>
@@ -212,4 +210,6 @@
     <string name="voice_telegram">تلگرام فارسی صوتی</string>
     <string name="aniways">انیویز</string>
     <string name="la_telegram">لاگاتگرام</string>
+    <string name="drop_shadow_with_line">حاله:</string>
+    <string name="contact_painter">ارتباط با گرافیست</string>
 </resources>

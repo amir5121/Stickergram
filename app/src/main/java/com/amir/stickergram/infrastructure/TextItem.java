@@ -1,31 +1,25 @@
 package com.amir.stickergram.infrastructure;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.Build;
-import android.text.Layout;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextPaint;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 
-import com.amir.stickergram.base.BaseActivity;
-
-public class TextItem {
+public class TextItem implements Parcelable {
     public static final int TEXT_BOLD = 0;
     public static final int TEXT_ITALIC = 1;
     public static final int TEXT_NORMAL = 2;
     public static final Typeface DEFAULT_FONT = Typeface.SERIF;
     public static final String DEFAULT_STROKE_COLOR = "#1565c0";
     private static final String DEFAULT_TEXT_COLOR = "#ffffff";
-//    public static final int DEFAULT_TEXT_COLOR = 1430537284;
-
+    private static final int SELECTED_TEXT_COCLOR = Color.parseColor("#55444444");
 
     public int hostWidth;
     public int hostHeight;
@@ -38,55 +32,81 @@ public class TextItem {
     private int tilt;
     private int alpha;
     private Shadow shadow;
-    private int textDirection;
-    private int gravity;
-    private Layout.Alignment alignment;
-    private TextArea area;
     private boolean isSelected;
     private int textStrokeColor;
-
-//    private float scale;
-    private int selectedColor;
-
     private int textWidth;
     private int textHeight;
-//    Bitmap hostBitmap;
-    Matrix matrix;
     private float strokeWidth;
+    private TextArea area;
+    //    private int textDirection;
+//    private int gravity;
 
     public TextItem(Bitmap hostBitmap) {
-//        scale = BaseActivity.density;
-
-//        this.hostBitmap = hostBitmap.copy(hostBitmap.getConfig(), true);
         hostWidth = hostBitmap.getWidth();
         hostHeight = hostBitmap.getHeight();
-
         textStrokeColor = Color.parseColor(DEFAULT_STROKE_COLOR);
         strokeWidth = 10;
-
-        selectedColor = Color.parseColor("#55444444");
         isSelected = false;
         this.text = "";
         alpha = 1;
         backgroundColor = Color.TRANSPARENT;
-        font = new FontItem("Mono Space", DEFAULT_FONT);
-        gravity = Gravity.NO_GRAVITY;
+        font = new FontItem("Mono Space", DEFAULT_FONT, FontItem.DEFAULTS, FontItem.SERIF);
+//        gravity = Gravity.NO_GRAVITY;
         position = new Position(50, 50);
         tilt = 180;
         shadow = new Shadow(Color.BLACK, 0, 0, 0);
         size = 50;
         textColor = Color.parseColor(DEFAULT_TEXT_COLOR);
-        alignment = Layout.Alignment.ALIGN_OPPOSITE;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-            textDirection = View.TEXT_DIRECTION_LTR;
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+//            textDirection = View.TEXT_DIRECTION_LTR;
+    }
+
+    public TextItem(Parcel parcel) {
+        hostWidth = parcel.readInt();
+        hostHeight = parcel.readInt();
+        text = parcel.readString();
+        position = parcel.readParcelable(Position.class.getClassLoader());
+        textColor = parcel.readInt();
+        backgroundColor = parcel.readInt();
+        font = parcel.readParcelable(FontItem.class.getClassLoader());
+        size = parcel.readInt();
+        tilt = parcel.readInt();
+        alpha = parcel.readInt();
+        shadow = parcel.readParcelable(Shadow.class.getClassLoader());
+        isSelected = parcel.readByte() == 1;
+        textStrokeColor = parcel.readInt();
+        textWidth = parcel.readInt();
+        textHeight = parcel.readInt();
+        strokeWidth = parcel.readFloat();
+        area = parcel.readParcelable(TextArea.class.getClassLoader());
+        Log.e(getClass().getSimpleName(), "textItem read from parcel");
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(hostWidth);
+        parcel.writeInt(hostHeight);
+        parcel.writeString(text);
+        parcel.writeParcelable(position, 0);
+        parcel.writeInt(textColor);
+        parcel.writeInt(backgroundColor);
+        parcel.writeParcelable(font, 0);
+        parcel.writeInt(size);
+        parcel.writeInt(tilt);
+        parcel.writeInt(alpha);
+        parcel.writeParcelable(shadow, 0);
+        parcel.writeByte((byte) (isSelected ? 1 : 0));
+        parcel.writeInt(textStrokeColor);
+        parcel.writeInt(textWidth);
+        parcel.writeInt(textHeight);
+        parcel.writeFloat(strokeWidth);
+        parcel.writeParcelable(area, 0);
+        Log.e(getClass().getSimpleName(), "textItem write to parcel");
     }
 
     public void setSelected(boolean selected) {
         isSelected = selected;
-    }
-
-    public void setAlignment(Layout.Alignment alignment) {
-        this.alignment = alignment;
     }
 
     public void setAlpha(int alpha) {
@@ -101,9 +121,6 @@ public class TextItem {
         this.font = font;
     }
 
-    public void setGravity(int gravity) {
-        this.gravity = gravity;
-    }
 
     public void setPosition(Position position) {
         this.position = position;
@@ -129,13 +146,13 @@ public class TextItem {
         this.textColor = textColor;
     }
 
-    public void setTextDirection(int textDirection) {
-        this.textDirection = textDirection;
-    }
+//    public void setTextDirection(int textDirection) {
+//        this.textDirection = textDirection;
+//    }
 
-    public Layout.Alignment getAlignment() {
-        return alignment;
-    }
+//    public Layout.Alignment getAlignment() {
+//        return alignment;
+//    }
 
     public int getAlpha() {
         return alpha;
@@ -149,9 +166,9 @@ public class TextItem {
         return font;
     }
 
-    public int getGravity() {
-        return gravity;
-    }
+//    public int getGravity() {
+//        return gravity;
+//    }
 
     public TextArea getArea() {
         getTextBitmap(); //updating the area
@@ -182,9 +199,9 @@ public class TextItem {
         return textColor;
     }
 
-    public int getTextDirection() {
-        return textDirection;
-    }
+//    public int getTextDirection() {
+//        return textDirection;
+//    }
 
     public Bitmap getTextBitmap() {
         Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -248,12 +265,12 @@ public class TextItem {
         Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(fullTextBitmap);
         Canvas textCanvas = new Canvas(tempTextBitmap);
-        matrix = new Matrix();
+        Matrix matrix = new Matrix();
 //        matrix.postRotate(tilt - 180, textWidth / 2, textHeight / 2);
         matrix.postRotate(tilt - 180, tempTextBitmap.getWidth() / 2, tempTextBitmap.getHeight() / 2);
         matrix.postTranslate(position.getLeft(), position.getTop());
         if (isSelected) {
-            textCanvas.drawColor(selectedColor);
+            textCanvas.drawColor(SELECTED_TEXT_COCLOR);
             textCanvas.save();
             textCanvas.restore();
         }
@@ -329,4 +346,21 @@ public class TextItem {
     public void setStrokeWidth(float strokeWidth) {
         this.strokeWidth = strokeWidth;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<TextItem> CREATOR = new Creator<TextItem>() {
+        @Override
+        public TextItem createFromParcel(Parcel parcel) {
+            return new TextItem(parcel);
+        }
+
+        @Override
+        public TextItem[] newArray(int i) {
+            return new TextItem[0];
+        }
+    };
 }

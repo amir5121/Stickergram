@@ -68,7 +68,7 @@ public class AsyncFirstLoad extends AsyncTask<Context, Integer, Void> {
 
                         outputStream = new FileOutputStream(thumbFile);
                         ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3).compress(Bitmap.CompressFormat.PNG, 85, outputStream);
-                        publishProgress((filesChecked++ * 100) / 225); // there are 213 sticker in the assets folder dividing bu 217 so we get 100%
+                        publishProgress((filesChecked++ * 100) / 215); // there are 213 sticker in the assets folder dividing bu 217 so we get 100%
                     }
                 }
             }

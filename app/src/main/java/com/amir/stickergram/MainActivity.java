@@ -3,16 +3,16 @@ package com.amir.stickergram;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -25,9 +25,11 @@ import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -197,43 +199,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         } else if (itemId == R.id.dialog_from_scratch_choose_a_picture) {
             chooseOrCapturePicture();
         } else if (itemId == R.id.activity_main_text_container) {
+//            if (!BuildConfig.DEBUG)
             Loader.joinToStickergramChannel(this);
-//            if (BuildConfig.DEBUG) {
-//                setLocale("fa", MainActivity.class);
-//            }
-//            Log.e(getClass().getSimpleName(), "clicked");
-//            File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/amir/");
-//            if (!folder.exists()) {
-//                Log.e(getClass().getSimpleName(), "folder didn't exist");
-//            }
-//            File files[] = folder.listFiles();
-//            int length = files.length;
+//            else {
+//                Log.e(getClass().getSimpleName(), "clicked");
+//                File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/amir/");
+//                if (!folder.exists()) {
+//                    Log.e(getClass().getSimpleName(), "folder didn't exist");
+//                }
+//                File files[] = folder.listFiles();
+//                int length = files.length;
 //
-//            if (length == 0) {
-//                Log.e(getClass().getSimpleName(), "folder was empty");
-//            }
-//            for (File file : files) {
-//                Log.e(getClass().getSimpleName(), file.getName());
-//                String name = file.getName();
-//                if (name.contains(".png")) {
-//                    Bitmap regionalBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//                    if (regionalBitmap == null)
-//                        Log.e(getClass().getSimpleName(), "bitmap was null");
-//                    FileOutputStream outStream = null;
-//                    try {
-//                        outStream = new FileOutputStream(file.getAbsolutePath().replace("png", "webp"));
-//                        if (regionalBitmap != null) {
-//                            Log.e(getClass().getSimpleName(), file.getAbsolutePath().replace("png", "webp"));
-//                            regionalBitmap.compress(Bitmap.CompressFormat.WEBP, 90, outStream);
-//                        } else Log.e(getClass().getSimpleName(), "regionalBitmap was null");
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    } finally {
+//                if (length == 0) {
+//                    Log.e(getClass().getSimpleName(), "folder was empty");
+//                }
+//                for (File file : files) {
+//                    Log.e(getClass().getSimpleName(), file.getName());
+//                    String name = file.getName();
+//                    if (name.contains(".png")) {
+//                        Bitmap regionalBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                        if (regionalBitmap == null)
+//                            Log.e(getClass().getSimpleName(), "bitmap was null");
+//                        FileOutputStream outStream = null;
 //                        try {
-//                            if (outStream != null)
-//                                outStream.close();
-//                        } catch (IOException e) {
+//                            outStream = new FileOutputStream(file.getAbsolutePath().replace("png", "webp"));
+//                            if (regionalBitmap != null) {
+//                                Log.e(getClass().getSimpleName(), file.getAbsolutePath().replace("png", "webp"));
+//                                regionalBitmap.compress(Bitmap.CompressFormat.WEBP, 90, outStream);
+//                            } else Log.e(getClass().getSimpleName(), "regionalBitmap was null");
+//                        } catch (FileNotFoundException e) {
 //                            e.printStackTrace();
+//                        } finally {
+//                            try {
+//                                if (outStream != null)
+//                                    outStream.close();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
 //                        }
 //                    }
 //                }
@@ -264,45 +266,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                e.printStackTrace();
 //            }
         }
-//        }
     }
-//
-//    public void setLocale(String lang, Class mClass) {
-////        Locale myLocale = new Locale(lang);
-//        Resources res = getResources();
-//        DisplayMetrics dm = res.getDisplayMetrics();
-//        Configuration conf = res.getConfiguration();
-////        conf.locale = myLocale;
-//        conf.setLocale(new Locale(lang));// = new Locale(lang);
-//        res.updateConfiguration(conf, dm);
-//        Intent refresh = new Intent(this, this.getClass());
-//        startActivity(refresh);
-//        finish();
-//
-//        Log.e(getClass().getSimpleName(), Locale.getDefault().getLanguage());
-//    }
 
 
     private void instantiateChooserDialog() {
-//        tempOutPutFile = new File(BaseActivity.TEMP_OUTPUT_DIRECTORY, "temp_file.png");
         tempOutPutFile = Loader.generateEmptyBitmapFile(this);
 
         if (!tempOutPutFile.mkdirs())
             Log.e(getClass().getSimpleName(), "could not make directory");
-//        try {
-//            if (tempOutPutFile.exists())
-//                tempOutPutFile.delete();
-//            if (!tempOutPutFile.createNewFile()) {
-//                Toast.makeText(this, getResources().getString(R.string.could_not_make_file), Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-//        if (tempOutPutFile == null)
-//            Log.e(getClass().getSimpleName(), "tempOutputFile was null");
-//        else Log.e(getClass().getSimpleName(), "tempOutputFile was not null");
         View view = getLayoutInflater().inflate(R.layout.dialog_from_scratch, null);
         if (isInLandscape) {
             LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialog_from_scratch_main_container);
@@ -376,9 +347,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_IMAGE) {
             Uri outputFile;
-            if (tempOutPutFile == null)
+            Uri tempFileUri = null;
+            if (tempOutPutFile == null) {
                 Log.e(getClass().getSimpleName(), "tempOutPutFile was null");
-            Uri tempFileUri = Uri.fromFile(tempOutPutFile);
+            } else tempFileUri = Uri.fromFile(tempOutPutFile);
 
             if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE)))
                 //if user took a picture
@@ -388,7 +360,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 //            rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI(outputFile, getContentResolver())); // this is being passed to the next activity and been used in rotation
 //            Log.e(getClass().getSimpleName(), "rotation: " + rotation);
-            Loader.crop(outputFile, tempFileUri, this);
+            if (tempFileUri != null && outputFile != null)
+                Loader.crop(outputFile, tempFileUri, this);
+            else
+                Toast.makeText(this, getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
 
 //        } else if (requestCode == UCrop.REQUEST_CROP) {
 //            Intent intent = new Intent(this, EditImageActivity.class);

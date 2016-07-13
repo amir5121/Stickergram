@@ -6,5 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:background="@color/colorPrimary"
+    android:elevation="8dp"
     android:title="@string/app_name"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />

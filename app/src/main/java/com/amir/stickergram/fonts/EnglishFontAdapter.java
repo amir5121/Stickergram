@@ -28,35 +28,8 @@ public class EnglishFontAdapter extends FontAdapter {
         String[] fonts = activity.getAssets().list(folder);
         folder += "/";
 
-        for (String font : fonts) {
-//            Log.e(getClass().getSimpleName(), font);
-//            Typeface.createFromAsset(activity.getAssets(), folder+font);
-            fontItems.add(new FontItem(font, Typeface.createFromAsset(activity.getAssets(), folder + font)));
-//            InputStream inputStream = activity.getAssets().open(folder + font);
-//
-//            File f = new File(BaseActivity.CACHE_DIR);
-//            if (!f.exists()) {
-//                if (!f.mkdirs())
-//                    return null;
-//            }
-//            String outPath = BaseActivity.CACHE_DIR + font;
-//            try {
-//                byte[] buffer = new byte[inputStream.available()];
-//                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outPath));
-//
-//                int l;
-//                while ((l = inputStream.read(buffer)) > 0) {
-//                    bos.write(buffer, 0, l);
-//                }
-//                bos.close();
-//                fontItems.add(new FontItem(font, Typeface.createFromFile(outPath)));
-//
-//                File f2 = new File(outPath);
-//                f2.delete();
-//            } catch (IOException e) {
-//                return null;
-//            }
-        }
+        for (String font : fonts)
+            fontItems.add(new FontItem(font, Typeface.createFromAsset(activity.getAssets(), folder + font), FontItem.ASSET_en, font));
 
         return fontItems;
     }

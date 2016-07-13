@@ -387,15 +387,22 @@ public class Loader {
         seekBar.setProgressColor(progressColor);
         seekBar.setThumbColor(thumbColor);
         seekBar.setProgress(defaultPosition);
-
-        float scale = context.getResources().getDisplayMetrics().density;
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (50 * scale));
-        params.addRule(RelativeLayout.ABOVE, R.id.include_buttons_scroll_view);
-        params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (55 * scale));
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            params.setMarginStart((int) (10 * scale));
-            params.setMarginEnd((int) (10 * scale));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            seekBar.setElevation(5);
         }
+
+        float scale = BaseActivity.density;
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (50 * scale));
+        if (!BaseActivity.isInLandscape) {
+            params.addRule(RelativeLayout.ABOVE, R.id.include_buttons_scroll_view);
+            params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (55 * scale));
+        } else {
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            params.addRule(RelativeLayout.START_OF, R.id.view_horizontal);
+            params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (10 * scale));
+        }
+        params.setMarginStart((int) (10 * scale));
+        params.setMarginEnd((int) (10 * scale));
         seekBar.setLayoutParams(params);
         seekBar.setVisibility(View.GONE);
         viewGroup.addView(seekBar);
@@ -404,24 +411,6 @@ public class Loader {
     }
 
     public static void setColor(BaseActivity activity, final TouchImageView touchImageView, final int type) {
-
-//        int initialColor = 0;
-//        switch (type) {
-//            case TEXT_COLOR:
-//                initialColor = touchImageView.getTextItem().getTextColor();
-//                break;
-//            case TEXT_SHADOW_COLOR:
-//                initialColor = touchImageView.getTextItem().getShadow().getColor();
-//                break;
-//            case TEXT_BACKGROUND_COLOR:
-//                initialColor = touchImageView.getTextItem().getBackgroundColor();
-//                break;
-//            case TEXT_STROKE_COLOR:
-//                initialColor = touchImageView.getTextItem().getTextStrokeColor();
-//                break;
-//            default:
-//                Log.e(TAG, "there are no such a type");
-//        }
 
         ColorPickerDialogBuilder
                 .with(activity)
@@ -738,7 +727,7 @@ public class Loader {
                 language = Locale.getDefault().getLanguage();
                 break;
         }
-        Log.e(TAG, "-------Language: " + language);
+//        Log.e(TAG, "-------Language: " + language);
         if (language != null) {
             Locale locale = new Locale(language);
 

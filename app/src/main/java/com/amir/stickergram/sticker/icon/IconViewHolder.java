@@ -33,8 +33,8 @@ public class IconViewHolder extends RecyclerView.ViewHolder {
                 case "Board":
                     iconNameTextView.setText("برد");
                     break;
-                case "Bunny":
-                    iconNameTextView.setText("خرگوش");
+                case "Roes1":
+                    iconNameTextView.setText("رز");
                     break;
                 case "Celebrities":
                     iconNameTextView.setText("نامدار");

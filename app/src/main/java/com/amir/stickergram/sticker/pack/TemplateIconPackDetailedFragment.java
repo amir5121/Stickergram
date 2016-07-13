@@ -22,6 +22,9 @@ import com.amir.stickergram.base.BaseFragment;
 
 public class TemplateIconPackDetailedFragment extends BaseFragment implements DetailedPackAdapter.OnStickerClickListener {
     public static final String EXPLOSM = "Explosm";
+    private static final String ROES_1 = "Roes1";
+    public static final String HTTP_WWW_EXPLOSM_NET = "http://www.explosm.net";
+    public static final String INSTAGRAM_COM_MR_KAZZEMI = "https://www.instagram.com/mr.kazzemi/";
     RecyclerView recyclerView;
     DetailedPackAdapter adapter;
     View view;
@@ -47,7 +50,22 @@ public class TemplateIconPackDetailedFragment extends BaseFragment implements De
                     linkButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String url = "http://www.explosm.net";
+                            String url = HTTP_WWW_EXPLOSM_NET;
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        }
+                    });
+                }
+            } else if (folder.equals(ROES_1)) {
+                Button linkButton = (Button) view.findViewById(R.id.fragment_icon_detailed_link_button);
+                if (linkButton != null) {
+                    linkButton.setVisibility(View.VISIBLE);
+                    linkButton.setText(getString(R.string.contact_painter));
+                    linkButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String url = INSTAGRAM_COM_MR_KAZZEMI;
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(url));
                             startActivity(i);

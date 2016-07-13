@@ -105,8 +105,6 @@
     <string name="send_mail">Send mail</string>
     <string name="sticker_name">Sticker Name</string>
     <string name="tilt_pro">Tilt (pro)</string>
-    <string name="shadow_dx_pro">X (pro)</string>
-    <string name="shadow_dy_pro">Y (pro)</string>
     <string name="you_Can_only_create_one_pack_in_free_version">You can\'t create more than two pack in the free version</string>
     <string name="you_haven_t_created_any_sticker">You haven\'t created any sticker!</string>
     <string name="name_must_be_shorter_than_50_character">Name must be shorter than 50 character</string>
@@ -212,4 +210,6 @@
     <string name="voice_telegram">Persian voice Telegram</string>
     <string name="aniways">Aniways</string>
     <string name="la_telegram">Lagatgram</string>
+    <string name="drop_shadow_with_line">Drop \n shadow</string>
+    <string name="contact_painter">Contact Artist</string>
 </resources>

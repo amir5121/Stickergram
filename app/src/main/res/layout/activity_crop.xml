@@ -1,6 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
     <include
         android:id="@+id/include_toolbar"
@@ -13,7 +15,7 @@
         android:layout_below="@id/include_toolbar"
         android:orientation="vertical">
 
-        <com.isseiaoki.simplecropview.CropImageView xmlns:custom="http://schemas.android.com/apk/res-auto"
+        <com.isseiaoki.simplecropview.CropImageView
             android:id="@+id/activity_crop_crop_image_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"

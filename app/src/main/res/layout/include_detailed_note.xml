@@ -11,6 +11,7 @@
     android:layout_marginTop="2dp"
     android:background="@drawable/note_background"
     android:orientation="horizontal"
+    android:elevation="10dp"
     android:padding="2dp">
 
     <ImageView

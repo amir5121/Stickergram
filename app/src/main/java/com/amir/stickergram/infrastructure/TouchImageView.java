@@ -5,36 +5,43 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 @SuppressLint("ViewConstructor")
 public class TouchImageView extends ImageView {
-    //    private final int layerId;
+    private static final String TEXT_ITEM = "TEXT_ITEM";
     private TextItem textItem;
     private boolean isFirstTapOnStrokeColor = true;
     private boolean isFirstTapOnShadowColor = true;
-    //    int scaledWidth;
-//    int scaledHeight;
     int mainBitmapWidth;
     int mainBitmapHeight;
     float widthScale;
     float heightScale;
 
-//    Bitmap latestTextLayer;
-//    Bitmap textLayer;
-
     public TouchImageView(Context context, Bitmap mainBitmap) {
         super(context);
         this.textItem = new TextItem(mainBitmap);
-//        this.layerId = layerId;
         setLayoutParams();
         mainBitmapWidth = mainBitmap.getWidth();
         mainBitmapHeight = mainBitmap.getHeight();
-//        this.textLayer = Bitmap.createBitmap(mainBitmapWidth, mainBitmapHeight, Bitmap.Config.ARGB_8888);
         setImageBitmap(textItem.getFullTextBitmap());
     }
+
+    public TouchImageView(Context context, Bundle bundle, Bitmap mainBitmap) {
+        super(context);
+        textItem = bundle.getParcelable(TEXT_ITEM);
+        setLayoutParams();
+        mainBitmapWidth = mainBitmap.getWidth();
+        mainBitmapHeight = mainBitmap.getHeight();
+        setImageBitmap(textItem.getFullTextBitmap());
+    }
+
+//    public TouchImageView(Parcel parcel) {
+//
+//    }
 
     public TextItem getTextItem() {
         return textItem;
@@ -59,7 +66,6 @@ public class TouchImageView extends ImageView {
     public void setLayoutParams() {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         setLayoutParams(params);
-//        setBackgroundColor(Color.parseColor("#55ff6622"));
         setScaleType(ScaleType.FIT_CENTER);
         setAdjustViewBounds(true);
         setClickable(false);
@@ -163,11 +169,16 @@ public class TouchImageView extends ImageView {
 
     public void notPaid() {
         textItem.setTilt(180);
-//        textItem.setTextStrokeColor(Color.parseColor(TextItem.DEFAULT_STROKE_COLOR));
         Shadow shadow = textItem.getShadow();
         shadow.setDx(0);
         shadow.setDy(0);
         textItem.setShadow(shadow);
     }
 
+
+    public Bundle getSaveBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(TEXT_ITEM, textItem);
+        return bundle;
+    }
 }

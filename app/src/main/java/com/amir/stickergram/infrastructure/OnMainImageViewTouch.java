@@ -3,6 +3,7 @@ package com.amir.stickergram.infrastructure;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,15 +22,15 @@ public class OnMainImageViewTouch {
     protected static final int NONE = 0;
     protected static final int DRAG = 1;
     protected static final int ZOOM = 2;
+    private static final String TOUCH_IMAGE_VIEW = "TOUCH_IMAGE_VIEW";
+    private static final String TEXT_LAYER_NUMBER = "TEXT_LAYER_NUMBER";
     protected int mode = NONE;
     // remember some things for zooming
-    protected Position start = new Position(0, 0);
     protected Position mid = new Position(0, 0);
     protected float oldDist = 1f;
     protected float d = 0f;
     protected float newRot = 0f;
     protected float[] lastEvent = null;
-    float scale = 1;
 
     EditImageActivity activity;
     Position offsetPosition;
@@ -124,75 +125,6 @@ public class OnMainImageViewTouch {
                 (offsetPosition.getLeft() + offsetPositionSecondPointer.getLeft()) / 2);
     }
 
-//
-//    public boolean onTouch(View v, MotionEvent event) {
-////        super.onTouchEvent(event);
-////        Log.e(getClass().getSimpleName(), "-----touch id: " + v.getId());
-//        // handle touch events here
-//        ImageView view = (ImageView) v;
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-////                savedMatrix.set(matrix);
-////                listener.onImageSelected(this);
-//                start.set(event.getX(), event.getY());
-////                Log.e(getClass().getSimpleName(), "down: " + start);
-//                mode = DRAG;
-//                lastEvent = null;
-//                break;
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                oldDist = spacing(event);
-//                if (oldDist > 10f) {
-////                    savedMatrix.set(matrix);
-//                    midPoint(mid, event);
-//                    mode = ZOOM;
-//                }
-//                lastEvent = new float[4];
-//                lastEvent[0] = event.getX(0);
-//                lastEvent[1] = event.getX(1);
-//                lastEvent[2] = event.getY(0);
-//                lastEvent[3] = event.getY(1);
-//                d = rotation(event);
-//                break;
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_POINTER_UP:
-//                mode = NONE;
-//                lastEvent = null;
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                if (mode == DRAG) {
-////                    matrix.set(savedMatrix);
-//                    float dx = event.getX() - start.getTop();
-//                    float dy = event.getY() - start.getLeft();
-////                    matrix.postTranslate(dx, dy);
-//                    setPosition(new Position(dy, dx));
-//                } else if (mode == ZOOM) {
-//                    float newDist = spacing(event);
-//                    if (newDist > 10f) {
-////                        matrix.set(savedMatrix);
-//                        float scale = (newDist / oldDist);
-////                        matrix.postScale(scale, scale, mid.getTop(), mid.getLeft());
-//                    }
-//                    if (lastEvent != null && event.getPointerCount() == 3) {
-//                        newRot = rotation(event);
-//                        float r = newRot - d;
-//                        float[] values = new float[9];
-////                        matrix.getValues(values);
-//                        float tx = values[2];
-//                        float ty = values[5];
-//                        float sx = values[0];
-//                        float xc = (view.getWidth() / 2) * sx;
-//                        float yc = (view.getHeight() / 2) * sx;
-////                        setRotation(r);
-////                        matrix.postRotate(r, tx + xc, ty + yc);
-//                    }
-//                }
-//                break;
-//        }
-//
-////        view.setImageMatrix(matrix);
-//        return true;
-//    }
-
     /**
      * Determine the space between the first two fingers
      */
@@ -263,7 +195,7 @@ public class OnMainImageViewTouch {
         TextItem textItem = label[0].getTextItem();
         textItem.setText(activity.getString(R.string.stickergram));
 //        textItem.setBackgroundColor(ContextCompat.getColor(this, R.color.stickergram_label_background));
-        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF));
+        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
         textItem.setStrokeWidth(strokeWidth);
         textItem.setSize(stickergramTextSize);
         textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
@@ -279,7 +211,7 @@ public class OnMainImageViewTouch {
         activity.textLayerContainer.addView(label[0]);
         label[1] = new TouchImageView(activity, mainBitmap);
         textItem = label[1].getTextItem();
-        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF));
+        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
         textItem.setSize(madeWithTextSize);
         textItem.setText(activity.getString(R.string.made));
         textItem.setStrokeWidth(4);
@@ -292,6 +224,27 @@ public class OnMainImageViewTouch {
                 stickergramWidth / 2 - bitmap.getWidth() / 2 - 15));
         label[1].setTextItem(textItem);
         activity.textLayerContainer.addView(label[1]);
+
+    }
+
+    public Bundle getSaveState() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(TEXT_LAYER_NUMBER, items.size());
+        for (int i = 0; i < items.size(); i++) {
+            Log.e(getClass().getSimpleName(), "getSaveState: " + TOUCH_IMAGE_VIEW + i);
+            bundle.putBundle(TOUCH_IMAGE_VIEW + i, items.get(i).getSaveBundle());
+        }
+        return bundle;
+    }
+
+    public void recreateState(Bundle bundle) {
+        int size = bundle.getInt(TEXT_LAYER_NUMBER);
+        for (int i = 0; i < size; i++) {
+            Log.e(getClass().getSimpleName(), "recreateState: " + TOUCH_IMAGE_VIEW + i);
+            TouchImageView touchItem = new TouchImageView(activity, bundle.getBundle(TOUCH_IMAGE_VIEW + i), mainBitmap);
+            activity.textLayerContainer.addView(touchItem);
+            items.add(touchItem);
+        }
 
     }
 }

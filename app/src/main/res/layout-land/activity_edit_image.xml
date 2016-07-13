@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_edit_image_main_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1565c0"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:background="#ff0099" />
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/include_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/view_horizontal"
+        android:background="@color/colorPrimary"
+        android:title="@string/app_name"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+
+    <include
+        android:id="@+id/include_buttons_scroll_view"
+        layout="@layout/include_buttons_land" />
+
+
+    <RelativeLayout
+        android:id="@+id/activity_edit_image_main_frame_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:layout_toStartOf="@id/view_horizontal">
+
+        <FrameLayout
+            android:id="@+id/activity_edit_image_images_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#888">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chess" />
+
+            <ImageView
+                android:id="@+id/activity_edit_image_main_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+            <!--this is the imageContainer for the images don't delete it-->
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_edit_image_move_container"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/include_buttons_scroll_view"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/activity_edit_image_move_up_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/move_button_background"
+            android:foreground="?android:selectableItemBackground"
+            android:src="@drawable/ic_up_arrow" />
+
+        <ImageButton
+            android:id="@+id/activity_edit_image_move_down_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/move_button_background"
+            android:foreground="?android:selectableItemBackground"
+            android:src="@drawable/ic_down_arrow"
+            android:text="@string/move" />
+
+        <ImageButton
+            android:id="@+id/activity_edit_image_move_left_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/move_button_background"
+            android:foreground="?android:selectableItemBackground"
+            android:src="@drawable/ic_left_arrow"
+            android:text="@string/move" />
+
+        <ImageButton
+            android:id="@+id/activity_edit_image_move_right_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/move_button_background"
+            android:foreground="?android:selectableItemBackground"
+            android:src="@drawable/ic_right_arrow"
+            android:text="@string/move" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/activity_edit_image_buttons_overlay_layer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/include_toolbar"
+        android:layout_toEndOf="@id/view_horizontal"
+        android:background="@color/edit_activity_button_overlay_layer_background_color"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/add_new_text_or_set_a_text_selected"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/include_pro_note_container"
+        layout="@layout/include_pro_note_land" />
+
+</RelativeLayout>
+

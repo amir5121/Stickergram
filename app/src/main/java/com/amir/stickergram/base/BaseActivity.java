@@ -59,6 +59,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static float density;
     public static String CACHE_DIR;
     public static String TEMP_STICKER_CASH_DIR;
+    public static String TEMP_CROP_CASH_DIR;
     public static String FONT_DIRECTORY;
     public static String BASE_THUMBNAIL_DIRECTORY;
     public static String USER_STICKERS_DIRECTORY;
@@ -91,7 +92,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         preferences = getSharedPreferences(SETTING, MODE_PRIVATE);
 
         setLanguage(preferences.getInt(LANGUAGE, AppType.DEFAULT_LANGUAGE));
-        Log.e(getClass().getSimpleName(), "Language: " + language);
+//        Log.e(getClass().getSimpleName(), "Language: " + language);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         isTablet = (metrics.widthPixels / metrics.density) >= 600;
@@ -101,8 +102,9 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         BASE_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_Stickers";
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
-        TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + ".temp_sticker.png";
-        Log.e(getClass().getSimpleName(), TEMP_STICKER_CASH_DIR);
+        TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
+        TEMP_CROP_CASH_DIR = getExternalCacheDir() + File.separator + "temp_crop.png";
+//        Log.e(getClass().getSimpleName(), TEMP_STICKER_CASH_DIR);
         CACHE_DIR = getCacheDir().getAbsolutePath() + "/";
 
 //        String defaultPack = Loader.getAllAvailableModes(this).get(0).getPack();
@@ -122,7 +124,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             }
         }
 
-        Log.e(getClass().getSimpleName(), "chosen pack is: " + chosenMode.getPack());
+//        Log.e(getClass().getSimpleName(), "chosen pack is: " + chosenMode.getPack());
 
         if (Loader.freeMemory() < 50 && !hasCashedPhoneStickersOnce()) {
             Toast.makeText(this, getString(R.string.low_storage_finish), Toast.LENGTH_LONG).show();
@@ -144,24 +146,8 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         //todo: set font
         //https://github.com/IsseiAoki/SimpleCropView/blob/master/simplecropview-sample/src/main/java/com/example/simplecropviewsample/FontUtils.java
         //http://stackoverflow.com/questions/5634245/how-to-add-external-fonts-to-android-application
-//
-//        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Roboto/Roboto-Regular.ttf");
-//        for (View view : allViews) {
-//            if (view instanceof TextView) {
-//                TextView textView = (TextView) view;
-//                textView.setTypeface(typeface);
-//            }
-//        }
     }
 
-//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-//    private void forceRTLIfSupported() {
-//        Log.e(getClass().getSimpleName(), Locale.getDefault().getDisplayLanguage());
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//            Log.e(getClass().getSimpleName(), "RTL");
-//            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-//        }
-//    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -171,7 +157,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             ActionBar ab = getSupportActionBar();
-            if (ab!=null)
+            if (ab != null)
                 ab.setTitle(getString(R.string.app_name));
         }
     }

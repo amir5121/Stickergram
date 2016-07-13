@@ -5,6 +5,7 @@
     android:layout_height="120dp"
     android:layout_gravity="center"
     android:layout_margin="5dp"
+    android:elevation="5dp"
     android:background="@drawable/simple_sticker_background"
     android:foreground="?android:selectableItemBackground"
     android:padding="4dp"

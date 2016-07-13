@@ -78,13 +78,18 @@ public class PersianFontAdapter extends FontAdapter {
 
         if (fontNames != null) {
             if (fonts.length != fontNames.size()) {
-                Log.e(getClass().getSimpleName(), "their length was not equal");
+                Log.e(getClass().getSimpleName(), "not enough name for persian fonts");
                 Log.e(getClass().getSimpleName(), fonts.length + " " + fontNames.size());
                 return null;
             }
         } else return null;
         for (int i = 0; i < fonts.length; i++) {
-            fontItems.add(new FontItem(fontNames.get(i), Typeface.createFromAsset(activity.getAssets(), folder + fonts[i])));
+            fontItems.add(
+                    new FontItem(
+                            fontNames.get(i),
+                            Typeface.createFromAsset(activity.getAssets(), folder + fonts[i]),
+                            FontItem.ASSET_fa,
+                            fonts[i]));
         }
         return fontItems;
     }
