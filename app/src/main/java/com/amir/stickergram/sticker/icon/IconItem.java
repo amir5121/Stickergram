@@ -7,33 +7,33 @@ import android.media.ThumbnailUtils;
 import android.util.Log;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class IconItem {
-    private static final String PNG = BaseActivity.PNG;
-    private static final String WEBP = BaseActivity.WEBP;
+    private static final String PNG = Constants.PNG;
+    private static final String WEBP = Constants.WEBP;
     private final String folder;
+    private final String enName;
     private final Context context;
 
-    public static final int TYPE_ASSET = 1;
-    public static final int TYPE_USER = 2;
-
-    public IconItem(Context context, String name) {
+    public IconItem(Context context, String name, String enName) {
         this.folder = name;
         this.context = context;
+        this.enName = enName;
     }
 
-    public String getFolder() {
+    public String getName() {
         return folder;
     }
 
     public Bitmap getBitmapIconFromAsset() {
         Bitmap bitmap = null;
         try {
-            InputStream inputStream = context.getAssets().open(BaseActivity.STICKERS + folder + File.separator + "10" + WEBP);
+            InputStream inputStream = context.getAssets().open(Constants.STICKERS + folder + File.separator + "10" + WEBP);
             bitmap = BitmapFactory.decodeStream(inputStream);
             bitmap = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3);
             inputStream.close();
@@ -53,7 +53,11 @@ public class IconItem {
         return bitmap;
     }
 
-    public String getFolderDirInExternalStorage() {
-        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator;
+    public String getEnName() {
+        return enName;
     }
+
+//    public String getFolderDirInExternalStorage() {
+//        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator;
+//    }
 }

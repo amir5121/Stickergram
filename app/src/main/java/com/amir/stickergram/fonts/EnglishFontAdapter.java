@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.view.View;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.FontItem;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class EnglishFontAdapter extends FontAdapter {
     }
 
     List<FontItem> readEnglishFonts() throws IOException {
-        String folder = BaseActivity.ENGLISH_FONT_DIRECTORY;
+        String folder = Constants.ENGLISH_FONT_DIRECTORY;
         String[] fonts = activity.getAssets().list(folder);
         folder += "/";
 

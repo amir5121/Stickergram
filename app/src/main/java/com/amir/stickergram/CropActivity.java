@@ -2,11 +2,8 @@ package com.amir.stickergram;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
@@ -15,21 +12,21 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.isseiaoki.simplecropview.CropImageView;
 import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.isseiaoki.simplecropview.callback.LoadCallback;
 import com.isseiaoki.simplecropview.callback.SaveCallback;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CropActivity extends BaseActivity {
     private static final String IMAGE_URT = "IMAGE_URI";
-    CropImageView mCropView;
-    View progressContainer;
-    Uri sourceUri;
+    private CropImageView mCropView;
+    private View progressContainer;
+    private Uri sourceUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,15 +35,7 @@ public class CropActivity extends BaseActivity {
         if (getIntent() != null) {
             sourceUri = getIntent().getParcelableExtra(IMAGE_URT);
         }
-
-        if (savedInstanceState != null) {
-            sourceUri = savedInstanceState.getParcelable(IMAGE_URT);
-            finish();
-            Intent intent = new Intent(this, CropActivity.class);
-            intent.putExtra(IMAGE_URT, sourceUri);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        } else setUpView();
+        setUpView(savedInstanceState != null);
     }
 
     @Override
@@ -59,11 +48,9 @@ public class CropActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.crop_activity_menu_save) {
-            final Uri destiny = getIntent().getParcelableExtra(BaseActivity.CROP_DESTINY);
+            final Uri destiny = getIntent().getParcelableExtra(Constants.CROP_DESTINY);
             showLoadingDialog(true);
-//            mCropView.setCompressQuality(85);
-//            mCropView.
-            mCropView.startCrop(destiny, cropCallback, null);
+            mCropView.startCrop(destiny, cropCallback, saveCallback);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -78,44 +65,43 @@ public class CropActivity extends BaseActivity {
 
     }
 
-    private void setUpView() {
+    private void setUpView(boolean isComingFromASavedState) {
+        Log.e(getClass().getSimpleName(), "setupView");
         progressContainer = findViewById(R.id.activity_crop_progress_bar_container);
-//        findViewById(R.id.buttonDone).setOnClickListener(btnListener);
-//        findViewById(R.id.buttonFitImage).setOnClickListener(btnListener);
+
         findViewById(R.id.button1_1).setOnClickListener(btnListener);
         findViewById(R.id.button3_4).setOnClickListener(btnListener);
         findViewById(R.id.button4_3).setOnClickListener(btnListener);
         findViewById(R.id.button9_16).setOnClickListener(btnListener);
         findViewById(R.id.button16_9).setOnClickListener(btnListener);
         findViewById(R.id.buttonFree).setOnClickListener(btnListener);
-//        findViewById(R.id.buttonPickImage).setOnClickListener(btnListener);
         findViewById(R.id.buttonRotateLeft).setOnClickListener(btnListener);
         findViewById(R.id.buttonRotateRight).setOnClickListener(btnListener);
         findViewById(R.id.buttonCustom).setOnClickListener(btnListener);
         findViewById(R.id.buttonCircle).setOnClickListener(btnListener);
-//        findViewById(R.id.buttonShowCircleButCropAsSquare).setOnClickListener(btnListener);
-//        mRootLayout = (LinearLayout) view.findViewById(R.id.layout_root);
-        Log.e(getClass().getSimpleName(), "setupView");
 
         mCropView = (CropImageView) findViewById(R.id.activity_crop_crop_image_view);
         mCropView.setCropMode(CropImageView.CropMode.FREE);
         if (sourceUri == null)//from screen orientation change
-            sourceUri = getIntent().getParcelableExtra(BaseActivity.CROP_SOURCE);
-//        Bitmap bitmap = BitmapFactory.decodeFile(new File(sourceUri.getPath()).getAbsolutePath());
-//        mCropView.getCircularBitmap(bitmap);
+            sourceUri = getIntent().getParcelableExtra(Constants.CROP_SOURCE);
 
-        if (sourceUri != null) {
-            Log.e(getClass().getSimpleName(), sourceUri.toString());
+        if (isComingFromASavedState)
+            showLoadingDialog(false);
+
+        if (sourceUri != null && !isComingFromASavedState) {
+            Log.e(getClass().getSimpleName(), "startLoad");
             mCropView.startLoad(
                     sourceUri,
                     new LoadCallback() {
                         @Override
                         public void onSuccess() {
+                            showLoadingDialog(false);
                             Log.e("amir", "loadCallBack onSuccess");
                         }
 
                         @Override
                         public void onError() {
+                            showLoadingDialog(false);
                             Log.e("amir", "loadCallBack onError");
                         }
                     });
@@ -172,15 +158,10 @@ public class CropActivity extends BaseActivity {
             }
         }
     };
-    SaveCallback saveCallback = new SaveCallback() {
+    private SaveCallback saveCallback = new SaveCallback() {
         @Override
         public void onSuccess(Uri outputUri) {
             Log.e("amir", "saveCallback onSuccess");
-//            showLoadingDialog(false);
-//            Intent intent = new Intent(CropActivity.this, EditImageActivity.class);
-//            intent.putExtra(BaseActivity.EDIT_IMAGE_URI, outputUri);
-//            startActivity(intent);
-//            finish();
         }
 
         @Override
@@ -193,7 +174,7 @@ public class CropActivity extends BaseActivity {
     };
 
 
-    CropCallback cropCallback = new CropCallback() {
+    private CropCallback cropCallback = new CropCallback() {
         @Override
         public void onSuccess(Bitmap cropped) {
             showLoadingDialog(false);
@@ -227,7 +208,7 @@ public class CropActivity extends BaseActivity {
                 e.printStackTrace();
             }
             Intent intent = new Intent(CropActivity.this, EditImageActivity.class);
-            intent.putExtra(BaseActivity.EDIT_IMAGE_URI, Uri.fromFile(file));
+            intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
             startActivity(intent);
             finish();
 

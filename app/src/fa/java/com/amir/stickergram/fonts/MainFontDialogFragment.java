@@ -48,24 +48,22 @@ public class MainFontDialogFragment extends DialogFragment {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
 
-
         return mainView;
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new EnglishFontsFragment(), getString(R.string.english));
-        adapter.addFragment(new PersianFontsFragment(), getString(R.string.persian));//productflavor
+        adapter.addFragment(new PersianFontsFragment(), getString(R.string.persian));
         adapter.addFragment(new AddFontFragment(), getString(R.string.add_font));
-
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<BaseFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -79,7 +77,7 @@ public class MainFontDialogFragment extends DialogFragment {
             return mFragmentList.size();
         }
 
-        public void addFragment(BaseFragment fragment, String title) {
+        void addFragment(BaseFragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }

@@ -31,7 +31,7 @@
             android:visibility="gone"/>
         <fragment
             android:id="@+id/activity_template_stickers_list_fragment"
-            android:name="com.amir.stickergram.sticker.icon.UserIconListFragmentFragment"
+            android:name="com.amir.stickergram.sticker.icon.user.UserIconListFragment"
             android:layout_width="@dimen/icon_fragment_landscape_width"
             android:layout_height="match_parent"
             android:layout_below="@id/activity_user_stickers_no_sticker"
@@ -39,7 +39,7 @@
 
         <fragment
             android:id="@+id/activity_template_stickers_detailed_fragment"
-            android:name="com.amir.stickergram.sticker.pack.UserIconPackDetailedFragment"
+            android:name="com.amir.stickergram.sticker.pack.user.UserIconPackDetailedFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/activity_user_stickers_no_sticker"

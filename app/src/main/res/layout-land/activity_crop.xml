@@ -9,7 +9,7 @@
         layout="@layout/include_toolbar" />
 
     <ScrollView
-        android:id="@+id/tab_bar"
+        android:id="@+id/activity_crop_scroll_view_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/include_toolbar"
@@ -113,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/include_toolbar"
-        android:layout_toEndOf="@id/tab_bar"
+        android:layout_toEndOf="@id/activity_crop_scroll_view_vertical"
         android:layout_toStartOf="@id/rotate_button_container"
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
@@ -139,8 +139,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#771565c0"
-        android:clickable="true"
-        android:visibility="gone">
+        android:clickable="true">
 
         <ProgressBar
             android:id="@+id/activity_crop_progress_bar"

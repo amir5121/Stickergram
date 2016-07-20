@@ -5,21 +5,21 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
-import com.amir.stickergram.sticker.icon.TemplateIconListFragmentFragment;
 import com.amir.stickergram.sticker.icon.IconItem;
-import com.amir.stickergram.sticker.icon.UserIconListFragmentFragment;
-import com.amir.stickergram.sticker.pack.UserIconPackDetailedFragment;
+import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
+import com.amir.stickergram.sticker.icon.user.UserIconListFragment;
+import com.amir.stickergram.sticker.pack.user.UserIconPackDetailedFragment;
 
 public class UserStickersActivity extends BaseActivity
-        implements TemplateIconListFragmentFragment.OnIconSelectedListener //this is used for the user sticker click event{
+        implements OnIconSelectedListener//this is used for the user sticker click event
 {
     public static final String ICON_FOLDER = "ICON_FOLDER";
     private static final String DETAILED_ICON_FRAGMENT = "DETAILED_ICON_FRAGMENT";
@@ -36,7 +36,7 @@ public class UserStickersActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         if (!Loader.checkPermission(this)) {
-            Loader.gainPermission(this, Loader.USER_STICKER_GAIN_PERMISSION);
+            Loader.gainPermission(this, Constants.USER_STICKER_GAIN_PERMISSION);
             return;
         }
 
@@ -57,7 +57,7 @@ public class UserStickersActivity extends BaseActivity
         if (findViewById(R.id.activity_user_stickers_fragment_container) != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.activity_user_stickers_fragment_container, new UserIconListFragmentFragment(), ICONS_FRAGMENT)
+                    .add(R.id.activity_user_stickers_fragment_container, new UserIconListFragment(), ICONS_FRAGMENT)
                     .commit();
         }
 
@@ -80,7 +80,7 @@ public class UserStickersActivity extends BaseActivity
 
     @Override
     public void OnIconSelected(IconItem item) {
-        folder = item.getFolder(); //folder is used to hold the state
+        folder = item.getName(); //folder is used to hold the state
         //what happening here is the same as saveState
         instantiateFragment(folder);
     }
@@ -99,7 +99,7 @@ public class UserStickersActivity extends BaseActivity
             if (findViewById(R.id.activity_user_stickers_fragment_container) != null)
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.activity_user_stickers_fragment_container, new UserIconListFragmentFragment(), ICONS_FRAGMENT)
+                        .add(R.id.activity_user_stickers_fragment_container, new UserIconListFragment(), ICONS_FRAGMENT)
                         .commit();
             return;
         }
@@ -140,7 +140,7 @@ public class UserStickersActivity extends BaseActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == Loader.USER_STICKER_GAIN_PERMISSION) {
+        if (requestCode == Constants.USER_STICKER_GAIN_PERMISSION) {
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

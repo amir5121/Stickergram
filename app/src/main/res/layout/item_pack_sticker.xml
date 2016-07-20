@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/item_pack_sticker_image"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:layout_margin="5dp"
-        android:scaleType="fitCenter"
-        android:id="@+id/item_pack_sticker_image"
         android:layout_gravity="center"
-        android:padding="5dp"
+        android:layout_margin="5dp"
         android:background="@drawable/simple_sticker_background"
-        android:foreground="?android:selectableItemBackground"/>
+        android:foreground="?android:selectableItemBackground"
+        android:padding="5dp"
+        android:scaleType="fitCenter" />
 
     <ImageView
+        android:id="@+id/list_view_item_selectedSticker_foreground"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:background="@drawable/selected_item_foreground"
-        android:id="@+id/list_view_item_selectedSticker_foreground"
         android:layout_marginBottom="20dp"
-        android:visibility="gone"/>
+        android:background="@drawable/selected_item_foreground"
+        android:visibility="gone" />
 
-</FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/item_pack_sticker_progress_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/item_pack_sticker_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/error"
+        android:visibility="gone" />
+
+</RelativeLayout>

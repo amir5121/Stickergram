@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.util.IabHelper;
 import com.amir.stickergram.util.IabResult;
@@ -22,11 +23,8 @@ import com.tozny.crypto.android.AesCbcWithIntegrity;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
-import java.util.Locale;
 
 public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
-    //todo: lucky patcher http://stackoverflow.com/questions/13445598/lucky-patcher-how-can-i-protect-from-it
-    //todo: read the comment on that answer
     //todo: https://code.google.com/p/android/issues/detail?id=203555 android N support
     private static final String TAG = "BaseAuthenticated";
     private static final int REQUEST_BUY_PRO = 1001;
@@ -45,7 +43,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         checkSignature(this);
 
-        preferences = getSharedPreferences(BaseActivity.SETTING, MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.SETTING, MODE_PRIVATE);
         isPaid = getProStatus();
 
         String base64EncodedPublicKey =
@@ -161,7 +159,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
             Signature[] signatures = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
 
             if (!signatures[0].toCharsString().equals(AesCbcWithIntegrity.decryptString(new AesCbcWithIntegrity.CipherTextIvMac("rgKw/MerIRrbbaziThZ4bg==:kZcE/+0ggZIqDaWfrs4R4DehHHtPxkHTqO9DyRntF8s=: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"),
-                    AesCbcWithIntegrity.keys(Loader.KEY)))) {
+                    AesCbcWithIntegrity.keys(Constants.KEY)))) {
                 Log.e(getClass().getSimpleName(), "signature was not a match");
                 // Kill the process without warning. If someone changed the certificate
                 // is better not to give a hint about why the app stopped working

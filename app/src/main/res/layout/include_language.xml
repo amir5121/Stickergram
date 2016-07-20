@@ -23,35 +23,6 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <!--<LinearLayout-->
-        <!--android:id="@+id/activity_setting_system_language_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:background="?android:selectableItemBackground"-->
-        <!--android:clickable="true"-->
-        <!--android:orientation="horizontal">-->
-
-
-        <!--<TextView-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:clickable="false"-->
-        <!--android:padding="5dp"-->
-        <!--android:text="@string/system"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="18sp" />-->
-
-        <!--<RadioButton-->
-        <!--android:id="@+id/activity_setting_system_radio_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:buttonTint="@color/white"-->
-        <!--android:clickable="false" />-->
-        <!--</LinearLayout>-->
-
         <RelativeLayout
             android:id="@+id/activity_setting_persian_language_container"
             android:layout_width="match_parent"

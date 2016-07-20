@@ -1,6 +1,5 @@
 package com.amir.stickergram.infrastructure;
 
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -41,7 +40,6 @@ import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.mode.Mode;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.sticker.pack.PackItem;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -61,45 +59,8 @@ import java.util.Locale;
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
 public class Loader {
-    private static final int THUMBNAIL_IMAGE_QUALITY = 85;
     private static final String TAG = "LOADER";
 
-    public static final int TEXT_COLOR = 0;
-    public static final int TEXT_SHADOW_COLOR = 1;
-    public static final int TEXT_BACKGROUND_COLOR = 2;
-    public static final int TEXT_STROKE_COLOR = 3;
-    public static final int USER_STICKER_GAIN_PERMISSION = 100;
-    public static final int PHONE_STICKERS_GAIN_PERMISSION = 101;
-    public static final int TEMPLATE_STICKERS_GAIN_PERMISSION = 102;
-    public static final int FROM_SCRATCH_GAIN_PERMISSION = 103;
-    public static final int EDIT_ACTIVITY_GAIN_PERMISSION = 104;
-    public static final String KEY = "mBRJaVxaA+9k4tiD5rYicw==:II8pAgeooHpABKf7BUOykr9cHLAFHQWFCie0coKLNBw=";
-
-    public static final int PERSIAN_LANGUAGE = 1;
-    public static final int ENGLISH_LANGUAGE = 2;
-    public static final int SYSTEM_LANGUAGE = 3;
-
-    public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
-    public static final String MOBOGRAM_PACKAGE = "com.hanista.mobogram";
-    public static final String TELEGRAPH_PACKAGE = "ir.ilmili.telegraph";
-    public static final String TELEGRAM_PLUS_PACKAGE = "org.telegram.plus";
-    public static final String PERSIAN_TELEGRAM = "ir.persianfox.messenger";
-    public static final String ORANGE_TELEGRAM = "org.telegram.comorangetelegram";
-    public static final String PERSIAN_VOICE_TELEGRAM = "ir.rrgc.telegram";
-    public static final String MY_TELEGRAM = "ir.alimodaresi.mytelegram";
-    public static final String ANIWAYS = "com.aniways.anigram.messenger";
-    public static final String LAGATGRAM = "org.ilwt.lagatgram";
-
-    final static String availableFormats[] = {TELEGRAM_PACKAGE,
-            TELEGRAM_PLUS_PACKAGE,
-            MOBOGRAM_PACKAGE,
-            TELEGRAPH_PACKAGE,
-            PERSIAN_TELEGRAM,
-            PERSIAN_VOICE_TELEGRAM,
-            LAGATGRAM,
-            ORANGE_TELEGRAM,
-            MY_TELEGRAM,
-            ANIWAYS};
 
     public static void gainPermission(BaseActivity activity, int requestCode) {
         if (
@@ -166,7 +127,7 @@ public class Loader {
         return true;
     }
 
-    public static String generateThumbnail(String fromDirectory, String toDirectory) {
+    static String generateThumbnail(String fromDirectory, String toDirectory) {
         Bitmap regionalBitmap = BitmapFactory.decodeFile(fromDirectory);
         if (regionalBitmap == null) return null;
 //        if (regionalBitmap == null) Log.e(TAG, "regionalBitmap was null");
@@ -176,7 +137,7 @@ public class Loader {
         try {
             outStream = new FileOutputStream(toDirectory);
             if (bitmap != null) {
-                bitmap.compress(Bitmap.CompressFormat.PNG, THUMBNAIL_IMAGE_QUALITY, outStream);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 80, outStream);
                 return toDirectory;
             } else {
                 return null;
@@ -201,7 +162,7 @@ public class Loader {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
                     Intent intent = new Intent(activity, EditImageActivity.class);
-                    intent.putExtra(BaseActivity.EDIT_IMAGE_URI, uri);
+                    intent.putExtra(Constants.EDIT_IMAGE_URI, uri);
                     // TODO: Animation
                     activity.startActivity(intent);
                     activity.finish();
@@ -229,45 +190,45 @@ public class Loader {
         dialog.show();
     }
 
-    public static void loadStickerDialog(final PackItem item, final BaseActivity activity) {
-
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == Dialog.BUTTON_POSITIVE) {
-                    Intent intent = new Intent(activity, EditImageActivity.class);
-                    intent.putExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET, item.getDirInAsset());
-                    //// TODO: Animation
-                    activity.startActivity(intent);
-                    activity.finish();
-                }
-            }
-        };
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
-        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
-
-        Bitmap bitmap = null;
-        try {
-            InputStream inputStream = item.getInputStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            if (inputStream != null) inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (stickerImage != null)
-            stickerImage.setImageBitmap(bitmap);
-        else Log.e("Loader", "dialog_single_item_image was null");
-
-        AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setView(view)
-                .setTitle(activity.getString(R.string.edit_this_sticker))
-                .setNegativeButton(activity.getString(R.string.no), listener)
-                .setPositiveButton(activity.getString(R.string.yes), listener)
-                .create();
-
-        dialog.show();
-    }
+//    public static void loadStickerDialog(final PackItem item, final BaseActivity activity) {
+//
+//        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if (which == Dialog.BUTTON_POSITIVE) {
+//                    Intent intent = new Intent(activity, EditImageActivity.class);
+//                    intent.putExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET, item.getDirInAsset());
+//                    //// TODO: Animation
+//                    activity.startActivity(intent);
+//                    activity.finish();
+//                }
+//            }
+//        };
+//
+//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+//        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
+//
+//        Bitmap bitmap = null;
+//        try {
+////            InputStream inputStream = item.getInputStream();
+//            bitmap = BitmapFactory.decodeStream(inputStream);
+//            if (inputStream != null) inputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if (stickerImage != null)
+//            stickerImage.setImageBitmap(bitmap);
+//        else Log.e("Loader", "dialog_single_item_image was null");
+//
+//        AlertDialog dialog = new AlertDialog.Builder(activity)
+//                .setView(view)
+//                .setTitle(activity.getString(R.string.edit_this_sticker))
+//                .setNegativeButton(activity.getString(R.string.no), listener)
+//                .setPositiveButton(activity.getString(R.string.yes), listener)
+//                .create();
+//
+//        dialog.show();
+//    }
 
     public static void saveBitmapToCache(Bitmap mainBitmap) {
         OutputStream outputStream;
@@ -428,13 +389,13 @@ public class Loader {
                     @Override
                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
 //                        changeBackgroundColor(selectedColor);
-                        if (type == TEXT_COLOR)
+                        if (type == Constants.TEXT_COLOR)
                             touchImageView.getTextItem().setTextColor(selectedColor);
-                        else if (type == TEXT_SHADOW_COLOR)
+                        else if (type == Constants.TEXT_SHADOW_COLOR)
                             touchImageView.getTextItem().getShadow().setColor(selectedColor);
-                        else if (type == TEXT_BACKGROUND_COLOR)
+                        else if (type == Constants.TEXT_BACKGROUND_COLOR)
                             touchImageView.getTextItem().setBackgroundColor(selectedColor);
-                        else if (type == TEXT_STROKE_COLOR)
+                        else if (type == Constants.TEXT_STROKE_COLOR)
                             touchImageView.getTextItem().setTextStrokeColor(selectedColor);
                         touchImageView.updateTextView();
                     }
@@ -530,8 +491,8 @@ public class Loader {
 
     public static void crop(Uri source, Uri destiny, MainActivity activity) {
         Intent intent = new Intent(activity, CropActivity.class);
-        intent.putExtra(BaseActivity.CROP_SOURCE, source);
-        intent.putExtra(BaseActivity.CROP_DESTINY, destiny);
+        intent.putExtra(Constants.CROP_SOURCE, source);
+        intent.putExtra(Constants.CROP_DESTINY, destiny);
         activity.startActivity(intent);
 //        UCrop.Options options = new UCrop.Options();
 //        options.setActiveWidgetColor(BaseActivity.LIGHT_BLUE);
@@ -561,7 +522,7 @@ public class Loader {
 
     public static void joinToStickergramChannel(BaseActivity activity) {
         if (Loader.getActivePack() != null) {
-            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BaseActivity.LINK_TO_CHANNEL));
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_TO_CHANNEL));
             myIntent.setPackage(Loader.getActivePack());
             activity.startActivity(myIntent);
         } else
@@ -661,7 +622,7 @@ public class Loader {
     public static void goToBotInTelegram(BaseActivity activity) {
         if (Loader.getActivePack() != null) {
 //            if (BaseActivity.isTelegramInstalled) {
-            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(BaseActivity.LINK_TO_BOT));
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_TO_BOT));
             myIntent.setPackage(Loader.getActivePack());
             activity.startActivity(myIntent);
         } else
@@ -684,7 +645,7 @@ public class Loader {
     }
 
     @NonNull
-    public static String getActiveStickerDir() {
+    static String getActiveStickerDir() {
         return BaseActivity.chosenMode.getCacheDir();
 //        if (BaseActivity.isTelegramProInstalled)
 //            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO;
@@ -704,7 +665,7 @@ public class Loader {
         ArrayList<Mode> modes = new ArrayList<>();
 
         Mode tempMode;
-        for (String pack : availableFormats) {
+        for (String pack : Constants.availableFormats) {
             tempMode = new Mode(pack, activity);
             if (tempMode.isAvailable)
                 modes.add(tempMode);
@@ -717,13 +678,13 @@ public class Loader {
 //        Resources res = activity.getResources();
         String language = null;
         switch (lang) {
-            case Loader.PERSIAN_LANGUAGE:
+            case Constants.PERSIAN_LANGUAGE:
                 language = "fa";
                 break;
-            case Loader.ENGLISH_LANGUAGE:
+            case Constants.ENGLISH_LANGUAGE:
                 language = "en";
                 break;
-            case Loader.SYSTEM_LANGUAGE:
+            case Constants.SYSTEM_LANGUAGE:
                 language = Locale.getDefault().getLanguage();
                 break;
         }
@@ -753,4 +714,37 @@ public class Loader {
     }
 
 
+    public static Bitmap getCached(String dir) {
+        if (new File(dir).exists()) {
+//            Log.e(TAG, dir);
+            return BitmapFactory.decodeFile(dir);
+        }
+//        Log.e(TAG, "file didn't exist");
+        return null;
+//        return null;
+    }
+
+    public static void cacheThumb(Bitmap mBitmap, String dir) {
+        try {
+            File file = new File(dir);
+//            Log.e(TAG, "cacheThumb: " + dir);
+            if (!file.getParentFile().exists())
+                if (file.getParentFile().mkdirs())
+                    Log.e(TAG, "couldn't make parent directory");
+//                    return false;
+            if (!file.exists()) {
+                if (!file.createNewFile())
+                    Log.e(TAG, "couldn't make parent directory");
+            } else {
+                file.delete();
+                file.createNewFile();
+            }
+
+            OutputStream outputStream = new FileOutputStream(dir);
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

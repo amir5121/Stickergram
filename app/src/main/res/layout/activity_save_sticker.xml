@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/activity_save_sticker_user_stickers_fragment"
-        android:name="com.amir.stickergram.sticker.icon.UserIconListFragmentFragment"
+        android:name="com.amir.stickergram.sticker.icon.user.UserIconListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

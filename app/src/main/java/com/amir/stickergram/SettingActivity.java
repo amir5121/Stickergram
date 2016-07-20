@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.mode.ModeListAdapter;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Loader;
@@ -22,12 +23,6 @@ import java.util.ArrayList;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
 
-//    ExpandableWeightLayout expandableLayout;
-//    ExpandableWeightLayout expandableLayout2;
-
-    //    private Button mMoveChildButton2;
-//    private Button mMoveTopButton;
-//    private Button mSetCloseHeightButton;
     private ExpandableWeightLayout mExpandLayout;
     View includeModes;
     View includeLanguages;
@@ -72,30 +67,20 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.activity_setting_language:
                 manageView(includeLanguages);
-//                mExpandLayout.removeAllViews();
-//                mExpandLayout.addView(includeLanguages);
-//                if (mExpandLayout.isExpanded())
-//                    mExpandLayout.collapse();
-//                mExpandLayout.expand();
                 break;
             case R.id.activity_setting_mode:
                 manageView(includeModes);
                 break;
             case R.id.activity_setting_persian_language_container:
 //                manageRadioButton();
-                setLanguage(Loader.PERSIAN_LANGUAGE);
+                setLanguage(Constants.PERSIAN_LANGUAGE);
                 restartActivity();
                 break;
             case R.id.activity_setting_english_language_container:
 //                manageRadioButton();
-                setLanguage(Loader.ENGLISH_LANGUAGE);
+                setLanguage(Constants.ENGLISH_LANGUAGE);
                 restartActivity();
                 break;
-//            case R.id.activity_setting_system_language_container:
-//                setLanguage(Loader.SYSTEM_LANGUAGE);
-////                manageRadioButton();
-//                restartActivity();
-//                break;
         }
     }
 
@@ -185,10 +170,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
 
         switch (language) {
-            case Loader.PERSIAN_LANGUAGE:
+            case Constants.PERSIAN_LANGUAGE:
                 persianLanguageRadioButton.setChecked(true);
                 break;
-            case Loader.ENGLISH_LANGUAGE:
+            case Constants.ENGLISH_LANGUAGE:
                 englishLanguageRadioButton.setChecked(true);
                 break;
 //            case Loader.SYSTEM_LANGUAGE:

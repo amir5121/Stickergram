@@ -212,4 +212,6 @@
     <string name="la_telegram">لاگاتگرام</string>
     <string name="drop_shadow_with_line">حاله:</string>
     <string name="contact_painter">ارتباط با گرافیست</string>
+    <string name="failed_to_refresh">تازه سازی ممکن نبود اینترنت خودتو چک کن!</string>
+    <string name="swipe_down_to_refresh_ncheck_your_connection">صفحه رو به پایین بکش\nاینترنت رو چک کن</string>
 </resources>

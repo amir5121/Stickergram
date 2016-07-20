@@ -3,19 +3,23 @@ package com.amir.stickergram;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.amir.stickergram.sticker.icon.IconItem;
-import com.amir.stickergram.sticker.icon.TemplateIconListFragmentFragment;
-import com.amir.stickergram.sticker.pack.TemplateIconPackDetailedFragment;
+import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
+import com.amir.stickergram.sticker.icon.template.TemplateIconListFragment;
+import com.amir.stickergram.sticker.pack.template.TemplateIconPackDetailedFragment;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
 
-public class TemplateStickersActivity extends BaseActivity implements TemplateIconListFragmentFragment.OnIconSelectedListener {
-    public static final String ICON_STICKER_ITEM_FOLDER = "ICON_FOLDER";
+public class TemplateStickersActivity extends BaseActivity implements OnIconSelectedListener {
+    public static final String ICON_STICKER_ITEM_NAME = "ICON_FOLDER";
     private static final String DETAILED_ICON_FRAGMENT = "DETAILED_ICON_FRAGMENT";
     private static final String ICONS_FRAGMENT = "ICONS_FRAGMENT";
+    private static final String ICON_STICKER_ITEM_EN_NAME = "ICON_STICKER_ITEM_EN_NAME";
 
-    private String folder;
+    private String name;
+    private String enName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,14 +28,16 @@ public class TemplateStickersActivity extends BaseActivity implements TemplateIc
         setNavDrawer(new MainNavDrawer(this));
 
         if (savedInstanceState != null) {
-            saveState(savedInstanceState.getString(ICON_STICKER_ITEM_FOLDER, null));
+            saveState(
+                    savedInstanceState.getString(ICON_STICKER_ITEM_NAME, null),
+                    savedInstanceState.getString(ICON_STICKER_ITEM_EN_NAME, null));
             return;
         }
 
         if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragmentFragment(), ICONS_FRAGMENT)
+                    .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragment(), ICONS_FRAGMENT)
                     .commit();
         }
 
@@ -39,30 +45,34 @@ public class TemplateStickersActivity extends BaseActivity implements TemplateIc
 
     @Override
     public void OnIconSelected(IconItem item) {
-        folder = item.getFolder(); //is used to hold the state
+        name = item.getName(); //is used to hold the state
+        enName = item.getEnName();
+        Log.e(getClass().getSimpleName(), "Name: " + name);
         //what happening here is the same as saveState
-        instantiateFragment(item.getFolder());
+        instantiateFragment(item.getName(), item.getEnName());
     }
 
     @Override
     public void OnNoStickerWereFoundListener() {
-        //intentionally empty
+//        Log.e(getClass().getSimpleName(), "no sticker was found");
     }
 
-    private void saveState(String folder) {
-        this.folder = folder;
-        if (folder == null) {
+    private void saveState(String name, String enName) {
+        this.name = name;
+        this.enName = enName;
+        if (name == null) {
             if (findViewById(R.id.activity_template_sticker_fragment_container) != null)
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragmentFragment(), ICONS_FRAGMENT)
+                        .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragment(), ICONS_FRAGMENT)
                         .commit();
             return;
         }
-        instantiateFragment(folder);
+        instantiateFragment(name, enName);
     }
 
-    private void instantiateFragment(String folder) {
+    private void instantiateFragment(String name, String enName) {
+//        Log.e(getClass().getSimpleName(), "name: " + name);
         TemplateIconPackDetailedFragment templateIconPackDetailedFragment;
         if (findViewById(R.id.activity_template_sticker_fragment_container) != null) {
             templateIconPackDetailedFragment = new TemplateIconPackDetailedFragment();
@@ -76,19 +86,20 @@ public class TemplateStickersActivity extends BaseActivity implements TemplateIc
                     addToBackStack(null).
                     commit();
 
-            templateIconPackDetailedFragment.refresh(folder);
+            templateIconPackDetailedFragment.refresh(name, enName);
         } else {
             templateIconPackDetailedFragment =
                     (TemplateIconPackDetailedFragment) getSupportFragmentManager().findFragmentById(R.id.activity_template_stickers_detailed_fragment);
 
-            templateIconPackDetailedFragment.refresh(folder);
+            templateIconPackDetailedFragment.refresh(name, enName);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(ICON_STICKER_ITEM_FOLDER, folder);
+        outState.putString(ICON_STICKER_ITEM_NAME, name);
+        outState.putString(ICON_STICKER_ITEM_EN_NAME, enName);
     }
 
     @Override

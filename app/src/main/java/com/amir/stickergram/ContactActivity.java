@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
 import com.amir.stickergram.navdrawer.NavDrawer;
@@ -52,7 +53,7 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
 
     protected void sendEmail() {
         Intent send = new Intent(Intent.ACTION_SENDTO);
-        String uriText = "mailto:" + Uri.encode(EMAIL) +
+        String uriText = "mailto:" + Uri.encode(Constants.EMAIL) +
                 "?subject=" + Uri.encode(STICKERGRAM_FEED_BACK);// +
 //                "&body=" + Uri.encode("the body of the message");
         Uri uri = Uri.parse(uriText);

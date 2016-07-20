@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.fonts.EnglishFontsFragment;
 import com.amir.stickergram.fonts.MainFontDialogFragment;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.FontItem;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.infrastructure.OnMainImageViewTouch;
@@ -143,7 +144,7 @@ public class EditImageActivity
                 instantiateSavingDialog();
             else {
                 Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
-                Loader.gainPermission(this, Loader.EDIT_ACTIVITY_GAIN_PERMISSION);
+                Loader.gainPermission(this, Constants.EDIT_ACTIVITY_GAIN_PERMISSION);
             }
             return true;
         }
@@ -223,10 +224,10 @@ public class EditImageActivity
                 MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
                 mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
             } else if (itemId == R.id.include_buttons_text_color) {
-                Loader.setColor(this, selectedLayer, Loader.TEXT_COLOR);
+                Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
             } else if (itemId == R.id.include_buttons_shadow_color) {
                 manageShadowsFirstTap();
-                Loader.setColor(this, selectedLayer, Loader.TEXT_SHADOW_COLOR);
+                Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
             } else if (itemId == R.id.include_buttons_shadow_radius) {
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
             } else if (itemId == R.id.include_buttons_shadow_dx) {
@@ -238,14 +239,14 @@ public class EditImageActivity
                 manageShadowsFirstTap();
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
             } else if (itemId == R.id.include_buttons_text_background) {
-                Loader.setColor(this, selectedLayer, Loader.TEXT_BACKGROUND_COLOR);
+                Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
             } else if (itemId == R.id.include_buttons_text_stroke_color) {
 //                if (!isPaid)
 //                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors));
                 if (selectedLayer.isFirstTapOnStrokeColor())
                     selectedLayer.getTextItem().setStrokeWidth(selectedLayer.getTextItem().getStrokeWidth());
                 selectedLayer.setFirstTapOnStrokeColor(false);
-                Loader.setColor(this, selectedLayer, Loader.TEXT_STROKE_COLOR);
+                Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
             } else if (itemId == R.id.include_buttons_text_stroke_width) {
                 setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
             } else if (itemId == R.id.activity_edit_image_main_frame_container) {
@@ -342,14 +343,14 @@ public class EditImageActivity
 
     @Nullable
     public Bitmap getBitmapFromExtra() {
-        Uri imageUri = getIntent().getParcelableExtra(BaseActivity.EDIT_IMAGE_URI);
+        Uri imageUri = getIntent().getParcelableExtra(Constants.EDIT_IMAGE_URI);
         Bitmap imageBitmap = null;
         try {
             if (imageUri == null) {
-                String dirInAsset = getIntent().getStringExtra(BaseActivity.EDIT_IMAGE_DIR_IN_ASSET);
+                String dirInAsset = getIntent().getStringExtra(Constants.EDIT_IMAGE_DIR_IN_ASSET);
                 imageBitmap = BitmapFactory.decodeStream(getAssets().open(dirInAsset));
             } else {
-                Log.e(getClass().getSimpleName(), "getBitmap from the extra: " + imageUri.toString());
+//                Log.e(getClass().getSimpleName(), "getBitmap from the extra: " + imageUri.toString());
                 imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
 //                if (imageBitmap == null)
 //                    imageBitmap = BitmapFactory.decodeFile(Loader.getRealPathFromURI(imageUri, getContentResolver()));
@@ -362,9 +363,9 @@ public class EditImageActivity
             finish();
             return null;
         }
-        int mainWidth = imageBitmap.getWidth();
-        int mainHeight = imageBitmap.getHeight();
-        Log.e(getClass().getSimpleName(), "mainWidth: " + mainWidth + " mainHeight: " + mainHeight);
+//        int mainWidth = imageBitmap.getWidth();
+//        int mainHeight = imageBitmap.getHeight();
+//        Log.e(getClass().getSimpleName(), "mainWidth: " + mainWidth + " mainHeight: " + mainHeight);
 //        imageBitmap = Loader.rotateImage(imageBitmap, rotation);
 //        Bitmap resBitmap;
 //        if (mainWidth != 512 && mainHeight != 512) {
@@ -524,7 +525,7 @@ public class EditImageActivity
 
     @Override
     public void onFontItemSelected(FontItem item) {
-        Log.e(getClass().getSimpleName(), "Called");
+//        Log.e(getClass().getSimpleName(), "Called");
         if (selectedLayer != null) {
             selectedLayer.getTextItem().setFont(item);
             selectedLayer.updateTextView();
@@ -564,7 +565,7 @@ public class EditImageActivity
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
 
-        if (requestCode == Loader.EDIT_ACTIVITY_GAIN_PERMISSION) {
+        if (requestCode == Constants.EDIT_ACTIVITY_GAIN_PERMISSION) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 instantiateSavingDialog();

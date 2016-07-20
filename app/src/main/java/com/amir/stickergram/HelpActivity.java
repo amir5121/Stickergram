@@ -24,6 +24,9 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
     View goToUserPackButton;
     View publishButton;
     View watchVideo;
+    View watchAddSticker;
+
+    //todo : add how to add sticker to a published pack https://youtu.be/-hB3qNd7dGk
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
         goToUserPackButton = findViewById(R.id.activity_faq_go_to_user_pack);
         publishButton = findViewById(R.id.activity_faq_publish);
         watchVideo = findViewById(R.id.activity_help_watch_video);
+        watchAddSticker = findViewById(R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack);
 
 
         if (activateBotButton != null &&
@@ -52,7 +56,8 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
                 goToBot3 != null &&
                 goToUserPackButton != null &&
                 publishButton != null &&
-                watchVideo != null) {
+                watchVideo != null &&
+                watchAddSticker != null) {
             activateBotButton.setOnClickListener(this);
             createNewPack.setOnClickListener(this);
             goToBot.setOnClickListener(this);
@@ -61,6 +66,9 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
             goToUserPackButton.setOnClickListener(this);
             publishButton.setOnClickListener(this);
             watchVideo.setOnClickListener(this);
+            watchAddSticker.setOnClickListener(this);
+            if (Loader.deviceLanguageIsPersian()) watchAddSticker.setVisibility(View.GONE);
+            else watchAddSticker.setVisibility(View.VISIBLE);
         }
 
     }
@@ -82,9 +90,13 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
         } else if (itemId == R.id.activity_faq_new_pack) {
             copyToClipboard(NEW_PACK_COMMAND);
             Loader.goToBotInTelegram(this);
-        } else if (itemId == R.id.activity_help_watch_video){
+        } else if (itemId == R.id.activity_help_watch_video) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(getString(R.string.link_to_video)));
+            startActivity(intent);
+        } else if (itemId == R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.link_to_video_add_sticker)));
             startActivity(intent);
         }
     }

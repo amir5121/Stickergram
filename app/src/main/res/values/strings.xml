@@ -143,7 +143,6 @@
     <string name="tilt_shadow_position_more_packages">You will be able to tilt your texts plus moving their shadow, and you can create more than two packages whitin the app. </string>
     <string name="drop_shadow">Drop shadow:</string>
     <string name="link">link</string>
-    <string name="explosm_net" translatable="false">Explosm.net</string>
     <string name="bazar_is_not_installed">Bazzar is not installed</string>
     <string name="no_market_was_found">No market was found!</string>
     <string name="payment_not_supported">Payment is not supported!</string>
@@ -212,4 +211,7 @@
     <string name="la_telegram">Lagatgram</string>
     <string name="drop_shadow_with_line">Drop \n shadow</string>
     <string name="contact_painter">Contact Artist</string>
+    <string name="failed_to_refresh">Failed to refresh check your connection!</string>
+    <string name="link_to_video_add_sticker" translatable="false">https://youtu.be/-hB3qNd7dGk</string>
+    <string name="swipe_down_to_refresh_ncheck_your_connection">Swipe down to refresh\nCheck your connection.</string>
 </resources>

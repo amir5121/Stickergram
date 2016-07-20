@@ -15,9 +15,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.icon.IconItem;
-import com.amir.stickergram.sticker.icon.UserIconListFragmentFragment;
+import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
+import com.amir.stickergram.sticker.icon.user.UserIconListFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SavingStickerActivity extends BaseActivity
-        implements UserIconListFragmentFragment.OnIconSelectedListener, View.OnClickListener {
+        implements OnIconSelectedListener, View.OnClickListener {
 
     public static final String EXTRA_FOLDER = "EXTRA_FOLDER";
 
@@ -39,8 +41,8 @@ public class SavingStickerActivity extends BaseActivity
         setContentView(R.layout.activity_save_sticker);
 
         if (isTablet) {
-            UserIconListFragmentFragment fragment =
-                    (UserIconListFragmentFragment) getSupportFragmentManager().findFragmentById(R.id.activity_save_sticker_user_stickers_fragment);
+            UserIconListFragment fragment =
+                    (UserIconListFragment) getSupportFragmentManager().findFragmentById(R.id.activity_save_sticker_user_stickers_fragment);
             if (fragment != null)
                 fragment.updateAdapterForSavingActivity();
         }
@@ -54,7 +56,7 @@ public class SavingStickerActivity extends BaseActivity
     @Override
     public void OnIconSelected(IconItem item) {
         Toast.makeText(this, getString(R.string.sticker_was_added), Toast.LENGTH_SHORT).show();
-        goToStickerPack(item.getFolder());
+        goToStickerPack(item.getName());
     }
 
     @Override
@@ -105,7 +107,7 @@ public class SavingStickerActivity extends BaseActivity
                                 View nameAlreadyExistText = newTextDialogView.findViewById(R.id.dialog_new_package_already_exist);
                                 if (nameAlreadyExistText != null)
                                     nameAlreadyExistText.setVisibility(View.VISIBLE);
-                            } else if (text.length() > BaseActivity.PACKAGE_NAME_LENGTH_LIMIT) {
+                            } else if (text.length() > Constants.PACKAGE_NAME_LENGTH_LIMIT) {
                                 View nameCantBeThisLong = newTextDialogView.findViewById(R.id.name_can_t_be_this_long);
                                 if (nameCantBeThisLong != null)
                                     nameCantBeThisLong.setVisibility(View.VISIBLE);

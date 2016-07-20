@@ -15,9 +15,9 @@ import com.amir.stickergram.infrastructure.Loader;
 import java.util.ArrayList;
 
 public class ModeListAdapter extends BaseAdapter implements View.OnClickListener {
-    LayoutInflater inflater;
-    ArrayList<Mode> modesList;
-    BaseActivity activity;
+    private LayoutInflater inflater;
+    private ArrayList<Mode> modesList;
+    private BaseActivity activity;
 
     public ModeListAdapter(BaseActivity activity) {
         this.activity = activity;

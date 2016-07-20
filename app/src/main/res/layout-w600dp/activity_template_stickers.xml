@@ -18,7 +18,7 @@
             android:layout_width="@dimen/icon_fragment_landscape_width"
             android:layout_height="match_parent"
             android:id="@+id/activity_template_stickers_list_fragment"
-            android:name="com.amir.stickergram.sticker.icon.TemplateIconListFragmentFragment"
+            android:name="com.amir.stickergram.sticker.icon.template.TemplateIconListFragment"
             tools:layout="@layout/fragment_icon_list"
             android:layout_below="@id/include_toolbar"/>
 
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/activity_template_stickers_detailed_fragment"
-            android:name="com.amir.stickergram.sticker.pack.TemplateIconPackDetailedFragment"
+            android:name="com.amir.stickergram.sticker.pack.template.TemplateIconPackDetailedFragment"
             tools:layout="@layout/fragment_icon_detailed"
             android:layout_below="@id/include_toolbar"
             android:layout_toEndOf="@id/activity_template_stickers_list_fragment"/>

@@ -14,10 +14,7 @@ import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.FontItem;
 
-//public class EnglishFontsFragment extends BaseFragment implements EnglishFontAdapter.OnFontClickListener, EnglishFontAdapter.AsyncEnglishFontsListener {
-    public class EnglishFontsFragment extends BaseFragment implements  FontAdapter.OnFontClickListener {
-
-    View loadingFrame;
+public class EnglishFontsFragment extends BaseFragment implements FontAdapter.OnFontClickListener {
 
     public EnglishFontsFragment() {
     }
@@ -31,36 +28,20 @@ import com.amir.stickergram.infrastructure.FontItem;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fonts, container, false);
-        loadingFrame = view.findViewById(R.id.dialog_font_loading_frame);
+        View loadingFrame = view.findViewById(R.id.dialog_font_loading_frame);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.dialog_font_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        recyclerView.setAdapter(new EnglishFontAdapter((BaseActivity) getActivity(), this, this));
         recyclerView.setAdapter(new EnglishFontAdapter((BaseActivity) getActivity(), this, loadingFrame));
         return view;
     }
 
-
-//    @Override
-//    public void onEnglishFontClicked(FontItem fontItem) {
-//        ((EditImageActivity) getActivity()).onFontItemSelected(fontItem);
-//        ((MainFontDialogFragment) getParentFragment()).dismiss();
-//    }
-
-//    @Override
-//    public void loadStarted() {
-//        loadingFrame.setVisibility(View.VISIBLE);
-//    }
-//
-//    @Override
-//    public void loafFinished() {
-//        loadingFrame.setVisibility(View.GONE);
-//    }
 
     @Override
     public void onFontClicked(FontItem fontItem) {
         ((EditImageActivity) getActivity()).onFontItemSelected(fontItem);
         ((MainFontDialogFragment) getParentFragment()).dismiss();
     }
+
 
     public interface OnFontItemClicked {
         void onFontItemSelected(FontItem item);

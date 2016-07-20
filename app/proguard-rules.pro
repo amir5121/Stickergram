@@ -13,6 +13,7 @@
 
 -keep public class com.google.android.gms.**
 -dontwarn com.google.android.gms.**
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.FontItem;
 import com.amir.stickergram.infrastructure.Loader;
 
@@ -41,7 +42,7 @@ public class PersianFontAdapter extends FontAdapter {
 
     List<FontItem> readPersianFont() throws IOException {
 
-        String folder = BaseActivity.PERSIAN_FONT_DIRECTORY;
+        String folder = Constants.PERSIAN_FONT_DIRECTORY;
         AssetManager assetManager = activity.getAssets();
         String[] fonts = assetManager.list(folder);
         folder += "/";
@@ -49,8 +50,8 @@ public class PersianFontAdapter extends FontAdapter {
         Arrays.sort(fonts);
         List<String> fontNames = null;
         try {
-            InputStream in = assetManager.open(BaseActivity.FONT_DIRECTORY_IN_ASSET + BaseActivity.PERSIAN_FONT_NAME);
-            String persian_font_names = BaseActivity.CACHE_DIR + BaseActivity.PERSIAN_FONT_NAME;
+            InputStream in = assetManager.open(Constants.FONT_DIRECTORY_IN_ASSET + Constants.PERSIAN_FONT_NAME);
+            String persian_font_names = BaseActivity.CACHE_DIR + Constants.PERSIAN_FONT_NAME;
             FileOutputStream fo = new FileOutputStream(persian_font_names);
             Loader.copyFile(in, fo);
             in.close();

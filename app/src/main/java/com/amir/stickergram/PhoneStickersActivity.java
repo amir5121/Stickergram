@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,12 +21,11 @@ import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.AsyncTaskPhoneAdapter;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
 import com.amir.stickergram.sticker.single.SingleStickersAdapter;
 import com.amir.stickergram.sticker.single.StickerItem;
-
-import java.io.File;
 
 public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener {
     private static final String IS_REFRESHING = "IS_REFRESHING";
@@ -194,7 +192,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void onRequestReadWritePermission() {
-        Loader.gainPermission(this, Loader.PHONE_STICKERS_GAIN_PERMISSION);
+        Loader.gainPermission(this, Constants.PHONE_STICKERS_GAIN_PERMISSION);
     }
 
 
@@ -237,7 +235,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == Loader.PHONE_STICKERS_GAIN_PERMISSION) {
+        if (requestCode == Constants.PHONE_STICKERS_GAIN_PERMISSION) {
 //            Log.e(getClass().getSimpleName(), "------here");
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
