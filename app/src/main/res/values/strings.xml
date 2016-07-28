@@ -214,4 +214,7 @@
     <string name="failed_to_refresh">Failed to refresh check your connection!</string>
     <string name="link_to_video_add_sticker" translatable="false">https://youtu.be/-hB3qNd7dGk</string>
     <string name="swipe_down_to_refresh_ncheck_your_connection">Swipe down to refresh\nCheck your connection.</string>
+    <string name="tolerance">Tolerance</string>
+    <string name="radius">Radius</string>
+    <string name="offset">Offset</string>
 </resources>

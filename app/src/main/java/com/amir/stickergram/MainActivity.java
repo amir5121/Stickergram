@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     if (action.equals(Intent.ACTION_SEND)) {
                         if (type.startsWith("image/")) {
                             tempOutPutFile = Loader.generateEmptyBitmapFile(this);
-                            Loader.crop((Uri) mIntent.getParcelableExtra(Intent.EXTRA_STREAM), Uri.fromFile(tempOutPutFile), this);
+                            Loader.crop((Uri) mIntent.getParcelableExtra(Intent.EXTRA_STREAM), Uri.fromFile(tempOutPutFile), this, false);
                         }
                     }
                 }
@@ -165,8 +165,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (Loader.checkPermission(this)) {
                 File tempFile = Loader.generateEmptyBitmapFile(this);
                 if (tempFile.exists() && tempOutPutFile.exists()) {
-//                    Crop.of(Uri.fromFile(tempFile), Uri.fromFile(tempOutPutFile)).start(this);
-                    Loader.crop(Uri.fromFile(tempFile), Uri.fromFile(tempOutPutFile), this);
+                    Loader.crop(Uri.fromFile(tempFile), Uri.fromFile(tempOutPutFile), this, true);
                 }
             } else {
                 Loader.gainPermission(this, Constants.FROM_SCRATCH_GAIN_PERMISSION);
@@ -271,7 +270,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //            rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI(outputFile, getContentResolver())); // this is being passed to the next activity and been used in rotation
 //            Log.e(getClass().getSimpleName(), "rotation: " + rotation);
             if (tempFileUri != null && outputFile != null)
-                Loader.crop(outputFile, tempFileUri, this);
+                Loader.crop(outputFile, tempFileUri, this, false);
             else
                 Toast.makeText(this, getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
 

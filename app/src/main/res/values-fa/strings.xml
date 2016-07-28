@@ -214,4 +214,7 @@
     <string name="contact_painter">ارتباط با گرافیست</string>
     <string name="failed_to_refresh">تازه سازی ممکن نبود اینترنت خودتو چک کن!</string>
     <string name="swipe_down_to_refresh_ncheck_your_connection">صفحه رو به پایین بکش\nاینترنت رو چک کن</string>
+    <string name="offset">انحراف</string>
+    <string name="radius">شعاع</string>
+    <string name="tolerance">گستردگی رنگ</string>
 </resources>

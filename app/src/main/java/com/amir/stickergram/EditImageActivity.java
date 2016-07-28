@@ -350,7 +350,7 @@ public class EditImageActivity
                 String dirInAsset = getIntent().getStringExtra(Constants.EDIT_IMAGE_DIR_IN_ASSET);
                 imageBitmap = BitmapFactory.decodeStream(getAssets().open(dirInAsset));
             } else {
-//                Log.e(getClass().getSimpleName(), "getBitmap from the extra: " + imageUri.toString());
+//                Log.e(getClass().getSimpleName(), "updateBitmap from the extra: " + imageUri.toString());
                 imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
 //                if (imageBitmap == null)
 //                    imageBitmap = BitmapFactory.decodeFile(Loader.getRealPathFromURI(imageUri, getContentResolver()));

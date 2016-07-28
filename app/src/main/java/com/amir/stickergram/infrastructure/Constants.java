@@ -1,5 +1,6 @@
 package com.amir.stickergram.infrastructure;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.amir.stickergram.AppType;
@@ -61,6 +62,7 @@ public class Constants {
     public static final String ACTIVE_PACK = "ACTIVE_PACK";
     public static final String LANGUAGE = "LANGUAGE";
     public static final String CACHED_JSON = "CACHED_JSON";
+//    public static final String IMAGE_URI = "IMAGE_URI";
 
     final static String availableFormats[] = {TELEGRAM_PACKAGE,
             TELEGRAM_PLUS_PACKAGE,
@@ -74,4 +76,15 @@ public class Constants {
             ANIWAYS};
 
     public static final int ALL_FLAVORS = 0;
+    public static final String IS_USING_EMPTY_IMAGE = "IS_USING_EMPTY_IMAGE";
+
+//    private static int[]workingBitmap;
+//
+//    public static int[] getWorkingBitmap() {
+//        return workingBitmap;
+//    }
+//
+//    public static void setWorkingBitmap(int[] workingBitmap) {
+//        Constants.workingBitmap = workingBitmap;
+//    }
 }

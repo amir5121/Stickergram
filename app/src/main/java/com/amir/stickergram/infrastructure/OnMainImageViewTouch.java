@@ -19,25 +19,26 @@ import java.util.List;
 
 public class OnMainImageViewTouch {
 
-    protected static final int NONE = 0;
-    protected static final int DRAG = 1;
-    protected static final int ZOOM = 2;
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
     private static final String TOUCH_IMAGE_VIEW = "TOUCH_IMAGE_VIEW";
     private static final String TEXT_LAYER_NUMBER = "TEXT_LAYER_NUMBER";
     protected int mode = NONE;
     // remember some things for zooming
-    protected Position mid = new Position(0, 0);
-    protected float oldDist = 1f;
-    protected float d = 0f;
-    protected float newRot = 0f;
-    protected float[] lastEvent = null;
+    private Position mid = new Position(0, 0);
+    private float oldDist = 1f;
+    private int oldTilt = 180;
+    private float d = 0f;
+    private float newRot = 0f;
+//    private float[] lastEvent = null;
 
-    EditImageActivity activity;
-    Position offsetPosition;
-    Position offsetPositionSecondPointer;
-    List<TouchImageView> items;
-    TouchImageView[] label;
-    Bitmap mainBitmap;
+    private EditImageActivity activity;
+    private Position offsetPosition;
+    private Position offsetPositionSecondPointer;
+    private List<TouchImageView> items;
+    private TouchImageView[] label;
+    private Bitmap mainBitmap;
 
     public OnMainImageViewTouch(EditImageActivity activity, Bitmap mainBitmap, ImageView mainImageView) {
         this.activity = activity;
@@ -73,7 +74,7 @@ public class OnMainImageViewTouch {
             case MotionEvent.ACTION_POINTER_DOWN:
                 oldDist = spacing(event);
                 if (oldDist > 10f) {
-//                    savedMatrix.set(matrix);
+                    oldTilt = selectedLayer.getTextItem().getTilt();
                     midPoint(mid, event);
                     for (int i = items.size() - 1; i >= 0; i--) {
                         offsetPositionSecondPointer = items.get(i).isItMe(new Position(event.getY(1), event.getX(1)));
@@ -92,7 +93,6 @@ public class OnMainImageViewTouch {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 mode = NONE;
-                lastEvent = null;
                 break;
             case MotionEvent.ACTION_MOVE: {
                 if (selectedLayer != null) {
@@ -111,7 +111,7 @@ public class OnMainImageViewTouch {
                         }
                         newRot = rotation(event);
                         float r = newRot - d;
-                        selectedLayer.getTextItem().setTilt((int) r + 180);
+                        selectedLayer.getTextItem().setTilt((int) r + oldTilt);
                         selectedLayer.updateTextView();
                     }
                 }
@@ -128,7 +128,7 @@ public class OnMainImageViewTouch {
     /**
      * Determine the space between the first two fingers
      */
-    public float spacing(MotionEvent event) {
+    private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return (float) Math.sqrt(x * x + y * y);
@@ -137,7 +137,7 @@ public class OnMainImageViewTouch {
     /**
      * Calculate the mid point of the first two fingers
      */
-    public void midPoint(Position point, MotionEvent event) {
+    private void midPoint(Position point, MotionEvent event) {
         float x = event.getX(0) + event.getX(1);
         float y = event.getY(0) + event.getY(1);
         point.set(x / 2, y / 2);
@@ -149,7 +149,7 @@ public class OnMainImageViewTouch {
      * @param event
      * @return Degrees
      */
-    public float rotation(MotionEvent event) {
+    private float rotation(MotionEvent event) {
         double delta_x = (event.getX(0) - event.getX(1));
         double delta_y = (event.getY(0) - event.getY(1));
         double radians = Math.atan2(delta_y, delta_x);
@@ -186,7 +186,6 @@ public class OnMainImageViewTouch {
         int bitmapWidth = mainBitmap.getWidth();
         float labelDecrementRatio = 1600.0f;
         int strokeWidth = (bitmapWidth / 51) + Math.abs(bitmapWidth - 512) / 80;
-//        Log.e(getClass().getSimpleName(), "strokeWidth: " + strokeWidth);
         int stickergramTextSize = (int) ((bitmapWidth / 18) + (labelDecrementRatio / bitmapWidth));
         int madeWithTextSize = (int) ((bitmapWidth / 30) + (labelDecrementRatio / bitmapWidth));
         Log.e(getClass().getSimpleName(), "stickergramTextSize: " + stickergramTextSize);
@@ -194,7 +193,6 @@ public class OnMainImageViewTouch {
         label[0] = new TouchImageView(activity, mainBitmap);
         TextItem textItem = label[0].getTextItem();
         textItem.setText(activity.getString(R.string.stickergram));
-//        textItem.setBackgroundColor(ContextCompat.getColor(this, R.color.stickergram_label_background));
         textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
         textItem.setStrokeWidth(strokeWidth);
         textItem.setSize(stickergramTextSize);
@@ -203,7 +201,6 @@ public class OnMainImageViewTouch {
         Bitmap bitmap = textItem.getTextBitmap();
         int stickergramHeight = bitmap.getHeight();
         int stickergramWidth = bitmap.getWidth();
-//        textItem.setPosition(new Position(mainBitmap.getHeight() - stickergramHeight, mainBitmap.getWidth() - stickergramWidth));
 
         int top = mainBitmap.getHeight() - stickergramHeight + 20;
         textItem.setPosition(new Position(top, -15));
@@ -219,7 +216,6 @@ public class OnMainImageViewTouch {
         textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
         textItem.setTextStrokeColor(ContextCompat.getColor(activity, R.color.stickergram_label_stroke_color));
         bitmap = textItem.getTextBitmap();
-//        textItem.setPosition(new Position(0,0));
         textItem.setPosition(new Position(top - bitmap.getHeight() / 3.3f,
                 stickergramWidth / 2 - bitmap.getWidth() / 2 - 15));
         label[1].setTextItem(textItem);

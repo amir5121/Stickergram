@@ -52,6 +52,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -124,6 +126,8 @@ public class Loader {
                 destination.close();
             }
         }
+
+
         return true;
     }
 
@@ -489,22 +493,12 @@ public class Loader {
         }
     }
 
-    public static void crop(Uri source, Uri destiny, MainActivity activity) {
+    public static void crop(Uri source, Uri destiny, MainActivity activity, boolean isEmpty) {
         Intent intent = new Intent(activity, CropActivity.class);
         intent.putExtra(Constants.CROP_SOURCE, source);
         intent.putExtra(Constants.CROP_DESTINY, destiny);
+        intent.putExtra(Constants.IS_USING_EMPTY_IMAGE, isEmpty);
         activity.startActivity(intent);
-//        UCrop.Options options = new UCrop.Options();
-//        options.setActiveWidgetColor(BaseActivity.LIGHT_BLUE);
-//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-//        options.setCropFrameColor(BaseActivity.DARK_BLUE);
-//        options.setDimmedLayerColor(BaseActivity.TRANSPARENT_DARK_BLUE);
-//        options.setFreeStyleCropEnabled(true);
-//        options.setStatusBarColor(BaseActivity.DARK_BLUE);
-//        options.setToolbarColor(BaseActivity.LIGHT_BLUE);
-////        options.setOvalDimmedLayer(true);
-//        //todo: check what the below line does?
-//        UCrop.of(source, destiny).withOptions(options).start(activity);
     }
 
     public static long freeMemory() {
@@ -639,7 +633,6 @@ public class Loader {
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < length; i++) {
             temp.append(Character.toString((char) (s.charAt(i) + 1728)));
-//            temp += Character.toString((char) ((int) s.charAt(i) + 1728));
         }
         return temp.toString();
     }
@@ -647,17 +640,9 @@ public class Loader {
     @NonNull
     static String getActiveStickerDir() {
         return BaseActivity.chosenMode.getCacheDir();
-//        if (BaseActivity.isTelegramProInstalled)
-//            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM_PRO;
-//        else
-//            return BaseActivity.PHONE_STICKERS_DIRECTORY_TELEGRAM;
     }
 
     public static String getActivePack() {
-////        if (BaseActivity.isTelegramProInstalled)
-////            return BaseActivity.TELEGRAM_PLUS_PACKAGE;
-////        else if (BaseActivity.isTelegramInstalled)
-////            return BaseActivity.TELEGRAM_PACKAGE;
         return BaseActivity.chosenMode.getPack();
     }
 
@@ -674,8 +659,6 @@ public class Loader {
     }
 
     public static void setLocale(int lang, BaseActivity activity) {
-//        Locale myLocale = new Locale(lang);
-//        Resources res = activity.getResources();
         String language = null;
         switch (lang) {
             case Constants.PERSIAN_LANGUAGE:
@@ -688,28 +671,15 @@ public class Loader {
                 language = Locale.getDefault().getLanguage();
                 break;
         }
-//        Log.e(TAG, "-------Language: " + language);
         if (language != null) {
             Locale locale = new Locale(language);
 
-//            Resources res = activity.getResources();
-//            DisplayMetrics dm = res.getDisplayMetrics();
-//            Configuration conf = res.getConfiguration();
-//            conf.locale = locale;
-//            conf.setLocale(new Locale(language));// = new Locale(lang);
-//            res.updateConfiguration(conf, dm);
-
             Locale.setDefault(locale);
             Configuration config = new Configuration();
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             config.setLocale(locale);
-//            else config.locale = locale;
 
             activity.getBaseContext().getResources().updateConfiguration(config,
                     activity.getBaseContext().getResources().getDisplayMetrics());
-//            Intent refresh = new Intent(activity, MainActivity.class);
-//            activity.startActivity(refresh);
-//            activity.finish();
         }
     }
 
@@ -746,5 +716,56 @@ public class Loader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Converts a immutable bitmap to a mutable bitmap. This operation doesn't allocates
+     * more memory that there is already allocated.
+     *
+     * @param imgIn - Source image. It will be released, and should not be used more
+     * @return a copy of imgIn, but muttable.
+     */
+    public static Bitmap convertToMutable(Bitmap imgIn) {
+        try {
+            //this is the file going to use temporally to save the bytes.
+            // This file will not be a image, it will store the raw image data.
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "temp.tmp");
+
+            //Open an RandomAccessFile
+            //Make sure you have added uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            //into AndroidManifest.xml file
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+
+            // get the width and height of the source bitmap.
+            int width = imgIn.getWidth();
+            int height = imgIn.getHeight();
+            Bitmap.Config type = imgIn.getConfig();
+
+            //Copy the byte to the file
+            //Assume source bitmap loaded using options.inPreferredConfig = Config.ARGB_8888;
+            FileChannel channel = randomAccessFile.getChannel();
+            MappedByteBuffer map = channel.map(FileChannel.MapMode.READ_WRITE, 0, imgIn.getRowBytes() * height);
+            imgIn.copyPixelsToBuffer(map);
+            //recycle the source bitmap, this will be no longer used.
+            imgIn.recycle();
+            System.gc();// try to force the bytes from the imgIn to be released
+
+            //Create a new bitmap to load the bitmap again. Probably the memory will be available.
+            imgIn = Bitmap.createBitmap(width, height, type);
+            map.position(0);
+            //load it back from temporary
+            imgIn.copyPixelsFromBuffer(map);
+            //close the temporary file and channel , then delete that also
+            channel.close();
+            randomAccessFile.close();
+
+            // delete the temp file
+            file.delete();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return imgIn;
     }
 }

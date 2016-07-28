@@ -52,4 +52,5 @@
     <color name="edit_activity_button_overlay_layer_background_color">#992196f3</color>
     <color name="dialog_text_hint_color">#aaa</color>
     <color name="contact_activity_background">#1976d2</color>
+    <color name="light_blue_transparent">#bb42a5f5</color>
 </resources>

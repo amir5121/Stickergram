@@ -16,10 +16,10 @@ public class TouchImageView extends ImageView {
     private TextItem textItem;
     private boolean isFirstTapOnStrokeColor = true;
     private boolean isFirstTapOnShadowColor = true;
-    int mainBitmapWidth;
-    int mainBitmapHeight;
-    float widthScale;
-    float heightScale;
+    private int mainBitmapWidth;
+    private int mainBitmapHeight;
+    private float widthScale;
+    private float heightScale;
 
     public TouchImageView(Context context, Bitmap mainBitmap) {
         super(context);
@@ -30,7 +30,7 @@ public class TouchImageView extends ImageView {
         setImageBitmap(textItem.getFullTextBitmap());
     }
 
-    public TouchImageView(Context context, Bundle bundle, Bitmap mainBitmap) {
+    TouchImageView(Context context, Bundle bundle, Bitmap mainBitmap) {
         super(context);
         textItem = bundle.getParcelable(TEXT_ITEM);
         setLayoutParams();
@@ -63,7 +63,7 @@ public class TouchImageView extends ImageView {
         return isFirstTapOnStrokeColor;
     }
 
-    public void setLayoutParams() {
+    private void setLayoutParams() {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         setLayoutParams(params);
         setScaleType(ScaleType.FIT_CENTER);
@@ -79,7 +79,7 @@ public class TouchImageView extends ImageView {
         heightScale = (float) textItem.hostHeight / getMeasuredHeight();
     }
 
-    public void updateTextPosition(Position position, Position offsetPosition) {
+    void updateTextPosition(Position position, Position offsetPosition) {
         Position actualPosition;
 
         if (offsetPosition != null) {
@@ -100,7 +100,7 @@ public class TouchImageView extends ImageView {
         setImageBitmap(textItem.getFullTextBitmap());
     }
 
-    public Position isItMe(Position position) {
+    Position isItMe(Position position) {
         TextArea area = textItem.getArea();
         float areaStartTop = area.getStartPosition().getTop();
         float areaEndTop = areaStartTop + area.getHeight();

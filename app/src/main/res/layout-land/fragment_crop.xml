@@ -4,10 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <include
-        android:id="@+id/include_toolbar"
-        layout="@layout/include_toolbar" />
-
     <ScrollView
         android:id="@+id/activity_crop_scroll_view_vertical"
         android:layout_width="wrap_content"

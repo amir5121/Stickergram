@@ -29,7 +29,7 @@ public class UserStickersActivity extends BaseActivity
     private String folder;
     private boolean publishNoteIsHidden;
     private boolean noItemWereFoundFlag = false;
-    LinearLayout publishNoteContainer;
+    private LinearLayout publishNoteContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

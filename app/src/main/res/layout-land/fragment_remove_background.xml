@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
+
+    <LinearLayout
+        android:id="@+id/fragment_remover_background_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/default_button_background"
+        android:elevation="10dp"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/fragment_remove_background_repair_toggle_mode"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_remove_blue" />
+
+        <ImageButton
+            android:id="@+id/fragment_remove_background_mode_zoom_toggle"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_hand_white" />
+
+        <ImageButton
+            android:id="@+id/fragment_remove_background_radius_button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_radius" />
+
+        <ImageButton
+            android:id="@+id/fragment_remove_background_mode_offset"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_offset" />
+
+        <ImageButton
+            android:id="@+id/fragment_remove_background_flood_filler"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_flood_fill" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/fragment_remove_background_surface_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@id/fragment_remover_background_buttons">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/chess" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_remove_background_radius_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@id/fragment_remover_background_buttons"
+        android:background="#aa55ff99"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#33000000"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/radius"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <app.minimize.com.seek_bar_compat.SeekBarCompat
+            android:id="@+id/fragment_remove_background_radius_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="30sp"
+            android:padding="10dp"
+            app:progressBackgroundColor="#000"
+            app:progressColor="#AFF123"
+            app:thumbAlpha="1.0"
+            app:thumbColor="#FF4444" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_remove_background_offset_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@id/fragment_remover_background_buttons"
+        android:background="#aaff5599"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#33000000"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/offset"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+
+        <app.minimize.com.seek_bar_compat.SeekBarCompat
+            android:id="@+id/fragment_remove_background_offset_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:max="200"
+            android:maxHeight="30sp"
+            android:padding="10dp"
+            app:progressBackgroundColor="#000"
+            app:progressColor="#22A1FF"
+            app:thumbAlpha="1.0"
+            app:thumbColor="#FF44FF" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_remove_background_tolerance_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@id/fragment_remover_background_buttons"
+        android:background="#aaaaff55"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#33000000"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/tolerance"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <app.minimize.com.seek_bar_compat.SeekBarCompat
+            android:id="@+id/fragment_remove_background_tolerance_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:maxHeight="30sp"
+            android:padding="10dp"
+            app:progressBackgroundColor="#000"
+            app:progressColor="#A221FF"
+            app:thumbAlpha="1.0"
+            app:thumbColor="#FF00FF" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/fragment_remove_background_loading_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#771565c0"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/activity_crop_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

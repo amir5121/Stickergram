@@ -32,20 +32,17 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     private static final String STICKER_COUNT = "STICKER_COUNT";
     private static final String PERCENT = "PERCENT";
 
-    TextView loadingTextPercentage;
-    TextView loadingStickersCount;
-    TextView noStickerText;
-    View loadingDialogView;
-    AlertDialog dialog;
-    RecyclerView recyclerView;
-    SingleStickersAdapter adapter;
-    SwipeRefreshLayout swipeRefresh;
-    AsyncTaskPhoneAdapter task;
+    private TextView loadingTextPercentage;
+    private TextView loadingStickersCount;
+    private TextView noStickerText;
+    private AlertDialog dialog;
+    private SingleStickersAdapter adapter;
+    private SwipeRefreshLayout swipeRefresh;
+    private AsyncTaskPhoneAdapter task;
 
-    int stickerCount = 0;
-    int percent = 0;
+    private int stickerCount = 0;
+    private int percent = 0;
     Bundle savedInstanceState;
-    boolean wasRefreshing = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +52,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         this.savedInstanceState = savedInstanceState;
 
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.activity_phone_stickers_swipeRefresh);
-        recyclerView = (RecyclerView) findViewById(R.id.activity_phone_stickers_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.activity_phone_stickers_list);
         noStickerText = (TextView) findViewById(R.id.activity_phone_stickers_no_cached_text);
 
         if (swipeRefresh != null) {
@@ -77,11 +74,10 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
         }
 
         if (savedInstanceState != null) {
-            wasRefreshing = savedInstanceState.getBoolean(IS_REFRESHING, false);
             TypedValue typed_value = new TypedValue();
             this.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, typed_value, true);
             swipeRefresh.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId));
-            swipeRefresh.setRefreshing(wasRefreshing);
+            swipeRefresh.setRefreshing(savedInstanceState.getBoolean(IS_REFRESHING, false));
         }
 
         if (!hasCashedPhoneStickersOnce())
@@ -100,7 +96,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     public Object onRetainCustomNonConfigurationInstance() {
         if (task != null)
             task.detach();
-        return (task);
+        return task;
     }
 
     @Override
@@ -217,7 +213,7 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     }
 
     private void instantiateLoadingDialog() {
-        loadingDialogView = getLayoutInflater().inflate(R.layout.dialog_phone_stickers_loading, null, false);
+        View loadingDialogView = getLayoutInflater().inflate(R.layout.dialog_phone_stickers_loading, null, false);
         if (dialog != null) {
             dialog.dismiss();
             dialog = null;
