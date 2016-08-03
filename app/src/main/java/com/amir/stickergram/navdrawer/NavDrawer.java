@@ -1,6 +1,7 @@
 package com.amir.stickergram.navdrawer;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -47,12 +48,15 @@ public class NavDrawer {
                 setOpen(!isOpen());
             }
         });
+
+//        setFont(navDrawerView);
     }
 
     public void addItem(NavDrawerItem item) {
         items.add(item);
         item.navDrawer = this;
     }
+
 
     public boolean isOpen() {
         return drawerLayout.isDrawerOpen(GravityCompat.START);

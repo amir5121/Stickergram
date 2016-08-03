@@ -1,4 +1,4 @@
-package com.amir.stickergram.imageProcessing;
+package com.amir.stickergram.backgroundRmover;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +18,7 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.Constants;
+import com.amir.stickergram.infrastructure.Loader;
 import com.isseiaoki.simplecropview.CropImageView;
 import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.isseiaoki.simplecropview.callback.LoadCallback;
@@ -32,6 +33,7 @@ public class CropFragment extends BaseFragment {
     private View progressContainer;
     private Uri sourceUri;
     private CropFragmentCallbacks listener;
+//    private int rotation;
 
     public static CropFragment newInstance(Bundle args) {
         CropFragment f = new CropFragment();
@@ -43,9 +45,9 @@ public class CropFragment extends BaseFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try{
+        try {
             listener = (CropFragmentCallbacks) context;
-        } catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new RuntimeException("Must implement CropFragmentCallback");
         }
     }
@@ -54,6 +56,7 @@ public class CropFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crop, container, false);
+        setFont((ViewGroup) view);
         setHasOptionsMenu(true);
 
         progressContainer = view.findViewById(R.id.activity_crop_progress_bar_container);
@@ -71,6 +74,10 @@ public class CropFragment extends BaseFragment {
 
         mCropView = (CropImageView) view.findViewById(R.id.activity_crop_crop_image_view);
         mCropView.setCropMode(CropImageView.CropMode.FREE);
+
+//        rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI((Uri) getArguments().getParcelable(Constants.CROP_SOURCE)
+//                , getActivity().getContentResolver()));
+//        Log.e(getClass().getSimpleName(), "rotation: " + rotation);
 
         setCropViewUri((Uri) getArguments().getParcelable(Constants.CROP_SOURCE), savedInstanceState != null);
 
@@ -119,7 +126,13 @@ public class CropFragment extends BaseFragment {
         int itemId = item.getItemId();
         if (itemId == R.id.crop_activity_menu_save) {
             showLoadingDialog(true);
-            mCropView.startCrop((Uri) getArguments().getParcelable(Constants.CROP_DESTINY), cropCallback, saveCallback);
+//            File outPutFile = Loader.generateEmptyBitmapFile((BaseActivity) getActivity(),true);
+            Uri destiny = getArguments().getParcelable(Constants.CROP_DESTINY);
+//            Uri destiny = Uri.fromFile(outPutFile);
+            if (destiny != null) {
+                Log.e(getClass().getSimpleName(), "destiny: " + destiny.toString());
+            }
+            mCropView.startCrop(destiny, cropCallback, saveCallback);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -217,6 +230,8 @@ public class CropFragment extends BaseFragment {
             try {
                 file.createNewFile();
                 if (resBitmap != null) {
+//                    if (rotation == 90 || rotation == 90.0)
+//                        resBitmap = Loader.rotateImage(resBitmap, rotation);
                     resBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
                 } else Log.e(getClass().getSimpleName(), "resBitmap was null");
             } catch (IOException e) {
@@ -224,6 +239,7 @@ public class CropFragment extends BaseFragment {
             }
 
             Bundle bundle = new Bundle();
+//            bundle.putInt(Constants.IMAGE_ROTATION, rotation);
             bundle.putParcelable(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
             listener.cropFinished(bundle);
 
@@ -237,12 +253,14 @@ public class CropFragment extends BaseFragment {
 
         @Override
         public void onError() {
+            getActivity().finish();
+            Toast.makeText(getContext(), getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
             Log.e("amir", "cropCallBack onError");
         }
     };
 
 
-    public interface CropFragmentCallbacks{
+    public interface CropFragmentCallbacks {
         void cropFinished(Bundle bundle);
     }
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_save_sticker_main_container"
     android:orientation="vertical">
 
     <include
@@ -25,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:layout="@layout/fragment_icon_list" />
+        tools:layout="@layout/fragment_template_sticker_icon" />
 
     <TextView
         android:layout_width="match_parent"

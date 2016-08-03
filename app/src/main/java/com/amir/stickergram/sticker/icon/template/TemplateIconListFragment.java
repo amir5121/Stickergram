@@ -22,10 +22,10 @@ import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
 
 public class TemplateIconListFragment extends BaseFragment
         implements OnIconSelectedListener, SwipeRefreshLayout.OnRefreshListener, OnRefreshCallbacks {
-    OnIconSelectedListener mCallback;
-    SwipeRefreshLayout refreshLayout;
-    View noItemFoundText;
-    IconAdapter adapter;
+    private OnIconSelectedListener mCallback;
+    private SwipeRefreshLayout refreshLayout;
+    private View noItemFoundText;
+    private IconAdapter adapter;
 
     @Override
     public void onAttach(Context context) {
@@ -44,7 +44,8 @@ public class TemplateIconListFragment extends BaseFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_icon_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_template_sticker_icon, container, false);
+        setFont((ViewGroup) view);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_icon_list_swipeRefresh);
         refreshLayout.setOnRefreshListener(this);
         noItemFoundText = view.findViewById(R.id.fragment_icon_list_no_item_found_text);

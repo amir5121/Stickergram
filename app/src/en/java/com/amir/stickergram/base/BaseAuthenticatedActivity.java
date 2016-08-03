@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amir.stickergram.BuildConfig;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.infrastructure.Constants;
@@ -32,11 +33,11 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     private static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     public static boolean isPaid;
     private static String HAS_BOUGHT_PRO = "HAS_BOUGHT_PRO";
-    IabHelper mHelper;
-    static final String ITEM_SKU = "com.amir.stickergram.pro";
+    private static final String ITEM_SKU = "com.amir.stickergram.pro";
+    private static boolean inAppBillingSetupOk = false;
+    private static boolean isPaymentAppInstalled = false;
     private SharedPreferences preferences;
-    public static boolean inAppBillingSetupOk = false;
-    public static boolean isPaymentAppInstalled = false;
+    private IabHelper mHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,15 +140,18 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
     }
 
-    public boolean getProStatus() {
-//        if (!BuildConfig.DEBUG) {
+    protected boolean getProStatus() {
+        if (BuildConfig.DEBUG) {
+//            Toast.makeText(this, "is in debug mode", Toast.LENGTH_SHORT).show();
+            return true;
+        }
         return preferences.getBoolean(HAS_BOUGHT_PRO, false);
 //        }
 //        return true;
 //        return preferences.getBoolean(HAS_BOUGHT_PRO, false);
     }
 
-    public void checkSignature(final Context context) {
+    private void checkSignature(final Context context) {
         if ((context.getApplicationContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
             return;
         }

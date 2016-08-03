@@ -16,9 +16,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
-    ImageView iconImageView;
-    View progressView;
-    View errorImage;
+    private ImageView iconImageView;
+    private View progressView;
+    private View errorImage;
 
 
     public ViewHolder(View itemView) {

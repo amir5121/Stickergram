@@ -8,6 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:id="@+id/activity_template_stickers_main_container"
         android:layout_height="match_parent">
 
         <include
@@ -19,7 +20,7 @@
             android:layout_height="match_parent"
             android:id="@+id/activity_template_stickers_list_fragment"
             android:name="com.amir.stickergram.sticker.icon.template.TemplateIconListFragment"
-            tools:layout="@layout/fragment_icon_list"
+            tools:layout="@layout/fragment_template_sticker_icon"
             android:layout_below="@id/include_toolbar"/>
 
         <fragment

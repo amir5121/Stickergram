@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
@@ -16,15 +17,6 @@ import com.amir.stickergram.navdrawer.MainNavDrawer;
 public class HelpActivity extends BaseActivity implements View.OnClickListener {
     private static final CharSequence PUBLISH_COMMAND = "/publish";
     private static final CharSequence NEW_PACK_COMMAND = "/newpack";
-    View activateBotButton;
-    View createNewPack;
-    View goToBot;
-    View goToBot2;
-    View goToBot3;
-    View goToUserPackButton;
-    View publishButton;
-    View watchVideo;
-    View watchAddSticker;
 
     //todo : add how to add sticker to a published pack https://youtu.be/-hB3qNd7dGk
 
@@ -38,15 +30,15 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void setUpView() {
-        activateBotButton = findViewById(R.id.activity_faq_activate_bot);
-        createNewPack = findViewById(R.id.activity_faq_new_pack);
-        goToBot = findViewById(R.id.activity_faq_go_to_bot1);
-        goToBot2 = findViewById(R.id.activity_faq_go_to_bot2);
-        goToBot3 = findViewById(R.id.activity_faq_go_to_bot3);
-        goToUserPackButton = findViewById(R.id.activity_faq_go_to_user_pack);
-        publishButton = findViewById(R.id.activity_faq_publish);
-        watchVideo = findViewById(R.id.activity_help_watch_video);
-        watchAddSticker = findViewById(R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack);
+        View activateBotButton = findViewById(R.id.activity_faq_activate_bot);
+        View createNewPack = findViewById(R.id.activity_faq_new_pack);
+        View goToBot = findViewById(R.id.activity_faq_go_to_bot1);
+        View goToBot2 = findViewById(R.id.activity_faq_go_to_bot2);
+        View goToBot3 = findViewById(R.id.activity_faq_go_to_bot3);
+        View goToUserPackButton = findViewById(R.id.activity_faq_go_to_user_pack);
+        View publishButton = findViewById(R.id.activity_faq_publish);
+        View watchVideo = findViewById(R.id.activity_help_watch_video);
+        View watchAddSticker = findViewById(R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack);
 
 
         if (activateBotButton != null &&
@@ -70,6 +62,9 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
             if (Loader.deviceLanguageIsPersian()) watchAddSticker.setVisibility(View.GONE);
             else watchAddSticker.setVisibility(View.VISIBLE);
         }
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_help_main_container));
 
     }
 

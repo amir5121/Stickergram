@@ -22,7 +22,7 @@ import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnClickListener, ServerHelperCallBacks {
+class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnClickListener, ServerHelperCallBacks {
     private final BaseActivity activity;
     private final OnIconSelectedListener iconSelectedListener;
     private final OnRefreshCallbacks refreshListener;
@@ -44,7 +44,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
 //        Log.e(getClass().getSimpleName(), "iconAdapter constructor was called");
     }
 
-    public void updateItems(boolean shouldInvalidate) {
+    void updateItems(boolean shouldInvalidate) {
         helper.updateStickerList(Constants.STICKERGRAM_URL + Constants.LIST_DIRECTORIES, shouldInvalidate);
     }
 
@@ -52,7 +52,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.item_icon_sticker, parent, false);
         view.setOnClickListener(this);
-        return new ViewHolder(view);
+        return new ViewHolder(view, activity.getAssets());
     }
 
     @Override

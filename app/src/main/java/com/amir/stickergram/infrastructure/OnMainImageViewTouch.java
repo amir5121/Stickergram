@@ -2,6 +2,7 @@ package com.amir.stickergram.infrastructure;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -30,8 +31,7 @@ public class OnMainImageViewTouch {
     private float oldDist = 1f;
     private int oldTilt = 180;
     private float d = 0f;
-    private float newRot = 0f;
-//    private float[] lastEvent = null;
+    //    private float[] lastEvent = null;
 
     private EditImageActivity activity;
     private Position offsetPosition;
@@ -57,7 +57,9 @@ public class OnMainImageViewTouch {
                 mode = DRAG;
                 Position pos = new Position(event.getY(), event.getX());
                 if (label != null)
-                    if (label[0].isItMe(pos) != null || label[1].isItMe(pos) != null)
+//                    if (label[0].isItMe(pos) != null || label[1].isItMe(pos) != null)
+//                        Toast.makeText(activity, activity.getString(R.string.upgrade_to_pro_to_delete_this_label), Toast.LENGTH_LONG).show();
+                    if (label[0].isItMe(pos) != null)
                         Toast.makeText(activity, activity.getString(R.string.upgrade_to_pro_to_delete_this_label), Toast.LENGTH_LONG).show();
                 for (int i = items.size() - 1; i >= 0; i--) {
                     offsetPosition = items.get(i).isItMe(new Position(event.getY(), event.getX()));
@@ -73,7 +75,7 @@ public class OnMainImageViewTouch {
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 oldDist = spacing(event);
-                if (oldDist > 10f) {
+                if (oldDist > 10f && selectedLayer != null) {
                     oldTilt = selectedLayer.getTextItem().getTilt();
                     midPoint(mid, event);
                     for (int i = items.size() - 1; i >= 0; i--) {
@@ -109,8 +111,8 @@ public class OnMainImageViewTouch {
                             oldDist = newDist;
                             selectedLayer.updateTextPosition(mid, midBetweenTwoPos(offsetPosition, offsetPositionSecondPointer));
                         }
-                        newRot = rotation(event);
-                        float r = newRot - d;
+//                        float newRot = rotation(event);
+                        float r = rotation(event) - d;
                         selectedLayer.getTextItem().setTilt((int) r + oldTilt);
                         selectedLayer.updateTextView();
                     }
@@ -165,10 +167,10 @@ public class OnMainImageViewTouch {
             canvas.drawBitmap(imageItem.getFinishedBitmap(), 0, 0, null);
         }
         if (label != null) {
-            Log.e(getClass().getSimpleName(), "label was not  null");
+//            Log.e(getClass().getSimpleName(), "label was not  null");
             canvas.drawBitmap(label[0].getFinishedBitmap(), 0, 0, null);
-            canvas.drawBitmap(label[1].getFinishedBitmap(), 0, 0, null);
-        }
+//            canvas.drawBitmap(label[1].getFinishedBitmap(), 0, 0, null);
+        } else Log.e(getClass().getSimpleName(), "label was null");
 
         return tempBitmap;
     }
@@ -182,44 +184,59 @@ public class OnMainImageViewTouch {
     }
 
     private void addLabel() {
+        Log.e(getClass().getSimpleName(), "Added label");
         label = new TouchImageView[2];
-        int bitmapWidth = mainBitmap.getWidth();
-        float labelDecrementRatio = 1600.0f;
-        int strokeWidth = (bitmapWidth / 51) + Math.abs(bitmapWidth - 512) / 80;
-        int stickergramTextSize = (int) ((bitmapWidth / 18) + (labelDecrementRatio / bitmapWidth));
-        int madeWithTextSize = (int) ((bitmapWidth / 30) + (labelDecrementRatio / bitmapWidth));
-        Log.e(getClass().getSimpleName(), "stickergramTextSize: " + stickergramTextSize);
-        Log.e(getClass().getSimpleName(), "madeWithTextSize: " + madeWithTextSize);
+
         label[0] = new TouchImageView(activity, mainBitmap);
         TextItem textItem = label[0].getTextItem();
         textItem.setText(activity.getString(R.string.stickergram));
-        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
+
+        int bitmapWidth = mainBitmap.getWidth();
+        float labelDecrementRatio = 1600.0f;
+//        int strokeWidth = (bitmapWidth / 51) + Math.abs(bitmapWidth - 512) / 80 - 2;
+        int strokeWidth = 5;
+//        Log.e(getClass().getSimpleName(), "stroke width: " + strokeWidth);
+        int stickergramTextSize;
+        if (Loader.deviceLanguageIsPersian()) {
+            textItem.setFont(new FontItem(null, Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET), 0, null));
+            stickergramTextSize = (int) ((bitmapWidth / 17) + (labelDecrementRatio / bitmapWidth));
+        } else {
+            textItem.setFont(new FontItem(null, Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET), 0, null));
+            stickergramTextSize = (int) ((bitmapWidth / 18) + (labelDecrementRatio / bitmapWidth));
+        }
+//        int madeWithTextSize = (int) ((bitmapWidth / 30) + (labelDecrementRatio / bitmapWidth));
+//        Log.e(getClass().getSimpleName(), "stickergramTextSize: " + stickergramTextSize);
+//        Log.e(getClass().getSimpleName(), "madeWithTextSize: " + madeWithTextSize);
+
+
+//        textItem.setShadow(new Shadow(Color.parseColor("#555555"), 5, 5, 0));
+//        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
         textItem.setStrokeWidth(strokeWidth);
         textItem.setSize(stickergramTextSize);
         textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
         textItem.setTextStrokeColor(ContextCompat.getColor(activity, R.color.stickergram_label_stroke_color));
         Bitmap bitmap = textItem.getTextBitmap();
         int stickergramHeight = bitmap.getHeight();
-        int stickergramWidth = bitmap.getWidth();
+//        int stickergramWidth = bitmap.getWidth();
 
         int top = mainBitmap.getHeight() - stickergramHeight + 20;
         textItem.setPosition(new Position(top, -15));
         label[0].setTextItem(textItem);
         activity.textLayerContainer.addView(label[0]);
-        label[1] = new TouchImageView(activity, mainBitmap);
-        textItem = label[1].getTextItem();
-        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
-        textItem.setSize(madeWithTextSize);
-        textItem.setText(activity.getString(R.string.made));
-        textItem.setStrokeWidth(4);
-        textItem.setBackgroundColor(0);
-        textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
-        textItem.setTextStrokeColor(ContextCompat.getColor(activity, R.color.stickergram_label_stroke_color));
-        bitmap = textItem.getTextBitmap();
-        textItem.setPosition(new Position(top - bitmap.getHeight() / 3.3f,
-                stickergramWidth / 2 - bitmap.getWidth() / 2 - 15));
-        label[1].setTextItem(textItem);
-        activity.textLayerContainer.addView(label[1]);
+//        label[1] = new TouchImageView(activity, mainBitmap);
+//        textItem = label[1].getTextItem();
+//        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
+//        textItem.setSize(madeWithTextSize);
+//        textItem.setText(activity.getString(R.string.made));
+//        textItem.setStrokeWidth(4);
+//        textItem.setBackgroundColor(0);
+//        textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
+//        textItem.setTextStrokeColor(ContextCompat.getColor(activity, R.color.stickergram_label_stroke_color));
+//        bitmap = textItem.getTextBitmap();
+//        textItem.setPosition(new Position(top - bitmap.getHeight() / 3.3f,
+//                stickergramWidth / 2 - bitmap.getWidth() / 2 - 15));
+//        label[1].setTextItem(textItem);
+//        activity.textLayerContainer.addView(label[1]);
 
     }
 

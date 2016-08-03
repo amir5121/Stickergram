@@ -72,7 +72,7 @@
     <string name="google_play_services_is_not_installed">گوگل پلی سرویس نصب نیست</string>
     <string name="got_it">گرفتم</string>
     <string name="help">راهنما</string>
-    <string name="how_to_add_new_font">میتونی به دو طریق به برنامه فونت های خودتونو اضافه کنی \n\n یکی اینکه دکمه اضافه کردن رو بزنی و فونت رو انتخاب کنی /n/nیا اینکه از طریق فایل اکسپلورر فونت خودتو انتخاب کنی </string>
+    <string name="how_to_add_new_font">"میتونی به دو طریق به برنامه فونت های خودتونو اضافه کنی \n\n یکی اینکه دکمه اضافه کردن فونت رو بزنی و فونتت رو انتخاب کنی\n \n یا اینکه از طریق فایل اکسپلورر فونت خودتو انتخاب کنی "</string>
     <string name="join_our_channel_on_telegram">به کانال ما بپیوندید، از آخرین آپدیت ها با خبر بشید و استیکر های خودتونو با بقیه به اشتراک بزارید</string>
     <string name="low_storage">حافظه داخلی (تقریبا) پره و برنامه ممکنه نتونه به کار خودش ادامه بده!</string>
     <string name="low_storage_finish">گوشی شما کمبود حافظه داره لطفا فضای بیشتری رو فراهم کنید</string>

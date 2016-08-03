@@ -1,4 +1,4 @@
-package com.amir.stickergram.imageProcessing;
+package com.amir.stickergram.backgroundRmover;
 
 import android.content.Context;
 import android.widget.ImageView;

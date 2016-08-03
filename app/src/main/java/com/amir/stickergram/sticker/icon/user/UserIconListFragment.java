@@ -18,10 +18,8 @@ import com.amir.stickergram.sticker.icon.IconItem;
 import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
 
 public class UserIconListFragment extends BaseFragment implements IconAdapter.OnStickerClickListener {
-    RecyclerView recyclerView;
-    OnIconSelectedListener mCallback;
-    IconAdapter adapter;
-    int length;
+    private RecyclerView recyclerView;
+    private OnIconSelectedListener mCallback;
 
 
     @Override
@@ -41,10 +39,11 @@ public class UserIconListFragment extends BaseFragment implements IconAdapter.On
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_icon_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_sticker_icon, container, false);
+        setFont((ViewGroup) view);
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_template_list_list);
         if (recyclerView != null) {
-            adapter = new IconAdapter((BaseActivity) getActivity(), this);
+            IconAdapter adapter = new IconAdapter((BaseActivity) getActivity(), this);
             if (BaseActivity.isInLandscape
                     || BaseActivity.isTablet)
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

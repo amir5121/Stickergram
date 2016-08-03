@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <color name="colorPrimary">#2196f3</color>
+    <color name="colorPrimary">#2196f3</color>
     <color name="colorPrimaryDark">#1565c0</color>
     <color name="colorAccent">#fff</color>
     <color name="selected_nav_drawer_item_background">#442196f3</color>
@@ -35,7 +35,7 @@
     <color name="stroke_width_seek_bar_background_color">#88790263</color>
     <color name="stroke_width_seek_bar_progress_color">#fff</color>
     <color name="stroke_width_seek_bar_thumb_color">#ff5100</color>
-    <color name="stickergram_label_stroke_color">#aa4477ff</color>
+    <color name="stickergram_label_stroke_color">#bb2196f3</color>
     <color name="stickergram_label_color">#ddffffff</color>
     <color name="sticker_item_background">#560e7bff</color>
     <color name="sticker_item_background_selected">#8afddfdf</color>
@@ -47,8 +47,8 @@
     <color name="faqAnswerColor">#eee</color>
     <color name="faqQuestionColor">#fff</color>
     <color name="phone_sticker_background_color">#1976d2</color>
-    <color name="faq_text_background" >#42a5f5</color>
-    <color name="activity_main_buttons_background" >#2196f3</color>
+    <color name="faq_text_background">#42a5f5</color>
+    <color name="activity_main_buttons_background">#2196f3</color>
     <color name="edit_activity_button_overlay_layer_background_color">#992196f3</color>
     <color name="dialog_text_hint_color">#aaa</color>
     <color name="contact_activity_background">#1976d2</color>

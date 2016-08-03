@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,8 +34,6 @@ public class SavingStickerActivity extends BaseActivity
 
     public static final String EXTRA_FOLDER = "EXTRA_FOLDER";
 
-    Button createNewPackButton;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +45,13 @@ public class SavingStickerActivity extends BaseActivity
             if (fragment != null)
                 fragment.updateAdapterForSavingActivity();
         }
-        createNewPackButton = (Button) findViewById(R.id.activity_save_sticker_create_new_pack);
+        Button createNewPackButton = (Button) findViewById(R.id.activity_save_sticker_create_new_pack);
         if (createNewPackButton != null) {
             createNewPackButton.setOnClickListener(this);
         }
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_save_sticker_main_container));
 
     }
 
@@ -82,6 +84,7 @@ public class SavingStickerActivity extends BaseActivity
                 } else Log.e(getClass().getSimpleName(), "stickers was null");
             }
             final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_new_package, null);
+            setFont((ViewGroup) newTextDialogView);
             final EditText editText = (EditText) newTextDialogView.findViewById(R.id.dialog_set_new_text_text);
 
             final AlertDialog newTextDialog = new AlertDialog.Builder(this)

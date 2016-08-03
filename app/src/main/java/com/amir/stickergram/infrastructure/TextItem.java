@@ -19,10 +19,11 @@ public class TextItem implements Parcelable {
     public static final Typeface DEFAULT_FONT = Typeface.SERIF;
     public static final String DEFAULT_STROKE_COLOR = "#1565c0";
     private static final String DEFAULT_TEXT_COLOR = "#ffffff";
-    private static final int SELECTED_TEXT_COCLOR = Color.parseColor("#55444444");
+    private static final int SELECTED_TEXT_COLOR = Color.parseColor("#55999999");
+    private static final int LIGHT_BLUE = Color.parseColor("#2196f3");
 
-    public int hostWidth;
-    public int hostHeight;
+    int hostWidth;
+    int hostHeight;
     private String text;
     private Position position;
     private int textColor;
@@ -38,30 +39,28 @@ public class TextItem implements Parcelable {
     private int textHeight;
     private float strokeWidth;
     private TextArea area;
-    //    private int textDirection;
-//    private int gravity;
+    private Paint selectedItemPaint;
 
-    public TextItem(Bitmap hostBitmap) {
+    TextItem(Bitmap hostBitmap) {
         hostWidth = hostBitmap.getWidth();
         hostHeight = hostBitmap.getHeight();
         textStrokeColor = Color.parseColor(DEFAULT_STROKE_COLOR);
-        strokeWidth = 10;
+        strokeWidth = 6;
         isSelected = false;
         this.text = "";
         alpha = 1;
         backgroundColor = Color.TRANSPARENT;
         font = new FontItem("Mono Space", DEFAULT_FONT, FontItem.DEFAULTS, FontItem.SERIF);
-//        gravity = Gravity.NO_GRAVITY;
         position = new Position(50, 50);
         tilt = 180;
         shadow = new Shadow(Color.BLACK, 0, 0, 0);
         size = 50;
         textColor = Color.parseColor(DEFAULT_TEXT_COLOR);
-//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-//            textDirection = View.TEXT_DIRECTION_LTR;
+
+        prepTools();
     }
 
-    public TextItem(Parcel parcel) {
+    TextItem(Parcel parcel) {
         hostWidth = parcel.readInt();
         hostHeight = parcel.readInt();
         text = parcel.readString();
@@ -79,8 +78,16 @@ public class TextItem implements Parcelable {
         textHeight = parcel.readInt();
         strokeWidth = parcel.readFloat();
         area = parcel.readParcelable(TextArea.class.getClassLoader());
-        Log.e(getClass().getSimpleName(), "textItem read from parcel");
 
+        prepTools();
+    }
+
+
+    private void prepTools() {
+        selectedItemPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedItemPaint.setColor(LIGHT_BLUE);
+        selectedItemPaint.setStyle(Paint.Style.STROKE);
+        selectedItemPaint.setStrokeWidth(5);
     }
 
     @Override
@@ -102,7 +109,6 @@ public class TextItem implements Parcelable {
         parcel.writeInt(textHeight);
         parcel.writeFloat(strokeWidth);
         parcel.writeParcelable(area, 0);
-        Log.e(getClass().getSimpleName(), "textItem write to parcel");
     }
 
     public void setSelected(boolean selected) {
@@ -146,13 +152,6 @@ public class TextItem implements Parcelable {
         this.textColor = textColor;
     }
 
-//    public void setTextDirection(int textDirection) {
-//        this.textDirection = textDirection;
-//    }
-
-//    public Layout.Alignment getAlignment() {
-//        return alignment;
-//    }
 
     public int getAlpha() {
         return alpha;
@@ -165,10 +164,6 @@ public class TextItem implements Parcelable {
     public FontItem getFont() {
         return font;
     }
-
-//    public int getGravity() {
-//        return gravity;
-//    }
 
     public TextArea getArea() {
         getTextBitmap(); //updating the area
@@ -199,11 +194,9 @@ public class TextItem implements Parcelable {
         return textColor;
     }
 
-//    public int getTextDirection() {
-//        return textDirection;
-//    }
 
     public Bitmap getTextBitmap() {
+//        Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextSize(size);
         mPaint.setAlpha(alpha);
@@ -213,15 +206,10 @@ public class TextItem implements Parcelable {
         mPaint.getTextBounds(text, 0, text.length(), bound);
 
         textWidth = (int) mPaint.measureText(text, 0, text.length()) + 10;
-//        Log.e(getClass().getSimpleName(), "textWidth: " + textWidth);
         textHeight = getTextHeight(text, textWidth, size, font.getTypeface()) + 10;
-//        Log.e(getClass().getSimpleName(), "textHeight: " + textHeight);
         textHeight += textHeight / 3;
 
-//        int padding = 0;
         int padding = 20 + size / 10;
-//        if (Loader.isPersian(text))
-//            padding += size / 10;
 
         int bitmapWidth = (int) (textWidth + shadow.getDx() + strokeWidth + padding);
         int bitmapHeight = (int) (textHeight + shadow.getDy() + strokeWidth + padding);
@@ -234,18 +222,14 @@ public class TextItem implements Parcelable {
                 Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(backgroundColor);
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+//        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(strokeWidth);
         mPaint.setColor(textStrokeColor);
         mPaint.setShadowLayer(shadow.getRadius(), shadow.getDx(), shadow.getDy(), shadow.getColor());
 
-//        int yOffSet = (int) (size - (size / 15) + strokeWidth / 2 + padding / 2);
-//        int yOffSet = (int) (strokeWidth / 2 + textWidth/2);
         int yOffSet = (int) (strokeWidth / 2 + textHeight / 1.5 + padding / 2 + size / 12);
-//        float xOffSet = (size / 2) + strokeWidth / 2;
-//        float xOffSet = bitmap.getWidth() / 2 - (textWidth / 2) + size / 2 + strokeWidth / 2 ;
         float xOffSet = (int) (10 + strokeWidth / 2 + padding / 2);
-//        Log.e(getClass().getSimpleName(), "text height: " + textHeight);
         canvas.drawText(text, xOffSet, yOffSet, mPaint);
 
         mPaint.setShadowLayer(0, 0, 0, 0);//removing the shadow to avoid redrawing it
@@ -259,18 +243,16 @@ public class TextItem implements Parcelable {
     }
 
     public Bitmap getFullTextBitmap() {
-//        Log.e(getClass().getSimpleName(), "getFullTextBitmap");
         Bitmap tempTextBitmap = getTextBitmap();
-//        Bitmap fullTextBitmap = hostBitmap.copy(Bitmap.Config.ARGB_8888, true);
         Bitmap fullTextBitmap = Bitmap.createBitmap(hostWidth, hostHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(fullTextBitmap);
         Canvas textCanvas = new Canvas(tempTextBitmap);
         Matrix matrix = new Matrix();
-//        matrix.postRotate(tilt - 180, textWidth / 2, textHeight / 2);
         matrix.postRotate(tilt - 180, tempTextBitmap.getWidth() / 2, tempTextBitmap.getHeight() / 2);
         matrix.postTranslate(position.getLeft(), position.getTop());
         if (isSelected) {
-            textCanvas.drawColor(SELECTED_TEXT_COCLOR);
+            textCanvas.drawColor(SELECTED_TEXT_COLOR);
+            textCanvas.drawRect(0, 0, tempTextBitmap.getWidth(), tempTextBitmap.getHeight(), selectedItemPaint);
             textCanvas.save();
             textCanvas.restore();
         }

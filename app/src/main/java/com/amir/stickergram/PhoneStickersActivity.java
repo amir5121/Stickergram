@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +90,9 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
             loadingTextPercentage.setText(percent + "%");
             loadingStickersCount.setText(String.valueOf(stickerCount));
         }
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_phone_stickers_main_container));
 
     }
 

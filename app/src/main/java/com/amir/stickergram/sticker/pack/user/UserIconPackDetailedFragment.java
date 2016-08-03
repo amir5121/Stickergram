@@ -1,19 +1,26 @@
 package com.amir.stickergram.sticker.pack.user;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.style.TypefaceSpan;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,24 +40,24 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.File;
 
 public class UserIconPackDetailedFragment extends BaseFragment
         implements OnStickerClickListener, View.OnClickListener {
-    RecyclerView recyclerView;
-    PackAdapter adapter;
-    View view;
-    String folder;
-    ProgressBar progressBar;
-    TextView folderText;
-    Button linkButton;
-    LinearLayout publishNoteContainer;
-    boolean publishNoteIsHidden;
-    boolean isInPackCreationMode;
-    MenuItem modeChooserMenuItem;
-    TextView publishNoteText;
+    private RecyclerView recyclerView;
+    private PackAdapter adapter;
+    private String folder;
+    private ProgressBar progressBar;
+    private TextView folderText;
+    private Button linkButton;
+    private LinearLayout publishNoteContainer;
+    private boolean isInPackCreationMode;
+    private MenuItem modeChooserMenuItem;
+    private TextView publishNoteText;
+    private boolean publishNoteIsHidden = false;
 
     @Nullable
     @Override
@@ -58,7 +65,8 @@ public class UserIconPackDetailedFragment extends BaseFragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         isInPackCreationMode = false;
-        view = inflater.inflate(R.layout.fragment_user_detailed_pack, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_detailed_pack, container, false);
+        setFont((ViewGroup) view);
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_user_detailed_pack_list);
         folderText = (TextView) view.findViewById(R.id.fragment_user_detailed_pack_text_folder);
         linkButton = (Button) view.findViewById(R.id.fragment_user_detailed_pack_pack_creation_mode);
@@ -68,9 +76,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
         View publishIcon = view.findViewById(R.id.include_detailed_note_info_icon);
         publishNoteContainer = (LinearLayout) view.findViewById(R.id.include_detailed_note_container);
 
-//        ActionBar actionBar = ((BaseActivity) getActivity()).getSupportActionBar();
-//        if (actionBar != null)
-//            actionBar.setTitle("");
+        progressBar = (ProgressBar) view.findViewById(R.id.fragment_icon_detailed_progressBar);
 
         if (publishNoteCloseButton != null &&
                 publishIcon != null &&
@@ -84,10 +90,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
             publishNoteContainer.setVisibility(View.GONE);
         }
         refresh(folder); // this guy sets the adapter
-//        isInPackCreationMode = true;
         return view;
-
-        //todo: showcase of long press and press
     }
 
     @Override
@@ -101,14 +104,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.user_fragment_pack_creation_mode_option) {
             modeChooserMenuItem = item;
-            Log.e(getClass().getSimpleName(), "isInPackCreationMode: " + isInPackCreationMode);
-            if (isInPackCreationMode) {
-                gotoPackCreationMode(false);
-
-            } else {
-                gotoPackCreationMode(true);
-
-            }
+            gotoPackCreationMode(!isInPackCreationMode);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -118,7 +114,6 @@ public class UserIconPackDetailedFragment extends BaseFragment
     public void onClick(View view) {
         int itemId = view.getId();
         if (itemId == R.id.fragment_user_detailed_pack_pack_creation_mode) {
-            //changing functionality
             if (isInPackCreationMode) {
                 Loader.goToBotInTelegram((BaseActivity) getActivity());
             } else {
@@ -128,7 +123,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
             if (publishNoteContainer != null) {
                 publishNoteContainer.setVisibility(View.GONE);
                 publishNoteIsHidden = true;
-                Log.e(getClass().getSimpleName(), "on click: " + publishNoteIsHidden);
+//                Log.e(getClass().getSimpleName(), "on click: " + publishNoteIsHidden);
             }
         } else if (itemId == R.id.include_detailed_note_text || itemId == R.id.include_detailed_note_info_icon) {
             getActivity().finish();
@@ -137,14 +132,24 @@ public class UserIconPackDetailedFragment extends BaseFragment
     }
 
     private void gotoPackCreationMode(boolean flag) {
-        publishNoteContainer.setVisibility(View.VISIBLE);
+//        if (publishNoteIsHidden)
+//            publishNoteContainer.setVisibility(View.VISIBLE);
         if (flag) {
-            if (modeChooserMenuItem != null)
+            if (!isInPackCreationMode) {
+                publishNoteContainer.setVisibility(View.VISIBLE);
+                publishNoteIsHidden = false;
+            }
+            if (modeChooserMenuItem != null) {
                 modeChooserMenuItem.setTitle(getString(R.string.go_to_normal_mode));
+            }
             linkButton.setVisibility(View.VISIBLE);
             isInPackCreationMode = true;
             publishNoteText.setText(getString(R.string.you_are_in_pack_creation_mode));
         } else {
+            if (isInPackCreationMode) {
+                publishNoteContainer.setVisibility(View.VISIBLE);
+                publishNoteIsHidden = false;
+            }
             if (modeChooserMenuItem != null)
                 modeChooserMenuItem.setTitle(getString(R.string.go_to_pack_creation_mode));
             linkButton.setVisibility(View.GONE);
@@ -205,7 +210,6 @@ public class UserIconPackDetailedFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-//                    if (BaseActivity.isTelegramInstalled) {
                     if (Loader.getActivePack() != null) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setPackage(Loader.getActivePack());
@@ -307,6 +311,10 @@ public class UserIconPackDetailedFragment extends BaseFragment
             gotoPackCreationMode(false);
         }
 
+        if (publishNoteContainer != null)
+            if (publishNoteIsHidden) publishNoteContainer.setVisibility(View.GONE);
+            else publishNoteContainer.setVisibility(View.VISIBLE);
+
         isInPackCreationMode = false;
 
         if (recyclerView != null) {
@@ -323,12 +331,12 @@ public class UserIconPackDetailedFragment extends BaseFragment
     }
 
 
-    public class AsyncTaskPackAdapter extends AsyncTask<String, Void, Void> {
+    private class AsyncTaskPackAdapter extends AsyncTask<String, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressBar = (ProgressBar) view.findViewById(R.id.fragment_icon_detailed_progressBar);
-            progressBar.setVisibility(View.VISIBLE);
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
             super.onPreExecute();
         }

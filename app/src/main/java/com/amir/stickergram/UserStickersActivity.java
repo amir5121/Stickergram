@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,9 +28,7 @@ public class UserStickersActivity extends BaseActivity
     private static final String PUBLISH_NOTE_STATUS = "PUBLISH_NOTE_STATUS";
 
     private String folder;
-    private boolean publishNoteIsHidden;
     private boolean noItemWereFoundFlag = false;
-    private LinearLayout publishNoteContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,10 +45,6 @@ public class UserStickersActivity extends BaseActivity
         setUpView();
 
         if (savedInstanceState != null) {
-            if (publishNoteContainer != null) {
-                publishNoteIsHidden = savedInstanceState.getBoolean(PUBLISH_NOTE_STATUS, false);
-                publishNoteContainer.setVisibility(publishNoteIsHidden ? View.GONE : View.VISIBLE);
-            }
             saveState(savedInstanceState.getString(ICON_FOLDER, null));
             return;
         }
@@ -75,6 +70,9 @@ public class UserStickersActivity extends BaseActivity
         View noItemFoundText = findViewById(R.id.activity_user_stickers_no_sticker);
         if (noItemFoundText != null && noItemWereFoundFlag)
             noItemFoundText.setVisibility(View.VISIBLE);
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_user_stickers_main_container));
 
     }
 
@@ -133,7 +131,6 @@ public class UserStickersActivity extends BaseActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(PUBLISH_NOTE_STATUS, publishNoteIsHidden);
         outState.putString(ICON_FOLDER, folder);
     }
 

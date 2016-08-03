@@ -77,7 +77,11 @@ public class Constants {
 
     public static final int ALL_FLAVORS = 0;
     public static final String IS_USING_EMPTY_IMAGE = "IS_USING_EMPTY_IMAGE";
-
+    public static final String APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET = "Vazir.ttf";
+    public static final String APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET = "Ubuntu.ttf";
+    public static final String IMAGE_ROTATION = "IMAGE_ROTATION";
+    public static final String PNG_NO_DOT = "png";
+//
 //    private static int[]workingBitmap;
 //
 //    public static int[] getWorkingBitmap() {

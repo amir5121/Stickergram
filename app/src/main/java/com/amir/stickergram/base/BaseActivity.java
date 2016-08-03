@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.LayoutRes;
@@ -14,12 +14,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amir.stickergram.AppType;
 import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.infrastructure.Constants;
+import com.amir.stickergram.infrastructure.FontsOverride;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.mode.Mode;
 import com.amir.stickergram.navdrawer.NavDrawer;
@@ -28,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public abstract class BaseActivity extends BaseAuthenticatedActivity {
+    public static String TEMP_STICKER_CASH_DIR_2 ;
     public static float density;
     public static String CACHE_DIR;
     public static String TEMP_STICKER_CASH_DIR;
@@ -66,6 +71,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
         TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
+        TEMP_STICKER_CASH_DIR_2 = getExternalCacheDir() + File.separator + "temp_sticker2.png";
         TEMP_CROP_CASH_DIR = getExternalCacheDir() + File.separator + "temp_crop.png";
         CACHE_DIR = getCacheDir().getAbsolutePath() + "/";
 
@@ -88,10 +94,37 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             Toast.makeText(this, getString(R.string.low_storage), Toast.LENGTH_LONG).show();
         }
 
-        setFont();
+//        setFont();
 
     }
-   private void setFont() {
+
+    public void setFont(ViewGroup group) {
+        if (group != null) {
+            int count = group.getChildCount();
+            View v;
+            for (int i = 0; i < count; i++) {
+                v = group.getChildAt(i);
+                if (v instanceof TextView) {
+                    if (Loader.deviceLanguageIsPersian())
+                        ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+                    else
+                        ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+//                    ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), "Exo2.otf"));
+                } else if (v instanceof ViewGroup)
+                    setFont((ViewGroup) v);
+            }
+        } else {
+            Log.e(getClass().getSimpleName(), "viewGroup was null");
+        }
+    }
+
+
+    private void setFont() {
+        FontsOverride.setDefaultFont(this, "DEFAULT", "Fonts/eng/libel suit.ttf");
+        FontsOverride.setDefaultFont(this, "ROBOTO", "Fonts/eng/libel suit.ttf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "Fonts/eng/libel suit.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "Fonts/eng/libel suit.ttf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "Fonts/eng/libel suit.ttf");
         //todo: set font
         //https://github.com/IsseiAoki/SimpleCropView/blob/master/simplecropview-sample/src/main/java/com/example/simplecropviewsample/FontUtils.java
         //http://stackoverflow.com/questions/5634245/how-to-add-external-fonts-to-android-application

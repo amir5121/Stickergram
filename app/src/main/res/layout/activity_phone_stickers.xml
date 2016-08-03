@@ -8,6 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:id="@+id/activity_phone_stickers_main_container"
         android:layout_height="match_parent"
         android:background="@color/phone_sticker_background_color">
 

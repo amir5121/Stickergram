@@ -22,11 +22,9 @@ import java.io.IOException;
 
 public class AddFontFragment extends BaseFragment implements View.OnClickListener, FontAdapter.OnFontClickListener {
     private static final int REQUEST_NEW_FONT = 1000;
-    View addButton;
-    View howToButton;
-    View loadingFrame;
-    AddFontAdapter adapter;
-    RecyclerView recyclerView;
+    private View loadingFrame;
+    private AddFontAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -39,8 +37,8 @@ public class AddFontFragment extends BaseFragment implements View.OnClickListene
         loadingFrame = view.findViewById(R.id.add_new_font_fragment_loading_frame);
         adapter = new AddFontAdapter((BaseActivity) getActivity(), this, loadingFrame);
         recyclerView.setAdapter(adapter);
-        addButton = view.findViewById(R.id.add_new_font_fragment_add_font_button);
-        howToButton = view.findViewById(R.id.add_new_font_fragment_how_to);
+        View addButton = view.findViewById(R.id.add_new_font_fragment_add_font_button);
+        View howToButton = view.findViewById(R.id.add_new_font_fragment_how_to);
 
         howToButton.setOnClickListener(this);
         addButton.setOnClickListener(this);

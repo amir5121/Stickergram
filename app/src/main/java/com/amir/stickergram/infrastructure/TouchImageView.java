@@ -169,10 +169,10 @@ public class TouchImageView extends ImageView {
 
     public void notPaid() {
         textItem.setTilt(180);
-        Shadow shadow = textItem.getShadow();
-        shadow.setDx(0);
-        shadow.setDy(0);
-        textItem.setShadow(shadow);
+//        Shadow shadow = textItem.getShadow();
+//        shadow.setDx(0);
+//        shadow.setDy(0);
+//        textItem.setShadow(shadow);
     }
 
 

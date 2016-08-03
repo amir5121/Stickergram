@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.imageProcessing.BackgroundRemoverFragment;
-import com.amir.stickergram.imageProcessing.CropFragment;
+import com.amir.stickergram.backgroundRmover.BackgroundRemoverFragment;
+import com.amir.stickergram.backgroundRmover.CropFragment;
 import com.amir.stickergram.infrastructure.Constants;
-
-import static java.security.AccessController.getContext;
+import com.amir.stickergram.infrastructure.Loader;
 
 public class CropActivity extends BaseActivity implements CropFragment.CropFragmentCallbacks {
     private boolean hasUsedAnEmptyImage = false;
@@ -23,6 +23,9 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_crop_main_container));
+
         if (savedInstanceState != null) return;
 
         Bundle bundle = new Bundle();
@@ -31,6 +34,9 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
             hasUsedAnEmptyImage = intent.getBooleanExtra(Constants.IS_USING_EMPTY_IMAGE, false);
             bundle.putParcelable(Constants.CROP_SOURCE, intent.getParcelableExtra(Constants.CROP_SOURCE));
             destinyUri = intent.getParcelableExtra(Constants.CROP_DESTINY);
+            if (destinyUri != null) {
+                Log.e(getClass().getSimpleName(), "destiny: " + destinyUri.toString());
+            }
             bundle.putParcelable(Constants.CROP_DESTINY, destinyUri);
         }
 
@@ -39,11 +45,14 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
                 add(R.id.crop_fragment_container, CropFragment.newInstance(bundle)).
                 commit();
 
+
     }
 
     @Override
     public void cropFinished(Bundle bundle) {
-        Log.e(getClass().getSimpleName(), "cropFinished");
+
+        int rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI(destinyUri, getContentResolver()));
+        Log.e(getClass().getSimpleName(), "rotation: " + rotation);
 
         if (hasUsedAnEmptyImage) {
             Intent intent = new Intent(this, EditImageActivity.class);

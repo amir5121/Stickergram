@@ -1,4 +1,4 @@
-package com.amir.stickergram.imageProcessing;
+package com.amir.stickergram.backgroundRmover;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,6 +25,7 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.Constants;
+import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,6 +69,7 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_remove_background, container, false);
+        setFont((ViewGroup) view);
         modeButton = (ImageButton) view.findViewById(R.id.fragment_remove_background_repair_toggle_mode);
         modeButton.setOnClickListener(this);
 
@@ -93,26 +95,34 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
         toleranceSeekBar.setOnSeekBarChangeListener(this);
         toleranceContainer = view.findViewById(R.id.fragment_remove_background_tolerance_container);
 
-        try {
 //            Bitmap mBitmap = Constants.getWorkingBitmap();
 //            if (mBitmap == null)
-            Bitmap mBitmap = MediaStore.Images.Media.getBitmap(
-                    getActivity().getContentResolver(), (Uri) getArguments().getParcelable(Constants.EDIT_IMAGE_URI));
+        Bundle info = getArguments();
+        if (info != null) {
+            try {
+                Bitmap mBitmap = MediaStore.Images.Media.getBitmap(
+                        getActivity().getContentResolver(), (Uri) info.getParcelable(Constants.EDIT_IMAGE_URI));
+//                Loader.rotateImage(mBitmap, info.getInt(Constants.IMAGE_ROTATION));
 //            Constants.setWorkingBitmap(mBitmap);
-            if (mBitmap != null) {
-                mBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                if (savedInstanceState != null)
-                    mBitmap =
-                            (savedInstanceState.getParcelable(BITMAP_EXTRA) != null) ?
-                                    (Bitmap) savedInstanceState.getParcelable(BITMAP_EXTRA) : mBitmap;
-                removerView = new RemoverView((BaseActivity) getActivity(), this, mBitmap);
-            } else {
-                Log.e(getClass().getSimpleName(), "bitmap was null");
-                Toast.makeText(getContext(), getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_LONG).show();
-                getActivity().finish();
+                if (mBitmap != null) {
+                    mBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                    if (savedInstanceState != null)
+                        mBitmap =
+                                (savedInstanceState.getParcelable(BITMAP_EXTRA) != null) ?
+                                        (Bitmap) savedInstanceState.getParcelable(BITMAP_EXTRA) : mBitmap;
+
+                    removerView = new RemoverView((BaseActivity) getActivity(), this, mBitmap);
+                } else {
+                    Log.e(getClass().getSimpleName(), "bitmap was null");
+                    Toast.makeText(getContext(), getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_LONG).show();
+                    getActivity().finish();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            getActivity().finish();
+            Toast.makeText(getContext(), getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
         }
         pointerViewBottom = new PointerViewBottom(getContext());
         RelativeLayout surfaceContainer = (RelativeLayout) view.findViewById(R.id.fragment_remove_background_surface_container);

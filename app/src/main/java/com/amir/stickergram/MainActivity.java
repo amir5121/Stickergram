@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +70,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (type != null) {
                     if (action.equals(Intent.ACTION_SEND)) {
                         if (type.startsWith("image/")) {
-                            tempOutPutFile = Loader.generateEmptyBitmapFile(this);
+                            tempOutPutFile = Loader.generateEmptyBitmapFile(this, true);
                             Loader.crop((Uri) mIntent.getParcelableExtra(Intent.EXTRA_STREAM), Uri.fromFile(tempOutPutFile), this, false);
                         }
                     }
@@ -107,7 +109,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         }
 
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_main_main_container));
+
     }
+
 
     private void runShowCase() {
         ShowcaseConfig config = new ShowcaseConfig();
@@ -163,7 +169,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         } else if (itemId == R.id.dialog_from_scratch_empty_image) {
             if (Loader.checkPermission(this)) {
-                File tempFile = Loader.generateEmptyBitmapFile(this);
+                File tempFile = Loader.generateEmptyBitmapFile(this, true);
                 if (tempFile.exists() && tempOutPutFile.exists()) {
                     Loader.crop(Uri.fromFile(tempFile), Uri.fromFile(tempOutPutFile), this, true);
                 }
@@ -179,15 +185,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private void instantiateChooserDialog() {
-        tempOutPutFile = Loader.generateEmptyBitmapFile(this);
+        tempOutPutFile = Loader.generateEmptyBitmapFile(this, false);
 
         if (!tempOutPutFile.mkdirs())
             Log.e(getClass().getSimpleName(), "could not make directory");
         View view = getLayoutInflater().inflate(R.layout.dialog_from_scratch, null);
+        setFont((ViewGroup) view);
         if (isInLandscape) {
             LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialog_from_scratch_main_container);
             if (linearLayout != null) {
-                Log.e(getClass().getSimpleName(), "isInLandscape");
+//                Log.e(getClass().getSimpleName(), "isInLandscape");
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 linearLayout.setPadding(20, 20, 20, 20);
             } else Log.e(getClass().getSimpleName(), "mainContainer is null");
@@ -267,8 +274,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             else
                 outputFile = tempFileUri;
 
-//            rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI(outputFile, getContentResolver())); // this is being passed to the next activity and been used in rotation
-//            Log.e(getClass().getSimpleName(), "rotation: " + rotation);
+
             if (tempFileUri != null && outputFile != null)
                 Loader.crop(outputFile, tempFileUri, this, false);
             else

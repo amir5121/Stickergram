@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,21 +37,22 @@ import java.io.File;
 
 public class TemplateIconPackDetailedFragment extends BaseFragment
         implements OnStickerClickListener, OnRefreshCallbacks, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
-    PackAdapter adapter;
+    private PackAdapter adapter;
 
-    RecyclerView recyclerView;
-    TextView folderText;
-    String folder;
-    String name;
-    SwipeRefreshLayout swipeRefreshLayout;
-    Button linkButton;
-    ServerSticker serverSticker;
+    private RecyclerView recyclerView;
+    private TextView folderText;
+    private String folder;
+    private String name;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Button linkButton;
+    private ServerSticker serverSticker;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_icon_detailed, container, false);
+        setFont((ViewGroup) view);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_icon_detailed_swipeRefresh);
         swipeRefreshLayout.setOnRefreshListener(this);
         folderText = (TextView) view.findViewById(R.id.fragment_icon_detailed_text_folder);
@@ -97,8 +99,15 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
         final View progressView = view.findViewById(R.id.dialog_server_sticker_loading);
         final View errorImage = view.findViewById(R.id.dialog_server_sticker_error);
         ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
-        String url = Constants.STICKERGRAM_URL + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.WEBP;
-        final String dir = BaseActivity.CACHE_DIR + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.WEBP;
+//        String url = Constants.STICKERGRAM_URL + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.WEBP;
+        String url;
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            url = Constants.STICKERGRAM_URL + Constants.STICKERS + item.getEnName() + "/" + Constants.PNG_NO_DOT + "/" + item.getPosition() + Constants.PNG;
+            Log.e(getClass().getSimpleName(), url);
+        } else {
+            url = Constants.STICKERGRAM_URL + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.WEBP;
+        }
+        final String dir = BaseActivity.CACHE_DIR + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.PNG;
 
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override

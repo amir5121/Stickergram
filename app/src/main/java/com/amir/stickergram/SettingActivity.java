@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,11 +25,11 @@ import java.util.ArrayList;
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
 
     private ExpandableWeightLayout mExpandLayout;
-    View includeModes;
-    View includeLanguages;
-    int visibleItem;
-    Button languageButton;
-    Button modeButton;
+    private View includeModes;
+    private View includeLanguages;
+    private int visibleItem;
+    private Button languageButton;
+    private Button modeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         instantiateListOfAvailableModes();
 
         manageRadioButton();
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_setting_main_container));
+
     }
 
     @Override

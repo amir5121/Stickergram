@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amir.stickergram.CropActivity;
@@ -446,12 +448,15 @@ public class Loader {
             orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
         }
 
-        Log.e(TAG, "orientation: " + orientation);
+//        Log.e(TAG, "orientation: " + orientation);
         switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_90:
                 return 90;
             case ExifInterface.ORIENTATION_ROTATE_180:
                 return 180;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return 270;
+
             // etc.
         }
         return 0;
@@ -460,8 +465,10 @@ public class Loader {
     public static Bitmap rotateImage(Bitmap source, float angle) {
         if (source == null)
             return null;
-        Log.e(TAG, "rotation: " + angle);
+        Log.e(TAG, "rotation angle: " + angle);
+        source = source.copy(Bitmap.Config.ARGB_8888, true);
         Matrix matrix = new Matrix();
+//        matrix.postRotate(angle);
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
@@ -533,10 +540,14 @@ public class Loader {
      */
 
     @NonNull
-    public static File generateEmptyBitmapFile(BaseActivity activity) {
+    public static File generateEmptyBitmapFile(BaseActivity activity, boolean flag) {
         File tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
-        InputStream in;
+//        else tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR_2);
+//        else tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
         try {
+            InputStream in;
+            if (tempFile.exists()) tempFile.delete();
+            tempFile.createNewFile();
             in = activity.getAssets().open("empty.png");
             if (in == null) Log.e(TAG, "inputStream was null in generateEmptyBitmapFile");
             OutputStream os = new FileOutputStream(tempFile);
@@ -606,6 +617,14 @@ public class Loader {
                 .setNegativeButton(activity.getString(R.string.rate), listener)
                 .setNeutralButton(activity.getString(R.string.channel), listener)
                 .create();
+
+//        TextView textView = (TextView) dialog.findViewById(android.R.id.title);
+//        if (textView != null)
+//            if (deviceLanguageIsPersian())
+//                textView.setTypeface(Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+//            else
+//                textView.setTypeface(Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+
         dialog.show();
 
     }
@@ -768,4 +787,6 @@ public class Loader {
 
         return imgIn;
     }
+
+
 }

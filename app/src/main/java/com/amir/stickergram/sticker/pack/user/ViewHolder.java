@@ -8,7 +8,7 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.sticker.pack.user.PackItem;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
-    ImageView iconImageView;
+    private ImageView iconImageView;
 
     public ViewHolder(View itemView) {
         super(itemView);

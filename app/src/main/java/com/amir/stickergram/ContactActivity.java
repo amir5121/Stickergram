@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
@@ -18,8 +19,6 @@ import com.amir.stickergram.navdrawer.NavDrawer;
 
 public class ContactActivity extends BaseActivity implements View.OnClickListener {
     private static final String STICKERGRAM_FEED_BACK = "Stickergram feed back";
-    View sendEmailButton;
-    View joinStickergramChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +30,18 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void setUpView() {
-        sendEmailButton = findViewById(R.id.activity_contact_send_email_button);
-        joinStickergramChannel = findViewById(R.id.activity_contact_join_channel);
+        View sendEmailButton = findViewById(R.id.activity_contact_send_email_button);
+        View joinStickergramChannel = findViewById(R.id.activity_contact_join_channel);
 
         if (sendEmailButton != null &&
                 joinStickergramChannel != null) {
             sendEmailButton.setOnClickListener(this);
             joinStickergramChannel.setOnClickListener(this);
         }
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_contact_main_container));
+
     }
 
     @Override
@@ -51,7 +54,7 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    protected void sendEmail() {
+    private void sendEmail() {
         Intent send = new Intent(Intent.ACTION_SENDTO);
         String uriText = "mailto:" + Uri.encode(Constants.EMAIL) +
                 "?subject=" + Uri.encode(STICKERGRAM_FEED_BACK);// +

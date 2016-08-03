@@ -57,41 +57,40 @@ public class EditImageActivity
     private static final String MAIN_FONT_DIALOG_FRAGMENT_TAG = "MAIN_FONT_DIALOG_FRAGMENT_TAG";
     public static final int MAX_TEXT_SIZE = 300;
     private static final String EDIT_IMAGE_STATE = "EDIT_IMAGE_STATE";
-    TouchImageView selectedLayer;
+    private TouchImageView selectedLayer;
 
     public FrameLayout textLayerContainer;
 
-    View buttonsDeactivateLayer;
-    View proNoteCloseButton;
-    Button sizeButton;
-    Button tiltButton;
-    Button shadowDx;
-    Button shadowDy;
-    Button textButton;
-    Button fontButton;
-    Button strokeColorButton;
-    Button strokeWidthButton;
-    Button textColorButton;
-    Button shadowColorButton;
-    Button textShadowRadius;
-    Button textBackgroundColor;
-    ImageButton moveUpButton;
-    ImageButton moveDownButton;
-    ImageButton moveLeftButton;
-    ImageButton moveRightButton;
-    SeekBarCompat sizeSeekBar;
-    SeekBarCompat tiltSeekBar;
-    SeekBarCompat shadowRadius;
-    SeekBarCompat shadowDxSeekBar;
-    SeekBarCompat shadowDySeekBar;
+    private View buttonsDeactivateLayer;
+    private Button sizeButton;
+    private Button tiltButton;
+    private Button shadowDx;
+    private Button shadowDy;
+    private Button textButton;
+    private Button fontButton;
+    private Button strokeColorButton;
+    private Button strokeWidthButton;
+    private Button textColorButton;
+    private Button shadowColorButton;
+    private Button textShadowRadius;
+    private Button textBackgroundColor;
+    private ImageButton moveUpButton;
+    private ImageButton moveDownButton;
+    private ImageButton moveLeftButton;
+    private ImageButton moveRightButton;
+    private SeekBarCompat sizeSeekBar;
+    private SeekBarCompat tiltSeekBar;
+    private SeekBarCompat shadowRadius;
+    private SeekBarCompat shadowDxSeekBar;
+    private SeekBarCompat shadowDySeekBar;
 
-    SeekBarCompat strokeWidthSeekBar;
-    RelativeLayout stickerContainer;
-    Bitmap mainBitmap;
+    private SeekBarCompat strokeWidthSeekBar;
+    private RelativeLayout stickerContainer;
+    private Bitmap mainBitmap;
 
     private View buyNoteContainer;
     private TextView buyNoteText;
-    OnMainImageViewTouch helper;
+    private OnMainImageViewTouch helper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -153,6 +152,7 @@ public class EditImageActivity
 
     private void instantiateSavingDialog() {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_finish_editing, null);
+        setFont((ViewGroup) newTextDialogView);
         ImageView finishedImage = (ImageView) newTextDialogView.findViewById(R.id.dialog_finish_editing_image);
         setLayerUnselected();
         final Bitmap tempBitmap = helper.getFinishedBitmap();
@@ -231,11 +231,11 @@ public class EditImageActivity
             } else if (itemId == R.id.include_buttons_shadow_radius) {
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
             } else if (itemId == R.id.include_buttons_shadow_dx) {
-                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
+//                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
                 manageShadowsFirstTap();
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
             } else if (itemId == R.id.include_buttons_shadow_dy) {
-                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
+//                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
                 manageShadowsFirstTap();
                 setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
             } else if (itemId == R.id.include_buttons_text_background) {
@@ -600,7 +600,7 @@ public class EditImageActivity
         stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
         buyNoteContainer = findViewById(R.id.include_pro_note_container);
         buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
-        proNoteCloseButton = findViewById(R.id.include_pro_note_close);
+        View proNoteCloseButton = findViewById(R.id.include_pro_note_close);
 
 
         ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
@@ -733,6 +733,10 @@ public class EditImageActivity
             strokeWidthSeekBar.setOnSeekBarChangeListener(this);
         }
         deactivateButtons(true);
+
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_edit_image_main_container));
+
     }
 
 }

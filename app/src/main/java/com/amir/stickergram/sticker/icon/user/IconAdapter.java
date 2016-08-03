@@ -62,7 +62,7 @@ class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.item_icon_sticker, parent, false);
         view.setOnClickListener(this);
-        return new ViewHolder(view);
+        return new ViewHolder(view, activity.getAssets());
     }
 
     @Override

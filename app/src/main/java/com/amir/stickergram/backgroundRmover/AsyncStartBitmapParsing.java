@@ -1,4 +1,4 @@
-package com.amir.stickergram.imageProcessing;
+package com.amir.stickergram.backgroundRmover;
 
 import android.graphics.Color;
 import android.os.AsyncTask;

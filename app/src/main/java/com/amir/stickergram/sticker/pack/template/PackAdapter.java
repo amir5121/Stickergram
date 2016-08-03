@@ -17,7 +17,7 @@ import com.amir.stickergram.sticker.OnRefreshCallbacks;
 
 import java.util.ArrayList;
 
-public class PackAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnClickListener, ServerHelperCallBacks {
+class PackAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnClickListener, ServerHelperCallBacks {
     private LayoutInflater inflater;
     private OnStickerClickListener stickerClickListener;
     private OnRefreshCallbacks refreshCallbacks;
@@ -39,7 +39,7 @@ public class PackAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
         Log.e(getClass().getSimpleName(), "PackAdapter constructor was called");
     }
 
-    protected void updateItems() {
+    void updateItems() {
         helper.updateStickerList(Constants.STICKERGRAM_URL + Constants.LIST_DIRECTORIES, false);
         Log.e(getClass().getSimpleName(), "updateItems");
     }

@@ -1,6 +1,5 @@
-package com.amir.stickergram.imageProcessing;
+package com.amir.stickergram.backgroundRmover;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 public class AsyncCallFloodFill extends AsyncTask<Void, Void, Void> {

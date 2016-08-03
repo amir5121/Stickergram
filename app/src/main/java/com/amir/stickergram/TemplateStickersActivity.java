@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.amir.stickergram.sticker.icon.IconItem;
 import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
@@ -27,6 +28,9 @@ public class TemplateStickersActivity extends BaseActivity implements OnIconSele
         setContentView(R.layout.activity_template_stickers);
         setNavDrawer(new MainNavDrawer(this));
 
+        setFont((ViewGroup) findViewById(R.id.nav_drawer));
+        setFont((ViewGroup) findViewById(R.id.activity_template_stickers_main_container));
+
         if (savedInstanceState != null) {
             saveState(
                     savedInstanceState.getString(ICON_STICKER_ITEM_NAME, null),
@@ -40,6 +44,8 @@ public class TemplateStickersActivity extends BaseActivity implements OnIconSele
                     .add(R.id.activity_template_sticker_fragment_container, new TemplateIconListFragment(), ICONS_FRAGMENT)
                     .commit();
         }
+
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.amir.stickergram.imageProcessing;
+package com.amir.stickergram.backgroundRmover;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -53,7 +53,7 @@ class RemoverView extends ImageView implements View.OnTouchListener, AsyncCallFl
     private int top;
     private boolean usingFloodFillPointer = false;
     private Paint linePaint;
-    private Bitmap tempBitmap;
+//    private Bitmap tempBitmap;
     private int tolerance = 15;
 
 //    RemoverView(BaseActivity activity, RemoverViewCallbacks listener, Bitmap mBitmap, int[] pixels, int width, int height) {

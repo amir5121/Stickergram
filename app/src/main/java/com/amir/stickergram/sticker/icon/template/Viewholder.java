@@ -1,6 +1,8 @@
 package com.amir.stickergram.sticker.icon.template;
 
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -17,18 +19,23 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
-    ImageView iconImageView;
-    TextView iconNameTextView;
-    View progressView;
-    View errorText;
+    private ImageView iconImageView;
+    private TextView iconNameTextView;
+    private View progressView;
+    private View errorText;
 
 
-    public ViewHolder(View itemView) {
+    public ViewHolder(View itemView, AssetManager assets) {
         super(itemView);
         iconImageView = (ImageView) itemView.findViewById(R.id.template_sticker_icon_item_stickerItem);
         progressView = itemView.findViewById(R.id.item_icon_sticker_loading_container);
         errorText = itemView.findViewById(R.id.item_icon_sticker_error_text);
         iconNameTextView = (TextView) itemView.findViewById(R.id.template_sticker_icon_item_stickerName);
+        if (Loader.deviceLanguageIsPersian())
+            iconNameTextView.setTypeface(Typeface.createFromAsset(assets, Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+        else
+            iconNameTextView.setTypeface(Typeface.createFromAsset(assets, Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+
     }
 
     void populate(IconItem item) {
