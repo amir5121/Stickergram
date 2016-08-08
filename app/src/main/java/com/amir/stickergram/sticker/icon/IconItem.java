@@ -18,33 +18,33 @@ public class IconItem {
     private static final String WEBP = Constants.WEBP;
     private final String folder;
     private final String enName;
-    private final Context context;
+    private final String baseStickerDir;
 
-    public IconItem(Context context, String name, String enName) {
+    public IconItem(String name, String enName, String baseStickerDir) {
         this.folder = name;
-        this.context = context;
         this.enName = enName;
+        this.baseStickerDir = baseStickerDir;
     }
 
     public String getName() {
         return folder;
     }
 
-    public Bitmap getBitmapIconFromAsset() {
-        Bitmap bitmap = null;
-        try {
-            InputStream inputStream = context.getAssets().open(Constants.STICKERS + folder + File.separator + "10" + WEBP);
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            bitmap = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3);
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
+//    public Bitmap getBitmapIconFromAsset() {
+//        Bitmap bitmap = null;
+//        try {
+//            InputStream inputStream = context.getAssets().open(Constants.STICKERS + folder + File.separator + "10" + WEBP);
+//            bitmap = BitmapFactory.decodeStream(inputStream);
+//            bitmap = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 3, bitmap.getHeight() / 3);
+//            inputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return bitmap;
+//    }
 
     public Bitmap getBitmapFromExternalStorage() {
-        String pathName = BaseActivity.USER_STICKERS_DIRECTORY + folder + "/0.png";
+        String pathName = baseStickerDir + folder + "/0.png";
 //        String pathName = BaseActivity.USER_STICKERS_DIRECTORY + folder + "/0" + WEBP;
         Bitmap bitmap = BitmapFactory.decodeFile(pathName);
         if (bitmap == null)
@@ -55,6 +55,10 @@ public class IconItem {
 
     public String getEnName() {
         return enName;
+    }
+
+    public String getFolder() {
+        return folder;
     }
 
 //    public String getFolderDirInExternalStorage() {

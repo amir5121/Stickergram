@@ -2,7 +2,6 @@ package com.amir.stickergram.sticker.pack.template;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,7 +9,6 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
-import com.amir.stickergram.serverHelper.ServerSticker;
 import com.amir.stickergram.serverHelper.VolleySingleton;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -37,7 +35,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         iconImageView.setVisibility(View.INVISIBLE);
         iconImageView.setImageBitmap(null);
         errorImage.setVisibility(View.GONE);
-        Bitmap bitmap = Loader.getCached(dir);
+        Bitmap bitmap = Loader.getCachedImage(dir);
         if (bitmap == null) {
             imageLoader.get(url, new ImageLoader.ImageListener() {
                 @Override
@@ -46,7 +44,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                     if (mBitmap != null) {
                         iconImageView.setImageBitmap(mBitmap);
                         iconImageView.setVisibility(View.VISIBLE);
-                        Loader.cacheThumb(mBitmap, dir);
+                        Loader.cacheImage(mBitmap, dir);
                         progressView.setVisibility(View.GONE);
                     }
                 }

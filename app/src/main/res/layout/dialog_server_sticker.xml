@@ -3,11 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/dialog_single_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/edit_this_sticker"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
     <ImageView
         android:id="@+id/dialog_server_sticker_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
+        android:layout_below="@id/dialog_single_item_title"
         android:layout_marginTop="5dp"
         android:contentDescription="@string/stickergram"
         android:scaleType="fitCenter" />

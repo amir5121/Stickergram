@@ -9,6 +9,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     private static boolean isPaymentAppInstalled = false;
     private SharedPreferences preferences;
     private IabHelper mHelper;
+
+    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +73,20 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
             });
         }
 
+        mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+                if (result.isFailure()) {
+                    showErrorInPayment();
+                    return;
+                } else if (purchase.getSku().equals(ITEM_SKU)) {
+                    Log.e(getClass().getSimpleName(), "Buy Pro");
+                    setBuyProTrue();
+                }
+
+            }
+
+        };
+
     }
 
     @Override
@@ -100,19 +117,6 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         }
     }
 
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (result.isFailure()) {
-                showErrorInPayment();
-                return;
-            } else if (purchase.getSku().equals(ITEM_SKU)) {
-                Log.e(getClass().getSimpleName(), "Buy Pro");
-                setBuyProTrue();
-            }
-
-        }
-
-    };
 
     private void showErrorInPayment() {
         Toast.makeText(this, getString(R.string.payment_was_unsuccessful), Toast.LENGTH_LONG).show();
@@ -141,10 +145,10 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     }
 
     protected boolean getProStatus() {
-        if (BuildConfig.DEBUG) {
+//        if (BuildConfig.DEBUG) {
 //            Toast.makeText(this, "is in debug mode", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+//            return true;
+//        }
         return preferences.getBoolean(HAS_BOUGHT_PRO, false);
 //        }
 //        return true;

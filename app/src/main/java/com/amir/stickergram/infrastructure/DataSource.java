@@ -18,20 +18,19 @@ public class DataSource {
     private static final String IS_VISIBLE_BOOLEAN = "IS_VISIBLE_BOOLEAN";
     private static final String TYPE_INT = "TYPE_INT";
     private Set<String> stickerDirectories;
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     public DataSource(Context context) {
         preferences = context.getSharedPreferences(context.getClass().getSimpleName(), Context.MODE_PRIVATE);
         stickerDirectories = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
     }
 
-    public void update(StickerItem item) {
+    public void add(StickerItem item) {
         addDirectoryToSet(item.getStickerDirectory());
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString(item.getStickerDirectory() + THUMB_DIR_STRING, item.getThumbDirectory());
         editor.putBoolean(item.getStickerDirectory() + IS_VISIBLE_BOOLEAN, item.isVisible());
-        editor.putInt(item.getStickerDirectory() + TYPE_INT, item.getType());
 
         editor.apply();
     }
@@ -43,7 +42,6 @@ public class DataSource {
         if (stickerDirectories.contains(stickerDirectory)) {
             removeDirectoryFromSet(stickerDirectory);
             SharedPreferences.Editor editor = preferences.edit();
-//            editor.removeThumb(item.getStickerDirectory());
             editor.remove(stickerDirectory + THUMB_DIR_STRING);
             editor.remove(stickerDirectory + IS_VISIBLE_BOOLEAN);
             editor.remove(stickerDirectory + TYPE_INT);
@@ -58,44 +56,31 @@ public class DataSource {
      * Returns all of the stickers that are save in telegram directory
      * (basically all of the user's stickers that telegram has cashed)
      */
-    public List<StickerItem> getAllPhoneStickers() {
+    public List<StickerItem> getAllVisiblePhoneStickers() {
         stickerDirectories = preferences.getStringSet(DIRECTORIES, null);
         StickerItem item;
         List<StickerItem> items = new ArrayList<>();
         if (stickerDirectories != null)
             for (String directory : stickerDirectories) {
                 item = getItem(directory);
-                if (item.getType() == StickerItem.IN_PHONE)
+                if (item.isVisible())
                     items.add(item);
+//                else Log.e(getClass().getSimpleName(), "was not visible");
             }
         return items;
     }
 
-    public List<StickerItem> getAllUserStickers() {
-        StickerItem item;
-        List<StickerItem> items = new ArrayList<>();
-
-        for (String directory : stickerDirectories) {
-            item = getItem(directory);
-            if (item.getType() == StickerItem.USER_STICKER)
-                items.add(item);
-        }
-        return items;
-    }
-
-    public boolean contain(String directory) {
-        if (stickerDirectories != null)
-            return stickerDirectories.contains(directory);
-        return false;
+    boolean contain(String directory) {
+        return stickerDirectories != null && stickerDirectories.contains(directory);
     }
 
     public StickerItem getItem(String directory) {
-
+//        Log.e(getClass().getSimpleName(), directory);
         String thumbDirectory = preferences.getString(directory + THUMB_DIR_STRING, null);
         Boolean isVisible = preferences.getBoolean(directory + IS_VISIBLE_BOOLEAN, true);
-        int type = preferences.getInt(directory + TYPE_INT, StickerItem.IN_PHONE);
+//        int type = preferences.getInt(directory + TYPE_INT, StickerItem.IN_PHONE);
 
-        return new StickerItem(directory, thumbDirectory, type, false, isVisible);
+        return new StickerItem(directory, thumbDirectory, false, isVisible);
     }
 
     private void addDirectoryToSet(String stickerDirectory) {
@@ -151,6 +136,16 @@ public class DataSource {
         }
         SharedPreferences.Editor editor = preferences.edit();
         editor.putStringSet(DIRECTORIES, updateSet);
+        editor.apply();
+    }
+
+
+    public void hideItems(List<StickerItem> selectedItems) {
+        SharedPreferences.Editor editor = preferences.edit();
+        for (StickerItem item : selectedItems) {
+//            Log.e(getClass().getSimpleName(), "directory was set to invisible: " + item.getStickerDirectory());
+            editor.putBoolean(item.getStickerDirectory() + IS_VISIBLE_BOOLEAN, false);
+        }
         editor.apply();
     }
 }

@@ -5,7 +5,6 @@
     <string name="entry_image">Entry Image</string>
     <string name="my_stickers">My Stickers</string>
     <string name="need_permission_to_access_telegram_cache">Need permission to access Telegram cached Stickers</string>
-    <string name="phone_stickers">Phone Stickers</string>
     <string name="template_stickers">Template Stickers</string>
     <string name="first_load">Preparing for the first run!</string>
     <string name="stickers_so_far">Sticker were found so far</string>
@@ -105,20 +104,17 @@
     <string name="send_mail">Send mail</string>
     <string name="sticker_name">Sticker Name</string>
     <string name="tilt_pro">Tilt (pro)</string>
-    <string name="you_Can_only_create_one_pack_in_free_version">You can\'t create more than two pack in the free version</string>
+    <string name="you_can_only_create_two_pack_in_free_version">You can\'t create more than two pack in the free version</string>
     <string name="you_haven_t_created_any_sticker">You haven\'t created any sticker!</string>
     <string name="name_must_be_shorter_than_50_character">Name must be shorter than 50 character</string>
     <string name="refresh">Refresh</string>
     <string name="sweep_refresh_is_also_available">Sweep down refresh is also available</string>
-    <string name="by_hitting_done_your">Your sticker will be saved in the new package.</string>
+    <!--<string name="by_hitting_done_your">Your sticker will be saved in the new package!</string>-->
     <string name="choose_a_font">Chosen file was not a font</string>
     <string name="tilt_effect">Tilt effect will not be applied in the free version!</string>
     <string name="shadow_position_effect">Shadow position will not be applied in the free version!</string>
     <string name="rate_us">Rate us</string>
-    <string name="are_sure_you_want_to_exit">Exit?</string>
-    <string name="i_feel_you_might_wanna_rate_me">I feel like you want to rate me…</string>
     <string name="rate">Rate</string>
-    <string name="just_exit">Just exit</string>
     <string name="uninstall_lucky_patcher">Uninstall lucky patcher!</string>
     <string name="what_s_a_pack">What\'s a Pack?</string>
     <string name="a_pack_is_a_package_that_contain_a_number">A pack is a package that contain a number of Stickers. Every Sticker must be contain within a pack.</string>
@@ -217,4 +213,11 @@
     <string name="tolerance">Tolerance</string>
     <string name="radius">Radius</string>
     <string name="offset">Offset</string>
+    <string name="are_sure_you_want_to_exit">Are you sure you want to exit?</string>
+    <string name="pack">pack?</string>
+    <string name="cut">Cut</string>
+    <string name="stickergram_feed_back">Stickergram Feedback</string>
+    <string name="mobogram_two">Mobogram two</string>
+    <string name="choose_a_folder_or_create_a_new_one">Choose a folder or create a new one!</string>
+
 </resources>

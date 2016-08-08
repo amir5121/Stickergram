@@ -21,7 +21,6 @@
     <string name="no">نه</string>
     <string name="ok">خب</string>
     <string name="persian">فارسی</string>
-    <string name="phone_stickers">استیکرهای گوشی</string>
     <string name="save">ذخیره</string>
     <string name="select_a_text">لطفا اول یک متن را انتخاب کنید</string>
     <string name="shadow">سایه:</string>
@@ -52,7 +51,7 @@
     <string name="add_new_text_or_set_a_text_selected">یه متن جدید اضافه کن یا یه متن رو انتخاب کن</string>
     <string name="buy_pro">خرید نسخه پیشرفته</string>
     <string name="buy_the_pro_version_for_full_functionality">برای استفاده از همه ی قابلیت ها و حذف برچسب از نسخه پیشرفته استفاده کنید!</string>
-    <string name="by_hitting_done_your">استیکر در پک جدید ذخیره می شه</string>
+    <!--<string name="by_hitting_done_your">!استیکر در پک جدید ذخیره می شه</string>-->
     <string name="cancel">بی خیال</string>
     <string name="are_you_sure_you_are_finished_editing_this_sticker">کارت با این استیکر تموم شد؟</string>
     <string name="choose_a_font">فایل انتخاب شده فونت نبود</string>
@@ -108,14 +107,11 @@
     <string name="tilt_effect">چرخش متن در نسخه رایگان ممکن  نیست </string>
     <string name="tilt_pro">چرخش</string>
     <string name="upgrade_to_pro_to_delete_this_label">برای خذف این برچسب به نسخه پیشرفته ارتقا دهید</string>
-    <string name="you_Can_only_create_one_pack_in_free_version">تو نسخه رایگان نمیشه بیشتر از دو پک ساخت</string>
+    <string name="you_can_only_create_two_pack_in_free_version">تو نسخه رایگان نمیشه بیشتر از دو پک ساخت</string>
     <string name="for_more_info_press_on_how_to_button">برای اطلاعات بیشتر راهنما رو بخون</string>
     <string name="you_haven_t_created_any_sticker">هنوز هیچ استیکری نساختی</string>
     <string name="you_will_lose_progress">اگر الان از برنامه خارج شی استیکرت رو از دست میدی! اول اسیتکر رو ذخیره کن</string>
     <string name="your_stickers_explanation">در اینجا همه ی استیکر هایی که می سازی رو پیدا می کنی</string>
-    <string name="are_sure_you_want_to_exit">خروج؟</string>
-    <string name="i_feel_you_might_wanna_rate_me">فک کنم می خوای درباره ی برنامه نظر بدی…</string>
-    <string name="just_exit">فقط خارج شو</string>
     <string name="rate">نظر دهی</string>
     <string name="rate_us">نظر میدم</string>
     <string name="uninstall_lucky_patcher">برنامه lucky patcher رو پاک کن</string>
@@ -127,7 +123,7 @@
     <string name="_5_after_sending_the_emoji_send">۵. بعد از ارسال شکلک استیکری رو که ساختی بفرس واسه بت. یادتان باشد که باید در حالت \'ساخت استیکر\' باشید</string>
     <string name="_6_when_you_were_done_adding_stickers_to_the_pack_you">۶.بعد از اینکه همه ی استیکرهایی رو که می خواید به پک اضافه کردید باید پک رو منتشر کنید. برای انتشار پک باید دستور publish رو به بت بدید.</string>
     <string name="_7_after_sending_the_publish_command_you">۷. بعد از ارسال دستور انتشار شما باید یک اسم کوتاه برای پک خودتون بدید این اسم در آدرسی که به پکتون وصله استفاده می شه و بقیه میتونن از اون لینک برای دسترسی به استیکرهای شما استفاده کنن.</string>
-    <string name="_8_hooray_you_published_a_new_pack">۸. استیکرهات رو منتشر کردی. حالا بت بهت لینک دسترسی به استیکرهات رو میده.</string>
+    <string name="_8_hooray_you_published_a_new_pack">۸.ایول! استیکرهات رو منتشر کردی. حالا بت بهت لینک دسترسی به استیکرهات رو میده و میتونی استیکرهاتو با دوستات به اشتراک بذاری.</string>
     <string name="a_bot_is_another_computer_program_that_runs_on_telegram">بت یک برنامه ی کامپیوتری هس که روی سرورهای تلگرام اجرا می شه و از کاربران دستور میگیره و اجرا می کنه. شما از بت Stickers برای ساخت استیکرهاتون استفاده می کنید.</string>
     <string name="a_pack_is_a_package_that_contain_a_number">پک یک تعداد استیکر هستن که در یک گروه قرار میگیرن و تمام استیکرها باید داخل پک باشن </string>
     <string name="how_can_i_use_my_stickers_in_telegram">چجوری می تونم استیکرهام رو برای استفاده در تلگرام تبدیل به پک کنم؟</string>
@@ -217,4 +213,10 @@
     <string name="offset">انحراف</string>
     <string name="radius">شعاع</string>
     <string name="tolerance">گستردگی رنگ</string>
+    <string name="are_sure_you_want_to_exit">مطمئنی می خوای از برنامه خارج شی؟</string>
+    <string name="pack">پک</string>
+    <string name="choose_a_folder_or_create_a_new_one">یک پوشه رو از نوار بالا انتخاب کن یا یه پوشه جدید بساز!</string>
+    <string name="cut">بریدن</string>
+    <string name="mobogram_two">موبوگرام دو</string>
+    <string name="stickergram_feed_back">بازخورد استیکگرام</string>
 </resources>

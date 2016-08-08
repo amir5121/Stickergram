@@ -23,7 +23,6 @@ import com.amir.stickergram.AppType;
 import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.FontsOverride;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.mode.Mode;
 import com.amir.stickergram.navdrawer.NavDrawer;
@@ -32,14 +31,16 @@ import java.io.File;
 import java.util.ArrayList;
 
 public abstract class BaseActivity extends BaseAuthenticatedActivity {
-    public static String TEMP_STICKER_CASH_DIR_2 ;
+    //    public static String TEMP_STICKER_CASH_DIR_2 ;
     public static float density;
     public static String CACHE_DIR;
     public static String TEMP_STICKER_CASH_DIR;
     public static String TEMP_CROP_CASH_DIR;
     public static String FONT_DIRECTORY;
-    public static String BASE_THUMBNAIL_DIRECTORY;
+    public static String BASE_USER_THUMBNAIL_DIRECTORY;
+    public static String BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY;
     public static String USER_STICKERS_DIRECTORY;
+    public static String BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY;
     public static String STICKERGRAM = "/Stickergram";
 
     private SharedPreferences preferences;
@@ -67,11 +68,13 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         isInLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         density = getResources().getDisplayMetrics().density;
 
-        BASE_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_Stickers";
+        BASE_USER_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_Stickers";
+        BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_phone_organized_Stickers";
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
+        BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.phone_organized/";
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
         TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
-        TEMP_STICKER_CASH_DIR_2 = getExternalCacheDir() + File.separator + "temp_sticker2.png";
+//        TEMP_STICKER_CASH_DIR_2 = getExternalCacheDir() + File.separator + "temp_sticker2.png";
         TEMP_CROP_CASH_DIR = getExternalCacheDir() + File.separator + "temp_crop.png";
         CACHE_DIR = getCacheDir().getAbsolutePath() + "/";
 
@@ -79,7 +82,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         if (chosenMode.getPack() == null) {
             ArrayList<Mode> modes = Loader.getAllAvailableModes(this);
             if (modes.size() > 0)//when one of the supported modes is installed
-                setDefaultMode(new Mode(modes.get(0).getPack(), this));
+                setDefaultMode(modes.get(0));
             if (chosenMode.getPack() == null) {// if none of the supported modes is installed
                 setDefaultMode(new Mode(Constants.TELEGRAM_PACKAGE, this));
                 Log.e(getClass().getSimpleName(), "no type of supported telegram was found and chosenMode was defaulted to original telegram");
@@ -94,9 +97,36 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             Toast.makeText(this, getString(R.string.low_storage), Toast.LENGTH_LONG).show();
         }
 
-//        setFont();
-
     }
+
+
+//    public void setFont(Button b) {
+//        if (b != null)
+//            if (Loader.deviceLanguageIsPersian())
+//                b.setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+//            else
+//                b.setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+////
+//    }
+
+    //    private void setFont() {
+//        FontsOverride.setDefaultFont(this, "DEFAULT", "Fonts/eng/libel suit.ttf");
+//        FontsOverride.setDefaultFont(this, "ROBOTO", "Fonts/eng/libel suit.ttf");
+//        FontsOverride.setDefaultFont(this, "MONOSPACE", "Fonts/eng/libel suit.ttf");
+//        FontsOverride.setDefaultFont(this, "SERIF", "Fonts/eng/libel suit.ttf");
+//        FontsOverride.setDefaultFont(this, "SANS_SERIF", "Fonts/eng/libel suit.ttf");
+//        //todo: set font
+//        //https://github.com/IsseiAoki/SimpleCropView/blob/master/simplecropview-sample/src/main/java/com/example/simplecropviewsample/FontUtils.java
+//        //http://stackoverflow.com/questions/5634245/how-to-add-external-fonts-to-android-application
+    public void setFont(TextView textView) {
+        if (textView != null)
+            if (Loader.deviceLanguageIsPersian())
+                textView.setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+            else
+                textView.setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+//
+    }
+
 
     public void setFont(ViewGroup group) {
         if (group != null) {
@@ -105,11 +135,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             for (int i = 0; i < count; i++) {
                 v = group.getChildAt(i);
                 if (v instanceof TextView) {
-                    if (Loader.deviceLanguageIsPersian())
-                        ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
-                    else
-                        ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
-//                    ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), "Exo2.otf"));
+                    setFont((TextView) v);
                 } else if (v instanceof ViewGroup)
                     setFont((ViewGroup) v);
             }
@@ -119,17 +145,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     }
 
 
-    private void setFont() {
-        FontsOverride.setDefaultFont(this, "DEFAULT", "Fonts/eng/libel suit.ttf");
-        FontsOverride.setDefaultFont(this, "ROBOTO", "Fonts/eng/libel suit.ttf");
-        FontsOverride.setDefaultFont(this, "MONOSPACE", "Fonts/eng/libel suit.ttf");
-        FontsOverride.setDefaultFont(this, "SERIF", "Fonts/eng/libel suit.ttf");
-        FontsOverride.setDefaultFont(this, "SANS_SERIF", "Fonts/eng/libel suit.ttf");
-        //todo: set font
-        //https://github.com/IsseiAoki/SimpleCropView/blob/master/simplecropview-sample/src/main/java/com/example/simplecropviewsample/FontUtils.java
-        //http://stackoverflow.com/questions/5634245/how-to-add-external-fonts-to-android-application
-    }
-
+//    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -142,6 +158,12 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             if (ab != null)
                 ab.setTitle(getString(R.string.app_name));
         }
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     public Toolbar getToolbar() {
@@ -208,6 +230,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             editor.apply();
 
             Loader.setLocale(language, this);
+//            restartActivity();
         }
     }
 
@@ -220,4 +243,11 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public String getCachedJson() {
         return preferences.getString(Constants.CACHED_JSON, null);
     }
+
+    public void restartActivity() {
+        Intent refresh = new Intent(this, this.getClass());
+        startActivity(refresh);
+        finish();
+    }
+
 }

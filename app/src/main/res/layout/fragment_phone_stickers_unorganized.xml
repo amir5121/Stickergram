@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/phone_sticker_background_color">
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/activity_phone_stickers_unorganized_swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/include_toolbar">
+
+        <com.amir.stickergram.phoneStickers.CustomRecyclerView
+            android:id="@+id/activity_phone_stickers_unorganized_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar"
+            android:scrollbars="vertical" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/fragment_phone_stickers_unorganized_enable_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/light_blue_transparent"
+        android:clickable="false"
+        android:gravity="center"
+        android:text="@string/choose_a_folder_or_create_a_new_one"
+        android:textColor="#fff"
+        android:textSize="19sp" />
+
+
+    <TextView
+        android:id="@+id/activity_phone_stickers_no_cached_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/include_toolbar"
+        android:gravity="center"
+        android:text="@string/telegram_has_not_cashed_any_stickers"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
+

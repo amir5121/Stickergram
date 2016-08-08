@@ -14,8 +14,11 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
+import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.icon.IconItem;
 import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
+
+import java.io.File;
 
 public class UserIconListFragment extends BaseFragment implements IconAdapter.OnStickerClickListener {
     private RecyclerView recyclerView;
@@ -58,6 +61,11 @@ public class UserIconListFragment extends BaseFragment implements IconAdapter.On
     @Override
     public void OnIconClicked(IconItem item) {//coming from the adapter
         mCallback.OnIconSelected(item);
+    }
+
+    @Override
+    public void OnIconLongClicked(IconItem item) {
+//        Loader.removeDirectory(new File(BaseActivity.USER_STICKERS_DIRECTORY + item.getFolder() + File.separator));
     }
 
     @Override

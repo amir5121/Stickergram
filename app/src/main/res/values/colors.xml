@@ -6,12 +6,12 @@
     <color name="selected_nav_drawer_item_background">#442196f3</color>
     <color name="list_item_nav_drawer_selected_item_text_color">#2196f3</color>
     <color name="nav_drawer_background">#ffffff</color>
-    <color name="loading_background">#283593</color>
+    <color name="loading_background">#661565c0</color>
     <color name="icon_sticker_name_background">#55000000</color>
     <color name="icon_sticker_list_background">#1976d2</color>
     <color name="detailed_sticker_fragment_background">#42a5f5</color>
     <color name="no_user_sticker_founded_text">#18ffff</color>
-    <color name="selected_item_foreground">#304ffe</color>
+    <color name="selected_item_foreground">#FFFFFF</color>
     <color name="size_seek_bar_background_color">#6dff2937</color>
     <color name="size_seek_bar_progress_color">#ff4081</color>
     <color name="size_seek_bar_thumb_color">#fff</color>
@@ -50,7 +50,7 @@
     <color name="faq_text_background">#42a5f5</color>
     <color name="activity_main_buttons_background">#2196f3</color>
     <color name="edit_activity_button_overlay_layer_background_color">#992196f3</color>
-    <color name="dialog_text_hint_color">#aaa</color>
+    <color name="dialog_text_hint_color">#ccc</color>
     <color name="contact_activity_background">#1976d2</color>
     <color name="light_blue_transparent">#bb42a5f5</color>
 </resources>

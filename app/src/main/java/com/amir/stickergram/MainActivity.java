@@ -1,5 +1,6 @@
 package com.amir.stickergram;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int REQUEST_SELECT_IMAGE = 999;
     private static final String MAIN_ACTIVITY_SEQUENCE_ID = "MAIN_ACTIVITY_SEQUENCE_ID";
 
+//    private static final int ANTHON_REQUEST_CODE = 222;
+
     private AlertDialog pickAnImageDialog;
     private View userStickersButton;
     private View phoneStickersButton;
@@ -61,7 +65,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setUpView();
 
 
-        //coming from a share intent
+        //coming from topMarginAnimation share intent
         Intent mIntent = getIntent();
         if (mIntent != null) {
             String action = mIntent.getAction();
@@ -111,6 +115,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         setFont((ViewGroup) findViewById(R.id.nav_drawer));
         setFont((ViewGroup) findViewById(R.id.activity_main_main_container));
+
+//        telephonyManager.getDeviceId();
+//
+//        if (Loader.checkPermissionAnthon(this)) {
+//            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//            String IMEI = telephonyManager.getDeviceId();
+//            if (IMEI.equals("358096070986985") && !isPaid) setBuyProTrue();
+//        } else Loader.gainPermissionAnthon(this, ANTHON_REQUEST_CODE);
 
     }
 
@@ -217,6 +229,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
+//            case ANTHON_REQUEST_CODE: {
+//                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//                String IMEI = telephonyManager.getDeviceId();
+//                if (IMEI.equals("358096070986985")) setBuyProTrue();
+//                break;
+//            }
             case Constants.USER_STICKER_GAIN_PERMISSION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -269,7 +287,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else tempFileUri = Uri.fromFile(tempOutPutFile);
 
             if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE)))
-                //if user took a picture
+                //if user took topMarginAnimation picture
                 outputFile = data.getData();
             else
                 outputFile = tempFileUri;

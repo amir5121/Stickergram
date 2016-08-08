@@ -55,9 +55,9 @@
 //                    if (bitmap != null) {
 //
 //                        // replacing webp with png and compressing it as a png so on devices with lower apis transparent background remain transparent and doesn't turn black
-//                        File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file).replace(".webp", ".png"));
-////                        File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file).replace(".webp", ".png"));
-////                        File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file));
+//                        File thumbFile = new File((BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file).replace(".webp", ".png"));
+////                        File thumbFile = new File((BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file).replace(".webp", ".png"));
+////                        File thumbFile = new File((BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + file));
 //
 //                        if (!thumbFile.getParentFile().exists())
 //                            if (!thumbFile.getParentFile().mkdirs())

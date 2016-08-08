@@ -2,8 +2,12 @@ package com.amir.stickergram.infrastructure;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Environment;
 
 import com.amir.stickergram.AppType;
+import com.amir.stickergram.base.BaseActivity;
+
+import java.io.File;
 
 public class Constants {
     public static final int TEXT_COLOR = 0;
@@ -23,6 +27,7 @@ public class Constants {
 
     public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
     public static final String MOBOGRAM_PACKAGE = "com.hanista.mobogram";
+    public static final String MOBOGRAM_TWO = "com.hanista.mobogram.two";
     public static final String TELEGRAPH_PACKAGE = "ir.ilmili.telegraph";
     public static final String TELEGRAM_PLUS_PACKAGE = "org.telegram.plus";
     public static final String PERSIAN_TELEGRAM = "ir.persianfox.messenger";
@@ -73,7 +78,8 @@ public class Constants {
             LAGATGRAM,
             ORANGE_TELEGRAM,
             MY_TELEGRAM,
-            ANIWAYS};
+            ANIWAYS,
+            MOBOGRAM_TWO};
 
     public static final int ALL_FLAVORS = 0;
     public static final String IS_USING_EMPTY_IMAGE = "IS_USING_EMPTY_IMAGE";
@@ -81,6 +87,7 @@ public class Constants {
     public static final String APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET = "Ubuntu.ttf";
     public static final String IMAGE_ROTATION = "IMAGE_ROTATION";
     public static final String PNG_NO_DOT = "png";
+    public static final String MOVED_STICKERS_INFO = Environment.getExternalStorageDirectory() + BaseActivity.STICKERGRAM + "/moveInfo.txt";
 //
 //    private static int[]workingBitmap;
 //

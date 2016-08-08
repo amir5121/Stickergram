@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.DataSource;
+import com.amir.stickergram.phoneStickers.unorganized.PhoneStickersUnorganizedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +21,8 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
     private OnStickerClickListener listener;
     private DataSource dataSource;
 
-
-    public SingleStickersAdapter(BaseActivity activity) {
-        try {
-            this.listener = (OnStickerClickListener) activity;
-        } catch (ClassCastException e) {
-            Log.e(getClass().getSimpleName(), "must implement OnStickerClickListener");
-            e.printStackTrace();
-        }
+    public SingleStickersAdapter(BaseActivity activity, OnStickerClickListener listener) {
+        this.listener = listener;
         this.inflater = activity.getLayoutInflater();
         dataSource = new DataSource(activity);
         items = new ArrayList<>(); // things actually happen in refresh method
@@ -43,8 +38,9 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
 
     @Override
     public void onBindViewHolder(SingleStickerViewHolder holder, int position) {
-        holder.populate(items.get(position));
+        holder.populate(items.get(position), PhoneStickersUnorganizedFragment.isInCropMode);
     }
+
 
     @Override
     public int getItemCount() {
@@ -72,31 +68,36 @@ public class SingleStickersAdapter extends RecyclerView.Adapter<SingleStickerVie
         return true;
     }
 
-//    public void add(StickerItem item) {
-//        dataSource.update(item);
-//        items.add(item);
-//        notifyItemInserted(items.indexOf(item));
-//    }
-
     public void refreshPhoneSticker() {
-        items = dataSource.getAllPhoneStickers();
-//        if (items.size() > 0)
-        Log.e(getClass().getSimpleName(), "size: " + items.size());
+        items = dataSource.getAllVisiblePhoneStickers();
+//        Arrays.sort(items.toArray());
+
         if (items.size() == 0)
-        listener.OnNoItemExistedListener();
+            listener.OnNoItemExistedListener();
         notifyItemRangeChanged(0, items.size());
         notifyDataSetChanged();
     }
 
-    public void refreshUserSticker() {
-        items = dataSource.getAllUserStickers();
-        if (items.size() > 0)
-            notifyItemRangeChanged(0, items.size());
+    public void hideItems(List<StickerItem> selectedItems) {
+        dataSource.hideItems(selectedItems);
     }
 
-    public List<StickerItem> getItems() {
-        return items;
+    public void updateItems(ArrayList<StickerItem> selectedItems) {
+//        String mString;
+//        String toMatch;
+        int size = items.size();
+        if (selectedItems != null)
+            for (StickerItem selectedItem : selectedItems) {
+                for (int i = 0; i < size; i++) {
+                    if (items.get(i).getName().equals(selectedItem.getName())) {
+                        items.set(i, selectedItem);
+                        break;
+                    }
+                }
+            }
+
     }
+
 
     public interface OnStickerClickListener {
         void OnStickerClicked(StickerItem item);

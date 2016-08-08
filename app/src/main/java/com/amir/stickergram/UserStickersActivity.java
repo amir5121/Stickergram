@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
@@ -58,7 +57,7 @@ public class UserStickersActivity extends BaseActivity
 
         Intent intent = getIntent();//when we are coming from the savingStickerActivity
         if (intent != null) {
-            folder = intent.getStringExtra(SavingStickerActivity.EXTRA_FOLDER);
+            folder = intent.getStringExtra(SaveStickerActivity.EXTRA_FOLDER);
             if (folder != null) {
                 getSupportFragmentManager().popBackStackImmediate();
                 instantiateFragment(folder);
@@ -72,7 +71,7 @@ public class UserStickersActivity extends BaseActivity
             noItemFoundText.setVisibility(View.VISIBLE);
 
         setFont((ViewGroup) findViewById(R.id.nav_drawer));
-        setFont((ViewGroup) findViewById(R.id.activity_user_stickers_main_container));
+        setFont((ViewGroup) findViewById(R.id.activity_phone_stickers_main_container));
 
     }
 
@@ -87,7 +86,7 @@ public class UserStickersActivity extends BaseActivity
     public void OnNoStickerWereFoundListener() {
         noItemWereFoundFlag = true;
         setUpView();
-        // there is a scenario where this method will be called before the call to OnCreate so i'm calling the setUpView
+        // there is topMarginAnimation scenario where this method will be called before the call to OnCreate so i'm calling the setUpView
 
     }
 
@@ -168,8 +167,11 @@ public class UserStickersActivity extends BaseActivity
         if (findViewById(R.id.activity_user_stickers_fragment_container) == null) {
             finish();
             startActivity(new Intent(this, MainActivity.class));
-        } else
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        } else {
             super.onBackPressed();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
     }
 
 }

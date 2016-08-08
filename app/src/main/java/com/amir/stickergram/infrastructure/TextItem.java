@@ -60,7 +60,7 @@ public class TextItem implements Parcelable {
         prepTools();
     }
 
-    TextItem(Parcel parcel) {
+    private TextItem(Parcel parcel) {
         hostWidth = parcel.readInt();
         hostHeight = parcel.readInt();
         text = parcel.readString();
@@ -83,13 +83,6 @@ public class TextItem implements Parcelable {
     }
 
 
-    private void prepTools() {
-        selectedItemPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        selectedItemPaint.setColor(LIGHT_BLUE);
-        selectedItemPaint.setStyle(Paint.Style.STROKE);
-        selectedItemPaint.setStrokeWidth(5);
-    }
-
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(hostWidth);
@@ -109,6 +102,13 @@ public class TextItem implements Parcelable {
         parcel.writeInt(textHeight);
         parcel.writeFloat(strokeWidth);
         parcel.writeParcelable(area, 0);
+    }
+
+    private void prepTools() {
+        selectedItemPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectedItemPaint.setColor(LIGHT_BLUE);
+        selectedItemPaint.setStyle(Paint.Style.STROKE);
+        selectedItemPaint.setStrokeWidth(5);
     }
 
     public void setSelected(boolean selected) {

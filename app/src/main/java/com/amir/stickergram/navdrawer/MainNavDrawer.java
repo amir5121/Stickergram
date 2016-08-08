@@ -19,7 +19,7 @@ public class MainNavDrawer extends NavDrawer {
 
         addItem(new ActivityNavDrawerItem(MainActivity.class, activity.getString(R.string.home), R.drawable.ic_home, R.id.include_nav_drawer_top_items));
         addItem(new ActivityNavDrawerItem(UserStickersActivity.class, activity.getString(R.string.my_stickers), R.drawable.ic_your_stickers, R.id.include_nav_drawer_top_items));
-        addItem(new ActivityNavDrawerItem(PhoneStickersActivity.class, activity.getString(R.string.phone_stickers), R.drawable.ic_phone, R.id.include_nav_drawer_top_items));
+        addItem(new ActivityNavDrawerItem(PhoneStickersActivity.class, activity.getString(R.string.telegram_sticker), R.drawable.ic_phone, R.id.include_nav_drawer_top_items));
         addItem(new ActivityNavDrawerItem(TemplateStickersActivity.class, activity.getString(R.string.template_stickers), R.drawable.ic_template, R.id.include_nav_drawer_top_items));
 
         if (!BaseActivity.isPaid) {

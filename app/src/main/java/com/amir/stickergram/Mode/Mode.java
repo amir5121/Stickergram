@@ -37,6 +37,9 @@ public class Mode {
                 case Constants.MOBOGRAM_PACKAGE:
                     name = activity.getString(R.string.mobogram);
                     break;
+                case Constants.MOBOGRAM_TWO:
+                    name = activity.getString(R.string.mobogram_two);
+                    break;
                 case Constants.ORANGE_TELEGRAM:
                     name = activity.getString(R.string.telegram_narenji);
                     break;
@@ -57,9 +60,7 @@ public class Mode {
     }
 
     public String getCacheDir() {
-//        if (isAvailable)
         return BASE_MODE_CACHE_DIR + pack + END_CACHE_DIR;
-//        return null;
     }
 
     public String getPack() {

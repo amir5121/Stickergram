@@ -41,7 +41,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         languageButton = (Button) findViewById(R.id.activity_setting_language);
         modeButton = (Button) findViewById(R.id.activity_setting_mode);
         mExpandLayout = (ExpandableWeightLayout) findViewById(R.id.activity_setting_expandable_layout);
-//        View systemLanguageContainer = findViewById(R.id.activity_setting_system_language_container);
 
         if (Loader.getAllAvailableModes(this).size() <= 1) {
             modeButton.setVisibility(View.GONE);
@@ -49,11 +48,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         includeModes = getLayoutInflater().inflate(R.layout.include_supported_modes, null, false);
         includeLanguages = getLayoutInflater().inflate(R.layout.include_language, null, false);
+        setFont((ViewGroup) includeLanguages);
+        setFont((ViewGroup) includeModes);
 
         View persianLanguageContainer = includeLanguages.findViewById(R.id.activity_setting_persian_language_container);
         View englishLanguageContainer = includeLanguages.findViewById(R.id.activity_setting_english_language_container);
 
-//        systemLanguageContainer.setOnClickListener(this);
         persianLanguageContainer.setOnClickListener(this);
         englishLanguageContainer.setOnClickListener(this);
         languageButton.setOnClickListener(this);
@@ -77,12 +77,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 manageView(includeModes);
                 break;
             case R.id.activity_setting_persian_language_container:
-//                manageRadioButton();
                 setLanguage(Constants.PERSIAN_LANGUAGE);
                 restartActivity();
                 break;
             case R.id.activity_setting_english_language_container:
-//                manageRadioButton();
                 setLanguage(Constants.ENGLISH_LANGUAGE);
                 restartActivity();
                 break;
@@ -189,11 +187,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-    public void restartActivity() {
-        Intent refresh = new Intent(this, this.getClass());
-        startActivity(refresh);
-        finish();
-    }
 
     private void instantiateListOfAvailableModes() {
         ListView listView = (ListView) includeModes.findViewById(R.id.activity_setting_modes_list);
@@ -215,6 +208,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     //        View butt1 = findViewById(R.id.butt1);

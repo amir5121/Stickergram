@@ -46,7 +46,6 @@ public class TemplateStickersActivity extends BaseActivity implements OnIconSele
         }
 
 
-
     }
 
     @Override
@@ -113,7 +112,10 @@ public class TemplateStickersActivity extends BaseActivity implements OnIconSele
         if (findViewById(R.id.activity_template_sticker_fragment_container) == null) {
             finish();
             startActivity(new Intent(this, MainActivity.class));
-        } else
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        } else {
             super.onBackPressed();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
     }
 }

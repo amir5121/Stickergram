@@ -1,279 +1,68 @@
 package com.amir.stickergram;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.infrastructure.AsyncTaskPhoneAdapter;
-import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
-import com.amir.stickergram.sticker.single.SingleStickersAdapter;
-import com.amir.stickergram.sticker.single.StickerItem;
+import com.amir.stickergram.phoneStickers.AsyncStickersCut;
+import com.amir.stickergram.phoneStickers.CustomRecyclerView;
+import com.amir.stickergram.phoneStickers.organizedDetailed.OrganizedStickersDetailedDialogFragment;
+import com.amir.stickergram.phoneStickers.organizedIcon.OnStickerClickListener;
+import com.amir.stickergram.phoneStickers.organizedIcon.OrganizedStickersIconFragment;
+import com.amir.stickergram.phoneStickers.unorganized.PhoneStickersUnorganizedFragment;
+import com.amir.stickergram.sticker.icon.IconItem;
 
-public class PhoneStickersActivity extends BaseActivity implements SingleStickersAdapter.OnStickerClickListener, SwipeRefreshLayout.OnRefreshListener, AsyncTaskPhoneAdapter.AsyncPhoneTaskListener {
-    private static final String IS_REFRESHING = "IS_REFRESHING";
-    private static final String STICKER_COUNT = "STICKER_COUNT";
-    private static final String PERCENT = "PERCENT";
+public class PhoneStickersActivity extends BaseActivity
+        implements OnStickerClickListener,
+        AsyncStickersCut.AsyncCutCallbacks,
+        CustomRecyclerView.RecyclerViewMovementCallbacks,
+        PhoneStickersUnorganizedFragment.UnorganizedFragmentCallbacks {
 
-    private TextView loadingTextPercentage;
-    private TextView loadingStickersCount;
-    private TextView noStickerText;
-    private AlertDialog dialog;
-    private SingleStickersAdapter adapter;
-    private SwipeRefreshLayout swipeRefresh;
-    private AsyncTaskPhoneAdapter task;
+    private static final long ANIMATION_DURATION = 500;
 
-    private int stickerCount = 0;
-    private int percent = 0;
-    Bundle savedInstanceState;
+    PhoneStickersUnorganizedFragment unorganizedFragment;
+    View loadingFrame;
+    View organizedFragmentView;
+    View unorganizedFragmentView;
+    private int organizedFragmentHeight = 0;
+    public boolean isOrganizedFragmentHidden = false;
+    private String lastClickedIcon = null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_stickers);
         setNavDrawer(new MainNavDrawer(this));
-        this.savedInstanceState = savedInstanceState;
-
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.activity_phone_stickers_swipeRefresh);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.activity_phone_stickers_list);
-        noStickerText = (TextView) findViewById(R.id.activity_phone_stickers_no_cached_text);
-
-        if (swipeRefresh != null) {
-            swipeRefresh.setOnRefreshListener(this);
-            swipeRefresh.setColorSchemeColors(
-                    Color.parseColor("#FF00DDFF"),
-                    Color.parseColor("#FF99CC00"),
-                    Color.parseColor("#FFFFBB33"),
-                    Color.parseColor("#FFFF4444"));
-        }
-        if (recyclerView != null) {
-            adapter = new SingleStickersAdapter(this);
-            adapter.refreshPhoneSticker();
-            if (isTablet || isInLandscape)
-                recyclerView.setLayoutManager(new GridLayoutManager(PhoneStickersActivity.this, 5));
-            else
-                recyclerView.setLayoutManager(new GridLayoutManager(PhoneStickersActivity.this, 3));
-            recyclerView.setAdapter(adapter);
-        }
-
-        if (savedInstanceState != null) {
-            TypedValue typed_value = new TypedValue();
-            this.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, typed_value, true);
-            swipeRefresh.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId));
-            swipeRefresh.setRefreshing(savedInstanceState.getBoolean(IS_REFRESHING, false));
-        }
-
-        if (!hasCashedPhoneStickersOnce())
-            callAsyncTaskPhoneAdapter();
-
-        if (savedInstanceState != null && loadingTextPercentage != null && loadingStickersCount != null) {
-            percent = savedInstanceState.getInt(PERCENT);
-            stickerCount = savedInstanceState.getInt(STICKER_COUNT);
-            loadingTextPercentage.setText(percent + "%");
-            loadingStickersCount.setText(String.valueOf(stickerCount));
-        }
 
         setFont((ViewGroup) findViewById(R.id.nav_drawer));
         setFont((ViewGroup) findViewById(R.id.activity_phone_stickers_main_container));
 
-    }
+        unorganizedFragment = (PhoneStickersUnorganizedFragment) getSupportFragmentManager().findFragmentById(R.id.activity_phone_stickers_phone_stickers_unorganized_fragment);
 
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        if (task != null)
-            task.detach();
-        return task;
-    }
+        unorganizedFragmentView = findViewById(R.id.activity_phone_stickers_organized_fragment_container);
+        organizedFragmentView = findViewById(R.id.activity_phone_stickers_phone_stickers_organized_fragment);
 
-    @Override
-    public void OnStickerClicked(StickerItem item) {
-        if (item.getBitmap() != null)
-            Loader.loadStickerDialog(item.getUri(), this);
-        else {
-            setPhoneStickerCashStatus(false);
-            callAsyncTaskPhoneAdapter();
-        }
-    }
+        loadingFrame = findViewById(R.id.activity_phone_stickers_loading_frame);
 
-    @Override
-    public void OnStickerLongClicked(StickerItem item) {
-
-    }
-
-    @Override
-    public void OnNoItemExistedListener() {
-        if (noStickerText != null) noStickerText.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onRefresh() {
-        callAsyncTaskPhoneAdapter();
-    }
-
-
-    @Override
-    public void onTaskStartListener() {
-        if (!hasCashedPhoneStickersOnce()) //to not to show the loading firstLoadingDialog if user is doing a swipeRefresh
-            instantiateLoadingDialog();
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onTaskUpdateListener(int percent, int stickerCount) {
-        this.percent = percent;
-        this.stickerCount = stickerCount;
-
-        if (loadingTextPercentage != null && loadingStickersCount != null) {
-            String percentTemp = String.valueOf(percent);
-            String stickerCountTemp = String.valueOf(stickerCount);
-            if (Loader.deviceLanguageIsPersian()) {
-                percentTemp = Loader.convertToPersianNumber(percentTemp);
-                loadingTextPercentage.setText("% " + percentTemp);
-                stickerCountTemp = Loader.convertToPersianNumber(stickerCountTemp);
-            } else loadingTextPercentage.setText(percentTemp + " %");
-
-            loadingStickersCount.setText(stickerCountTemp);
-
-        }
-
-    }
-
-    @Override
-    public void onTaskFinishedListener() {
-        if (noStickerText != null) noStickerText.setVisibility(View.GONE);
-        manageView();
-    }
-
-    private void manageView() {
-        if (dialog != null) {
-            dialog.dismiss();
-            dialog = null;
-        }
-
-        if (swipeRefresh != null)
-            swipeRefresh.setRefreshing(false);
-        setPhoneStickerCashStatus(true);
-        adapter.refreshPhoneSticker();
-    }
-
-    @Override
-    public void onNoCashDirectoryListener() {
-        if (!chosenMode.isAvailable)
-            Toast.makeText(this, getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
-        finish();
-    }
-
-    @Override
-    public void onNoStickerWereFoundListener() {
-        if (noStickerText != null)
-            noStickerText.setVisibility(View.VISIBLE);
-        manageView();
-    }
-
-    @Override
-    public void onRequestReadWritePermission() {
-        Loader.gainPermission(this, Constants.PHONE_STICKERS_GAIN_PERMISSION);
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(IS_REFRESHING, swipeRefresh.isRefreshing());
-        outState.putInt(STICKER_COUNT, stickerCount);
-        outState.putInt(PERCENT, percent);
-        super.onSaveInstanceState(outState);
-    }
-
-    private void callAsyncTaskPhoneAdapter() {
-        task = (AsyncTaskPhoneAdapter) getLastCustomNonConfigurationInstance();
-
-        if (task == null) {
-            task = new AsyncTaskPhoneAdapter(this);
-            task.execute(adapter);
-        } else {
-            instantiateLoadingDialog();
-            task.attach(this);
-        }
-    }
-
-    private void instantiateLoadingDialog() {
-        View loadingDialogView = getLayoutInflater().inflate(R.layout.dialog_phone_stickers_loading, null, false);
-        if (dialog != null) {
-            dialog.dismiss();
-            dialog = null;
-            Log.e(getClass().getSimpleName(), "instantiateDialog firstLoadingDialog was set to null");
-        }
-        dialog = new AlertDialog.Builder(PhoneStickersActivity.this)
-                .setView(loadingDialogView)
-                .setCancelable(false)
-                .create();
-        dialog.show();
-
-        loadingTextPercentage = (TextView) loadingDialogView.findViewById(R.id.phone_loading_dialog_text_percentage);
-        loadingStickersCount = (TextView) loadingDialogView.findViewById(R.id.phone_loading_dialog_total_sticker);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == Constants.PHONE_STICKERS_GAIN_PERMISSION) {
-//            Log.e(getClass().getSimpleName(), "------here");
-            // If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                finish();
-                startActivity(new Intent(this, PhoneStickersActivity.class));
-                this.overridePendingTransition(0, 0);
-
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
-
-            } else {
-                Log.e(getClass().getSimpleName(), "permission denied");
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-                this.overridePendingTransition(0, 0);
-                Toast.makeText(this, getResources().getString(R.string.need_permission_to_look_for_your_stickers), Toast.LENGTH_LONG).show();
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
-            }
-
-            return;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (dialog != null) {
-            Log.e(getClass().getSimpleName(), "onDestroy firstLoadingDialog was set to null");
-            dialog.dismiss();
-            dialog = null;
-        }
-        super.onDestroy();
+        if (PhoneStickersUnorganizedFragment.isInCropMode) onSlideUpCallback();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.phone_sticker_activity_menu_item, menu);
+        menu.clear();
+        getMenuInflater().inflate(R.menu.phone_sticker_unoraganized_fragment_menu, menu);
+        menu.getItem(1).setVisible(PhoneStickersUnorganizedFragment.isInCropMode);
+        menu.getItem(0).setVisible(!PhoneStickersUnorganizedFragment.isInCropMode);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -281,15 +70,142 @@ public class PhoneStickersActivity extends BaseActivity implements SingleSticker
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.phone_sticker_activity_menu_item_refresh) {
-            onRefresh();
+            unorganizedFragment.onRefresh();
             Toast.makeText(this, getString(R.string.sweep_refresh_is_also_available), Toast.LENGTH_SHORT).show();
+        } else if (itemId == R.id.phone_sticker_activity_menu_item_cut) {
+            unorganizedFragment.setEnable(false);
+            onSlideDownCallback();
         }
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onBackPressed() {
-        finish();
-        startActivity(new Intent(this, MainActivity.class));
+        if (PhoneStickersUnorganizedFragment.isInCropMode || !unorganizedFragment.isEnable()) {
+            if (!unorganizedFragment.isEnable()) {
+                unorganizedFragment.setEnable(true);
+                onSlideUpCallback();
+                return;
+            }
+            if (PhoneStickersUnorganizedFragment.isInCropMode) {
+                unorganizedFragment.toggleCutMode();
+            }
+        } else {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
+    }
+
+    @Override
+    public void OnIconClicked(IconItem item) {
+        lastClickedIcon = item.getFolder();
+
+        if (PhoneStickersUnorganizedFragment.isInCropMode) {
+            new AsyncStickersCut(this, unorganizedFragment.getSelectedItems(), item.getFolder(), this).execute();
+
+        } else {
+            OrganizedStickersDetailedDialogFragment
+                    .newInstance(item.getFolder())
+                    .show(getSupportFragmentManager(), "dialog");
+        }
+    }
+
+    @Override
+    public void OnIconLongClicked(IconItem item) {
+
+    }
+
+    @Override
+    public void OnNoItemWereFoundListener() {
+        Log.e(getClass().getSimpleName(), "OnNoItemWereFound");
+    }
+
+    @Override
+    public void OnCreateNewFolderSelected() {
+        //is handled in the Fragment
+        //intentionally empty
+    }
+
+    @Override
+    public void onCutStarted() {
+        loadingFrame.setClickable(true);
+        loadingFrame.animate()
+                .alpha(1)
+                .setDuration(300)
+                .start();
+        unorganizedFragment.setEnable(true);
+
+        unorganizedFragment.hideSelectedList();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        organizedFragmentHeight = organizedFragmentView.getHeight();
+    }
+
+    @Override
+    public void onCutFinished() {
+        loadingFrame.setClickable(false);
+        loadingFrame.animate().alpha(0).setDuration(300).start();
+
+        if (lastClickedIcon != null)
+            OrganizedStickersDetailedDialogFragment
+                    .newInstance(lastClickedIcon)
+                    .show(getSupportFragmentManager(), "dialog");
+
+
+        onSlideDownCallback();
+
+        OrganizedStickersIconFragment fragment =
+                (OrganizedStickersIconFragment) getSupportFragmentManager().findFragmentById(R.id.activity_phone_stickers_phone_stickers_organized_fragment);
+
+        unorganizedFragment.toggleCutMode();
+        if (fragment != null) fragment.refreshItems();
+
+    }
+
+
+    @Override
+    public void onSlideUpCallback() {
+        if (!isOrganizedFragmentHidden) {
+            isOrganizedFragmentHidden = true;
+            organizedFragmentView
+                    .animate()
+                    .translationY(-organizedFragmentHeight)
+                    .setDuration(ANIMATION_DURATION)
+                    .alpha(0)
+                    .start();
+        }
+    }
+
+    @Override
+    public void onSlideDownCallback() {
+        if (isOrganizedFragmentHidden && !PhoneStickersUnorganizedFragment.isInCropMode || !unorganizedFragment.isEnable()) {
+            slideDown();
+        }
+    }
+
+    private void slideDown() {
+        isOrganizedFragmentHidden = false;
+        organizedFragmentView
+                .animate()
+                .translationY(0)
+                .alpha(1)
+                .setDuration(ANIMATION_DURATION)
+                .start();
+    }
+
+    @Override
+    public void cutModeToggled(boolean enabled) {
+        invalidateOptionsMenu();
+        unorganizedFragment.setSwipeRefreshEnable(!enabled);
+        if (enabled) {
+            onSlideUpCallback();
+        } else {
+            onSlideDownCallback();
+        }
     }
 }

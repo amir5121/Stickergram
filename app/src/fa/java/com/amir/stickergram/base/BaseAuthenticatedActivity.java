@@ -39,6 +39,9 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     public static boolean inAppBillingSetupOk = false;
     public static boolean isPaymentAppInstalled = false;
+
+
+    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 //    boolean mIsPremium = false;
 
     @Override
@@ -77,8 +80,22 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
             });
         }
 
-    }
+        mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+                if (result.isFailure()) {
+                    showErrorInPayment();
+                    Log.e(getClass().getSimpleName(), "failed");
+                    return;
+                } else if (purchase.getSku().equals(ITEM_SKU)) {
+                    Log.e(getClass().getSimpleName(), "Buy Pro");
+                    setBuyProTrue();
+                }
 
+            }
+
+        };
+    }
+//
 //    private void queryPurchasedItems() {
 //        //check if user has bought "remove adds"
 ////        if (mHelper.isSetupDone() && !mHelper.isAsyncInProgress()) {
@@ -97,7 +114,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 //        super.onResume();
 //        queryPurchasedItems();
 //    }
-
+//
 //
 //    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
 //        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
@@ -114,7 +131,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 //                if (mIsPremium && !isPaid)
 //                    setBuyProTrue();
 //
-//                // update UI accordingly
+//                // add UI accordingly
 //
 //                Log.d(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
 //            }
@@ -148,19 +165,6 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         }
     }
 
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (result.isFailure()) {
-                showErrorInPayment();
-                return;
-            } else if (purchase.getSku().equals(ITEM_SKU)) {
-                Log.e(getClass().getSimpleName(), "Buy Pro");
-                setBuyProTrue();
-            }
-
-        }
-
-    };
 
     private void showErrorInPayment() {
         Toast.makeText(this, getString(R.string.payment_was_unsuccessful), Toast.LENGTH_LONG).show();

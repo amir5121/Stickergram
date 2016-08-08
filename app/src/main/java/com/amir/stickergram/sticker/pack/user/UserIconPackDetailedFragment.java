@@ -1,26 +1,18 @@
 package com.amir.stickergram.sticker.pack.user;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
-import android.text.style.TypefaceSpan;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +32,6 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
-import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.File;
@@ -191,19 +182,43 @@ public class UserIconPackDetailedFragment extends BaseFragment
         };
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+        setFont((ViewGroup) view);
+        TextView textView = (TextView) view.findViewById(R.id.dialog_single_item_title);
+        textView.setText(activity.getString(R.string.do_you_want_to_send_this_sticker));
         ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
         if (stickerImage != null)
             stickerImage.setImageBitmap(BitmapFactory.decodeFile(item.getDir()));
 
-        AlertDialog deleteDialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog sendImageToUserDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(activity.getString(R.string.do_you_want_to_send_this_sticker))
+//                .setTitle(activity.getString(R.string.do_you_want_to_send_this_sticker))
                 .setNegativeButton(activity.getString(R.string.no), listener)
                 .setPositiveButton(activity.getString(R.string.send), listener)
                 .create();
 
-        deleteDialog.show();
+
+        sendImageToUserDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+//                activity.setFont((TextView) sendToBotDialog.findViewById(android.R.id.message));
+                activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
+
+        sendImageToUserDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
+
+        sendImageToUserDialog.show();
     }
+
+
 
     private void sendImageToBot(final BaseActivity activity, final PackItem item) {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -228,6 +243,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
         };
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_send_sticker, null, false);
+        setFont((ViewGroup) view);
         ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_send_sticker_image_view);
 
         if (BaseActivity.isInLandscape) {
@@ -246,16 +262,29 @@ public class UserIconPackDetailedFragment extends BaseFragment
         if (stickerImage != null)
             stickerImage.setImageBitmap(bitmap);
 
-        AlertDialog deleteDialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog sendToBotDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(activity.getString(R.string.add_to_pack))
+//                .setTitle(activity.getString(R.string.add_to_pack))
                 .setNegativeButton(activity.getString(R.string.no), listener)
                 .setPositiveButton(activity.getString(R.string.add), listener)
                 .setNeutralButton(getString(R.string.help), listener)
                 .create();
 
-        deleteDialog.show();
+
+        sendToBotDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+//                activity.setFont((TextView) sendToBotDialog.findViewById(android.R.id.message));
+                activity.setFont(sendToBotDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(sendToBotDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                activity.setFont(sendToBotDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
+
+
+        sendToBotDialog.show();
     }
+
 
     @Override
     public void OnLongClicked(final PackItem item) {
@@ -274,18 +303,32 @@ public class UserIconPackDetailedFragment extends BaseFragment
         };
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+        setFont((ViewGroup) view);
+        TextView textView = (TextView) view.findViewById(R.id.dialog_single_item_title);
+        textView.setText(activity.getString(R.string.do_you_want_to_delete_this_sticker));
+
         ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
 
         Bitmap bitmap = BitmapFactory.decodeFile(item.getDir());
         if (stickerImage != null)
             stickerImage.setImageBitmap(bitmap);
 
-        AlertDialog deleteDialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog deleteDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(activity.getString(R.string.do_you_want_to_delete_this_sticker))
+//                .setTitle(activity.getString(R.string.do_you_want_to_delete_this_sticker))
                 .setNegativeButton(activity.getString(R.string.cancel), listener)
                 .setPositiveButton(activity.getString(R.string.delete), listener)
                 .create();
+
+        deleteDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
+
+
 
         deleteDialog.show();
     }
@@ -318,7 +361,13 @@ public class UserIconPackDetailedFragment extends BaseFragment
         isInPackCreationMode = false;
 
         if (recyclerView != null) {
-            adapter = new PackAdapter(this, this, folder);
+            adapter = new PackAdapter(
+                    (BaseActivity) getActivity(),
+                    this,
+                    folder,
+                    BaseActivity.USER_STICKERS_DIRECTORY,
+                    BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY);
+
             if (BaseActivity.isTablet || BaseActivity.isInLandscape)
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
             else

@@ -4,22 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="@string/by_hitting_done_your"
-        android:textColor="@color/dialog_text_color"
-        android:textSize="16sp" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="5dp"-->
+        <!--android:text="@string/by_hitting_done_your"-->
+        <!--android:textColor="@color/dialog_text_color"-->
+        <!--android:textSize="16sp" />-->
 
     <EditText
         android:id="@+id/dialog_set_new_text_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_your_text"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        android:hint="@string/package_name"
         android:inputType="text"
         android:maxLines="1"
         android:textColor="@color/dialog_text_color"

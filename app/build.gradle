@@ -8,8 +8,8 @@ android {
         applicationId "com.amir.stickergram"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 21
-        versionName "3.1.1"
+        versionCode 22
+        versionName "3.2"
     }
     productFlavors {
         fa {

@@ -17,29 +17,28 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
     private static final Integer ITEMS_WERE_ADDED = 0;
     private static final Integer NO_ITEM_IN_CACHE_DIRECTORY = 1;
     private static final Integer NEED_PERMISSION = 2;
-    Context context;
-    AsyncPhoneTaskListener listener;
-    String baseThumbDir;
-    int percent;
-    int foundedStickersCount = 0;
+    private Context context;
+    private AsyncPhoneTaskListener listener;
+    private String baseThumbDir;
+    private int foundedStickersCount = 0;
 
-    public AsyncTaskPhoneAdapter(BaseActivity activity) {
-        attach(activity);
+    public AsyncTaskPhoneAdapter(BaseActivity activity, AsyncPhoneTaskListener listener) {
+        attach(activity, listener);
     }
 
-    public void attach(BaseActivity activity) {
+    public void attach(BaseActivity activity, AsyncPhoneTaskListener listener) {
 
-        try {
-            listener = (AsyncPhoneTaskListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + "Must implement AsyncPhoneTaskListener");
-        }
+//        try {
+        this.listener = listener;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + "Must implement AsyncPhoneTaskListener");
+//        }
 
-        if (activity.getExternalCacheDir() != null)
-            baseThumbDir = activity.getExternalCacheDir().getAbsolutePath() + File.separator + "phone_" + BaseActivity.chosenMode.getPack();
-        else
-            baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_" + BaseActivity.chosenMode.getPack();
+//        if (activity.getExternalCacheDir() != null)
+        baseThumbDir = activity.getExternalCacheDir() + File.separator + "phone_" + BaseActivity.chosenMode.getPack();
+//        else
+//            baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_" + BaseActivity.chosenMode.getPack();
         this.context = activity;
     }
 
@@ -58,7 +57,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
             return CACHE_DIRECTORY_DID_NOT_EXIST;
         }
         int temp = 0;
-        percent = 0;
+        int percent;
         File files[] = folder.listFiles();
         int length = files.length;
         DataSource dataSource = params[0].getDataSource();
@@ -78,10 +77,9 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
                 if (!dataSource.contain(file.getAbsolutePath())) {
                     String thumbDirectory = Loader.generateThumbnail(file.getAbsolutePath(), baseThumbDir + name);
                     if (thumbDirectory != null)
-                        dataSource.update(new StickerItem(
+                        dataSource.add(new StickerItem(
                                 file.getAbsolutePath(),
                                 Loader.generateThumbnail(file.getAbsolutePath(), thumbDirectory),
-                                StickerItem.IN_PHONE,
                                 false,
                                 true));
                 }

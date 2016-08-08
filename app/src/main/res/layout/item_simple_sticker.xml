@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/simple_sticker_item_image"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:layout_gravity="center"
-    android:layout_margin="5dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="2dp"
     android:elevation="5dp"
-    android:background="@drawable/simple_sticker_background"
-    android:foreground="?android:selectableItemBackground"
-    android:padding="4dp"
-    android:scaleType="fitCenter"
-    android:src="@drawable/phone" />
+    android:padding="4dp">
 
-    <!--todo: change the foreground color instead of overlaying another imageView on top-->
+    <ImageView
+        android:id="@+id/simple_sticker_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/simple_sticker_background"
+        android:foreground="?android:selectableItemBackground"
+        android:scaleType="fitCenter" />
+
+    <ImageView
+        android:id="@+id/simple_sticker_item_image_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/simple_sticker_overlay"
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/item_simple_sticker_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        app:buttonTint="#fff" />
+
+</RelativeLayout>

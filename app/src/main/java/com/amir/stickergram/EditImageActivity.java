@@ -166,9 +166,9 @@ public class EditImageActivity
                 if (which == Dialog.BUTTON_POSITIVE) {
 
                     if (Loader.freeMemory() > 2) {
-                        Loader.saveBitmapToCache(tempBitmap); // the SavingStickerActivity uses the cached image for the saving process
+                        Loader.saveBitmapToCache(tempBitmap); // the SaveStickerActivity uses the cached image for the saving process
                         finish();
-                        startActivity(new Intent(EditImageActivity.this, SavingStickerActivity.class));
+                        startActivity(new Intent(EditImageActivity.this, SaveStickerActivity.class));
                     } else
                         Toast.makeText(EditImageActivity.this, getString(R.string.failed_to_save_the_sticker), Toast.LENGTH_LONG).show();
                 }
@@ -177,11 +177,19 @@ public class EditImageActivity
             }
         };
 
-        AlertDialog finishedEditing = new AlertDialog.Builder(this)
+        final AlertDialog finishedEditing = new AlertDialog.Builder(this)
                 .setView(newTextDialogView)
                 .setPositiveButton(getString(R.string.yes), listener)
                 .setNegativeButton(getString(R.string.no), listener)
                 .create();
+
+        finishedEditing.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                EditImageActivity.this.setFont(finishedEditing.getButton(AlertDialog.BUTTON_NEGATIVE));
+                EditImageActivity.this.setFont(finishedEditing.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
 
         finishedEditing.show();
     }
@@ -191,7 +199,7 @@ public class EditImageActivity
         int itemId = view.getId();
 //
 //        if (itemId == R.id.lol){
-//            Log.e(getClass().getSimpleName(), "you are a total idiot");
+//            Log.e(getClass().getSimpleName(), "you are topMarginAnimation total idiot");
 //        }
 
         if (itemId == R.id.include_pro_note_close) {
@@ -427,13 +435,23 @@ public class EditImageActivity
             }
         };
 
-        AlertDialog newTextDialog = new AlertDialog.Builder(this)
+        final AlertDialog newTextDialog = new AlertDialog.Builder(this)
                 .setView(newTextDialogView)
-                .setTitle(getString(R.string.new_text))
+                .setMessage(getString(R.string.new_text))
                 .setPositiveButton(getString(R.string.done), listener)
                 .setNegativeButton(getString(R.string.cancel), listener)
                 .setCancelable(false)
                 .create();
+
+        newTextDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                EditImageActivity.this.setFont((TextView) newTextDialog.findViewById(android.R.id.message));
+                EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
 
         newTextDialog.show();
     }

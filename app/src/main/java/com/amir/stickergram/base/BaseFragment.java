@@ -12,6 +12,13 @@ import com.amir.stickergram.infrastructure.Loader;
 
 public class BaseFragment extends Fragment {
 
+    public void setFont(TextView textView) {
+        if (textView != null)
+            if (Loader.deviceLanguageIsPersian())
+                textView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+            else
+                textView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+    }
 
     public void setFont(ViewGroup group) {
         if (group != null) {
@@ -20,11 +27,7 @@ public class BaseFragment extends Fragment {
             for (int i = 0; i < count; i++) {
                 v = group.getChildAt(i);
                 if (v instanceof TextView) {
-                    if (Loader.deviceLanguageIsPersian())
-                        ((TextView) v).setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
-                    else
-                        ((TextView) v).setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
-//                    ((TextView) v).setTypeface(Typeface.createFromAsset(getAssets(), "Exo2.otf"));
+                    setFont((TextView) v);
                 } else if (v instanceof ViewGroup)
                     setFont((ViewGroup) v);
             }
@@ -32,4 +35,5 @@ public class BaseFragment extends Fragment {
             Log.e(getClass().getSimpleName(), "viewGroup was null");
         }
     }
+
 }

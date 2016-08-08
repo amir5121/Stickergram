@@ -18,19 +18,23 @@ public class PackItem {
 
     private final String folder;
     private final String name;
+    private String baseThumbDir;
+    private String baseStickerDir;
 
-    public PackItem(String folder, String name) {
+    public PackItem(String folder, String name, String thumbDir, String baseStickerDir) {
         this.folder = folder;
         this.name = name;
+        this.baseThumbDir = thumbDir;
+        this.baseStickerDir = baseStickerDir;
     }
 
     public Bitmap getThumbnail() {
-        Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG);
+        Bitmap bitmap = BitmapFactory.decodeFile(baseThumbDir + File.separator + folder + "_" + name + PNG);
         if (bitmap == null) {
             Bitmap tempBitmap;
             try {
                 tempBitmap = BitmapFactory.decodeFile(getDir());
-                File thumbFile = new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG));
+                File thumbFile = new File((baseThumbDir + File.separator + folder + "_" + name + PNG));
                 if (!thumbFile.getParentFile().exists())
                     if (!thumbFile.getParentFile().mkdirs())
                         Log.e(getClass().getSimpleName(), "failed");
@@ -55,11 +59,12 @@ public class PackItem {
     }
 
     public String getDir() {
-        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG;
+//        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG;
+        return baseStickerDir+ folder + File.separator + name + PNG;
     }
 
     public String getWebpDir() {
-        Bitmap tempBitmap = BitmapFactory.decodeFile(BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG);
+        Bitmap tempBitmap = BitmapFactory.decodeFile(baseStickerDir + folder + File.separator + name + PNG);
         if (tempBitmap == null) {
             Log.e(getClass().getSimpleName(), "tempBitmap was null");
             return null;
@@ -70,7 +75,7 @@ public class PackItem {
             if (file.exists())
                 file.delete();
             file.createNewFile();
-            tempBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(dir));
+            tempBitmap.compress(Bitmap.CompressFormat.WEBP, 80, new FileOutputStream(dir));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,7 +84,7 @@ public class PackItem {
     }
 
     public void removeThumb() {
-        File file = new File(BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG);
+        File file = new File(BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG);
         if (file.exists())
             file.delete();
     }

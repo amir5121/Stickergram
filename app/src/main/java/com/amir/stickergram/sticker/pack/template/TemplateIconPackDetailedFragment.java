@@ -95,6 +95,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
 
     private void getDialogFor(PackItem item) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_server_sticker, null, false);
+        setFont((ViewGroup) view);
         final ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_server_sticker_image);
         final View progressView = view.findViewById(R.id.dialog_server_sticker_loading);
         final View errorImage = view.findViewById(R.id.dialog_server_sticker_error);
@@ -116,23 +117,36 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
                     Intent intent = new Intent(getActivity(), EditImageActivity.class);
                     intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(new File(dir)));
                     startActivity(intent);
+                    getActivity().finish();
                 }
             }
         };
 
         final AlertDialog editStickerDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(getActivity().getString(R.string.edit_this_sticker))
+//                .setTitle(getActivity().getString(R.string.edit_this_sticker))
                 .setNegativeButton(getActivity().getString(R.string.no), listener)
                 .setPositiveButton(getActivity().getString(R.string.yes), listener)
                 .create();
+
+
+        editStickerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                BaseActivity activity = ((BaseActivity) getActivity());
+                activity.setFont((TextView) editStickerDialog.findViewById(android.R.id.message));
+                activity.setFont(editStickerDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(editStickerDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                activity.setFont(editStickerDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
 
         editStickerDialog.show();
 
         final Button positiveButton = editStickerDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
 
-        Bitmap bitmap = Loader.getCached(dir);
+        Bitmap bitmap = Loader.getCachedImage(dir);
         if (bitmap == null) {
             imageLoader.get(url, new ImageLoader.ImageListener() {
                 @Override
@@ -140,7 +154,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
                     Bitmap mBitmap = response.getBitmap();
                     if (mBitmap != null) {
                         stickerImage.setImageBitmap(mBitmap);
-                        Loader.cacheThumb(mBitmap, dir);
+                        Loader.cacheImage(mBitmap, dir);
                         positiveButton.setEnabled(true);
                         progressView.setVisibility(View.GONE);
                     }

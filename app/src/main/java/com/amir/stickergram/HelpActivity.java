@@ -18,7 +18,7 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
     private static final CharSequence PUBLISH_COMMAND = "/publish";
     private static final CharSequence NEW_PACK_COMMAND = "/newpack";
 
-    //todo : add how to add sticker to a published pack https://youtu.be/-hB3qNd7dGk
+    //todo : add how to add sticker to topMarginAnimation published pack https://youtu.be/-hB3qNd7dGk
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,5 +107,6 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
     public void onBackPressed() {
         finish();
         startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

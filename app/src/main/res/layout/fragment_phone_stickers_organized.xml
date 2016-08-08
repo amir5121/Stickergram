@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/organized_fragment_icon_background">
+
+    <RelativeLayout
+        android:id="@+id/fragment_phone_stickers_organized_top_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/fragment_phone_sticker_organized_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="3dp"
+            android:clickable="true"
+            android:padding="5dp"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/fragment_phone_stickers_organized_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/fragment_phone_sticker_organized_close"
+            android:layout_toStartOf="@id/fragment_phone_sticker_organized_close"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Title"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_phone_stickers_organized_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_phone_stickers_organized_top_container"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>
+

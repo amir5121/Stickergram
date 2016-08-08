@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -94,6 +93,39 @@ public class Loader {
         }
     }
 
+//    public static void gainPermissionAnthon(BaseActivity activity, int requestCode) {
+//        if (
+//                ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
+//                        Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+//
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+//                    Manifest.permission.READ_CONTACTS)) {
+//
+//                // Show an explanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//
+//            } else {
+//
+//                // No explanation needed, we can request the permission.
+//
+//                ActivityCompat.requestPermissions(activity,
+//                        new String[]{Manifest.permission.READ_PHONE_STATE}, requestCode);
+//
+//                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+//                // app-defined int constant. The callback method gets the
+//                // result of the request.
+//            }
+//        }
+//    }
+//
+//    public static boolean checkPermissionAnthon(BaseActivity activity) {
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
+//            return ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+//        return true;
+//    }
+
     public static boolean checkPermission(BaseActivity activity) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
             return ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -103,11 +135,12 @@ public class Loader {
     public static boolean copyFile(File sourceFile, File destFile) throws IOException {
         if (!destFile.getParentFile().exists())
             if (destFile.getParentFile().mkdirs())
-                return false;
+                Log.e(TAG, "couldn't make parent");
 
         if (!destFile.exists()) {
             if (!destFile.createNewFile())
-                return false;
+                Log.e(TAG, "couldn't make file");
+//                return false;
         } else {
             destFile.delete();
             destFile.createNewFile();
@@ -177,18 +210,34 @@ public class Loader {
         };
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+        activity.setFont((ViewGroup) view);
+
+        TextView textView = (TextView) view.findViewById(R.id.dialog_single_item_title);
+        textView.setText(activity.getString(R.string.edit_this_sticker));
+
         ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
 
+        Log.e(TAG, "uri: " + uri);
         if (stickerImage != null) {
             stickerImage.setImageURI(uri);
         } else Log.e(TAG, "dialog_single_item_image was null");
 
-        AlertDialog dialog = new AlertDialog.Builder(activity)
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(view)
-                .setTitle(activity.getString(R.string.edit_this_sticker))
+//                .setTitle(activity.getString(R.string.edit_this_sticker))
                 .setNegativeButton(activity.getString(R.string.no), listener)
                 .setPositiveButton(activity.getString(R.string.yes), listener)
                 .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                activity.setFont((TextView) dialog.findViewById(android.R.id.message));
+                activity.setFont(dialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(dialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                activity.setFont(dialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
 
         dialog.getWindow().getAttributes().width = ActionBar.LayoutParams.MATCH_PARENT;
         dialog.getWindow().getAttributes().height = ActionBar.LayoutParams.MATCH_PARENT;
@@ -610,20 +659,23 @@ public class Loader {
                 }
             }
         };
-        AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setTitle(activity.getString(R.string.are_sure_you_want_to_exit))
-                .setMessage(activity.getString(R.string.i_feel_you_might_wanna_rate_me))
-                .setPositiveButton(activity.getString(R.string.just_exit), listener)
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setMessage(activity.getString(R.string.are_sure_you_want_to_exit))
+//                .setMessage(activity.getString(R.string.i_feel_you_might_wanna_rate_me))
+                .setPositiveButton(activity.getString(R.string.exit), listener)
                 .setNegativeButton(activity.getString(R.string.rate), listener)
                 .setNeutralButton(activity.getString(R.string.channel), listener)
                 .create();
 
-//        TextView textView = (TextView) dialog.findViewById(android.R.id.title);
-//        if (textView != null)
-//            if (deviceLanguageIsPersian())
-//                textView.setTypeface(Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
-//            else
-//                textView.setTypeface(Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                activity.setFont((TextView) dialog.findViewById(android.R.id.message));
+                activity.setFont(dialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                activity.setFont(dialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                activity.setFont(dialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            }
+        });
 
         dialog.show();
 
@@ -657,7 +709,7 @@ public class Loader {
     }
 
     @NonNull
-    static String getActiveStickerDir() {
+    public static String getActiveStickerDir() {
         return BaseActivity.chosenMode.getCacheDir();
     }
 
@@ -703,7 +755,7 @@ public class Loader {
     }
 
 
-    public static Bitmap getCached(String dir) {
+    public static Bitmap getCachedImage(String dir) {
         if (new File(dir).exists()) {
 //            Log.e(TAG, dir);
             return BitmapFactory.decodeFile(dir);
@@ -713,17 +765,17 @@ public class Loader {
 //        return null;
     }
 
-    public static void cacheThumb(Bitmap mBitmap, String dir) {
+    public static void cacheImage(Bitmap mBitmap, String dir) {
         try {
             File file = new File(dir);
-//            Log.e(TAG, "cacheThumb: " + dir);
+//            Log.e(TAG, "cacheImage: " + dir);
             if (!file.getParentFile().exists())
                 if (file.getParentFile().mkdirs())
-                    Log.e(TAG, "couldn't make parent directory");
+                    Log.v(TAG, "couldn't make parent directory");
 //                    return false;
             if (!file.exists()) {
                 if (!file.createNewFile())
-                    Log.e(TAG, "couldn't make parent directory");
+                    Log.v(TAG, "couldn't make parent directory");
             } else {
                 file.delete();
                 file.createNewFile();
@@ -788,5 +840,11 @@ public class Loader {
         return imgIn;
     }
 
+    public static void removeDirectory(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                removeDirectory(child);
 
+        fileOrDirectory.delete();
+    }
 }

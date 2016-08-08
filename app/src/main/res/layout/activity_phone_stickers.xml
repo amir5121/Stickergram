@@ -4,43 +4,57 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/icon_sticker_list_background"
     tools:context=".UserStickersActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/activity_phone_stickers_main_container"
-        android:layout_height="match_parent"
-        android:background="@color/phone_sticker_background_color">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <include
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/activity_phone_stickers_swipeRefresh"
+        <RelativeLayout
+            android:id="@+id/activity_phone_stickers_organized_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/include_toolbar">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_toolbar"
+            android:elevation="5dp">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/activity_phone_stickers_list"
+            <fragment
+                android:id="@+id/activity_phone_stickers_phone_stickers_organized_fragment"
+                android:name="com.amir.stickergram.phoneStickers.organizedIcon.OrganizedStickersIconFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/include_toolbar"
-                android:scrollbars="vertical" />
+                android:layout_height="85dp"
+                tools:layout="@layout/fragment_phone_stickers_organized" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/activity_phone_stickers_no_cached_text"
+        <fragment
+            android:id="@+id/activity_phone_stickers_phone_stickers_unorganized_fragment"
+            android:name="com.amir.stickergram.phoneStickers.unorganized.PhoneStickersUnorganizedFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/include_toolbar"
-            android:gravity="center"
-            android:textColor="#fff"
-            android:text="@string/telegram_has_not_cashed_any_stickers"
-            android:textSize="18sp"
-            android:visibility="gone"/>
+            tools:layout="@layout/fragment_phone_stickers_unorganized" />
+
+
+        <FrameLayout
+            android:id="@+id/activity_phone_stickers_loading_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_toolbar"
+            android:background="@color/light_blue_transparent"
+            android:alpha="0">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
 
     </RelativeLayout>
 

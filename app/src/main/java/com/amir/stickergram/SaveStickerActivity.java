@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class SavingStickerActivity extends BaseActivity
+public class SaveStickerActivity extends BaseActivity
         implements OnIconSelectedListener, View.OnClickListener {
 
     public static final String EXTRA_FOLDER = "EXTRA_FOLDER";
@@ -78,7 +78,7 @@ public class SavingStickerActivity extends BaseActivity
             if (!isPaid) {
                 if (stickers != null) {
                     if (stickers.size() > 1) {
-                        Toast.makeText(this, getString(R.string.you_Can_only_create_one_pack_in_free_version), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.you_can_only_create_two_pack_in_free_version), Toast.LENGTH_LONG).show();
                         return;
                     }
                 } else Log.e(getClass().getSimpleName(), "stickers was null");
@@ -89,7 +89,7 @@ public class SavingStickerActivity extends BaseActivity
 
             final AlertDialog newTextDialog = new AlertDialog.Builder(this)
                     .setView(newTextDialogView)
-                    .setTitle(getString(R.string.package_name))
+//                    .setTitle(getString(R.string.package_name))
                     .setPositiveButton(getString(R.string.done), null)
                     .setNegativeButton(getString(R.string.cancel), null)
                     .create();
@@ -100,6 +100,8 @@ public class SavingStickerActivity extends BaseActivity
                 @Override
                 public void onShow(DialogInterface dialog) {
                     Button b = newTextDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    SaveStickerActivity.this.setFont(b);
+                    SaveStickerActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
                     b.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -152,6 +154,7 @@ public class SavingStickerActivity extends BaseActivity
     }
 
 
+
     private void goToStickerPack(String stickerFolder) {
 
         String dir = BaseActivity.USER_STICKERS_DIRECTORY + stickerFolder + File.separator;
@@ -169,7 +172,7 @@ public class SavingStickerActivity extends BaseActivity
 
                 Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.TEMP_STICKER_CASH_DIR);
                 File thumbFile =
-                        new File((BaseActivity.BASE_THUMBNAIL_DIRECTORY + File.separator + stickerFolder + "_" + files.length + ".png"));
+                        new File((BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + stickerFolder + "_" + files.length + ".png"));
                 if (!thumbFile.getParentFile().exists())
                     if (!thumbFile.getParentFile().mkdirs())
                         Log.e(getClass().getSimpleName(), "failed");

@@ -18,7 +18,6 @@ import com.amir.stickergram.navdrawer.MainNavDrawer;
 import com.amir.stickergram.navdrawer.NavDrawer;
 
 public class ContactActivity extends BaseActivity implements View.OnClickListener {
-    private static final String STICKERGRAM_FEED_BACK = "Stickergram feed back";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
     private void sendEmail() {
         Intent send = new Intent(Intent.ACTION_SENDTO);
         String uriText = "mailto:" + Uri.encode(Constants.EMAIL) +
-                "?subject=" + Uri.encode(STICKERGRAM_FEED_BACK);// +
+                "?subject=" + Uri.encode(getString(R.string.stickergram_feed_back));// +
 //                "&body=" + Uri.encode("the body of the message");
         Uri uri = Uri.parse(uriText);
 
@@ -69,5 +68,6 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
     public void onBackPressed() {
         finish();
         startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }
