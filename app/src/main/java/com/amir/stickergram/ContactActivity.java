@@ -1,6 +1,7 @@
 package com.amir.stickergram;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amir.stickergram.arcList.SemiCircleDrawable;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
@@ -31,6 +33,10 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
     private void setUpView() {
         View sendEmailButton = findViewById(R.id.activity_contact_send_email_button);
         View joinStickergramChannel = findViewById(R.id.activity_contact_join_channel);
+
+//        View thanksText = findViewById(R.id.activity_contact_thanks_text);
+//
+//        thanksText.setBackground(new SemiCircleDrawable(Color.RED, SemiCircleDrawable.Direction.BOTTOM));
 
         if (sendEmailButton != null &&
                 joinStickergramChannel != null) {

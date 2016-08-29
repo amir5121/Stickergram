@@ -36,10 +36,10 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         Bitmap bitmap = item.getBitmapFromExternalStorage();
         itemView.setTag(item);
         iconNameTextView.setText(item.getName());
-        if (bitmap == null) {
-            Log.e(getClass().getSimpleName(), "bitmap was null");
-            return;
-        }
+//        if (bitmap == null) {
+//            Log.e(getClass().getSimpleName(), "bitmap was null");
+//            return;
+//        }
         iconImageView.setImageBitmap(bitmap);
     }
 }

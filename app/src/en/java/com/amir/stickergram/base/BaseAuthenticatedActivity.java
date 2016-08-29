@@ -145,10 +145,10 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     }
 
     protected boolean getProStatus() {
-//        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
 //            Toast.makeText(this, "is in debug mode", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
+            return true;
+        }
         return preferences.getBoolean(HAS_BOUGHT_PRO, false);
 //        }
 //        return true;

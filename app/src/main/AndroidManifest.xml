@@ -43,7 +43,8 @@
 
         <activity
             android:name=".EditImageActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ContactActivity" />
 

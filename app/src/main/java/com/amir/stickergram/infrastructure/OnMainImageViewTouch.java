@@ -61,14 +61,17 @@ public class OnMainImageViewTouch {
 //                        Toast.makeText(activity, activity.getString(R.string.upgrade_to_pro_to_delete_this_label), Toast.LENGTH_LONG).show();
                     if (label[0].isItMe(pos) != null)
                         Toast.makeText(activity, activity.getString(R.string.upgrade_to_pro_to_delete_this_label), Toast.LENGTH_LONG).show();
+                offsetPosition = null;
                 for (int i = items.size() - 1; i >= 0; i--) {
                     offsetPosition = items.get(i).isItMe(new Position(event.getY(), event.getX()));
                     if (offsetPosition != null) {
                         activity.setSelectedLayer(items.get(i));
                         break;
-                    } else {
-                        activity.setLayerUnselected();
                     }
+                }
+                if (offsetPosition == null) {
+                    Log.e(getClass().getSimpleName(), " onTouch setLayerUnselected");
+                    activity.setLayerUnselected();
                 }
                 break;
             }

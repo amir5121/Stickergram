@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
@@ -29,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CropFragment extends BaseFragment {
+    private static final String TAG = EditImageActivity.class.getSimpleName();
     private CropImageView mCropView;
     private View progressContainer;
     private Uri sourceUri;
@@ -77,7 +79,7 @@ public class CropFragment extends BaseFragment {
 
 //        rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI((Uri) getArguments().getParcelable(Constants.CROP_SOURCE)
 //                , getActivity().getContentResolver()));
-//        Log.e(getClass().getSimpleName(), "rotation: " + rotation);
+//        Log.e(TAG, "rotation: " + rotation);
 
         setCropViewUri((Uri) getArguments().getParcelable(Constants.CROP_SOURCE), savedInstanceState != null);
 
@@ -93,7 +95,7 @@ public class CropFragment extends BaseFragment {
             showLoadingDialog(false);
 
         if (sourceUri != null && !isComingFromASavedState) {
-//            Log.e(getClass().getSimpleName(), "startLoad");
+//            Log.e(TAG, "startLoad");
             mCropView.startLoad(
                     sourceUri,
                     new LoadCallback() {
@@ -110,7 +112,7 @@ public class CropFragment extends BaseFragment {
                         }
                     });
         } else {
-            Log.e(getClass().getSimpleName(), "sourceUri was null");
+            Log.e(TAG, "sourceUri was null");
         }
     }
 
@@ -130,7 +132,7 @@ public class CropFragment extends BaseFragment {
             Uri destiny = getArguments().getParcelable(Constants.CROP_DESTINY);
 //            Uri destiny = Uri.fromFile(outPutFile);
             if (destiny != null) {
-                Log.e(getClass().getSimpleName(), "destiny: " + destiny.toString());
+                Log.e(TAG, "destiny: " + destiny.toString());
             }
             mCropView.startCrop(destiny, cropCallback, saveCallback);
             return true;
@@ -232,8 +234,8 @@ public class CropFragment extends BaseFragment {
                 if (resBitmap != null) {
 //                    if (rotation == 90 || rotation == 90.0)
 //                        resBitmap = Loader.rotateImage(resBitmap, rotation);
-                    resBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
-                } else Log.e(getClass().getSimpleName(), "resBitmap was null");
+                    resBitmap.compress(Bitmap.CompressFormat.PNG, 90, new FileOutputStream(file));
+                } else Log.e(TAG, "resBitmap was null");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -241,7 +243,9 @@ public class CropFragment extends BaseFragment {
             Bundle bundle = new Bundle();
 //            bundle.putInt(Constants.IMAGE_ROTATION, rotation);
             bundle.putParcelable(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
+            Log.e(TAG, "-----width: " + resBitmap.getWidth() + " height: " + resBitmap.getHeight());
             listener.cropFinished(bundle);
+            
 
 //            Intent intent = new Intent(getContext(), EditImageActivity.class);
 //            intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));

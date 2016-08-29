@@ -16,7 +16,6 @@ import com.amir.stickergram.infrastructure.Loader;
 
 public class CropActivity extends BaseActivity implements CropFragment.CropFragmentCallbacks {
     private boolean hasUsedAnEmptyImage = false;
-    private Uri destinyUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,10 +32,7 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
         if (intent != null) {
             hasUsedAnEmptyImage = intent.getBooleanExtra(Constants.IS_USING_EMPTY_IMAGE, false);
             bundle.putParcelable(Constants.CROP_SOURCE, intent.getParcelableExtra(Constants.CROP_SOURCE));
-            destinyUri = intent.getParcelableExtra(Constants.CROP_DESTINY);
-            if (destinyUri != null) {
-                Log.e(getClass().getSimpleName(), "destiny: " + destinyUri.toString());
-            }
+            Uri destinyUri = intent.getParcelableExtra(Constants.CROP_DESTINY);
             bundle.putParcelable(Constants.CROP_DESTINY, destinyUri);
         }
 
@@ -51,19 +47,19 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
     @Override
     public void cropFinished(Bundle bundle) {
 
-        int rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI(destinyUri, getContentResolver()));
-        Log.e(getClass().getSimpleName(), "rotation: " + rotation);
+//        int rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI(destinyUri, getContentResolver()));
+//        Log.e(getClass().getSimpleName(), "rotation: " + rotation);
 
         if (hasUsedAnEmptyImage) {
             Intent intent = new Intent(this, EditImageActivity.class);
-            intent.putExtra(Constants.EDIT_IMAGE_URI, destinyUri);
+//            intent.putExtra(Constants.EDIT_IMAGE_URI, destinyUri);
+            intent.putExtra(Constants.EDIT_IMAGE_URI, bundle.getParcelable(Constants.EDIT_IMAGE_URI));
             startActivity(intent);
             finish();
         } else {
-            Fragment f = BackgroundRemoverFragment.getInstance(bundle);
             getSupportFragmentManager().
                     beginTransaction().
-                    replace(R.id.crop_fragment_container, f).
+                    replace(R.id.crop_fragment_container, BackgroundRemoverFragment.getInstance(bundle)).
                     commit();
         }
     }

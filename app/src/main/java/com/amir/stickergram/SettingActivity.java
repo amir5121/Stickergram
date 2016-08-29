@@ -1,6 +1,7 @@
 package com.amir.stickergram;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.amir.stickergram.arcList.ArcScrollView;
+import com.amir.stickergram.arcList.VerticalArcContainer;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.mode.ModeListAdapter;
 import com.amir.stickergram.base.BaseActivity;
@@ -30,6 +33,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private int visibleItem;
     private Button languageButton;
     private Button modeButton;
+    private int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

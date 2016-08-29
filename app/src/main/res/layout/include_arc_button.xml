@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.amir.stickergram.arcList.VerticalArcContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/include_buttons_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true">
+
+    <com.amir.stickergram.arcList.ArcScrollView
+        android:id="@+id/include_arc_buttons_temp_arc"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/move_button_background"
+        android:elevation="3dp"
+        android:visibility="gone"
+        app:findBestWidth="true"
+        app:radius="550dp"
+        app:stroke_width="50dp" />
+
+    <com.amir.stickergram.arcList.ArcScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="#4499ff"
+        android:elevation="5dp"
+        app:findBestWidth="true"
+        app:radius="400dp"
+        app:stroke_width="60dp">
+
+        <com.amir.stickergram.arcList.ArcLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:itemsOffset="15dp"
+            app:useMinPadding="true">
+
+            <ImageView
+                android:id="@+id/include_buttons_stroke"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_stroke" />
+
+            <ImageView
+                android:id="@+id/include_buttons_shadow"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_shadow" />
+
+            <ImageView
+                android:id="@+id/include_buttons_size_button"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_size" />
+
+            <ImageView
+                android:id="@+id/include_buttons_font_button"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_font" />
+
+            <ImageView
+                android:id="@+id/include_buttons_text_color"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_color" />
+
+            <ImageView
+                android:id="@+id/include_buttons_text_background"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_background_color" />
+
+
+        </com.amir.stickergram.arcList.ArcLinearLayout>
+
+    </com.amir.stickergram.arcList.ArcScrollView>
+
+    <com.amir.stickergram.arcList.ArcScrollView
+        android:id="@+id/activity_edit_image_move_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/move_button_background"
+        android:elevation="6dp"
+        android:fillViewport="true"
+        app:findBestWidth="true"
+        app:radius="300dp"
+        app:stroke_width="35dp">
+
+        <com.amir.stickergram.arcList.ArcLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:itemsOffset="7dp"
+            app:useMinPadding="true">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_up_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_up_arrow" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_down_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_down_arrow" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_left_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_left_arrow" />
+
+            <ImageButton
+                android:id="@+id/activity_edit_image_move_right_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:foreground="?android:selectableItemBackground"
+                android:src="@drawable/ic_right_arrow" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+
+        </com.amir.stickergram.arcList.ArcLinearLayout>
+
+    </com.amir.stickergram.arcList.ArcScrollView>
+
+    <com.amir.stickergram.arcList.ArcScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="#0088ff"
+        android:elevation="9dp"
+        app:findBestWidth="true"
+        app:radius="100dp"
+        app:stroke_width="55dp">
+
+        <com.amir.stickergram.arcList.ArcLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:itemsOffset="10dp"
+            app:useMinPadding="true">
+
+            <TextView
+                android:id="@+id/include_buttons_text_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:padding="5dp"
+                android:text="@string/text"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </com.amir.stickergram.arcList.ArcLinearLayout>
+
+    </com.amir.stickergram.arcList.ArcScrollView>
+
+</com.amir.stickergram.arcList.VerticalArcContainer>

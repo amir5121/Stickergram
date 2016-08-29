@@ -10,6 +10,7 @@
         android:id="@+id/activity_contact_main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/contact_activity_background"
         android:orientation="vertical">
 
         <include
@@ -18,8 +19,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/contact_activity_background">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,7 +87,9 @@
                     android:src="@drawable/stickergram_pic" />
 
             </LinearLayout>
+
         </ScrollView>
+
     </LinearLayout>
 
     <include layout="@layout/include_nav_drawer" />

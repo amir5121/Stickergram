@@ -72,4 +72,27 @@
         <item name="android:textSize">18sp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
+
+    <style name="EditActivityImageView" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:layout_width">@dimen/edit_image_activity_button_size</item>
+        <item name="android:layout_height">@dimen/edit_image_activity_button_size</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_marginStart">7dp</item>
+        <item name="android:layout_marginEnd">7dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="EditActivityText" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginStart">7dp</item>
+        <item name="android:layout_marginEnd">7dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
 </resources>

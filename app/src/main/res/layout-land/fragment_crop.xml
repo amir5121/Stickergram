@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/ic_circle_vector" />
+                android:src="@drawable/ic_circle_stroke" />
 
             <Button
                 android:id="@+id/button1_1"

@@ -191,7 +191,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else if (itemId == R.id.dialog_from_scratch_choose_a_picture) {
             chooseOrCapturePicture();
         } else if (itemId == R.id.activity_main_text_container) {
-            Loader.joinToStickergramChannel(this);
+            if (!BuildConfig.DEBUG)
+                Loader.joinToStickergramChannel(this);
         }
     }
 

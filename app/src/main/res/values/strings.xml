@@ -14,7 +14,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="text">Text</string>
-    <string name="fontItem">Font</string>
+    <string name="font">Font</string>
     <string name="size">Size</string>
     <string name="tilt">Tilt</string>
     <string name="move">Move</string>
@@ -33,16 +33,16 @@
     <string name="how_to_add_new_font">You can add new fonts to the app using \n\n 1. The add button and selecting your font \n\n 2. You can also add the font by opening the font from your file explorer with the \'Stickergram\' (i.e. click your font)</string>
     <string name="your_font_was_added_to_the_app">Your font was added to the app</string>
     <string name="couldn_t_add_the_font">Stickergram couldn\'t add the font!</string>
-    <string name="text_color">Text Color</string>
+    <string name="text_color">Text color</string>
     <string name="choose_color">Choose color</string>
-    <string name="shadow_color">Color</string>
-    <string name="shadow_radius">Radius</string>
-    <string name="shadow_dx">X</string>
-    <string name="shadow_dy">Y</string>
-    <string name="shadow">Shadow:</string>
-    <string name="text_background">Text Background</string>
-    <string name="stroke_color">Color</string>
-    <string name="stroke_width">Width</string>
+    <string name="shadow_color">Shadow color</string>
+    <string name="shadow_radius">Shadow radius</string>
+    <string name="x">X</string>
+    <string name="y">Y</string>
+    <string name="shadow">Shadow</string>
+    <string name="text_background">Text background</string>
+    <string name="stroke_color">Stroke Color</string>
+    <string name="stroke_width">Stroke width</string>
     <string name="telegram_sticker">Telegram Stickers</string>
     <string name="sticker_from_picture">Sticker from Picture</string>
     <string name="choose_the_package_to_save_in">Choose a package to save in</string>
@@ -77,7 +77,7 @@
     <string name="name_can_not_contain_symbols">Name can not contain symbols or be empty!</string>
     <string name="buy_the_pro_version_for_full_functionality">To remove the label and use full functionality tap here</string>
     <string name="shadow_position">Shadow position</string>
-    <string name="stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors">in free version stroke color is only available in blue</string>
+    <string name="stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors">in free version drop shadow color is only available in blue</string>
     <string name="buy_pro">Buy pro version</string>
     <string name="empty_image">Empty image</string>
     <string name="your_stickers_explanation">Here you will find all the stickers that you will create</string>
@@ -137,7 +137,7 @@
     <string name="what_does_the_pro_version_offer">What does the pro version offer?</string>
     <string name="send">Send</string>
     <string name="tilt_shadow_position_more_packages">You will be able to tilt your texts plus moving their shadow, and you can create more than two packages whitin the app. </string>
-    <string name="drop_shadow">Drop shadow:</string>
+    <string name="drop_shadow">Drop shadow</string>
     <string name="link">link</string>
     <string name="bazar_is_not_installed">Bazzar is not installed</string>
     <string name="no_market_was_found">No market was found!</string>
@@ -219,5 +219,11 @@
     <string name="stickergram_feed_back">Stickergram Feedback</string>
     <string name="mobogram_two">Mobogram two</string>
     <string name="choose_a_folder_or_create_a_new_one">Choose a folder or create a new one!</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="move_left">Move left</string>
+    <string name="move_right">Move right</string>
+    <string name="shadow_x">Shadow X</string>
+    <string name="shadow_y">Shadow Y</string>
 
 </resources>

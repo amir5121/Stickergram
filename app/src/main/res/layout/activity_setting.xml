@@ -7,17 +7,61 @@
     android:layout_height="match_parent"
     tools:context="com.amir.stickergram.MainActivity">
 
+
     <LinearLayout
+        android:id="@+id/activity_setting_main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/activity_setting_main_container"
         android:background="@color/default_background_color"
-        android:orientation="vertical"
-        android:paddingBottom="5dp">
+        android:orientation="vertical">
 
         <include
             android:id="@+id/include_toolbar"
             layout="@layout/include_toolbar" />
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<com.amir.stickergram.arcList.VerticalArcContainer-->
+                <!--android:id="@+id/include_buttons_scroll_view"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true">-->
+
+                <!--<com.amir.stickergram.arcList.ArcScrollView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:background="#0088ff"-->
+                    <!--android:elevation="9dp"-->
+                    <!--app:findBestWidth="true"-->
+                    <!--app:radius="100dp"-->
+                    <!--app:stroke_width="55dp">-->
+
+                    <!--<com.amir.stickergram.arcList.ArcLinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--app:itemsOffset="10dp"-->
+                        <!--app:useMinPadding="true">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/include_buttons_text_button"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:clickable="true"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:text="@string/text"-->
+                            <!--android:textColor="@color/white"-->
+                            <!--android:textSize="20sp" />-->
+
+                    <!--</com.amir.stickergram.arcList.ArcLinearLayout>-->
+
+                <!--</com.amir.stickergram.arcList.ArcScrollView>-->
+
+            <!--</com.amir.stickergram.arcList.VerticalArcContainer>-->
+
+        <!--</RelativeLayout>-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -46,14 +90,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_below="@id/activity_setting_mode"
                 android:layout_height="match_parent"
+                android:layout_below="@id/activity_setting_mode"
                 android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <com.github.aakira.expandablelayout.ExpandableWeightLayout
                     android:id="@+id/activity_setting_expandable_layout"
@@ -71,10 +115,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
+                    android:layout_weight="1" />
 
             </LinearLayout>
+
         </RelativeLayout>
 
     </LinearLayout>

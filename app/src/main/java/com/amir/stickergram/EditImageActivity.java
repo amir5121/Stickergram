@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,17 +21,18 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amir.stickergram.arcList.ArcLinearLayout;
+import com.amir.stickergram.arcList.ArcScrollView;
+import com.amir.stickergram.arcList.VerticalArcContainer;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.fonts.EnglishFontsFragment;
 import com.amir.stickergram.fonts.MainFontDialogFragment;
@@ -49,7 +51,6 @@ public class EditImageActivity
         extends BaseActivity
         implements
         View.OnTouchListener,
-        View.OnClickListener,
         SeekBar.OnSeekBarChangeListener,
         EnglishFontsFragment.OnFontItemClicked {
 
@@ -57,27 +58,12 @@ public class EditImageActivity
     private static final String MAIN_FONT_DIALOG_FRAGMENT_TAG = "MAIN_FONT_DIALOG_FRAGMENT_TAG";
     public static final int MAX_TEXT_SIZE = 300;
     private static final String EDIT_IMAGE_STATE = "EDIT_IMAGE_STATE";
+    private static final String TAG = EditImageActivity.class.getSimpleName();
     private TouchImageView selectedLayer;
 
     public FrameLayout textLayerContainer;
 
-    private View buttonsDeactivateLayer;
-    private Button sizeButton;
-    private Button tiltButton;
-    private Button shadowDx;
-    private Button shadowDy;
-    private Button textButton;
-    private Button fontButton;
-    private Button strokeColorButton;
-    private Button strokeWidthButton;
-    private Button textColorButton;
-    private Button shadowColorButton;
-    private Button textShadowRadius;
-    private Button textBackgroundColor;
-    private ImageButton moveUpButton;
-    private ImageButton moveDownButton;
-    private ImageButton moveLeftButton;
-    private ImageButton moveRightButton;
+    private VerticalArcContainer arcContainer;
     private SeekBarCompat sizeSeekBar;
     private SeekBarCompat tiltSeekBar;
     private SeekBarCompat shadowRadius;
@@ -91,6 +77,16 @@ public class EditImageActivity
     private View buyNoteContainer;
     private TextView buyNoteText;
     private OnMainImageViewTouch helper;
+    private ArcScrollView tempArcContainer;
+    private ArcLinearLayout strokeItemsView;
+    private ArcLinearLayout shadowItemsView;
+    private RelativeLayout mainContainer;
+    private ImageView strokeButton;
+    private ImageView shadowButton;
+    private int toolbarHeight;
+    private int mainContainerHeight;
+    private TextView infoTextView;
+    private int[] pos;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -194,76 +190,90 @@ public class EditImageActivity
         finishedEditing.show();
     }
 
-    @Override
-    public void onClick(View view) {
-        int itemId = view.getId();
+    //    @Override
+//    public void onClick(View view) {
+//        int itemId = view.getId();
 //
-//        if (itemId == R.id.lol){
-//            Log.e(getClass().getSimpleName(), "you are topMarginAnimation total idiot");
-//        }
-
-        if (itemId == R.id.include_pro_note_close) {
-            if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
-        } else if (itemId == R.id.include_pro_note_text)
-            requestProVersion();
-        else if (itemId == R.id.activity_edit_image_buttons_overlay_layer)
-            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
-        else if (selectedLayer != null) {
-            if (itemId == R.id.include_buttons_size_button) {
-                setVisibleSeekBar(selectedLayer.getTextSize(), sizeSeekBar);
-            } else if (itemId == R.id.include_buttons_text_button) {
-                getNewTextDialog(false);
-            } else if (itemId == R.id.include_buttons_tilt_button) {
-                if (!isPaid) buyProNote(getString(R.string.tilt_effect));
-                setVisibleSeekBar(selectedLayer.getTextItem().getTilt(), tiltSeekBar);
-            } else if (itemId == R.id.activity_edit_image_move_up_button) {
-                selectedLayer.getTextItem().moveUp();
-                selectedLayer.updateTextView();
-            } else if (itemId == R.id.activity_edit_image_move_down_button) {
-                selectedLayer.getTextItem().moveDown();
-                selectedLayer.updateTextView();
-            } else if (itemId == R.id.activity_edit_image_move_left_button) {
-                selectedLayer.getTextItem().moveLeft();
-                selectedLayer.updateTextView();
-            } else if (itemId == R.id.activity_edit_image_move_right_button) {
-                selectedLayer.getTextItem().moveRight();
-                selectedLayer.updateTextView();
-            } else if (itemId == R.id.include_buttons_font_button) {
-                MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
-                mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
-            } else if (itemId == R.id.include_buttons_text_color) {
-                Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
-            } else if (itemId == R.id.include_buttons_shadow_color) {
-                manageShadowsFirstTap();
-                Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
-            } else if (itemId == R.id.include_buttons_shadow_radius) {
-                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
-            } else if (itemId == R.id.include_buttons_shadow_dx) {
-//                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
-                manageShadowsFirstTap();
-                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
-            } else if (itemId == R.id.include_buttons_shadow_dy) {
-//                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
-                manageShadowsFirstTap();
-                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
-            } else if (itemId == R.id.include_buttons_text_background) {
-                Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
-            } else if (itemId == R.id.include_buttons_text_stroke_color) {
-//                if (!isPaid)
-//                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors));
-                if (selectedLayer.isFirstTapOnStrokeColor())
-                    selectedLayer.getTextItem().setStrokeWidth(selectedLayer.getTextItem().getStrokeWidth());
-                selectedLayer.setFirstTapOnStrokeColor(false);
-                Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
-            } else if (itemId == R.id.include_buttons_text_stroke_width) {
-                setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
-            } else if (itemId == R.id.activity_edit_image_main_frame_container) {
-                setLayerUnselected();
-            }
-        } else
-            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
-    }
-
+//        if (itemId == R.id.include_pro_note_close) {
+//            if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
+//        } else if (itemId == R.id.include_pro_note_text)
+//            requestProVersion();
+//        else if (itemId == R.id.activity_edit_image_buttons_overlay_layer)
+//            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
+//        else if (selectedLayer != null) {
+//            if (itemId == R.id.include_buttons_size_button) {
+//                setVisibleSeekBar(selectedLayer.getTextSize(), sizeSeekBar);
+//            } else if (itemId == R.id.include_buttons_text_button) {
+//                getNewTextDialog(false);
+//            } else if (itemId == R.id.include_buttons_tilt_button) {
+//                if (!isPaid) buyProNote(getString(R.string.tilt_effect));
+//                setVisibleSeekBar(selectedLayer.getTextItem().getTilt(), tiltSeekBar);
+//            } else if (itemId == R.id.activity_edit_image_move_up_button) {
+//                selectedLayer.getTextItem().moveUp();
+//                selectedLayer.updateTextView();
+//            } else if (itemId == R.id.activity_edit_image_move_down_button) {
+//                selectedLayer.getTextItem().moveDown();
+//                selectedLayer.updateTextView();
+//            } else if (itemId == R.id.activity_edit_image_move_left_button) {
+//                selectedLayer.getTextItem().moveLeft();
+//                selectedLayer.updateTextView();
+//            } else if (itemId == R.id.activity_edit_image_move_right_button) {
+//                selectedLayer.getTextItem().moveRight();
+//                selectedLayer.updateTextView();
+//            } else if (itemId == R.id.include_buttons_font_button) {
+//                MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
+//                mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
+//            } else if (itemId == R.id.include_buttons_text_color) {
+//                Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
+//            } else if (itemId == R.id.include_buttons_shadow_color) {
+//                manageShadowsFirstTap();
+//                Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
+//            } else if (itemId == R.id.include_buttons_shadow_radius) {
+//                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
+//            } else if (itemId == R.id.include_buttons_shadow_dx) {
+////                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
+//                manageShadowsFirstTap();
+//                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
+//            } else if (itemId == R.id.include_buttons_shadow_dy) {
+////                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
+//                manageShadowsFirstTap();
+//                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
+//            } else if (itemId == R.id.include_buttons_text_background) {
+//                Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
+//            } else if (itemId == R.id.include_buttons_text_stroke_color) {
+////                if (!isPaid)
+////                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors));
+//                if (selectedLayer.isFirstTapOnStrokeColor())
+//                    selectedLayer.getTextItem().setStrokeWidth(selectedLayer.getTextItem().getStrokeWidth());
+//                selectedLayer.setFirstTapOnStrokeColor(false);
+//                Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
+//            } else if (itemId == R.id.include_buttons_text_stroke_width) {
+//                setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
+//            } else if (itemId == R.id.activity_edit_image_main_frame_container) {
+//                setLayerUnselected();
+//            } else if (itemId == R.id.include_buttons_stroke) {
+//                tempArcContainer.swapView(strokeItemsView);
+//                strokeButton.setBackgroundResource(R.drawable.ic_circle);
+//                strokeButton.setImageResource(R.drawable.ic_stroke_blue);
+//                int padding = (int) Loader.convertDpToPixel(2, this);
+//                strokeButton.setPadding(padding, padding, padding, padding);
+//                shadowButton.setBackgroundResource(0);
+//                shadowButton.setPadding(0, 0, 0, 0);
+//
+//            } else if (itemId == R.id.include_buttons_shadow) {
+//                tempArcContainer.swapView(shadowItemsView);
+//                shadowButton.setBackgroundResource(R.drawable.ic_circle);
+//                int padding = (int) Loader.convertDpToPixel(2, this);
+//                shadowButton.setPadding(padding, padding, padding, padding);
+//                strokeButton.setBackgroundResource(0);
+//                strokeButton.setImageResource(R.drawable.ic_stroke);
+//                strokeButton.setPadding(0, 0, 0, 0);
+//
+//            }
+//        } else
+//            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
+//    }
+//
     private void manageShadowsFirstTap() {
         if (selectedLayer.isFirstTapOnShadowColor()) {
             selectedLayer.getTextItem().getShadow().setRadius(5);
@@ -280,8 +290,222 @@ public class EditImageActivity
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        helper.onTouch(selectedLayer, event);
+        int itemId = v.getId();
+        if (itemId == R.id.activity_edit_image_main_image)
+            helper.onTouch(selectedLayer, event);
+        else {
+//            boolean isActionUp = false;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+//                    isActionUp = false;
+                    clickAction(v, itemId, false);
+                    break;
+                case MotionEvent.ACTION_UP:
+//                    isActionUp = true;
+                    clickAction(v, itemId, true);
+                    break;
+            }
+////            if (isActionUp)
+        }
         return true;
+    }
+
+    private void clickAction(View view, int itemId, boolean isActionUp) {
+//        Log.e(getClass().getSimpleName(), "isActionUp: " + isActionUp);
+        if (itemId == R.id.include_pro_note_close) {
+            if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
+        } else if (itemId == R.id.include_pro_note_text) {
+            if (isActionUp)
+                requestProVersion();
+        } else if (itemId == R.id.activity_edit_image_buttons_overlay_layer) {
+            if (isActionUp)
+                Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
+        } else if (selectedLayer != null) {
+            if (itemId == R.id.include_buttons_size_button) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.size), view);
+                else {
+                    setVisibleSeekBar(selectedLayer.getTextSize(), sizeSeekBar);
+                }
+            } else if (itemId == R.id.include_buttons_text_button) {
+                if (isActionUp)
+                    getNewTextDialog(false);
+            } else if (itemId == R.id.include_buttons_tilt_button) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.tilt), view);
+                else {
+                    if (!isPaid) buyProNote(getString(R.string.tilt_effect));
+                    setVisibleSeekBar(selectedLayer.getTextItem().getTilt(), tiltSeekBar);
+                }
+            } else if (itemId == R.id.activity_edit_image_move_up_button) {
+                if (!isActionUp) {
+                    showInfo(getString(R.string.move_up), view);
+                } else {
+                    selectedLayer.getTextItem().moveUp();
+                    selectedLayer.updateTextView();
+                }
+            } else if (itemId == R.id.activity_edit_image_move_down_button) {
+                if (!isActionUp) {
+                    showInfo(getString(R.string.move_down), view);
+                } else {
+                    selectedLayer.getTextItem().moveDown();
+                    selectedLayer.updateTextView();
+                }
+            } else if (itemId == R.id.activity_edit_image_move_left_button) {
+                if (!isActionUp) {
+                    showInfo(getString(R.string.move_left), view);
+                } else {
+                    selectedLayer.getTextItem().moveLeft();
+                    selectedLayer.updateTextView();
+                }
+            } else if (itemId == R.id.activity_edit_image_move_right_button) {
+                if (!isActionUp) {
+                    showInfo(getString(R.string.move_right), view);
+                } else {
+                    selectedLayer.getTextItem().moveRight();
+                    selectedLayer.updateTextView();
+                }
+            } else if (itemId == R.id.include_buttons_font_button) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.font), view);
+                else {
+                    MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
+                    mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
+                }
+            } else if (itemId == R.id.include_buttons_text_color) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.text_color), view);
+                else {
+                    Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
+                }
+            } else if (itemId == R.id.include_buttons_shadow_color) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.shadow_color), view);
+                else {
+                    manageShadowsFirstTap();
+                    Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
+                }
+            } else if (itemId == R.id.include_buttons_shadow_radius) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.shadow_radius), view);
+                else {
+                    setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
+                }
+            } else if (itemId == R.id.include_buttons_shadow_dx) {
+//                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
+                if (!isActionUp)
+                    showInfo(getString(R.string.shadow_x), view);
+                else {
+                    manageShadowsFirstTap();
+                    setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
+                }
+            } else if (itemId == R.id.include_buttons_shadow_dy) {
+//                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
+                if (!isActionUp)
+                    showInfo(getString(R.string.shadow_y), view);
+                else {
+                    manageShadowsFirstTap();
+                    setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
+                }
+            } else if (itemId == R.id.include_buttons_text_background) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.text_background), view);
+                else {
+                    Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
+                }
+            } else if (itemId == R.id.include_buttons_text_stroke_color) {
+//                if (!isPaid)
+//                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors));
+                if (!isActionUp)
+                    showInfo(getString(R.string.stroke_color), view);
+                else {
+                    if (selectedLayer.isFirstTapOnStrokeColor())
+                        selectedLayer.getTextItem().setStrokeWidth(selectedLayer.getTextItem().getStrokeWidth());
+                    selectedLayer.setFirstTapOnStrokeColor(false);
+                    Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
+                }
+            } else if (itemId == R.id.include_buttons_text_stroke_width) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.stroke_width), view);
+                else {
+                    setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
+                }
+            } else if (itemId == R.id.activity_edit_image_main_frame_container) {
+                if (isActionUp) setLayerUnselected();
+            } else if (itemId == R.id.include_buttons_stroke) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.drop_shadow), view);
+                else {
+
+                    tempArcContainer.swapView(strokeItemsView);
+                    strokeButton.setBackgroundResource(R.drawable.ic_circle);
+                    strokeButton.setImageResource(R.drawable.ic_stroke_blue);
+                    int padding = (int) Loader.convertDpToPixel(2, this);
+                    strokeButton.setPadding(padding, padding, padding, padding);
+                    shadowButton.setBackgroundResource(0);
+                    shadowButton.setPadding(0, 0, 0, 0);
+                }
+            } else if (itemId == R.id.include_buttons_shadow) {
+                if (!isActionUp)
+                    showInfo(getString(R.string.shadow), view);
+                else {
+                    tempArcContainer.swapView(shadowItemsView);
+                    shadowButton.setBackgroundResource(R.drawable.ic_circle);
+                    int padding = (int) Loader.convertDpToPixel(2, this);
+                    shadowButton.setPadding(padding, padding, padding, padding);
+                    strokeButton.setBackgroundResource(0);
+                    strokeButton.setImageResource(R.drawable.ic_stroke);
+                    strokeButton.setPadding(0, 0, 0, 0);
+                }
+            }
+
+            if (isActionUp) hideInfo();
+        } else if (isActionUp)
+            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
+    }
+
+    private void hideInfo() {
+        if (infoTextView != null)
+            infoTextView.setVisibility(View.GONE);
+    }
+
+    private void showInfo(String string, final View v) {
+        v.getLocationOnScreen(pos);
+        infoTextView.setVisibility(View.INVISIBLE);
+        infoTextView.setText(string);
+//        Log.e(getClass().getSimpleName(), "string: " + string + " x: " + event.getX() + " Y: " + event.getY());
+        ViewTreeObserver viewTreeObserver = infoTextView.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    infoTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    if (Loader.deviceLanguageIsPersian()) {
+                        Log.e(TAG, "x: " + pos[0] + " y: " + pos[1] + " marginStart: " + ((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 + v.getWidth() / 2));
+                        params.setMargins((int) (ArcScrollView.screenWidth - pos[0]),
+                                pos[1] - 100, 0, 0);
+                        params.setMarginStart((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 - v.getWidth() / 2);
+
+                    } else {
+                        params.setMargins(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2,
+                                pos[1] - 100, 0, 0);
+                        params.setMarginStart(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2);
+                    }
+                    infoTextView.setLayoutParams(params);
+//                    Log.e(getClass().getSimpleName(), "height: " + infoTextView.getHeight() + " width: " + infoTextView.getWidth());
+                    infoTextView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    private void deselectSelectableButtons() {
+        strokeButton.setBackgroundResource(0);
+        strokeButton.setImageResource(R.drawable.ic_stroke);
+        strokeButton.setPadding(0, 0, 0, 0);
+        shadowButton.setBackgroundResource(0);
+        shadowButton.setPadding(0, 0, 0, 0);
     }
 
     @Override
@@ -324,29 +548,40 @@ public class EditImageActivity
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         //todo: should this be implemented in on setContentView????
-        int stickerContainerWidth = stickerContainer.getWidth();
-        int stickerContainerHeight = stickerContainer.getHeight();
-        int bitmapHeight = mainBitmap.getHeight();
-        int bitmapWidth = mainBitmap.getWidth();
-        float scale;
-        scale = (float) stickerContainerWidth / bitmapWidth;
-        int scaledHeight = (int) (bitmapHeight * scale);
-        int scaledWidth = (int) (bitmapWidth * scale);
-        while (scaledHeight > stickerContainerHeight - 7 || scaledWidth > stickerContainerWidth - 7) {
-            scale -= .1;
-            scaledHeight = (int) (bitmapHeight * scale);
-            scaledWidth = (int) (bitmapWidth * scale);
-        }
-        int marginTop = stickerContainerHeight / 2 - scaledHeight / 2;
-        int marginStart = stickerContainerWidth / 2 - scaledWidth / 2;
-        RelativeLayout.LayoutParams params =
-                new RelativeLayout.LayoutParams(scaledWidth, scaledHeight);
-        params.setMargins(marginStart, 0, 0, 0);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-            params.setMarginStart(marginStart);
-        params.setMargins(0, marginTop, 0, 0);
-        textLayerContainer.setLayoutParams(params);
+//        Log.e(getClass().getSimpleName(), "toolbar height: " + getSupportActionBar().getHeight());
+        if (mainContainerHeight == 0) {
+            mainContainerHeight = mainContainer.getHeight();
+            toolbarHeight = toolbar.getHeight();
+            if (selectedLayer == null)
+                stickerContainer.animate()
+                        .translationY((mainContainerHeight - toolbarHeight) / 2 - stickerContainer.getHeight() / 2)
+                        .setDuration(500);
+//            Log.e(getClass().getSimpleName(), "toolbarHeight: " + toolbarHeight);
+            int stickerContainerWidth = stickerContainer.getWidth();
+            int stickerContainerHeight = stickerContainer.getHeight();
+            int bitmapHeight = mainBitmap.getHeight();
+            int bitmapWidth = mainBitmap.getWidth();
+            float scale;
+            scale = (float) stickerContainerWidth / bitmapWidth;
+            int scaledHeight = (int) (bitmapHeight * scale);
+            int scaledWidth = (int) (bitmapWidth * scale);
+            while (scaledHeight > stickerContainerHeight - 7 || scaledWidth > stickerContainerWidth - 7) {
+                scale -= .1;
+                scaledHeight = (int) (bitmapHeight * scale);
+                scaledWidth = (int) (bitmapWidth * scale);
+            }
+            int marginTop = stickerContainerHeight / 2 - scaledHeight / 2;
+            int marginStart = stickerContainerWidth / 2 - scaledWidth / 2;
+            RelativeLayout.LayoutParams params =
+                    new RelativeLayout.LayoutParams(scaledWidth, scaledHeight);
+            params.setMargins(marginStart, 0, 0, 0);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
+                params.setMarginStart(marginStart);
+            params.setMargins(0, marginTop, 0, 0);
+            textLayerContainer.setLayoutParams(params);
 //        Log.e(getClass().getSimpleName(), "scale: " + scale);
+        }
+
     }
 
     @Nullable
@@ -416,7 +651,7 @@ public class EditImageActivity
 //                                        ++layerCount,
                                         mainBitmap);
                         setSelectedLayer(touchItem);
-//                        touchItem.setOnClickListener(EditImageActivity.this);
+//                        touchItem.setOnTouchListener(EditImageActivity.this);
 //                        touchItem.setId(R.id.lol);
                         helper.add(touchItem);
                         textLayerContainer.addView(touchItem);
@@ -431,6 +666,8 @@ public class EditImageActivity
                             setLayerUnselected();
                         }
                     }
+                } else if (which == Dialog.BUTTON_NEGATIVE) {
+                    setLayerUnselected();
                 }
             }
         };
@@ -458,6 +695,7 @@ public class EditImageActivity
 
     public void setLayerUnselected() {
         if (selectedLayer != null) {
+            Log.e(getClass().getSimpleName(), "setLayerUnselected was called ");
             if (!isPaid) selectedLayer.notPaid();
             selectedLayer.setAsSelected(false);
             sizeSeekBar.setVisibility(View.GONE);
@@ -468,62 +706,42 @@ public class EditImageActivity
             strokeWidthSeekBar.setVisibility(View.GONE);
 
             selectedLayer = null;
+            tempArcContainer.swapView(null);
+            deselectSelectableButtons();
             deactivateButtons(true);
         }
     }
 
     public void setSelectedLayer(TouchImageView item) {
         if (item != null) {
-            setLayerUnselected();
-            selectedLayer = item;
-            item.setAsSelected(true);
-            deactivateButtons(false);
+            if (selectedLayer != item) {
+                setLayerUnselected();
+                selectedLayer = item;
+                item.setAsSelected(true);
+                deactivateButtons(false);
+            }
         }
     }
 
     private void deactivateButtons(boolean deactivate) {
-        if (textColorButton != null &&
-                sizeButton != null &&
-                tiltButton != null &&
-                shadowDy != null &&
-                shadowDx != null &&
-                textButton != null &&
-                fontButton != null &&
-                moveUpButton != null &&
-                moveDownButton != null &&
-                moveLeftButton != null &&
-                moveRightButton != null &&
-                shadowColorButton != null &&
-                textShadowRadius != null &&
-                textBackgroundColor != null &&
-                strokeWidthButton != null &&
-                strokeColorButton != null &&
-                buttonsDeactivateLayer != null) {
-            textShadowRadius.setEnabled(!deactivate);
-            textColorButton.setEnabled(!deactivate);
-            sizeButton.setEnabled(!deactivate);
-            shadowDy.setEnabled(!deactivate);
-            shadowDx.setEnabled(!deactivate);
-            tiltButton.setEnabled(!deactivate);
-            textButton.setEnabled(!deactivate);
-            fontButton.setEnabled(!deactivate);
-            shadowColorButton.setEnabled(!deactivate);
-            textBackgroundColor.setEnabled(!deactivate);
-            strokeColorButton.setEnabled(!deactivate);
-            strokeWidthButton.setEnabled(!deactivate);
+        if (arcContainer != null) {
             if (deactivate) {
-                buttonsDeactivateLayer.setVisibility(View.VISIBLE);
-                moveUpButton.setVisibility(View.GONE);
-                moveDownButton.setVisibility(View.GONE);
-                moveLeftButton.setVisibility(View.GONE);
-                moveRightButton.setVisibility(View.GONE);
+                if (selectedLayer == null) {
+                    hideInfo();
+                    stickerContainer.animate()
+                            .translationY((mainContainerHeight - toolbarHeight) / 2 - stickerContainer.getHeight() / 2)
+                            .setDuration(500);
+                    arcContainer.knockout();
+                }
             } else {
-                buttonsDeactivateLayer.setVisibility(View.GONE);
-                moveUpButton.setVisibility(View.VISIBLE);
-                moveDownButton.setVisibility(View.VISIBLE);
-                moveLeftButton.setVisibility(View.VISIBLE);
-                moveRightButton.setVisibility(View.VISIBLE);
+                if (selectedLayer != null) {
+                    stickerContainer.animate()
+                            .translationY(0)
+                            .setDuration(500);
+                    arcContainer.knockIn();
+                }
             }
+
 
         }
 
@@ -543,7 +761,6 @@ public class EditImageActivity
 
     @Override
     public void onFontItemSelected(FontItem item) {
-//        Log.e(getClass().getSimpleName(), "Called");
         if (selectedLayer != null) {
             selectedLayer.getTextItem().setFont(item);
             selectedLayer.updateTextView();
@@ -598,41 +815,54 @@ public class EditImageActivity
         if (textLayerContainer == null)
             throw new RuntimeException("Container was null add activity_edit_image_relative_layout_container to the view");
 
-        buttonsDeactivateLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
-        textShadowRadius = (Button) findViewById(R.id.include_buttons_shadow_radius);
-        textButton = (Button) findViewById(R.id.include_buttons_text_button);
-        fontButton = (Button) findViewById(R.id.include_buttons_font_button);
-        sizeButton = (Button) findViewById(R.id.include_buttons_size_button);
-        textBackgroundColor = (Button) findViewById(R.id.include_buttons_text_background);
-        shadowDx = (Button) findViewById(R.id.include_buttons_shadow_dx);
-        shadowDy = (Button) findViewById(R.id.include_buttons_shadow_dy);
-        textColorButton = (Button) findViewById(R.id.include_buttons_text_color);
-        tiltButton = (Button) findViewById(R.id.include_buttons_tilt_button);
-        shadowColorButton = (Button) findViewById(R.id.include_buttons_shadow_color);
-        strokeWidthButton = (Button) findViewById(R.id.include_buttons_text_stroke_width);
-        strokeColorButton = (Button) findViewById(R.id.include_buttons_text_stroke_color);
-        moveUpButton = (ImageButton) findViewById(R.id.activity_edit_image_move_up_button);
-        moveDownButton = (ImageButton) findViewById(R.id.activity_edit_image_move_down_button);
-        moveLeftButton = (ImageButton) findViewById(R.id.activity_edit_image_move_left_button);
-        moveRightButton = (ImageButton) findViewById(R.id.activity_edit_image_move_right_button);
+        View textButton = findViewById(R.id.include_buttons_text_button);
+        View buttonsDeactivateLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
+        View fontButton = findViewById(R.id.include_buttons_font_button);
+        View sizeButton = findViewById(R.id.include_buttons_size_button);
+        View textBackgroundColor = findViewById(R.id.include_buttons_text_background);
+        View textColorButton = findViewById(R.id.include_buttons_text_color);
+        View tiltButton = findViewById(R.id.include_buttons_tilt_button);
+        View moveUpButton = findViewById(R.id.activity_edit_image_move_up_button);
+        View moveDownButton = findViewById(R.id.activity_edit_image_move_down_button);
+        View moveLeftButton = findViewById(R.id.activity_edit_image_move_left_button);
+        View moveRightButton = findViewById(R.id.activity_edit_image_move_right_button);
         stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
         buyNoteContainer = findViewById(R.id.include_pro_note_container);
         buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
         View proNoteCloseButton = findViewById(R.id.include_pro_note_close);
+        arcContainer = (VerticalArcContainer) findViewById(R.id.include_buttons_scroll_view);
+        arcContainer.bringToFront();
 
+        strokeButton = (ImageView) findViewById(R.id.include_buttons_stroke);
+        strokeButton.setOnTouchListener(this);
+
+        shadowButton = (ImageView) findViewById(R.id.include_buttons_shadow);
+        shadowButton.setOnTouchListener(this);
+
+        tempArcContainer = (ArcScrollView) findViewById(R.id.include_arc_buttons_temp_arc);
+
+        strokeItemsView = (ArcLinearLayout) getLayoutInflater().inflate(R.layout.stroke_arc_linear_layout, arcContainer, false);
+        View strokeWidthButton = strokeItemsView.findViewById(R.id.include_buttons_text_stroke_width);
+        View strokeColorButton = strokeItemsView.findViewById(R.id.include_buttons_text_stroke_color);
+
+        shadowItemsView = (ArcLinearLayout) getLayoutInflater().inflate(R.layout.shadow_arc_linear_layout, arcContainer, false);
+        View shadowRadius = shadowItemsView.findViewById(R.id.include_buttons_shadow_radius);
+        View shadowDx = shadowItemsView.findViewById(R.id.include_buttons_shadow_dx);
+        View shadowDy = shadowItemsView.findViewById(R.id.include_buttons_shadow_dy);
+        View shadowColorButton = shadowItemsView.findViewById(R.id.include_buttons_shadow_color);
 
         ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
         helper = new OnMainImageViewTouch(this, mainBitmap, mainImageView);
-        RelativeLayout mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.include_buttons_scroll_view);
-        if (isTablet && !isInLandscape) {
-            if (scrollView != null) {
-                RelativeLayout.LayoutParams params =
-                        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.height_of_the_button_scroll_view_on_tablet));
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                scrollView.setLayoutParams(params);
-            }
-        }
+        mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
+//        View scrollView = findViewById(R.id.include_buttons_scroll_view);
+//        if (isTablet && !isInLandscape) {
+//            if (scrollView != null) {
+//                RelativeLayout.LayoutParams params =
+//                        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.height_of_the_button_scroll_view_on_tablet));
+//                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//                scrollView.setLayoutParams(params);
+//            }
+//        }
         if (mainImageView != null) {
 //            mainImageView.setImageBitmap(mainBitmap);
             mainImageView.setOnTouchListener(this);
@@ -679,7 +909,7 @@ public class EditImageActivity
                 mainContainer
         );
 
-        shadowRadius = Loader.getSeekBar(this,
+        this.shadowRadius = Loader.getSeekBar(this,
                 20,
                 ContextCompat.getColor(this, R.color.shadow_radius_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.shadow_radius_tilt_seek_bar_progress_color),
@@ -688,42 +918,42 @@ public class EditImageActivity
                 mainContainer
         );
 
-        if (stickerContainer != null) stickerContainer.setOnClickListener(this);
+        if (stickerContainer != null) stickerContainer.setOnTouchListener(this);
         if (buyNoteContainer != null && !isPaid) buyNoteContainer.setVisibility(View.VISIBLE);
-        if (buttonsDeactivateLayer != null) buttonsDeactivateLayer.setOnClickListener(this);
-        if (textColorButton != null) textColorButton.setOnClickListener(this);
-        if (proNoteCloseButton != null) proNoteCloseButton.setOnClickListener(this);
-        if (sizeButton != null) sizeButton.setOnClickListener(this);
-        if (textShadowRadius != null) textShadowRadius.setOnClickListener(this);
+        if (buttonsDeactivateLayer != null) buttonsDeactivateLayer.setOnTouchListener(this);
+        if (textColorButton != null) textColorButton.setOnTouchListener(this);
+        if (proNoteCloseButton != null) proNoteCloseButton.setOnTouchListener(this);
+        if (sizeButton != null) sizeButton.setOnTouchListener(this);
+        if (shadowRadius != null) shadowRadius.setOnTouchListener(this);
         if (tiltButton != null) {
-            if (!isPaid)
-                tiltButton.setText(getString(R.string.tilt_pro));
-            tiltButton.setOnClickListener(this);
+//            if (!isPaid)
+//                tiltButton.setText(getString(R.string.tilt_pro));
+            tiltButton.setOnTouchListener(this);
         }
-        if (textButton != null) textButton.setOnClickListener(this);
-        if (textBackgroundColor != null) textBackgroundColor.setOnClickListener(this);
-        if (fontButton != null) fontButton.setOnClickListener(this);
-        if (strokeWidthButton != null) strokeWidthButton.setOnClickListener(this);
-        if (strokeColorButton != null) strokeColorButton.setOnClickListener(this);
+        if (textButton != null) textButton.setOnTouchListener(this);
+        if (textBackgroundColor != null) textBackgroundColor.setOnTouchListener(this);
+        if (fontButton != null) fontButton.setOnTouchListener(this);
+        if (strokeWidthButton != null) strokeWidthButton.setOnTouchListener(this);
+        if (strokeColorButton != null) strokeColorButton.setOnTouchListener(this);
         if (shadowDx != null) {
-            shadowDx.setOnClickListener(this);
+            shadowDx.setOnTouchListener(this);
         }
         if (shadowDy != null) {
-            shadowDy.setOnClickListener(this);
+            shadowDy.setOnTouchListener(this);
         }
-        if (shadowColorButton != null) shadowColorButton.setOnClickListener(this);
-        if (buyNoteText != null) buyNoteText.setOnClickListener(this);
+        if (shadowColorButton != null) shadowColorButton.setOnTouchListener(this);
+        if (buyNoteText != null) buyNoteText.setOnTouchListener(this);
         if (moveUpButton != null) {
-            moveUpButton.setOnClickListener(this);
+            moveUpButton.setOnTouchListener(this);
         }
         if (moveDownButton != null) {
-            moveDownButton.setOnClickListener(this);
+            moveDownButton.setOnTouchListener(this);
         }
         if (moveLeftButton != null) {
-            moveLeftButton.setOnClickListener(this);
+            moveLeftButton.setOnTouchListener(this);
         }
         if (moveRightButton != null) {
-            moveRightButton.setOnClickListener(this);
+            moveRightButton.setOnTouchListener(this);
         }
         if (sizeSeekBar != null) {
             sizeSeekBar.setOnSeekBarChangeListener(this);
@@ -734,9 +964,9 @@ public class EditImageActivity
             tiltSeekBar.setProgress(180);
             tiltSeekBar.setOnSeekBarChangeListener(this);
         }
-        if (shadowRadius != null) {
-            shadowRadius.setProgress(2);
-            shadowRadius.setOnSeekBarChangeListener(this);
+        if (this.shadowRadius != null) {
+            this.shadowRadius.setProgress(2);
+            this.shadowRadius.setOnSeekBarChangeListener(this);
         }
         if (shadowDxSeekBar != null) {
             shadowDxSeekBar.setProgress(0);
@@ -750,11 +980,27 @@ public class EditImageActivity
             strokeWidthSeekBar.setProgress(55);
             strokeWidthSeekBar.setOnSeekBarChangeListener(this);
         }
-        deactivateButtons(true);
 
         setFont((ViewGroup) findViewById(R.id.nav_drawer));
-        setFont((ViewGroup) findViewById(R.id.activity_edit_image_main_container));
+        setFont(mainContainer);
 
+        arcContainer.knockout();
+
+        infoTextView = new TextView(this);
+        infoTextView.setTextSize(17);
+        infoTextView.setTextColor(Color.WHITE);
+//        infoTextView.setBackgroundColor(Color.BLUE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            infoTextView.setElevation(5);
+        }
+        infoTextView.setBackgroundResource(R.drawable.simple_sticker_background);
+        infoTextView.setAlpha(.85f);
+        infoTextView.setPadding(5, 5, 5, 5);
+        setFont(infoTextView);
+        mainContainer.addView(infoTextView);
+        pos = new int[2];
+
+        deactivateButtons(true);
     }
 
 }

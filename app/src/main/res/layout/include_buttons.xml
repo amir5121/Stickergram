@@ -39,7 +39,7 @@
             android:id="@+id/include_buttons_font_button"
             style="@style/EditActivityButton"
             android:background="#64B5F6"
-            android:text="@string/fontItem"
+            android:text="@string/font"
             android:textColor="@color/font_button_color"
             android:textSize="16sp" />
 
@@ -154,7 +154,7 @@
                 android:layout_weight="1"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
-                android:text="@string/shadow_dx"
+                android:text="@string/x"
                 android:textColor="@color/shadow_button_color" />
 
             <Button
@@ -165,7 +165,7 @@
                 android:layout_weight="1"
                 android:foreground="?android:selectableItemBackground"
                 android:padding="@dimen/edit_activity_button_padding"
-                android:text="@string/shadow_dy"
+                android:text="@string/y"
                 android:textColor="@color/shadow_button_color" />
 
         </LinearLayout>

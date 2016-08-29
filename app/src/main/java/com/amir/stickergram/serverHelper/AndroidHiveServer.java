@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 public class AndroidHiveServer {
     private static final String TAG = "AndroidHiveServer";
-    ServerHelperCallBacks listener;
-    BaseActivity activity;
+    private ServerHelperCallBacks listener;
+    private BaseActivity activity;
 
     public AndroidHiveServer(BaseActivity activity, ServerHelperCallBacks listener) {
         this.activity = activity;
