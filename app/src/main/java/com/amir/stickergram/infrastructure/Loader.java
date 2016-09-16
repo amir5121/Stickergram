@@ -472,7 +472,7 @@ public class Loader {
 
     public static boolean isPersian(String string) {
         for (int i = 0; i < string.length(); i++) {
-            int charAsciiNum = (int) string.charAt(i);
+            int charAsciiNum =  (int) string.charAt(i);
             if ((charAsciiNum > 1575 && charAsciiNum < 1641) || charAsciiNum == 1662 || charAsciiNum == 1711 || charAsciiNum == 1670 || charAsciiNum == 1688)
                 return true;
         }
@@ -566,7 +566,8 @@ public class Loader {
     public static long freeMemory() {
         StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
         long free;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             free = (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong()) / 1048576;
         } else {
             free = (statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
@@ -879,4 +880,16 @@ public class Loader {
         return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    public static boolean createFolderStructure(File file) {
+        try {
+            file.mkdirs();
+            if (file.exists())
+                file.delete();
+            file.createNewFile();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }

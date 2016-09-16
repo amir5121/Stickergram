@@ -443,7 +443,8 @@ public class EditImageActivity
                     int padding = (int) Loader.convertDpToPixel(2, this);
                     strokeButton.setPadding(padding, padding, padding, padding);
                     shadowButton.setBackgroundResource(0);
-                    shadowButton.setPadding(0, 0, 0, 0);
+                    int defaultPadding = (int) Loader.convertDpToPixel(7, this);
+                    shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
                 }
             } else if (itemId == R.id.include_buttons_shadow) {
                 if (!isActionUp)
@@ -455,7 +456,9 @@ public class EditImageActivity
                     shadowButton.setPadding(padding, padding, padding, padding);
                     strokeButton.setBackgroundResource(0);
                     strokeButton.setImageResource(R.drawable.ic_stroke);
-                    strokeButton.setPadding(0, 0, 0, 0);
+                    int defaultPadding = (int) Loader.convertDpToPixel(7, this);
+                    shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
+//                    strokeButton.setPadding(0, 0, 0, 0);
                 }
             }
 

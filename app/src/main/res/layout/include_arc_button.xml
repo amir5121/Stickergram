@@ -25,12 +25,12 @@
         android:elevation="5dp"
         app:findBestWidth="true"
         app:radius="400dp"
-        app:stroke_width="60dp">
+        app:stroke_width="50dp">
 
         <com.amir.stickergram.arcList.ArcLinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:itemsOffset="15dp"
+            app:itemsOffset="7dp"
             app:useMinPadding="true">
 
             <ImageView
@@ -59,6 +59,11 @@
                 android:src="@drawable/ic_color" />
 
             <ImageView
+                android:id="@+id/include_buttons_tilt_button"
+                style="@style/EditActivityImageView"
+                android:src="@drawable/ic_rotate_right" />
+
+            <ImageView
                 android:id="@+id/include_buttons_text_background"
                 style="@style/EditActivityImageView"
                 android:src="@drawable/ic_background_color" />
@@ -74,10 +79,9 @@
         android:layout_height="wrap_content"
         android:background="@color/move_button_background"
         android:elevation="6dp"
-        android:fillViewport="true"
         app:findBestWidth="true"
         app:radius="300dp"
-        app:stroke_width="35dp">
+        app:stroke_width="40dp">
 
         <com.amir.stickergram.arcList.ArcLinearLayout
             android:layout_width="wrap_content"
@@ -85,51 +89,41 @@
             app:itemsOffset="7dp"
             app:useMinPadding="true">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
-
-            <ImageButton
+            <ImageView
                 android:id="@+id/activity_edit_image_move_up_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
+                style="@style/EditActivityImageView"
                 android:foreground="?android:selectableItemBackground"
                 android:src="@drawable/ic_up_arrow" />
 
-            <ImageButton
+            <View
+                android:layout_width="10dp"
+                android:layout_height="0dp" />
+
+            <ImageView
                 android:id="@+id/activity_edit_image_move_down_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
+                style="@style/EditActivityImageView"
                 android:foreground="?android:selectableItemBackground"
                 android:src="@drawable/ic_down_arrow" />
 
-            <ImageButton
+            <View
+                android:layout_width="10dp"
+                android:layout_height="0dp" />
+
+            <ImageView
                 android:id="@+id/activity_edit_image_move_left_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
+                style="@style/EditActivityImageView"
                 android:foreground="?android:selectableItemBackground"
                 android:src="@drawable/ic_left_arrow" />
 
-            <ImageButton
+            <View
+                android:layout_width="10dp"
+                android:layout_height="0dp" />
+
+            <ImageView
                 android:id="@+id/activity_edit_image_move_right_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
+                style="@style/EditActivityImageView"
                 android:foreground="?android:selectableItemBackground"
                 android:src="@drawable/ic_right_arrow" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
 
         </com.amir.stickergram.arcList.ArcLinearLayout>
 
@@ -143,12 +137,12 @@
         android:elevation="9dp"
         app:findBestWidth="true"
         app:radius="100dp"
-        app:stroke_width="55dp">
+        app:stroke_width="50dp">
 
         <com.amir.stickergram.arcList.ArcLinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:itemsOffset="10dp"
+            app:itemsOffset="7dp"
             app:useMinPadding="true">
 
             <TextView

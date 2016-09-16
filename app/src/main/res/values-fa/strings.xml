@@ -3,7 +3,7 @@
     <string name="app_name">استیکرگرام</string>
     <string name="add_font">افزودن فونت</string>
     <string name="add_new_text">افزودن متن جدید</string>
-    <string name="stroke_width">پهنا حاله</string>
+    <string name="stroke_width">پهنا هاله</string>
     <string name="choose_an_image">یه عکس انتخاب کن</string>
     <string name="could_not_make_file">ساخت فایل موفقیت آمیز نبود</string>
     <string name="done">خب</string>
@@ -30,7 +30,7 @@
     <string name="shadow_radius">شعاع سایه</string>
     <string name="size">سایز</string>
     <string name="stickers_so_far">استیکر تا الان پیدا کردم </string>
-    <string name="stroke_color">رنگ حاله</string>
+    <string name="stroke_color">رنگ هاله</string>
     <string name="template_stickers">قالب ها</string>
     <string name="text">متن</string>
     <string name="text_background">پس زمینه ی متن</string>
@@ -94,7 +94,7 @@
     <string name="shadow_position">مکان سایه</string>
     <string name="shadow_position_effect">مکان سایه در ورژن رایگان کار نمی کند</string>
     <string name="sticker_name">نام استیکر</string>
-    <string name="stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors">در نسخه رایگان رنگ حاله فقط آبی می تواند باشد</string>
+    <string name="stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors">در نسخه رایگان رنگ هاله فقط آبی می تواند باشد</string>
     <string name="sweep_refresh_is_also_available">برای تازه سازی میتوانید صفحه را به پایین بکشید</string>
     <string name="telegram_has_not_cashed_any_stickers">تلگرام هیج استیکری را ذخیره نکرده\nبرای تازه سازی صفحه را به پایین بکشید</string>
     <string name="telegram_is_not_installed">تلگرام نصب نیست</string>
@@ -134,7 +134,7 @@
     <string name="what_does_the_pro_version_offer">در نسخه رایگان چه چیزایی رو از دست می دم؟</string>
     <string name="what_if_i_wanted_to_add_sticker_to_a_published_pack">اگر بخوام به پکی که انتشار پیدا کرده استیکر اضافه کنم باید چه کار کنم؟</string>
     <string name="what_if_i_wanted_to_delete_a_sticker_from_a_published_pack">اگر بخوام یه استیکر رو از یه پک منتشر شده پاک کنم چی؟</string>
-    <string name="drop_shadow">حاله</string>
+    <string name="drop_shadow">هاله</string>
     <string name="link">لینک</string>
     <string name="tilt_shadow_position_more_packages">می تونی متن ها رو بچرخونی و سایه متن رو جا به جا کنی و بیشتر از دوتا پک داخل برنامه بسازی</string>
     <string name="bazar_is_not_installed">بازار نصب نیست</string>
@@ -206,7 +206,7 @@
     <string name="voice_telegram">تلگرام فارسی صوتی</string>
     <string name="aniways">انیویز</string>
     <string name="la_telegram">لاگاتگرام</string>
-    <string name="drop_shadow_with_line">حاله:</string>
+    <string name="drop_shadow_with_line">هاله:</string>
     <string name="contact_painter">ارتباط با گرافیست</string>
     <string name="failed_to_refresh">تازه سازی ممکن نبود اینترنت خودتو چک کن!</string>
     <string name="swipe_down_to_refresh_ncheck_your_connection">صفحه رو به پایین بکش\nاینترنت رو چک کن</string>
@@ -225,4 +225,11 @@
     <string name="move_up">حرکت بالا</string>
     <string name="shadow_x">X سایه</string>
     <string name="shadow_y">Y سایه</string>
+    <string name="apply">اعمال کردن</string>
+    <string name="background_remover">حذف پس زمینه</string>
+    <string name="crop">برش</string>
+    <string name="discard">انصراف</string>
+    <string name="image_stroke">هاله عکس</string>
+    <string name="somthing_went_wrong">یه چیز اشتباه شد!</string>
+    <string name="width">پهنا</string>
 </resources>

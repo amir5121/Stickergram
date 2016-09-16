@@ -108,7 +108,7 @@ public class QueueLinearFloodFiller {
     protected void prepare() {
         // Called before starting flood-fill
         pixelsChecked = new boolean[pixels.length];
-        ranges = new LinkedList<FloodFillRange>();
+        ranges = new LinkedList<>();
     }
 
     // Fills the specified point on the bitmap with the currently selected fill
@@ -121,10 +121,16 @@ public class QueueLinearFloodFiller {
 
         if (startColor[0] == 0) {
             // ***Get starting color.
-            int startPixel = pixels[(width * y) + x];
-            startColor[0] = (startPixel >> 16) & 0xff;
-            startColor[1] = (startPixel >> 8) & 0xff;
-            startColor[2] = startPixel & 0xff;
+            int startPos = (width * y) + x;
+            if (startPos < pixels.length) {
+                int startPixel = pixels[(width * y) + x];
+                startColor[0] = (startPixel >> 16) & 0xff;
+                startColor[1] = (startPixel >> 8) & 0xff;
+                startColor[2] = startPixel & 0xff;
+            } else {
+                return;
+            }
+
         }
 
         // ***Do first call to floodfill.

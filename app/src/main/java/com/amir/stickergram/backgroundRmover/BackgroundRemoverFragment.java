@@ -44,6 +44,7 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
     private static final int APPLY_FLOOD = 5;
     private static final String BITMAP_WIDTH = "BITMAP_WIDTH";
     private static final String BITMAP_HEIGHT = "BITMAP_HEIGHT";
+    private static int LIGHT_BLUE = Color.parseColor("#1565c0");
     private RemoverView removerView;
     private PointerViewBottom pointerViewBottom;
     private ImageButton modeButton;
@@ -57,6 +58,9 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
     private View loadingDialog;
     private boolean applyFloodFillMode = false;
     private ImageButton floodFillerButton;
+    private BackgroundRemoverFragmentCallbacks listener;
+    private ImageButton backgroundButton;
+    private View chessBackground;
 
     public static Fragment getInstance(Bundle bundle) {
         BackgroundRemoverFragment fragment = new BackgroundRemoverFragment();
@@ -68,6 +72,11 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        try {
+            listener = (BackgroundRemoverFragmentCallbacks) getActivity();
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Parent activity must implement BackgroundRemoverFragmentCallbacks");
+        }
         View view = inflater.inflate(R.layout.fragment_remove_background, container, false);
         setFont((ViewGroup) view);
         modeButton = (ImageButton) view.findViewById(R.id.fragment_remove_background_repair_toggle_mode);
@@ -88,6 +97,11 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
         offsetContainer = view.findViewById(R.id.fragment_remove_background_offset_container);
 
         view.findViewById(R.id.fragment_remove_background_mode_offset).setOnClickListener(this);
+
+        backgroundButton = ((ImageButton) view.findViewById(R.id.fragment_remove_background_background_button));
+        backgroundButton.setOnClickListener(this);
+
+        chessBackground = view.findViewById(R.id.fragment_remove_background_background);
 
         floodFillerButton = (ImageButton) view.findViewById(R.id.fragment_remove_background_flood_filler);
         floodFillerButton.setOnClickListener(this);
@@ -150,18 +164,19 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.crop_activity_menu_save) {
-            File file = new File(BaseActivity.TEMP_CROP_CASH_DIR);
-            createFolderStructure(file);
-            try {
-                removerView.getFinishedBitmap().compress(Bitmap.CompressFormat.PNG, 85, new FileOutputStream(file));
-                Intent intent = new Intent(getContext(), EditImageActivity.class);
-                intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
-                startActivity(intent);
-                getActivity().finish();
+//            File file = new File(BaseActivity.TEMP_CROP_CASH_DIR);
+//            createFolderStructure(file);
+//            try {
+//                removerView.getFinishedBitmap().compress(Bitmap.CompressFormat.PNG, 85, new FileOutputStream(file));
+            listener.backgroundRemoverFinished(removerView.getFinishedBitmap());
+//                Intent intent = new Intent(getContext(), EditImageActivity.class);
+//                intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
+//                startActivity(intent);
+//                getActivity().finish();
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -196,6 +211,16 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
                 switchTo(APPLY_FLOOD);
 
             }
+        } else if (itemId == R.id.fragment_remove_background_background_button) {
+            if (chessBackground.getVisibility() == View.GONE) {
+                backgroundButton.setImageResource(R.drawable.ic_chess_white);
+                backgroundButton.setBackgroundColor(LIGHT_BLUE);
+                chessBackground.setVisibility(View.VISIBLE);
+            } else {
+                backgroundButton.setImageResource(R.drawable.ic_chess_blue);
+                backgroundButton.setBackgroundColor(Color.WHITE);
+                chessBackground.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -208,7 +233,7 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
             case REMOVE:
                 removerView.setUsingFloodFillPointer(false);
                 modeButton.setImageResource(R.drawable.ic_remove_blue);
-                modeButton.setBackgroundColor(Color.parseColor("#1565c0"));
+                modeButton.setBackgroundColor(LIGHT_BLUE);
                 dismissFloodPointer();
                 break;
             case REPAIR:
@@ -224,7 +249,7 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
                 break;
             case ZOOM_OFF:
                 zoomToggleButton.setImageResource(R.drawable.ic_hand_white);
-                zoomToggleButton.setBackgroundColor(Color.parseColor("#1565c0"));
+                zoomToggleButton.setBackgroundColor(LIGHT_BLUE);
                 dismissFloodPointer();
                 break;
             case SHOW_FLOOD_POINTER:
@@ -238,7 +263,7 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
             case APPLY_FLOOD:
                 removerView.floodFill();
                 removerView.setUsingFloodFillPointer(false);
-                floodFillerButton.setBackgroundColor(Color.parseColor("#1565c0"));
+                floodFillerButton.setBackgroundColor(LIGHT_BLUE);
                 floodFillerButton.setImageResource(R.drawable.ic_flood_fill);
                 break;
 
@@ -266,18 +291,6 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
         }
     }
 
-    private boolean createFolderStructure(File file) {
-        try {
-            file.mkdirs();
-            if (file.exists())
-                file.delete();
-            file.createNewFile();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
 
     @Override
     public void updateBottomPointer(float top, float left, float scale) {
@@ -332,6 +345,10 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
 
     public void setApplyFloodFillMode(boolean applyFloodFillMode) {
         this.applyFloodFillMode = applyFloodFillMode;
+    }
+
+    public interface BackgroundRemoverFragmentCallbacks {
+        void backgroundRemoverFinished(Bitmap finishedBitmap);
     }
 
 }

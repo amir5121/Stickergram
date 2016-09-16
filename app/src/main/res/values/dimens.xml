@@ -7,5 +7,5 @@
     <dimen name="icon_fragment_landscape_width">135dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_small">5dp</dimen>
-    <dimen name="edit_image_activity_button_size">38dp</dimen>
+    <dimen name="edit_image_activity_button_size">43dp</dimen>
 </resources>

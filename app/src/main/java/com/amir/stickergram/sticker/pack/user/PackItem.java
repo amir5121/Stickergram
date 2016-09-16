@@ -3,8 +3,10 @@ package com.amir.stickergram.sticker.pack.user;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.util.Log;
 
+import com.amir.stickergram.BuildConfig;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
 
@@ -60,7 +62,7 @@ public class PackItem {
 
     public String getDir() {
 //        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG;
-        return baseStickerDir+ folder + File.separator + name + PNG;
+        return baseStickerDir + folder + File.separator + name + PNG;
     }
 
     public String getWebpDir() {
@@ -75,7 +77,10 @@ public class PackItem {
             if (file.exists())
                 file.delete();
             file.createNewFile();
-            tempBitmap.compress(Bitmap.CompressFormat.WEBP, 80, new FileOutputStream(dir));
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                tempBitmap.compress(Bitmap.CompressFormat.WEBP, 80, new FileOutputStream(dir));
+            } else tempBitmap.compress(Bitmap.CompressFormat.PNG, 80, new FileOutputStream(dir));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

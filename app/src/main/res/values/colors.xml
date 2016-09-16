@@ -23,7 +23,7 @@
     <color name="tilt_seek_bar_background_color">#890e6900</color>
     <color name="tilt_seek_bar_progress_color">#01d929</color>
     <color name="tilt_seek_bar_thumb_color">#33ff00</color>
-    <color name="shadow_radius_seek_bar_background_color">#558c9eff</color>
+    <color name="shadow_radius_seek_bar_background_color">#888ceeff</color>
     <color name="shadow_radius_tilt_seek_bar_progress_color">#00e676</color>
     <color name="shadow_radius_seek_bar_thumb_color">#00c853</color>
     <color name="shadow_dx_seek_bar_background_color">#88b700ff</color>

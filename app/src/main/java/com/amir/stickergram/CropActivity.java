@@ -1,20 +1,19 @@
 package com.amir.stickergram;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.backgroundRmover.BackgroundRemoverFragment;
 import com.amir.stickergram.backgroundRmover.CropFragment;
+import com.amir.stickergram.imagePadder.ImagePadderFragment;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.Loader;
 
-public class CropActivity extends BaseActivity implements CropFragment.CropFragmentCallbacks {
+public class CropActivity extends BaseActivity implements CropFragment.CropFragmentCallbacks, BackgroundRemoverFragment.BackgroundRemoverFragmentCallbacks {
     private boolean hasUsedAnEmptyImage = false;
 
     @Override
@@ -36,6 +35,7 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
             bundle.putParcelable(Constants.CROP_DESTINY, destinyUri);
         }
 
+        getSupportActionBar().setTitle(getString(R.string.crop));
         getSupportFragmentManager().
                 beginTransaction().
                 add(R.id.crop_fragment_container, CropFragment.newInstance(bundle)).
@@ -57,10 +57,25 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
             startActivity(intent);
             finish();
         } else {
+
+            getSupportActionBar().setTitle(getString(R.string.background_remover));
+
             getSupportFragmentManager().
                     beginTransaction().
                     replace(R.id.crop_fragment_container, BackgroundRemoverFragment.getInstance(bundle)).
                     commit();
         }
+    }
+
+
+    @Override
+    public void backgroundRemoverFinished(Bitmap finishedBitmap) {
+
+        getSupportActionBar().setTitle(getString(R.string.image_stroke));
+
+        getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.crop_fragment_container, ImagePadderFragment.getInstance(finishedBitmap)).
+                commit();
     }
 }

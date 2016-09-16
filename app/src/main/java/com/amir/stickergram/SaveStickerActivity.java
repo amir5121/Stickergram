@@ -160,7 +160,7 @@ public class SaveStickerActivity extends BaseActivity
         String dir = BaseActivity.USER_STICKERS_DIRECTORY + stickerFolder + File.separator;
         File folder = new File(dir);
         File[] files;
-        Log.e(getClass().getSimpleName(), "Directory: " + dir);
+//        Log.e(getClass().getSimpleName(), "Directory: " + dir);
         if (folder.exists() && folder.isDirectory())
             files = folder.listFiles();
         else throw new RuntimeException("Invalid Folder");

@@ -137,7 +137,13 @@ public class ArcLinearLayout extends LinearLayout {
                 pos[0] -= containerWidth / 2;
                 float xPow2 = (float) Math.pow(pos[0] + currChild.getWidth() / 2, 2);
                 y = (float) Math.abs(Math.sqrt(Math.abs(radiusPow2 - xPow2)) - radius);
+//                Log.e(getClass().getSimpleName(), " elevation: " + elevation + " offset: " + (y * 1.2f + elevation + itemsOffset));
+
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+//                    currChild.setY(y * 1.2f);
+//                else
                 currChild.setY(y * 1.2f + elevation + itemsOffset);
+
 //                currChild.setY(0);
 //                Log.e(getClass().getSimpleName(), "------------posX: " + (pos[0] + currChild.getWidth() / 2) + " y: " + y);
 

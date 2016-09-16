@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
+
+    <LinearLayout
+        android:id="@+id/fragment_image_padder_bottom_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:alpha=".8"
+        android:background="@color/default_button_background"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/fragment_image_padder_width_button"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/width"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/fragment_image_padder_color_button"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:src="@drawable/ic_color" />
+
+        <TextView
+            android:id="@+id/fragment_image_padder_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/apply"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/fragment_image_padder_main_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:layout_toEndOf="@id/fragment_image_padder_bottom_container" />
+
+    <app.minimize.com.seek_bar_compat.SeekBarCompat
+        android:id="@+id/fragment_image_padder_width_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@id/fragment_image_padder_bottom_container"
+        android:background="#88ff5599"
+        android:maxHeight="30sp"
+        android:padding="15dp"
+        android:visibility="gone"
+        app:progressBackgroundColor="#000"
+        app:progressColor="#AFF123"
+        app:thumbAlpha="1.0"
+        app:thumbColor="#55FF44" />
+
+
+    <RelativeLayout
+        android:id="@+id/fragment_image_padder_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/loading_background"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

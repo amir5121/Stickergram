@@ -225,5 +225,12 @@
     <string name="move_right">Move right</string>
     <string name="shadow_x">Shadow X</string>
     <string name="shadow_y">Shadow Y</string>
+    <string name="background_remover">Background remover</string>
+    <string name="crop">Crop</string>
+    <string name="image_stroke">Image Stroke</string>
+    <string name="somthing_went_wrong">Something went wrong</string>
+    <string name="apply">Apply</string>
+    <string name="discard">Discard</string>
+    <string name="width">Width</string>
 
 </resources>
