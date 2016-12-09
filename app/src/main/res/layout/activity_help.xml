@@ -81,23 +81,23 @@
                     style="@style/HowToAnswer"
                     android:text="@string/in_pack_creation_mode_your_stickers_will_be_saves_as_png_files_with_appropriate_file_and_image_size" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/i_have_explained_the_process_here" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/i_have_explained_the_process_here" />-->
 
-                <Button
-                    android:id="@+id/activity_help_watch_video"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/watch_a_video_tutorial"
-                    android:textColor="#fff" />
+                <!--<Button-->
+                    <!--android:id="@+id/activity_help_watch_video"-->
+                    <!--style="@style/Base.Widget.AppCompat.Button.Borderless"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="15dp"-->
+                    <!--android:layout_marginEnd="25dp"-->
+                    <!--android:layout_marginLeft="25dp"-->
+                    <!--android:layout_marginRight="25dp"-->
+                    <!--android:layout_marginStart="25dp"-->
+                    <!--android:background="@color/default_button_background"-->
+                    <!--android:text="@string/watch_a_video_tutorial"-->
+                    <!--android:textColor="#fff" />-->
 
 
                 <TextView
@@ -234,9 +234,9 @@
                     style="@style/HowToAnswer"
                     android:text="@string/_5_after_sending_the_emoji_send" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/while_you_want_to_add_new_stickers_to_pack_do_step_4_and_5" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/while_you_want_to_add_new_stickers_to_pack_do_step_4_and_5" />-->
 
                 <Button
                     android:id="@+id/activity_faq_go_to_user_pack"
@@ -356,36 +356,36 @@
                     style="@style/HowToAnswer"
                     android:text="@string/command_to_add_sticker_to_a_published_pack_for_example_if_i_have_a_sticker_that_i_published_with_this_link" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/telegram_me_addstickers_stickergramapp" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/telegram_me_addstickers_stickergramapp" />-->
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/and_i_want_to_add_another_sticker_to_that_pack_i_should_write_this_command" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/and_i_want_to_add_another_sticker_to_that_pack_i_should_write_this_command" />-->
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/addsticker_telegram_me_addstickers_stickergramapp" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/addsticker_telegram_me_addstickers_stickergramapp" />-->
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/then_send_an_emoji_and_the_sticker_itself_afterward" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/then_send_an_emoji_and_the_sticker_itself_afterward" />-->
 
 
-                <Button
-                    android:id="@+id/activity_help_watch_how_to_add_sticker_to_a_published_pack"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/default_button_background"
-                    android:text="@string/watch_a_video_tutorial"
-                    android:textColor="#fff" />
+                <!--<Button-->
+                    <!--android:id="@+id/activity_help_watch_how_to_add_sticker_to_a_published_pack"-->
+                    <!--style="@style/Base.Widget.AppCompat.Button.Borderless"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="15dp"-->
+                    <!--android:layout_marginEnd="25dp"-->
+                    <!--android:layout_marginLeft="25dp"-->
+                    <!--android:layout_marginRight="25dp"-->
+                    <!--android:layout_marginStart="25dp"-->
+                    <!--android:background="@color/default_button_background"-->
+                    <!--android:text="@string/watch_a_video_tutorial"-->
+                    <!--android:textColor="#fff" />-->
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"
@@ -403,23 +403,23 @@
                     style="@style/HowToAnswer"
                     android:text="@string/command_for_just_this_propose_for_example_if_i_have_a_sticker_that_i_published_with_this_link" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/telegram_me_addstickers_stickergramapp" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/telegram_me_addstickers_stickergramapp" />-->
 
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/and_i_want_to_delete_a_sticker_from_that_pack_i_should_write_this_command" />-->
 
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/delsticker_telegram_me_addstickers_stickergramapp" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/delsticker_telegram_me_addstickers_stickergramapp" />-->
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/then_send_the_sticker_from_within_the_telegram" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/then_send_the_sticker_from_within_the_telegram" />-->
 
                 <TextView
                     style="@style/HowToQuestionTextStyle"

@@ -492,7 +492,7 @@ public class EditImageActivity
 
                     } else {
                         params.setMargins(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2,
-                                pos[1] - 100, 0, 0);
+                                (int) (pos[1] - 70 * BaseActivity.density), 0, 0);
                         params.setMarginStart(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2);
                     }
                     infoTextView.setLayoutParams(params);
@@ -998,7 +998,7 @@ public class EditImageActivity
         }
         infoTextView.setBackgroundResource(R.drawable.simple_sticker_background);
         infoTextView.setAlpha(.85f);
-        infoTextView.setPadding(5, 5, 5, 5);
+        infoTextView.setPadding(6, 6, 6, 6);
         setFont(infoTextView);
         mainContainer.addView(infoTextView);
         pos = new int[2];

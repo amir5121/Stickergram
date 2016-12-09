@@ -19,6 +19,7 @@ import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.util.IabHelper;
 import com.amir.stickergram.util.IabResult;
+import com.amir.stickergram.util.Inventory;
 import com.amir.stickergram.util.Purchase;
 import com.tozny.crypto.android.AesCbcWithIntegrity;
 
@@ -75,6 +76,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
                     } else {
                         inAppBillingSetupOk = true;
                         Log.d(TAG, "In-app Billing is set up OK");
+                        if (!isPaid) mHelper.queryInventoryAsync(mGotInventoryListener);
                     }
                 }
             });
@@ -95,6 +97,41 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
         };
     }
+
+    // Listener that's called when we finish querying the items and
+    // subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result,
+                                             Inventory inventory) {
+            Log.d(TAG, "Query inventory finished.");
+            if (result.isFailure()) {
+                Log.e(TAG, "Query inventory failed.");
+                //complain("Failed to query inventory: " + result);
+                //showErrorInPayment();
+                return;
+            }
+
+            Log.d(TAG, "Query inventory was successful.");
+
+                /*
+                 * Check for items we own. Notice that for each purchase, we check
+                 * the developer payload to see if it's correct! See
+                 * verifyDeveloperPayload().
+                 */
+
+            // // Check for gas delivery -- if we own gas, we should fill up the
+            // tank immediately
+            Purchase gasPurchase = inventory.getPurchase(ITEM_SKU);
+            if (gasPurchase != null
+                //&& verifyDeveloperPayload(gasPurchase)
+                    ) {
+                Log.d(TAG, "We have gas. Consuming it.");
+                setBuyProTrue();
+                return;
+            }
+        }
+    };
+
 //
 //    private void queryPurchasedItems() {
 //        //check if user has bought "remove adds"

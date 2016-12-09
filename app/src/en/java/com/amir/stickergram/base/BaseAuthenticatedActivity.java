@@ -20,6 +20,7 @@ import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.util.IabHelper;
 import com.amir.stickergram.util.IabResult;
+import com.amir.stickergram.util.Inventory;
 import com.amir.stickergram.util.Purchase;
 import com.tozny.crypto.android.AesCbcWithIntegrity;
 
@@ -68,14 +69,21 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
                     } else {
                         inAppBillingSetupOk = true;
                         Log.d(TAG, "In-app Billing is set up OK");
+                        try {
+                            if (!isPaid) mHelper.queryInventoryAsync(mGotInventoryListener);
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
         }
 
+
         mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
             public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
                 if (result.isFailure()) {
+                    //Toast.makeText(BaseAuthenticatedActivity.this, result.getMessage(), Toast.LENGTH_LONG).show();
                     showErrorInPayment();
                     return;
                 } else if (purchase.getSku().equals(ITEM_SKU)) {
@@ -89,6 +97,39 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
     }
 
+    // Listener that's called when we finish querying the items and
+    // subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result,
+                                             Inventory inventory) {
+            Log.d(TAG, "Query inventory finished.");
+            if (result.isFailure()) {
+                Log.e(TAG, "Query inventory failed.");
+                //complain("Failed to query inventory: " + result);
+                //showErrorInPayment();
+                return;
+            }
+
+            Log.d(TAG, "Query inventory was successful.");
+
+                /*
+                 * Check for items we own. Notice that for each purchase, we check
+                 * the developer payload to see if it's correct! See
+                 * verifyDeveloperPayload().
+                 */
+
+            // // Check for gas delivery -- if we own gas, we should fill up the
+            // tank immediately
+            Purchase gasPurchase = inventory.getPurchase(ITEM_SKU);
+            if (gasPurchase != null
+                //&& verifyDeveloperPayload(gasPurchase)
+                    ) {
+                Log.d(TAG, "We have gas. Consuming it.");
+                setBuyProTrue();
+                return;
+            }
+        }
+    };
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (inAppBillingSetupOk) {

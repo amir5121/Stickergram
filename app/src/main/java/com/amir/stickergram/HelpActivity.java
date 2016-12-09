@@ -37,8 +37,8 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
         View goToBot3 = findViewById(R.id.activity_faq_go_to_bot3);
         View goToUserPackButton = findViewById(R.id.activity_faq_go_to_user_pack);
         View publishButton = findViewById(R.id.activity_faq_publish);
-        View watchVideo = findViewById(R.id.activity_help_watch_video);
-        View watchAddSticker = findViewById(R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack);
+//        View watchVideo = findViewById(R.id.activity_help_watch_video);
+//        View watchAddSticker = findViewById(R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack);
 
 
         if (activateBotButton != null &&
@@ -47,9 +47,10 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
                 goToBot2 != null &&
                 goToBot3 != null &&
                 goToUserPackButton != null &&
-                publishButton != null &&
-                watchVideo != null &&
-                watchAddSticker != null) {
+                publishButton != null
+//                watchVideo != null &&
+//                watchAddSticker != null
+                ) {
             activateBotButton.setOnClickListener(this);
             createNewPack.setOnClickListener(this);
             goToBot.setOnClickListener(this);
@@ -57,10 +58,10 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
             goToBot3.setOnClickListener(this);
             goToUserPackButton.setOnClickListener(this);
             publishButton.setOnClickListener(this);
-            watchVideo.setOnClickListener(this);
-            watchAddSticker.setOnClickListener(this);
-            if (Loader.deviceLanguageIsPersian()) watchAddSticker.setVisibility(View.GONE);
-            else watchAddSticker.setVisibility(View.VISIBLE);
+//            watchVideo.setOnClickListener(this);
+//            watchAddSticker.setOnClickListener(this);
+//            if (Loader.deviceLanguageIsPersian()) watchAddSticker.setVisibility(View.GONE);
+//            else watchAddSticker.setVisibility(View.VISIBLE);
         }
 
         setFont((ViewGroup) findViewById(R.id.nav_drawer));
@@ -85,14 +86,14 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
         } else if (itemId == R.id.activity_faq_new_pack) {
             copyToClipboard(NEW_PACK_COMMAND);
             Loader.goToBotInTelegram(this);
-        } else if (itemId == R.id.activity_help_watch_video) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(getString(R.string.link_to_video)));
-            startActivity(intent);
-        } else if (itemId == R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(getString(R.string.link_to_video_add_sticker)));
-            startActivity(intent);
+//        } else if (itemId == R.id.activity_help_watch_video) {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(getString(R.string.link_to_video)));
+//            startActivity(intent);
+//        } else if (itemId == R.id.activity_help_watch_how_to_add_sticker_to_a_published_pack) {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(getString(R.string.link_to_video_add_sticker)));
+//            startActivity(intent);
         }
     }
 
