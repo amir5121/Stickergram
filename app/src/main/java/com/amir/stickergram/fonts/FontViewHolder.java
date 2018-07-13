@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.amir.stickergram.R;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
 
 public class FontViewHolder extends RecyclerView.ViewHolder {
     TextView textView;

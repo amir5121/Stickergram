@@ -1,9 +1,11 @@
 package com.amir.stickergram.sticker.pack.template;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
+import com.amir.stickergram.image.ImageReceiverCallBack;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.serverHelper.ServerSticker;
@@ -46,11 +49,38 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
     private SwipeRefreshLayout swipeRefreshLayout;
     private Button linkButton;
     private ServerSticker serverSticker;
+    private boolean isImagePicker;
+    private ImageReceiverCallBack listener;
+
+    public static TemplateIconPackDetailedFragment newInstance(boolean isImagePicker) {
+
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.IS_AN_IMAGE_PICKER, isImagePicker);
+        TemplateIconPackDetailedFragment fragment = new TemplateIconPackDetailedFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (ImageReceiverCallBack) context;
+        } catch (ClassCastException e) {
+            //Nothing to do we don't care
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null)
+            isImagePicker = args.getBoolean(Constants.IS_AN_IMAGE_PICKER, false);
+
         View view = inflater.inflate(R.layout.fragment_icon_detailed, container, false);
         setFont((ViewGroup) view);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_icon_detailed_swipeRefresh);
@@ -90,12 +120,13 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
     @Override
     public void onStickerClicked(PackItem item) {
         getDialogFor(item);
-//        Log.e(getClass().getSimpleName(), "clicked: " + item.getEnName() + " " + item.getPosition());
     }
 
     private void getDialogFor(PackItem item) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_server_sticker, null, false);
         setFont((ViewGroup) view);
+        if (isImagePicker)
+            ((TextView) view.findViewById(R.id.dialog_single_item_title)).setText(getString(R.string.add_this_image));
         final ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_server_sticker_image);
         final View progressView = view.findViewById(R.id.dialog_server_sticker_loading);
         final View errorImage = view.findViewById(R.id.dialog_server_sticker_error);
@@ -114,10 +145,14 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-                    Intent intent = new Intent(getActivity(), EditImageActivity.class);
-                    intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(new File(dir)));
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (isImagePicker) {
+                        TemplateIconPackDetailedFragment.this.listener.receivedImage(BitmapFactory.decodeFile(dir));
+                    } else {
+                        Intent intent = new Intent(getActivity(), EditImageActivity.class);
+                        intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(new File(dir)));
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
                 }
             }
         };
@@ -164,7 +199,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
                 public void onErrorResponse(VolleyError error) {
                     progressView.setVisibility(View.GONE);
                     errorImage.setVisibility(View.VISIBLE);
-                    Log.e(getClass().getSimpleName(), "error getting the image");
+                    Log.e(getClass().getSimpleName(), "error getting the com.amir.stickergram.image");
                 }
             });
         } else {

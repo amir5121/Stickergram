@@ -177,6 +177,9 @@ public class UserIconPackDetailedFragment extends BaseFragment
                         startActivity(intent);
                     } else
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();
+                } else if (which == Dialog.BUTTON_NEUTRAL) {
+                    sendImageToBot((BaseActivity) UserIconPackDetailedFragment.this.getActivity(), item);
+                    Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -194,6 +197,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
 //                .setTitle(activity.getString(R.string.do_you_want_to_send_this_sticker))
                 .setNegativeButton(activity.getString(R.string.no), listener)
                 .setPositiveButton(activity.getString(R.string.send), listener)
+                .setNeutralButton(activity.getString(R.string.send_to_bot), listener)
                 .create();
 
 
@@ -212,6 +216,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
             public void onShow(DialogInterface dialogInterface) {
                 activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
                 activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+                activity.setFont(sendImageToUserDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
             }
         });
 

@@ -9,6 +9,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_edit_image_add_new_image"
+        android:icon="@drawable/ic_insert_photo"
+        android:title="@string/add_new_text"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menu_edit_image_save"
         android:icon="@drawable/ic_save"
         android:title="@string/save"

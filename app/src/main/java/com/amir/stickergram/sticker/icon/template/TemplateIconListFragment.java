@@ -22,6 +22,7 @@ import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
 
 public class TemplateIconListFragment extends BaseFragment
         implements OnIconSelectedListener, SwipeRefreshLayout.OnRefreshListener, OnRefreshCallbacks {
+    private static final String TAG = "TemplateIconListFra";
     private OnIconSelectedListener mCallback;
     private SwipeRefreshLayout refreshLayout;
     private View noItemFoundText;
@@ -59,13 +60,13 @@ public class TemplateIconListFragment extends BaseFragment
             recyclerView.setAdapter(adapter);
         }
         Log.e(getClass().getSimpleName(), "onCreateView temFragment");
-
         return view;
     }
 
     @Override
     public void onRefresh() {
-        refreshLayout.setRefreshing(true);
+        if (refreshLayout != null)
+            refreshLayout.setRefreshing(true);
         adapter.updateItems(true);
     }
 

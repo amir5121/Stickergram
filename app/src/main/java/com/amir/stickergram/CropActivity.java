@@ -15,6 +15,7 @@ import com.amir.stickergram.infrastructure.Constants;
 
 public class CropActivity extends BaseActivity implements CropFragment.CropFragmentCallbacks, BackgroundRemoverFragment.BackgroundRemoverFragmentCallbacks {
     private boolean hasUsedAnEmptyImage = false;
+    private boolean launchedToAddImage = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,9 +31,11 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
         Intent intent = getIntent();
         if (intent != null) {
             hasUsedAnEmptyImage = intent.getBooleanExtra(Constants.IS_USING_EMPTY_IMAGE, false);
+            launchedToAddImage = intent.getBooleanExtra(Constants.LAUNCHED_TO_ADD_IMAGE, false);
             bundle.putParcelable(Constants.CROP_SOURCE, intent.getParcelableExtra(Constants.CROP_SOURCE));
             Uri destinyUri = intent.getParcelableExtra(Constants.CROP_DESTINY);
             bundle.putParcelable(Constants.CROP_DESTINY, destinyUri);
+
         }
 
         getSupportActionBar().setTitle(getString(R.string.crop));
@@ -75,7 +78,7 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
 
         getSupportFragmentManager().
                 beginTransaction().
-                replace(R.id.crop_fragment_container, ImagePadderFragment.getInstance(finishedBitmap)).
+                replace(R.id.crop_fragment_container, ImagePadderFragment.getInstance(finishedBitmap, launchedToAddImage)).
                 commit();
     }
 }

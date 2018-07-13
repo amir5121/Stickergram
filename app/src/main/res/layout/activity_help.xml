@@ -140,7 +140,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="@string/by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_creation_command_will_be_copied_to_your_clipboard_then_paste_it_and_send_it_to_the_bot" />
+                    android:text="@string/by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_" />
 
 
                 <Button
@@ -307,7 +307,7 @@
 
                 <TextView
                     style="@style/HowToAnswer"
-                    android:text="@string/note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only_have_english_alphabetic_characters_in_it_so_for_example_it_can_t_be_55555_or_stickergram_app_or_stickergram_and_it_must_at_least_be_5_character_and_not_in_use_by_others_bot_will_tell_you_if_the_short_name_has_been_taken_or_not_if_it_was_taken_you_need_to_pick_another_name" />
+                    android:text="@string/note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only" />
 
                 <Button
                     android:id="@+id/activity_faq_go_to_bot3"
@@ -429,9 +429,9 @@
                     style="@style/HowToAnswer"
                     android:text="@string/these_features_are_activated_in_the_pro_version" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/you_will_be_able_to_rotate_tilt_your_texts" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/you_will_be_able_to_rotate_tilt_your_texts" />-->
 
                 <TextView
                     style="@style/HowToAnswer"
@@ -441,9 +441,9 @@
                     style="@style/HowToAnswer"
                     android:text="@string/label_will_be_removed_from_the_bottom_of_your_stickers" />
 
-                <TextView
-                    style="@style/HowToAnswer"
-                    android:text="@string/you_will_be_able_to_crop_your_images_circularly" />
+                <!--<TextView-->
+                    <!--style="@style/HowToAnswer"-->
+                    <!--android:text="@string/you_will_be_able_to_crop_your_images_circularly" />-->
 
                 <TextView
                     style="@style/HowToAnswer"

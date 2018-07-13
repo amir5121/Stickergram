@@ -823,6 +823,7 @@ public class IabHelper {
     int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException {
         // Query purchases
         logDebug("Querying owned items, item type: " + itemType);
+        if (mContext == null) return 0;
         logDebug("Package name: " + mContext.getPackageName());
         boolean verificationFailed = false;
         String continueToken = null;
@@ -887,6 +888,7 @@ public class IabHelper {
         logDebug("Querying SKU details.");
         ArrayList<String> skuList = new ArrayList<String>();
         skuList.addAll(inv.getAllOwnedSkus(itemType));
+        if (mContext == null) return 0;
         if (moreSkus != null) {
             for (String sku : moreSkus) {
                 if (!skuList.contains(sku)) {

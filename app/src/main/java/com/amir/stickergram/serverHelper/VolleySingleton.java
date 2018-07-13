@@ -2,7 +2,10 @@ package com.amir.stickergram.serverHelper;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.amir.stickergram.R;
+import com.amir.stickergram.infrastructure.Loader;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -21,6 +24,10 @@ public class VolleySingleton extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        if (Loader.freeMemory() < 5) {
+            Toast.makeText(this, getString(R.string.low_storage), Toast.LENGTH_LONG).show();
+        }
     }
 
     public static synchronized VolleySingleton getInstance() {

@@ -60,6 +60,8 @@ class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
         String name;
         if (Loader.deviceLanguageIsPersian())
             name = items.get(position).getPerName();
+//        else if (Loader.deviceLanguageIsRussian())
+//            name = items.get(position).getRuName();
         else name = items.get(position).getEnName();
 
         if (name != null) {
@@ -90,10 +92,10 @@ class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
 //        Log.e(getClass().getSimpleName(), "listIconReceived");
 //        items = list;
         items = new ArrayList<>();
-        for (ServerSticker item : list){
-            if (item.getMode() == Constants.ALL_FLAVORS){
+        for (ServerSticker item : list) {
+            if (item.getMode() == Constants.ALL_FLAVORS) {
                 items.add(item);
-            } else if (item.getMode() == AppType.FLAVOR){
+            } else if (item.getMode() == AppType.FLAVOR) {
                 items.add(item);
             }
         }

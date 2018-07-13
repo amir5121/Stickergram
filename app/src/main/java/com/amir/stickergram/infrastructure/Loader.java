@@ -15,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -31,10 +30,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -65,6 +62,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
+
+import com.amir.stickergram.image.TextItem;
+import com.amir.stickergram.image.TouchImageView;
 
 public class Loader {
     private static final String TAG = "LOADER";
@@ -309,7 +309,7 @@ public class Loader {
                 inputStream = new FileInputStream(file);
                 Log.e("fileSize: " + TAG, String.valueOf(inputStream.available()));
                 i++;
-            } while (inputStream.available() >= 357376); // decreasing size to please the Telegram
+            } while (inputStream.available() >= 350000); // decreasing size to please the Telegram
             inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -451,14 +451,14 @@ public class Loader {
                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
 //                        changeBackgroundColor(selectedColor);
                         if (type == Constants.TEXT_COLOR)
-                            touchImageView.getTextItem().setTextColor(selectedColor);
+                            ((TextItem) touchImageView.getDrawableItem()).setTextColor(selectedColor);
                         else if (type == Constants.TEXT_SHADOW_COLOR)
-                            touchImageView.getTextItem().getShadow().setColor(selectedColor);
+                            ((TextItem) touchImageView.getDrawableItem()).getShadow().setColor(selectedColor);
                         else if (type == Constants.TEXT_BACKGROUND_COLOR)
-                            touchImageView.getTextItem().setBackgroundColor(selectedColor);
+                            ((TextItem) touchImageView.getDrawableItem()).setBackgroundColor(selectedColor);
                         else if (type == Constants.TEXT_STROKE_COLOR)
-                            touchImageView.getTextItem().setTextStrokeColor(selectedColor);
-                        touchImageView.updateTextView();
+                            ((TextItem) touchImageView.getDrawableItem()).setTextStrokeColor(selectedColor);
+                        touchImageView.updateDrawable();
                     }
                 })
                 .setNegativeButton(activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -472,7 +472,7 @@ public class Loader {
 
     public static boolean isPersian(String string) {
         for (int i = 0; i < string.length(); i++) {
-            int charAsciiNum =  (int) string.charAt(i);
+            int charAsciiNum = (int) string.charAt(i);
             if ((charAsciiNum > 1575 && charAsciiNum < 1641) || charAsciiNum == 1662 || charAsciiNum == 1711 || charAsciiNum == 1670 || charAsciiNum == 1688)
                 return true;
         }
@@ -555,7 +555,7 @@ public class Loader {
         }
     }
 
-    public static void crop(Uri source, Uri destiny, MainActivity activity, boolean isEmpty) {
+    public static void crop(Uri source, Uri destiny, BaseActivity activity, boolean isEmpty) {
         Intent intent = new Intent(activity, CropActivity.class);
         intent.putExtra(Constants.CROP_SOURCE, source);
         intent.putExtra(Constants.CROP_DESTINY, destiny);
@@ -574,6 +574,7 @@ public class Loader {
         }
 
         return free;
+        //return 100;
     }
 
 
@@ -705,6 +706,10 @@ public class Loader {
         return Locale.getDefault().getLanguage().equals("fa");
     }
 
+    public static boolean deviceLanguageIsRussian() {
+        return Locale.getDefault().getLanguage().equals("ru");
+    }
+
 
     public static String convertToPersianNumber(String s) {
         int length = s.length();
@@ -736,6 +741,35 @@ public class Loader {
         return modes;
     }
 
+    public static Bitmap createTrimmedBitmap(Bitmap bmp) {
+
+        int imgHeight = bmp.getHeight();
+        int imgWidth = bmp.getWidth();
+        int smallX = 0, largeX = imgWidth, smallY = 0, largeY = imgHeight;
+        int left = imgWidth, right = imgWidth, top = imgHeight, bottom = imgHeight;
+        for (int i = 0; i < imgWidth; i++) {
+            for (int j = 0; j < imgHeight; j++) {
+                if (bmp.getPixel(i, j) != Color.TRANSPARENT) {
+                    if ((i - smallX) < left) {
+                        left = (i - smallX);
+                    }
+                    if ((largeX - i) < right) {
+                        right = (largeX - i);
+                    }
+                    if ((j - smallY) < top) {
+                        top = (j - smallY);
+                    }
+                    if ((largeY - j) < bottom) {
+                        bottom = (largeY - j);
+                    }
+                }
+            }
+        }
+        Log.d(TAG, "left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
+        bmp = Bitmap.createBitmap(bmp, left, top, imgWidth - left - right, imgHeight - top - bottom);
+        return bmp;
+    }
+
     public static void setLocale(int lang, BaseActivity activity) {
         String language = null;
         switch (lang) {
@@ -744,6 +778,12 @@ public class Loader {
                 break;
             case Constants.ENGLISH_LANGUAGE:
                 language = "en";
+                break;
+            case Constants.RUSSIAN_LANGUAGE:
+                language = "ru";
+                break;
+            case Constants.GERMAN_LANGUAGE:
+                language = "de";
                 break;
             case Constants.SYSTEM_LANGUAGE:
                 language = Locale.getDefault().getLanguage();
@@ -800,13 +840,13 @@ public class Loader {
      * Converts a immutable bitmap to a mutable bitmap. This operation doesn't allocates
      * more memory that there is already allocated.
      *
-     * @param imgIn - Source image. It will be released, and should not be used more
+     * @param imgIn - Source com.amir.stickergram.image. It will be released, and should not be used more
      * @return a copy of imgIn, but muttable.
      */
     public static Bitmap convertToMutable(Bitmap imgIn) {
         try {
             //this is the file going to use temporally to save the bytes.
-            // This file will not be a image, it will store the raw image data.
+            // This file will not be a com.amir.stickergram.image, it will store the raw com.amir.stickergram.image data.
             File file = new File(Environment.getExternalStorageDirectory() + File.separator + "temp.tmp");
 
             //Open an RandomAccessFile
@@ -854,30 +894,31 @@ public class Loader {
 
         fileOrDirectory.delete();
     }
+
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *
-     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param dp      A value in dp (density independent pixels) unit. Which we need to convert into pixels
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent px equivalent to dp depending on device density
      */
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     /**
      * This method converts device specific pixels to density independent pixels.
      *
-     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @param px      A value in px (pixels) unit. Which we need to convert into db
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent dp equivalent to px value
      */
-    public static float convertPixelsToDp(float px, Context context){
+    public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static boolean createFolderStructure(File file) {

@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
 import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.BufferedReader;
@@ -17,7 +17,6 @@ import java.util.List;
 
 import android.graphics.Typeface;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

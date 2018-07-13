@@ -53,4 +53,5 @@
     <color name="dialog_text_hint_color">#ccc</color>
     <color name="contact_activity_background">#1976d2</color>
     <color name="light_blue_transparent">#bb42a5f5</color>
+    <color name="divider">#dcdcdc</color>
 </resources>

@@ -20,6 +20,8 @@ public class DataSource {
     private Set<String> stickerDirectories;
     private SharedPreferences preferences;
 
+    private SharedPreferences.Editor editor;
+
     public DataSource(Context context) {
         preferences = context.getSharedPreferences(context.getClass().getSimpleName(), Context.MODE_PRIVATE);
         stickerDirectories = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
@@ -34,6 +36,38 @@ public class DataSource {
 
         editor.apply();
     }
+
+    private void addDirectoryToSet(String stickerDirectory) {
+        stickerDirectories = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
+        SharedPreferences.Editor editor = preferences.edit();
+        stickerDirectories.add(stickerDirectory);
+
+        editor.putStringSet(DIRECTORIES, stickerDirectories);
+        editor.apply();
+    }
+
+    public void lazyAdd(StickerItem item) {
+        if (editor == null)
+            editor = preferences.edit();
+
+        editor.putString(item.getStickerDirectory() + THUMB_DIR_STRING, item.getThumbDirectory());
+        editor.putBoolean(item.getStickerDirectory() + IS_VISIBLE_BOOLEAN, item.isVisible());
+
+        if (stickerDirectories == null)
+            stickerDirectories = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
+
+        stickerDirectories.add(item.getStickerDirectory());
+        editor.putStringSet(DIRECTORIES, stickerDirectories);
+    }
+
+
+    public void apply() {
+        if (editor != null) {
+            editor.apply();
+            editor = null;
+        }
+    }
+
 
     public boolean remove(StickerItem item) {
 
@@ -83,14 +117,6 @@ public class DataSource {
         return new StickerItem(directory, thumbDirectory, false, isVisible);
     }
 
-    private void addDirectoryToSet(String stickerDirectory) {
-        stickerDirectories = preferences.getStringSet(DIRECTORIES, new HashSet<String>());
-        SharedPreferences.Editor editor = preferences.edit();
-        stickerDirectories.add(stickerDirectory);
-
-        editor.putStringSet(DIRECTORIES, stickerDirectories);
-        editor.apply();
-    }
 
     private boolean removeDirectoryFromSet(String stickerDirectory) {
         if (stickerDirectories.contains(stickerDirectory)) {

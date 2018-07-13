@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public abstract class BaseActivity extends BaseAuthenticatedActivity {
+    private static final String TAG = "BaseActivity";
     public static float density;
     public static String CACHE_DIR;
     public static String TEMP_STICKER_CASH_DIR;
@@ -40,6 +41,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static String BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY;
     public static String USER_STICKERS_DIRECTORY;
     public static String BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY;
+    public static String STICKERGRAM_ROOT;
     public static String STICKERGRAM = "/Stickergram";
 
     private SharedPreferences preferences;
@@ -70,6 +72,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY = getExternalCacheDir() + File.separator + "thumb_phone_organized_Stickers";
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.phone_organized/";
+        STICKERGRAM_ROOT = Environment.getExternalStorageDirectory() + STICKERGRAM + File.separator;
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
         TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
         TEMP_CROP_CASH_DIR = getExternalCacheDir() + File.separator + "temp_crop.png";
@@ -86,13 +89,12 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
             }
         }
 
-        if (Loader.freeMemory() < 50 && !hasCashedPhoneStickersOnce()) {
-            Toast.makeText(this, getString(R.string.low_storage_finish), Toast.LENGTH_LONG).show();
-            Toast.makeText(this, getString(R.string.low_storage_finish), Toast.LENGTH_LONG).show();
-            finish();
-        } else if (Loader.freeMemory() < 5) {
-            Toast.makeText(this, getString(R.string.low_storage), Toast.LENGTH_LONG).show();
-        }
+//        if (Loader.freeMemory() < 50 && !hasCashedPhoneStickersOnce()) {
+//            Toast.makeText(this, getString(R.string.low_storage_finish), Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, getString(R.string.low_storage_finish), Toast.LENGTH_LONG).show();
+////            finish();
+//        } else
+
 
     }
 
@@ -191,6 +193,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     }
 
     public void setDefaultMode(Mode mode) {
+
         chosenMode = mode;
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(Constants.ACTIVE_PACK, mode.getPack());

@@ -1,5 +1,6 @@
 package com.amir.stickergram.imagePadder;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -48,6 +49,7 @@ public class ImagePadderFragment extends BaseFragment implements View.OnClickLis
     private View loadingView;
     private Bitmap lastRes;
     private boolean imageHasChanged = false;
+    private boolean launchedToAddImage = false;
 
     @Nullable
     @Override
@@ -60,7 +62,7 @@ public class ImagePadderFragment extends BaseFragment implements View.OnClickLis
         if (bundle == null) {
             Toast.makeText(getContext(), getString(R.string.somthing_went_wrong), Toast.LENGTH_LONG).show();
             getActivity().finish();
-            return null;
+            return view;
         }
 
         view.findViewById(R.id.fragment_image_padder_width_button).setOnClickListener(this);
@@ -73,11 +75,12 @@ public class ImagePadderFragment extends BaseFragment implements View.OnClickLis
         seekBar.setOnSeekBarChangeListener(this);
         seekBar.setMax(15);
 
+        launchedToAddImage = bundle.getBoolean(Constants.LAUNCHED_TO_ADD_IMAGE, false);
         mainImage = bundle.getParcelable(EXTRA_IMAGE);
         if (mainImage == null) {
             Toast.makeText(getContext(), getString(R.string.somthing_went_wrong), Toast.LENGTH_LONG).show();
             getActivity().finish();
-            return null;
+            return view;
         }
         mainImageView = ((ImageView) view.findViewById(R.id.fragment_image_padder_main_image));
         mainImageView.setImageBitmap(mainImage);
@@ -117,19 +120,27 @@ public class ImagePadderFragment extends BaseFragment implements View.OnClickLis
                 mainImage.compress(Bitmap.CompressFormat.PNG, 85, new FileOutputStream(file));
             else lastRes.compress(Bitmap.CompressFormat.PNG, 85, new FileOutputStream(file));
 
-            Intent intent = new Intent(getContext(), EditImageActivity.class);
-            intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
-            startActivity(intent);
-            getActivity().finish();
+            if (launchedToAddImage) {
+                Intent intent = new Intent();
+                intent.putExtra(EditImageActivity.ADDED_IMAGE_ADDRESS, file.getAbsolutePath());
+                getActivity().setResult(Activity.RESULT_OK, intent);
+                getActivity().finish();
+            } else {
+                Intent intent = new Intent(getContext(), EditImageActivity.class);
+                intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
+                startActivity(intent);
+                getActivity().finish();
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static Fragment getInstance(Bitmap finishedBitmap) {
+    public static Fragment getInstance(Bitmap finishedBitmap, boolean launchedToAddImage) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_IMAGE, finishedBitmap);
+        bundle.putBoolean(Constants.LAUNCHED_TO_ADD_IMAGE, launchedToAddImage);
         ImagePadderFragment imagePadderFragment = new ImagePadderFragment();
         imagePadderFragment.setArguments(bundle);
         return imagePadderFragment;

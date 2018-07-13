@@ -47,6 +47,7 @@ public class UserIconListFragment extends BaseFragment implements IconAdapter.On
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_template_list_list);
         if (recyclerView != null) {
             IconAdapter adapter = new IconAdapter((BaseActivity) getActivity(), this);
+
             if (BaseActivity.isInLandscape
                     || BaseActivity.isTablet)
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

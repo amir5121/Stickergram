@@ -43,8 +43,8 @@
     <string name="text_background">Text background</string>
     <string name="stroke_color">Stroke Color</string>
     <string name="stroke_width">Stroke width</string>
-    <string name="telegram_sticker">Telegram Stickers</string>
-    <string name="sticker_from_picture">Sticker from Picture</string>
+    <string name="telegram_sticker">Telegram cache</string>
+    <string name="sticker_from_picture">Create Sticker</string>
     <string name="choose_the_package_to_save_in">Choose a package to save in</string>
     <string name="create_new_package">Create new Package</string>
     <string name="stickergram">Stickergram</string>
@@ -53,7 +53,7 @@
     <string name="package_name">Package name</string>
     <string name="Folder">Folder</string>
     <string name="every_sticker_must_be_in_a_pack">Every Sticker must be saved in a package</string>
-    <string name="every_sticker_must_be_saved_in_a_package_you_have_the_choice_os_choosing_an_existing_pack_or_creating_a_new_one">Every Sticker must be saved in a package. You can either choose an existing pack or create a new package</string>
+    <string name="every_sticker_must_be_saved_in_a_package_you_have_the_choice">Every Sticker must be saved in a package. You can either choose an existing pack or create a new package</string>
     <string name="are_you_sure_you_are_finished_editing_this_sticker">Are finished editing this Sticker?</string>
     <string name="upgrade_to_pro_to_delete_this_label">Upgrade to pro to delete this label</string>
     <string name="couldn_t_find_telegram_cash_directory">I couldn\'t find any cache directory.</string>
@@ -73,7 +73,7 @@
     <string name="need_permission_to_look_for_your_stickers">Need permission to access your Stickers</string>
     <string name="need_permission_to_save_the_sticker">Need permission to save the Sticker</string>
     <string name="there_was_a_problem_getting_the_picture">There was a problem loading the picture.</string>
-    <string name="add_new_text_or_set_a_text_selected">Add a new Text or select a text</string>
+    <string name="add_new_text_or_set_a_text_selected">Add a new Layer or select one</string>
     <string name="name_can_not_contain_symbols">Name can not contain symbols or be empty!</string>
     <string name="buy_the_pro_version_for_full_functionality">To remove the label and use full functionality tap here</string>
     <string name="shadow_position">Shadow position</string>
@@ -97,7 +97,7 @@
     <string name="thanks_for_using_the_app_n_nif_you_have_any_suggestion_or_bug_report_you_can_send_me_an_email">Thanks for using the app.\n\nIf you have any suggestion or bug report you can send me an email.</string>
     <string name="send_an_email">Send an email</string>
     <string name="join_the_channel">Join our channel</string>
-    <string name="join_our_channel_on_telegram">Join our channel on Telegram to get the latest news on the app development and share your stickers with others:</string>
+    <string name="join_our_channel_on_telegram">Join our channel on Telegram to get the latest news on the app development and share your stickers with others (You might find my username too ;) )</string>
     <string name="contact">Contact</string>
     <string name="google_play_services_is_not_installed">Google play Services is not installed.</string>
     <string name="there_is_no_email_client_installed">There is no email client installed</string>
@@ -126,7 +126,7 @@
     <string name="_2_the_bot_will_ask_for_commands_as_every_sticker">2.The bot will ask for commands. As every Sticker must be contained within a pack you need to create a new pack and add your sticker to it.</string>
     <string name="_3_the_bot_will_now_ask_you">3. The bot will now ask you to give your new pack a name so send the name of the pack to the bot. This name can be anything.</string>
     <string name="_4_as_every_sticker_has_a_corresponding">4. Go back to the stickergram app and enter to \"Pack creation mode\" then send the sticker you have created to the bot.</string>
-    <string name="_5_after_sending_the_emoji_send">5. Now send an emoji to the bot corresponding to the sticker that you have sent.\n\n **Do the step 4 and 5 as long as you have stickers to add to your pack on Telegram.</string>
+    <string name="_5_after_sending_the_emoji_send">5. Now send an emoji to the bot corresponding to the sticker that you have sent.\n\nIMPORTANT: Do the step 4 and 5 as long as you have stickers to add to your pack on Telegram.</string>
     <string name="_6_when_you_were_done_adding_stickers_to_the_pack_you">6. When you were done adding Stickers to the pack you will need to publish the pack. In order to publish a pack you need to send the publish command to the bot.</string>
     <string name="_7_after_sending_the_publish_command_you">7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Sticker pack.</string>
     <string name="_8_hooray_you_published_a_new_pack">8. Hooray you published a new pack. The bot will give you a link which you can access your stickers from.</string>
@@ -155,10 +155,10 @@
     <string name="in_pack_creation_mode_your_stickers_will_be_saves_as_png_files_with_appropriate_file_and_image_size">In Pack creation mode your stickers will be saves as PNG files with appropriate file size and image size.</string>
     <string name="i_have_explained_the_process_here">I have explained the process Here.</string>
     <string name="press_the_below_button_and_hit_start_in_the_conversation_that_opens">Press the below button and hit start in the conversation that opens.</string>
-    <string name="by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_creation_command_will_be_copied_to_your_clipboard_then_paste_it_and_send_it_to_the_bot">By hitting the below button you will be guided to @Stickers bot and pack creation command will be copied to your clipboard then paste it and send it to the bot</string>
+    <string name="by_hitting_the_below_button_you_will_be_guided_to_stickers_bot_and_pack_">By hitting the below button you will be guided to @Stickers bot and pack creation command will be copied to your clipboard then paste it and send it to the bot</string>
     <string name="while_you_want_to_add_new_stickers_to_pack_do_step_4_and_5">while you want to add new stickers to pack do step 4 and 5</string>
     <string name="hit_the_bellow_button_and_paste_and_send_the_copied_command_to_the_bot">Hit the bellow button and paste and send the copied command to the Bot.</string>
-    <string name="note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only_have_english_alphabetic_characters_in_it_so_for_example_it_can_t_be_55555_or_stickergram_app_or_stickergram_and_it_must_at_least_be_5_character_and_not_in_use_by_others_bot_will_tell_you_if_the_short_name_has_been_taken_or_not_if_it_was_taken_you_need_to_pick_another_name">*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can\'t be \'55555\' or \'Stickergram app\' or \'@Stickergram\' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name).</string>
+    <string name="note_that_the_short_name_must_not_contain_any_spaces_in_it_and_must_only">*Note that the short name must not contain any spaces in it and must only have English alphabetic characters in it so for example it can\'t be \'55555\' or \'Stickergram app\' or \'@Stickergram\' and it must at least be 5 character and not in use by others (bot will tell you if the short name has been taken or not if it was taken you need to pick another name).</string>
     <string name="add_to_pack">Add to pack?</string>
     <string name="add">Add</string>
     <string name="addsticker_link_to_your_pack">\'/addsticker\'</string>
@@ -232,5 +232,58 @@
     <string name="apply">Apply</string>
     <string name="discard">Discard</string>
     <string name="width">Width</string>
+    <string name="telegram_beta">Telegram Beta</string>
+    <string name="royal_telegram">Royal Telegram</string>
+    <string name="add_this_image">Add this Image</string>
 
+    <string name="PickerPhotos">Photos</string>
+    <string name="PickerVideo">Video</string>
+    <string name="AllPhotos">All Photos</string>
+    <string name="AllVideo">All Videos</string>
+    <string name="NoPhotos">No photos yet</string>
+    <string name="NoVideo">No videos yet</string>
+    <string name="SearchImages">FIND IMAGES</string>
+    <string name="SearchGifs">FIND GIFS</string>
+    <string name="NoRecentPhotos">No recent photos</string>
+    <string name="NoRecentGIFs">No recent GIFs</string>
+    <string name="NoResult">No results</string>
+    <string name="Crop">CROP</string>
+    <string name="AttachPhoto">Photo</string>
+    <string name="Of">%1$d of %2$d</string>
+    <string name="Set">Set</string>
+    <string name="Album">Album</string>
+
+    <string name="ClearSearch">Clear search history?</string>
+    <string name="ClearButton">Clear</string>
+
+    <string name="SearchImagesTitle">Search web</string>
+    <string name="SearchGifsTitle">Search GIFs</string>
+
+    <string name="SearchImagesInfo">WEB SEARCH</string>
+    <string name="MostSelect">You can select up to %d pictures</string>
+
+    <string name="Send">Done</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Preview">Preview</string>
+    <string name="album_read_fail">Failed to read an album, please check permissions</string>
+    <string name="remove">Remove</string>
+    <string name="undo_button">Hint: instead of undo button you can use the repair mode (toggle remove mode)</string>
+    <string name="repair">Repair</string>
+    <string name="magic">Magic</string>
+    <string name="organized_telegram_stickers">Organized Stickers</string>
+    <string name="error">Error</string>
+    <string name="center_vertical">Center Vertical</string>
+    <string name="align_left">Align left</string>
+    <string name="align_right">Align right</string>
+    <string name="align_top">Align top</string>
+    <string name="align_bottom">Align bottom</string>
+    <string name="background">Background</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="send_to_bot">Send to Bot</string>
+    <string name="close">Close</string>
+    <string name="add_new_layer">Add a new Layer</string>
+    <string name="russian">Russian</string>
+    <string name="german">German</string>
+    <string name="telegram_x">Telegram x</string>
+    <string name="golden_telegram">Golden Telegram</string>
 </resources>

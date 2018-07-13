@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_button_background"
+    android:orientation="vertical">
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/dialog_image_picker_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+id/dialog_image_picker_titles"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:padding="10dip"
+        android:textColor="#999"
+        app:footerColor="#1b5e20"
+        app:footerIndicatorHeight="3dp"
+        app:footerIndicatorStyle="underline"
+        app:footerLineHeight="1dp"
+        app:selectedBold="true"
+        app:selectedColor="#ffffff" />
+
+    <Button
+        android:id="@+id/dialog_image_picker_add_image"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/colorPrimary"
+        android:textSize="18sp"
+        android:drawableStart="@drawable/ic_add_white"
+        android:padding="5dp"
+        android:elevation="5dp"
+        android:text="@string/choose_an_image"
+        android:textColor="@color/white" />
+
+</LinearLayout>

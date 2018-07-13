@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
 
+    private static final String TAG = "SettingsActivity";
     private ExpandableWeightLayout mExpandLayout;
     private View includeModes;
     private View includeLanguages;
@@ -57,9 +58,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         View persianLanguageContainer = includeLanguages.findViewById(R.id.activity_setting_persian_language_container);
         View englishLanguageContainer = includeLanguages.findViewById(R.id.activity_setting_english_language_container);
+        includeLanguages.findViewById(R.id.activity_setting_russian_language_container).setOnClickListener(this);
+        includeLanguages.findViewById(R.id.activity_setting_german_language_container).setOnClickListener(this);
 
-        persianLanguageContainer.setOnClickListener(this);
         englishLanguageContainer.setOnClickListener(this);
+        persianLanguageContainer.setOnClickListener(this);
         languageButton.setOnClickListener(this);
         modeButton.setOnClickListener(this);
         instantiateListOfAvailableModes();
@@ -86,6 +89,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.activity_setting_english_language_container:
                 setLanguage(Constants.ENGLISH_LANGUAGE);
+                restartActivity();
+                break;
+            case R.id.activity_setting_russian_language_container:
+                setLanguage(Constants.RUSSIAN_LANGUAGE);
+                restartActivity();
+                break;
+            case R.id.activity_setting_german_language_container:
+                setLanguage(Constants.GERMAN_LANGUAGE);
                 restartActivity();
                 break;
         }

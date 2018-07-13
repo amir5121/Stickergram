@@ -1,12 +1,10 @@
 package com.amir.stickergram.phoneStickers.organizedDetailed;
 
 import android.app.Dialog;
-import android.graphics.Color;
+import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +16,9 @@ import android.widget.TextView;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.base.BaseDialogFragment;
+import com.amir.stickergram.image.ImageReceiverCallBack;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.pack.user.OnStickerClickListener;
 import com.amir.stickergram.sticker.pack.user.PackAdapter;
@@ -25,8 +26,10 @@ import com.amir.stickergram.sticker.pack.user.PackItem;
 
 import java.io.File;
 
-public class OrganizedStickersDetailedDialogFragment extends DialogFragment implements OnStickerClickListener {
+public class OrganizedStickersDetailedDialogFragment extends BaseDialogFragment implements OnStickerClickListener {
     private static final String FOLDER = "FOLDER";
+    private boolean isImagePicker;
+    private ImageReceiverCallBack imageListener;
 
     @Override
     public void onStart() {
@@ -39,10 +42,22 @@ public class OrganizedStickersDetailedDialogFragment extends DialogFragment impl
         }
     }
 
-    public static OrganizedStickersDetailedDialogFragment newInstance(String folder) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            imageListener = (ImageReceiverCallBack) context;
+        } catch (ClassCastException e) {
+            //EMPTY
+        }
+    }
+
+    public static OrganizedStickersDetailedDialogFragment newInstance(String folder, boolean isImagePicker) {
         OrganizedStickersDetailedDialogFragment fragment = new OrganizedStickersDetailedDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(FOLDER, folder);
+        bundle.putBoolean(Constants.IS_AN_IMAGE_PICKER, isImagePicker);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -51,6 +66,7 @@ public class OrganizedStickersDetailedDialogFragment extends DialogFragment impl
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String folder = getArguments().getString(FOLDER);
+        isImagePicker = getArguments().getBoolean(Constants.IS_AN_IMAGE_PICKER, false);
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_phone_stickers_organized, null, false);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -99,7 +115,11 @@ public class OrganizedStickersDetailedDialogFragment extends DialogFragment impl
 
     @Override
     public void OnIconClicked(PackItem item) {
-        Loader.loadStickerDialog(Uri.fromFile(new File(item.getDir())), (BaseActivity) getActivity());
+        if (isImagePicker) {
+            imageListener.receivedImage(item.getBitmap());
+            dismiss();
+        } else
+            Loader.loadStickerDialog(Uri.fromFile(new File(item.getDir())), (BaseActivity) getActivity());
     }
 
     @Override

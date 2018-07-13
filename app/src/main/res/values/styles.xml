@@ -94,5 +94,86 @@
         <item name="android:layout_marginEnd">7dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
+    <style name="PopupAnimation" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_out</item>
+    </style>
 
+    <style name="Theme.TMessages" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:itemTextAppearance">@style/ActionBar.Transparent.TMessages.Item</item>
+        <item name="android:listViewStyle">@style/Theme.TMessages.ListView</item>
+        <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector</item>
+        <item name="android:actionBarItemBackground">@drawable/bar_selector_style</item>
+    </style>
+
+    <!--ACTION BAR ITEMS-->
+
+    <style name="ActionBar.Transparent.TMessages.Item" parent="android:TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!--LIST VIEW-->
+
+    <style name="Theme.TMessages.ListView" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:divider">@color/divider</item>
+    </style>
+
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#3300A621</item>
+        <item name="sv_showcaseColor">#00801A</item>
+        <item name="sv_buttonText">Hide</item>
+        <item name="sv_tintButtonColor">false</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+    </style>
+
+    <style name="CustomShowcaseTheme2" parent="ShowcaseView">
+        <item name="sv_backgroundColor">#e51249d9</item>
+        <item name="sv_showcaseColor">#25467A</item>
+        <item name="sv_buttonText">Close</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle2</item>
+        <item name="sv_detailTextAppearance">@style/CustomText2</item>
+    </style>
+
+    <style name="CustomShowcaseTheme3" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#c8ed680f</item>
+        <item name="sv_showcaseColor">#ed680f</item>
+        <item name="sv_buttonText">Hide</item>
+        <item name="sv_tintButtonColor">false</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle2</item>
+        <item name="sv_detailTextAppearance">@style/CustomText2</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textColor">#00801A</item>
+    </style>
+
+    <style name="CustomTitle2" parent="TextAppearance.ShowcaseView.Title.Light">
+        <item name="android:textColor">#deffffff</item>
+    </style>
+
+    <style name="CustomText2" parent="TextAppearance.ShowcaseView.Detail.Light">
+        <item name="android:textColor">#8affffff</item>
+    </style>
+
+    <style name="ListItemBigtext">
+        <item name="android:textColor">#25467A</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="ListItemSubtext">
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+    
 </resources>

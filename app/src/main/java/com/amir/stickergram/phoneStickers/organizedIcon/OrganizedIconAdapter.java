@@ -24,11 +24,13 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
     private final OnStickerClickListener listener;
     private final LayoutInflater inflater;
     public List<String> items;
+    private boolean isImagePicker;
 
-    OrganizedIconAdapter(BaseActivity activity, OnStickerClickListener listener) {
+    OrganizedIconAdapter(BaseActivity activity, OnStickerClickListener listener, boolean isImagePicker) {
         this.activity = activity;
         this.listener = listener;
         this.inflater = activity.getLayoutInflater();
+        this.isImagePicker = isImagePicker;
         try {
             items = getItems();
             if (items.size() == 0) listener.OnNoItemWereFoundListener();
@@ -71,6 +73,8 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
             view = inflater.inflate(R.layout.item_icon_sticker_organized, parent, false);
         } else {
             view = inflater.inflate(R.layout.new_folder_button, parent, false);
+            if (isImagePicker)
+                view.findViewById(R.id.new_folder_button_image).setVisibility(View.GONE);
 //            view.setOnClickListener(this);
 //            view.setOnLongClickListener(this);
 //            return (ViewHolder) new ViewHolder(view);

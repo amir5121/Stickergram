@@ -1,57 +1,38 @@
 package com.amir.stickergram;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amir.stickergram.base.BaseActivity;
-//import com.amir.stickergram.infrastructure.AsyncFirstLoad;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
+import com.tangxiaolv.telegramgallery.GalleryActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int REQUEST_SELECT_IMAGE = 999;
     private static final String MAIN_ACTIVITY_SEQUENCE_ID = "MAIN_ACTIVITY_SEQUENCE_ID";
+    public static final int GALLERY_REQUEST_CODE = 5654;
+    private static final String TAG = "MainActivity";
 
 //    private static final int ANTHON_REQUEST_CODE = 222;
 
     private AlertDialog pickAnImageDialog;
-    private View userStickersButton;
-    private View phoneStickersButton;
-    private View templateStickerButton;
-    private View scratchButton;
-    private File tempOutPutFile; // this is where the captured image would be saved
+    private File tempOutPutFile; // this is where the captured com.amir.stickergram.image would be saved
 
     //todo: use snackBar instead of Toast
 
@@ -73,7 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 String type = mIntent.getType();
                 if (type != null) {
                     if (action.equals(Intent.ACTION_SEND)) {
-                        if (type.startsWith("image/")) {
+                        if (type.contains("image")) {
                             tempOutPutFile = Loader.generateEmptyBitmapFile(this, true);
                             Loader.crop((Uri) mIntent.getParcelableExtra(Intent.EXTRA_STREAM), Uri.fromFile(tempOutPutFile), this, false);
                         }
@@ -85,25 +66,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (pickAnImageDialog != null)
             pickAnImageDialog.dismiss();
 
-        if (!BuildConfig.DEBUG && !isInLandscape)
-            runShowCase();
+//        if (!BuildConfig.DEBUG && !isInLandscape)
+//            runShowCase();
     }
 
     private void setUpView() {
-        userStickersButton = findViewById(R.id.activity_main_user_stickers_button);
-        phoneStickersButton = findViewById(R.id.activity_main_phone_stickers);
-        templateStickerButton = findViewById(R.id.activity_main_template_stickers);
-        scratchButton = findViewById(R.id.activity_main_start_scratch_stickers);
+        View userStickersButton = findViewById(R.id.activity_main_user_stickers_button);
+        View phoneStickersButton = findViewById(R.id.activity_main_phone_stickers);
+//        templateStickerButton = findViewById(R.id.activity_main_template_stickers);
+        View scratchButton = findViewById(R.id.activity_main_start_scratch_stickers);
         View topContainer = findViewById(R.id.activity_main_text_container);
 
         if (userStickersButton != null &&
                 phoneStickersButton != null &&
-                templateStickerButton != null &&
+//                templateStickerButton != null &&
                 scratchButton != null &&
                 topContainer != null) {
             userStickersButton.setOnClickListener(this);
             phoneStickersButton.setOnClickListener(this);
-            templateStickerButton.setOnClickListener(this);
+//            templateStickerButton.setOnClickListener(this);
             scratchButton.setOnClickListener(this);
             topContainer.setOnClickListener(this);
 
@@ -127,30 +108,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    private void runShowCase() {
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(200); // half second between each showcase view
-        config.setDismissTextColor(Constants.LIGHT_BLUE);
-
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, MAIN_ACTIVITY_SEQUENCE_ID);
-
-        sequence.setConfig(config);
-
-        sequence.addSequenceItem(userStickersButton,
-                getString(R.string.your_stickers_explanation), getString(R.string.got_it));
-
-        sequence.addSequenceItem(phoneStickersButton,
-                getString(R.string.phone_stickers_explanation), getString(R.string.ok));
-
-        sequence.addSequenceItem(templateStickerButton,
-                getString(R.string.template_stickers_explanation), getString(R.string.okay));
-
-        sequence.addSequenceItem(scratchButton,
-                getString(R.string.scratch_stickers_explanation), getString(R.string.Let_s_go));
-
-        sequence.start();
-
-    }
+//    private void runShowCase() {
+//        ShowcaseConfig config = new ShowcaseConfig();
+//        config.setDelay(200); // half second between each showcase view
+//        config.setDismissTextColor(Constants.LIGHT_BLUE);
+//
+//        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, MAIN_ACTIVITY_SEQUENCE_ID);
+//
+//        sequence.setConfig(config);
+//
+//        sequence.addSequenceItem(userStickersButton,
+//                getString(R.string.your_stickers_explanation), getString(R.string.got_it));
+//
+//        sequence.addSequenceItem(phoneStickersButton,
+//                getString(R.string.phone_stickers_explanation), getString(R.string.ok));
+//
+//        sequence.addSequenceItem(templateStickerButton,
+//                getString(R.string.template_stickers_explanation), getString(R.string.okay));
+//
+//        sequence.addSequenceItem(scratchButton,
+//                getString(R.string.scratch_stickers_explanation), getString(R.string.Let_s_go));
+//
+//        sequence.start();
+//
+//    }
 
     @Override
     public void onClick(View view) {
@@ -171,8 +152,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Loader.gainPermission(this, Constants.PHONE_STICKERS_GAIN_PERMISSION);
                 Toast.makeText(this, getResources().getString(R.string.need_permission_to_access_telegram_cache), Toast.LENGTH_SHORT).show();
             }
-        } else if (itemId == R.id.activity_main_template_stickers) {
-            startActivity(new Intent(this, TemplateStickersActivity.class));
+//        } else if (itemId == R.id.activity_main_template_stickers) {
+//            startActivity(new Intent(this, TemplateStickersActivity.class));
         } else if (itemId == R.id.activity_main_start_scratch_stickers) {
             if (Loader.checkPermission(this)) {
                 instantiateChooserDialog();
@@ -275,36 +256,66 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (resultCode != RESULT_OK)
+//            return;
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_SELECT_IMAGE) {
+//            Uri outputFile;
+//            Uri tempFileUri = null;
+//            if (tempOutPutFile == null) {
+//                Log.e(getClass().getSimpleName(), "tempOutPutFile was null");
+//            } else tempFileUri = Uri.fromFile(tempOutPutFile);
+//
+//            if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE)))
+//                //if user took topMarginAnimation picture
+//                outputFile = data.getData();
+//            else
+//                outputFile = tempFileUri;
+//
+//
+//            if (tempFileUri != null && outputFile != null)
+//                Loader.crop(outputFile, tempFileUri, this, false);
+//            else
+//                Toast.makeText(this, getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
+//
+////        } else if (requestCode == UCrop.REQUEST_CROP) {
+////            Intent intent = new Intent(this, EditImageActivity.class);
+////            intent.putExtra(BaseActivity.EDIT_IMAGE_URI, Uri.fromFile(tempOutPutFile));
+//////            intent.putExtra(BaseActivity.NEED_ROTATION, rotation);
+////            startActivity(intent);
+//        }
+//    }
+
+
+    //open album
+
+
+    //process result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK)
             return;
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SELECT_IMAGE) {
-            Uri outputFile;
-            Uri tempFileUri = null;
-            if (tempOutPutFile == null) {
-                Log.e(getClass().getSimpleName(), "tempOutPutFile was null");
-            } else tempFileUri = Uri.fromFile(tempOutPutFile);
 
-            if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE)))
-                //if user took topMarginAnimation picture
-                outputFile = data.getData();
-            else
-                outputFile = tempFileUri;
+        if (requestCode == GALLERY_REQUEST_CODE) {
 
+            //list of photos of seleced
+            List<String> photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
+            for (String s : photos) {
 
-            if (tempFileUri != null && outputFile != null)
-                Loader.crop(outputFile, tempFileUri, this, false);
-            else
-                Toast.makeText(this, getString(R.string.there_was_a_problem_getting_the_picture), Toast.LENGTH_SHORT).show();
-
-//        } else if (requestCode == UCrop.REQUEST_CROP) {
-//            Intent intent = new Intent(this, EditImageActivity.class);
-//            intent.putExtra(BaseActivity.EDIT_IMAGE_URI, Uri.fromFile(tempOutPutFile));
-////            intent.putExtra(BaseActivity.NEED_ROTATION, rotation);
-//            startActivity(intent);
+                Log.e(getClass().getName(), "onActivityResult: " + s);
+            }
+            Loader.crop(Uri.fromFile(new File(photos.get(0))), Uri.fromFile(tempOutPutFile), this, false);
         }
+
+//        Intent intent = new Intent(this, EditImageActivity.class);
+//        intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(tempOutPutFile));
+////            intent.putExtra(BaseActivity.NEED_ROTATION, rotation);
+//        startActivity(intent);
+
+        //list of videos of seleced
+//        List<String> vides = (List<String>) data.getSerializableExtra(GalleryActivity.VIDEOS);
     }
 
     //    @Override
@@ -332,27 +343,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //    }
 //
     private void chooseOrCapturePicture() {
-        List<Intent> otherImageCaptureIntents = new ArrayList<>();
-        List<ResolveInfo> otherImageCaptureActivities = getPackageManager().
-                queryIntentActivities(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 0);
+        GalleryActivity.openActivity(MainActivity.this, GALLERY_REQUEST_CODE, Constants.galleryConfig);
 
-        if (tempOutPutFile == null)
-            Log.e(getClass().getSimpleName(), "tempOutPutFile was null in choose or cap");
-        else Log.e(getClass().getSimpleName(), "----tempOutPutFile was not null in choose or cap");
-        for (ResolveInfo info : otherImageCaptureActivities) {
-            Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            captureIntent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
-            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempOutPutFile));
-            otherImageCaptureIntents.add(captureIntent);
-        }
-
-        Intent selectImageIntent = new Intent(Intent.ACTION_PICK);
-        selectImageIntent.setType("image/*");
-
-        Intent chooser = Intent.createChooser(selectImageIntent, getResources().getString(R.string.choose_an_image));
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, otherImageCaptureIntents.toArray(new Parcelable[otherImageCaptureActivities.size()]));
-
-        startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
+//        List<Intent> otherImageCaptureIntents = new ArrayList<>();
+//        List<ResolveInfo> otherImageCaptureActivities = getPackageManager().
+//                queryIntentActivities(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 0);
+//
+//        if (tempOutPutFile == null)
+//            Log.e(getClass().getSimpleName(), "tempOutPutFile was null in choose or cap");
+//        else Log.e(getClass().getSimpleName(), "----tempOutPutFile was not null in choose or cap");
+//        for (ResolveInfo info : otherImageCaptureActivities) {
+//            Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            captureIntent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
+//            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempOutPutFile));
+//            otherImageCaptureIntents.add(captureIntent);
+//        }
+//
+//        Intent selectImageIntent = new Intent(Intent.ACTION_PICK);
+//        selectImageIntent.setType("com/amir/stickergram/image/*");
+//
+//        Intent chooser = Intent.createChooser(selectImageIntent, getResources().getString(R.string.choose_an_image));
+//        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, otherImageCaptureIntents.toArray(new Parcelable[otherImageCaptureActivities.size()]));
+//
+//        startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
     }
 
 

@@ -6,6 +6,7 @@ import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.util.Log;
 
+import com.amir.stickergram.AppType;
 import com.amir.stickergram.BuildConfig;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
@@ -65,6 +66,10 @@ public class PackItem {
         return baseStickerDir + folder + File.separator + name + PNG;
     }
 
+    public Bitmap getBitmap() {
+        return BitmapFactory.decodeFile(getDir());
+    }
+
     public String getWebpDir() {
         Bitmap tempBitmap = BitmapFactory.decodeFile(baseStickerDir + folder + File.separator + name + PNG);
         if (tempBitmap == null) {
@@ -73,9 +78,20 @@ public class PackItem {
         }
         String dir = Constants.WEBP_CASH_DIR;
         try {
+            //this was a bug from the old versions
+            File fileOld = new File(AppType.WEBP_CASH_DIR_OLD);
+            if (fileOld.exists())
+                fileOld.delete();
+
+
             File file = new File(dir);
+
             if (file.exists())
                 file.delete();
+
+            if (!file.getParentFile().exists())
+                file.getParentFile().mkdirs();
+
             file.createNewFile();
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                 tempBitmap.compress(Bitmap.CompressFormat.WEBP, 80, new FileOutputStream(dir));

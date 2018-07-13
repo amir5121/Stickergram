@@ -19,7 +19,7 @@ public class QueueLinearFloodFiller {
     private boolean[] pixelsChecked;
     private Queue<FloodFillRange> ranges;
 
-    // Construct using an image and a copy will be made to fill into,
+    // Construct using an com.amir.stickergram.image and a copy will be made to fill into,
     // Construct with BufferedImage and flood fill will write directly to
     // provided BufferedImage
     public QueueLinearFloodFiller(Bitmap img) {
@@ -78,14 +78,14 @@ public class QueueLinearFloodFiller {
         width = img.getWidth();
         height = img.getHeight();
 
-//        image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+//        com.amir.stickergram.image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 //        img.setHasAlpha(true);
-//        image = img.copy(Bitmap.Config.ARGB_8888, true);
+//        com.amir.stickergram.image = img.copy(Bitmap.Config.ARGB_8888, true);
         image = img;
-//        image.setHasAlpha(true);
-//        image.setConfig(Bitmap.Config.ARGB_8888);
-//        image.setHasAlpha(true);
-//        Canvas canvas = new Canvas(image);
+//        com.amir.stickergram.image.setHasAlpha(true);
+//        com.amir.stickergram.image.setConfig(Bitmap.Config.ARGB_8888);
+//        com.amir.stickergram.image.setHasAlpha(true);
+//        Canvas canvas = new Canvas(com.amir.stickergram.image);
 //        canvas.drawBitmap(img, 0, 0, null);
 
         pixels = new int[width * height];
@@ -170,7 +170,7 @@ public class QueueLinearFloodFiller {
             }
         }
 
-//        image.setPixels(pixels, 0, width, 1, 1, width - 1, height - 1);
+//        com.amir.stickergram.image.setPixels(pixels, 0, width, 1, 1, width - 1, height - 1);
     }
 
     // Finds the furthermost left and right boundaries of the fill area

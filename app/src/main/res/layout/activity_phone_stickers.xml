@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/icon_sticker_list_background"
-    tools:context=".UserStickersActivity">
+    tools:context=".PhoneStickersActivity">
 
     <RelativeLayout
         android:id="@+id/activity_phone_stickers_main_container"

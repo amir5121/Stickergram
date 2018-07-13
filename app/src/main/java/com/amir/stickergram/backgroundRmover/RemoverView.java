@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.infrastructure.Position;
+import com.amir.stickergram.image.Position;
 
 @SuppressLint("ViewConstructor")
 class RemoverView extends ImageView implements View.OnTouchListener, AsyncCallFloodFill.AsyncFloodFillCallbacks {

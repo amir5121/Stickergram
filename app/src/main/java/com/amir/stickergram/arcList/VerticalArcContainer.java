@@ -1,5 +1,6 @@
 package com.amir.stickergram.arcList;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
@@ -18,35 +19,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VerticalArcContainer extends ViewGroup {
+    private static final String TAG = "VerticalArcContainer";
     int prevChildBottom = 0; //kinda doesn't need to be global
     List<Integer> childrenStrokes;
     private float totalHeight;
     private int animationBuffer;
+    private ArcCallBack animationCallBack;
 
     public VerticalArcContainer(Context context) {
         super(context);
-        startUp();
+        startUp(context);
     }
 
     public VerticalArcContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        startUp();
+        startUp(context);
     }
 
     public VerticalArcContainer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        startUp();
+        startUp(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public VerticalArcContainer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        startUp();
+        startUp(context);
     }
 
-    private void startUp() {
+    private void startUp(Context context) {
 //        mScrollViewChildren = new HashMap<>();
         childrenStrokes = new ArrayList<>();
+
+        try {
+            animationCallBack = (ArcCallBack) context;
+        } catch (ClassCastException e) {
+            //INTENTIONALLY EMPTY
+        }
     }
 
     public void hideChild(int id) {
@@ -63,6 +72,28 @@ public class VerticalArcContainer extends ViewGroup {
 //                        .translationY(prevChildBottom)
                         .translationY(totalHeight)
                         .setDuration(500)
+                        .setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (i == 0) animationCallBack.itAllKnockedOut();
+
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        })
 //                        .alpha(.2f)
                         .setInterpolator(new DecelerateInterpolator())
                         .start();
@@ -81,6 +112,28 @@ public class VerticalArcContainer extends ViewGroup {
                 child.animate()
                         .translationY(0)
                         .setDuration(400)
+                        .setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (childPosition == childrenStrokes.size() - 1)
+                                    animationCallBack.itAllKnockedIn();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        })
 //                        .alpha(1)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .start();

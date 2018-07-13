@@ -26,6 +26,7 @@ import android.widget.HorizontalScrollView;
 import com.amir.stickergram.R;
 
 public class ArcScrollView extends HorizontalScrollView {
+    private static final String TAG = "ArcScrollView";
     public static float screenWidth;
     private float circleRadius;
     private float strokeWidth;
@@ -226,26 +227,7 @@ public class ArcScrollView extends HorizontalScrollView {
         int color = Color.BLACK;
 
         if (view.getBackground() instanceof ColorDrawable) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                initIfNeeded();
-
-                // If the ColorDrawable makes use of its bounds in the draw method,
-                // we may not be able to get the color we want. This is not the usual
-                // case before Ice Cream Sandwich (4.0.1 r1).
-                // Yet, we change the bounds temporarily, just to be sure that we are
-                // successful.
-                ColorDrawable colorDrawable = (ColorDrawable) view.getBackground();
-
-                mBounds.set(colorDrawable.getBounds()); // Save the original bounds.
-                colorDrawable.setBounds(0, 0, 1, 1); // Change the bounds.
-
-                colorDrawable.draw(mCanvas);
-                color = mBitmap.getPixel(0, 0);
-
-                colorDrawable.setBounds(mBounds); // Restore the original bounds.
-            } else {
-                color = ((ColorDrawable) view.getBackground()).getColor();
-            }
+            color = ((ColorDrawable) view.getBackground()).getColor();
         }
 
         return color;
@@ -325,6 +307,7 @@ public class ArcScrollView extends HorizontalScrollView {
 
     public void swapView(final ArcLinearLayout view) {
         if (!animationInProgress)
+            Log.e(TAG, "swapView: ");
             if (view == null) { //in case you want to hide the view
                 animate()
                         .alpha(0)

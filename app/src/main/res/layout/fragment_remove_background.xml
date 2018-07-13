@@ -14,64 +14,162 @@
         android:elevation="10dp"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/fragment_remove_background_repair_toggle_mode"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_remove_blue" />
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/fragment_remove_background_mode_zoom_toggle"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_hand_white" />
+            <ImageButton
+                android:id="@+id/fragment_remove_background_repair_toggle_mode"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_remove_blue" />
 
-        <ImageButton
-            android:id="@+id/fragment_remove_background_radius_button"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_radius" />
+            <TextView
+                android:id="@+id/fragment_remove_background_remove_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_blue_transparent"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="2dp"
+                android:text="@string/remove"
+                android:textColor="@color/white" />
 
-        <ImageButton
-            android:id="@+id/fragment_remove_background_mode_offset"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_offset" />
+        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/fragment_remove_background_flood_filler"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_flood_fill" />
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/fragment_remove_background_background_button"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            <ImageButton
+                android:id="@+id/fragment_remove_background_mode_zoom_toggle"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_hand_white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_blue_transparent"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="2dp"
+                android:text="@string/move"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_chess_white" />
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/fragment_remove_background_radius_button"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_radius" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_blue_transparent"
+                android:gravity="center"
+                android:padding="2dp"
+                android:maxLines="1"
+                android:text="@string/radius"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/fragment_remove_background_mode_offset"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_offset" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:background="@color/light_blue_transparent"
+                android:padding="2dp"
+                android:maxLines="1"
+                android:text="@string/offset"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/fragment_remove_background_flood_filler"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_flood_fill" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_blue_transparent"
+                android:gravity="center"
+                android:padding="2dp"
+                android:maxLines="1"
+                android:text="@string/magic"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/fragment_remove_background_background_button"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:background="@color/light_blue"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_chess_white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_blue_transparent"
+                android:gravity="center"
+                android:padding="2dp"
+                android:maxLines="1"
+                android:text="@string/background"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -85,6 +183,7 @@
             android:id="@+id/fragment_remove_background_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:scaleType="centerCrop"
             android:src="@drawable/chess" />
 
@@ -211,5 +310,34 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/fragment_remove_background_hint_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#BB2196f3"
+        android:elevation="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="@string/undo_button"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/fragment_remove_background_hint_close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_close" />
+
+    </LinearLayout>
 
 </RelativeLayout>

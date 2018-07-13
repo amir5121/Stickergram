@@ -6,6 +6,7 @@ import android.os.Environment;
 
 import com.amir.stickergram.AppType;
 import com.amir.stickergram.base.BaseActivity;
+import com.tangxiaolv.telegramgallery.GalleryConfig;
 
 import java.io.File;
 
@@ -24,10 +25,14 @@ public class Constants {
     public static final int PERSIAN_LANGUAGE = 1;
     public static final int ENGLISH_LANGUAGE = 2;
     public static final int SYSTEM_LANGUAGE = 3;
+    public static final int RUSSIAN_LANGUAGE = 4;
+    public static final int GERMAN_LANGUAGE = 5;
 
     public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    public static final String TELEGRAM_PACKAGE_BETA = "org.telegram.messenger.beta";
     public static final String MOBOGRAM_PACKAGE = "com.hanista.mobogram";
     public static final String MOBOGRAM_TWO = "com.hanista.mobogram.two";
+    public static final String GOLDEN_TELEGRAM = "org.ir.talaeii";
     public static final String TELEGRAPH_PACKAGE = "ir.ilmili.telegraph";
     public static final String TELEGRAM_PLUS_PACKAGE = "org.telegram.plus";
     public static final String PERSIAN_TELEGRAM = "ir.persianfox.messenger";
@@ -36,8 +41,10 @@ public class Constants {
     public static final String MY_TELEGRAM = "ir.alimodaresi.mytelegram";
     public static final String ANIWAYS = "com.aniways.anigram.messenger";
     public static final String LAGATGRAM = "org.ilwt.lagatgram";
+    public static final String ROYAL_TELEGRAM = "com.shaltouk.mytelegram";
+    public static final String TELEGRAM_X = "org.thunderdog.challegram";
 
-    public static final String STICKERGRAM_URL = "http://stickergram.xzn.ir/";
+    public static final String STICKERGRAM_URL = "http://stickergramapp.com/";
     public static final String LIST_DIRECTORIES = "listDirectory.php";
     public static final String CACHE = "cache/";
     public static final String STICKERS = "stickers/";
@@ -69,17 +76,23 @@ public class Constants {
     public static final String CACHED_JSON = "CACHED_JSON";
 //    public static final String IMAGE_URI = "IMAGE_URI";
 
-    final static String availableFormats[] = {TELEGRAM_PACKAGE,
+    final static String availableFormats[] = {
+            TELEGRAM_PACKAGE,
             TELEGRAM_PLUS_PACKAGE,
             MOBOGRAM_PACKAGE,
             TELEGRAPH_PACKAGE,
+            GOLDEN_TELEGRAM,
             PERSIAN_TELEGRAM,
             PERSIAN_VOICE_TELEGRAM,
             LAGATGRAM,
             ORANGE_TELEGRAM,
             MY_TELEGRAM,
             ANIWAYS,
-            MOBOGRAM_TWO};
+            MOBOGRAM_TWO,
+            TELEGRAM_PACKAGE_BETA,
+            TELEGRAM_X,
+            ROYAL_TELEGRAM
+    };
 
     public static final int ALL_FLAVORS = 0;
     public static final String IS_USING_EMPTY_IMAGE = "IS_USING_EMPTY_IMAGE";
@@ -88,14 +101,14 @@ public class Constants {
     public static final String IMAGE_ROTATION = "IMAGE_ROTATION";
     public static final String PNG_NO_DOT = "png";
     public static final String MOVED_STICKERS_INFO = Environment.getExternalStorageDirectory() + BaseActivity.STICKERGRAM + "/moveInfo.txt";
-//
-//    private static int[]workingBitmap;
-//
-//    public static int[] getWorkingBitmap() {
-//        return workingBitmap;
-//    }
-//
-//    public static void setWorkingBitmap(int[] workingBitmap) {
-//        Constants.workingBitmap = workingBitmap;
-//    }
+
+    public static final String IS_AN_IMAGE_PICKER = "IS_AN_IMAGE_PICKER";
+    public static final String LAUNCHED_TO_ADD_IMAGE = "LAUNCHED_TO_ADD_IMAGE";
+
+    public static GalleryConfig galleryConfig = new GalleryConfig.Build()
+//            .limitPickPhoto(3)
+            .singlePhoto(true)
+            .hintOfPick("this is pick hint")
+            .filterMimeTypes(new String[]{"image/*"})
+            .build();
 }

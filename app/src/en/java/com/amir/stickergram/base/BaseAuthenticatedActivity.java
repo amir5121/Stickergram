@@ -200,10 +200,10 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         if ((context.getApplicationContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
             return;
         }
-        if (Loader.checkLuckyPatcher(this)) {
-            Toast.makeText(this, getString(R.string.uninstall_lucky_patcher), Toast.LENGTH_LONG).show();
-            finish();
-        }
+//        if (Loader.checkLuckyPatcher(this)) {
+//            Toast.makeText(this, getString(R.string.uninstall_lucky_patcher), Toast.LENGTH_LONG).show();
+//            finish();
+//        }
         try {
             Signature[] signatures = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
 

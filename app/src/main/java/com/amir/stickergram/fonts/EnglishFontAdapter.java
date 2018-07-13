@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
 
 import java.io.IOException;
 import java.util.List;

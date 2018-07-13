@@ -51,6 +51,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         checkSignature(this);
 
         preferences = getSharedPreferences(Constants.SETTING, MODE_PRIVATE);
+
         isPaid = getProStatus();
 
 
@@ -69,7 +70,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
                 @Override
                 public void onIabSetupFinished(IabResult result) {
                     if (!result.isSuccess()) {
-                        Log.d(TAG, "In-app Billing setup failed: " +
+                        Log.d(TAG, "In-app Bil7ling setup failed: " +
                                 result);
                         inAppBillingSetupOk = false;
 

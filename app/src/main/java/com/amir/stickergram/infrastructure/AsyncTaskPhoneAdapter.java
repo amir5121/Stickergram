@@ -17,6 +17,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
     private static final Integer ITEMS_WERE_ADDED = 0;
     private static final Integer NO_ITEM_IN_CACHE_DIRECTORY = 1;
     private static final Integer NEED_PERMISSION = 2;
+    private static final String TAG = "AsyncTaskPhoneAdapter";
     private Context context;
     private AsyncPhoneTaskListener listener;
     private String baseThumbDir;
@@ -72,26 +73,32 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
             filesChecked++;
             String name = file.getName();
 
-            if (name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp") && file.exists()) {
-                updateSet.add(file.getAbsolutePath());
-                if (!dataSource.contain(file.getAbsolutePath())) {
-                    String thumbDirectory = Loader.generateThumbnail(file.getAbsolutePath(), baseThumbDir + name);
-                    if (thumbDirectory != null)
-                        dataSource.add(new StickerItem(
-                                file.getAbsolutePath(),
-                                Loader.generateThumbnail(file.getAbsolutePath(), thumbDirectory),
-                                false,
-                                true));
-                }
-                foundedStickersCount++;
+            try {
+
+                if (file.exists() && name.contains(".webp") && name.charAt(1) == '_' && !name.contains("temp")) {
+                    updateSet.add(file.getAbsolutePath());
+                    if (!dataSource.contain(file.getAbsolutePath())) {
+                        String thumbDirectory = Loader.generateThumbnail(file.getAbsolutePath(), baseThumbDir + name);
+                        if (thumbDirectory != null)
+                            dataSource.lazyAdd(new StickerItem(
+                                    file.getAbsolutePath(),
+                                    Loader.generateThumbnail(file.getAbsolutePath(), thumbDirectory),
+                                    false,
+                                    true));
+                    }
+                    foundedStickersCount++;
 
                 /*
                 todo: concurrentModificationException on Nexus 5 take a look
                 todo: it might be because of to many calls to shared preferences do it all at once ...
                 todo: gather them up and write another method to do it all at once not requiring too many applies
                 */
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "doInBackground: Got an exception");
             }
             percent = (100 * filesChecked) / length;
+            dataSource.apply();
             if (temp == percent) {
 //                Log.e(getClass().getSimpleName(), String.valueOf(percent));
                 temp++;

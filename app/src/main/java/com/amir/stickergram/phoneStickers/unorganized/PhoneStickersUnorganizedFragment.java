@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,17 +21,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.PhoneStickersActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
+import com.amir.stickergram.image.ImageReceiverCallBack;
 import com.amir.stickergram.infrastructure.AsyncTaskPhoneAdapter;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.single.SingleStickersAdapter;
 import com.amir.stickergram.sticker.single.StickerItem;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +69,17 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
     private UnorganizedFragmentCallbacks listener;
     private boolean enable = true;
     private View enableView;
+    private boolean isAnImagePicker;
+    private ImageReceiverCallBack imageListener;
+
+    public static BaseFragment newInstance(boolean isAnImagePicker) {
+
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.IS_AN_IMAGE_PICKER, isAnImagePicker);
+        PhoneStickersUnorganizedFragment fragment = new PhoneStickersUnorganizedFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -73,12 +89,22 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
         } catch (ClassCastException e) {
             throw new RuntimeException(context.getPackageName() + " must implement UnorganizedFragmentCallbacks");
         }
+        try {
+            this.imageListener = (ImageReceiverCallBack) context;
+        } catch (ClassCastException e) {
+            //do Nothing
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            isAnImagePicker = args.getBoolean(Constants.IS_AN_IMAGE_PICKER, false);
+        }
 
         View view = inflater.inflate(R.layout.fragment_phone_stickers_unorganized, container, false);
 
@@ -140,13 +166,17 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
 
     @Override
     public void OnStickerClicked(StickerItem item) {
-        if (item.getBitmap() == null) {
-            ((BaseActivity) getActivity()).setPhoneStickerCashStatus(false);
-            callAsyncTaskPhoneAdapter();
-        } else if (!isInCropMode) {
-            Loader.loadStickerDialog(item.getUri(), (BaseActivity) getActivity());
+        if (!isAnImagePicker) {
+            if (item.getBitmap() == null) {
+                ((BaseActivity) getActivity()).setPhoneStickerCashStatus(false);
+                callAsyncTaskPhoneAdapter();
+            } else if (!isInCropMode) {
+                Loader.loadStickerDialog(item.getUri(), (BaseActivity) getActivity());
+            } else {
+                manageSelectedItems(item);
+            }
         } else {
-            manageSelectedItems(item);
+            imageListener.receivedImage(item.getBitmap());
         }
     }
 
@@ -174,11 +204,13 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
 
     @Override
     public void OnStickerLongClicked(StickerItem item) {
-        if (!isInCropMode) {
-            selectedItems = new ArrayList<>();
-            toggleCutMode();
+        if (!isAnImagePicker) {
+            if (!isInCropMode) {
+                selectedItems = new ArrayList<>();
+                toggleCutMode();
+            }
+            manageSelectedItems(item);
         }
-        manageSelectedItems(item);
     }
 
     public void toggleCutMode() {
@@ -259,7 +291,8 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
 
         if (swipeRefresh != null)
             swipeRefresh.setRefreshing(false);
-        ((BaseActivity) getActivity()).setPhoneStickerCashStatus(true);
+        if (getActivity() != null)
+            ((BaseActivity) getActivity()).setPhoneStickerCashStatus(true);
         adapter.refreshPhoneSticker();
     }
 
@@ -269,7 +302,10 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
             Toast.makeText(getActivity(), getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getActivity(), getString(R.string.couldn_t_find_telegram_cash_directory), Toast.LENGTH_LONG).show();
-        getActivity().finish();
+        if (!isAnImagePicker) {
+            getActivity().finish();
+        } else
+            dialog.dismiss();
     }
 
     @Override
@@ -296,6 +332,12 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
     }
 
     private void callAsyncTaskPhoneAdapter() {
+        File file = new File(BaseActivity.STICKERGRAM_ROOT + ".nomedia");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (!swipeRefresh.isRefreshing() || onRefreshWasCalled) {
             new AsyncTaskPhoneAdapter((BaseActivity) getActivity(), this).execute(adapter);
             onRefreshWasCalled = false;
@@ -314,6 +356,7 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
                 .setView(loadingDialogView)
                 .setCancelable(false)
                 .create();
+
         dialog.show();
 
         loadingTextPercentage = (TextView) loadingDialogView.findViewById(R.id.phone_loading_dialog_text_percentage);

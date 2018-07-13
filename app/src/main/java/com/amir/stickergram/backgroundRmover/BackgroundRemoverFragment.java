@@ -1,6 +1,5 @@
 package com.amir.stickergram.backgroundRmover;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -18,18 +17,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.Loader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
@@ -61,6 +56,8 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
     private BackgroundRemoverFragmentCallbacks listener;
     private ImageButton backgroundButton;
     private View chessBackground;
+    private TextView removeTag;
+    private View hintContainer;
 
     public static Fragment getInstance(Bundle bundle) {
         BackgroundRemoverFragment fragment = new BackgroundRemoverFragment();
@@ -108,6 +105,12 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
         toleranceSeekBar = (SeekBarCompat) view.findViewById(R.id.fragment_remove_background_tolerance_seek_bar);
         toleranceSeekBar.setOnSeekBarChangeListener(this);
         toleranceContainer = view.findViewById(R.id.fragment_remove_background_tolerance_container);
+
+        removeTag = (TextView) view.findViewById(R.id.fragment_remove_background_remove_tag);
+        hintContainer = view.findViewById(R.id.fragment_remove_background_hint_container);
+
+        view.findViewById(R.id.fragment_remove_background_hint_close_button).setOnClickListener(this);
+
 
 //            Bitmap mBitmap = Constants.getWorkingBitmap();
 //            if (mBitmap == null)
@@ -187,9 +190,12 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
         int itemId = view.getId();
         if (itemId == R.id.fragment_remove_background_repair_toggle_mode) {
             if (removerView.removeToggle()) {
+                removeTag.setText(getText(R.string.remove));
                 switchTo(REMOVE);
             } else {
+                removeTag.setText(getText(R.string.repair));
                 switchTo(REPAIR);
+                hintContainer.setVisibility(View.GONE);
             }
         } else if (itemId == R.id.fragment_remove_background_mode_zoom_toggle) {
             if (removerView.changeZoomMode()) {
@@ -221,14 +227,13 @@ public class BackgroundRemoverFragment extends BaseFragment implements View.OnCl
                 backgroundButton.setBackgroundColor(Color.WHITE);
                 chessBackground.setVisibility(View.GONE);
             }
+        } else if (itemId == R.id.fragment_remove_background_hint_close_button) {
+            hintContainer.setVisibility(View.GONE);
         }
     }
 
     private void switchTo(int mode) {
         manageSeekBarsVisibility(null);
-//        removerView.setUsingFloodFillPointer(false);
-//        floodFillerButton.setBackgroundColor(Color.parseColor("#1565c0"));
-//        floodFillerButton.setImageResource(R.drawable.ic_flood_fill);
         switch (mode) {
             case REMOVE:
                 removerView.setUsingFloodFillPointer(false);

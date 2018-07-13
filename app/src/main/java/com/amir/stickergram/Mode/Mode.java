@@ -1,6 +1,7 @@
 package com.amir.stickergram.mode;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
@@ -12,6 +13,7 @@ import java.io.File;
 public class Mode {
     private static final String BASE_MODE_CACHE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator;
     private static final String END_CACHE_DIR = File.separator + "cache" + File.separator;
+    private static final String TAG = "Mode";
     private String pack;
     private String name;
     public boolean isAvailable = false;
@@ -24,6 +26,9 @@ public class Mode {
             switch (pack) {
                 case Constants.TELEGRAM_PACKAGE:
                     name = activity.getString(R.string.telegram);
+                    break;
+                case Constants.TELEGRAM_X:
+                    name = activity.getString(R.string.telegram_x);
                     break;
                 case Constants.TELEGRAPH_PACKAGE:
                     name = activity.getString(R.string.telegraph);
@@ -40,6 +45,9 @@ public class Mode {
                 case Constants.MOBOGRAM_TWO:
                     name = activity.getString(R.string.mobogram_two);
                     break;
+                case Constants.GOLDEN_TELEGRAM:
+                    name = activity.getString(R.string.golden_telegram);
+                    break;
                 case Constants.ORANGE_TELEGRAM:
                     name = activity.getString(R.string.telegram_narenji);
                     break;
@@ -55,8 +63,15 @@ public class Mode {
                 case Constants.LAGATGRAM:
                     name = activity.getString(R.string.la_telegram);
                     break;
-
+                case Constants.TELEGRAM_PACKAGE_BETA:
+                    name = activity.getString(R.string.telegram_beta);
+                    break;
+                case Constants.ROYAL_TELEGRAM:
+                    name = activity.getString(R.string.royal_telegram);
+                    break;
             }
+
+
     }
 
     public String getCacheDir() {

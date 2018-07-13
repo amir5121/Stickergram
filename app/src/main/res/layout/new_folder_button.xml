@@ -9,6 +9,7 @@
     android:foreground="?android:selectableItemBackground">
 
     <ImageView
+        android:id="@+id/new_folder_button_image"
         android:layout_width="85dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"

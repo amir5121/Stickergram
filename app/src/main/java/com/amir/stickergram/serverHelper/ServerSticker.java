@@ -1,7 +1,5 @@
 package com.amir.stickergram.serverHelper;
 
-import android.util.Log;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +10,7 @@ public class ServerSticker {
     public static final String NUM = "num";
     public static final String EN_NAME = "en_name";
     public static final String PER_NAME = "per_name";
+    public static final String RUS_NAME = "rus_name";
     public static final String MODE = "mode";
     public static final String HAS_LINK = "has_link";
     public static final String LINK_NAME_EN = "link_name_en";
@@ -21,6 +20,7 @@ public class ServerSticker {
     private int num;
     private String enName;
     private String perName;
+    private final String rusName;
     private int mode;
     private boolean hasLink;
     private String linkNameEn;
@@ -28,7 +28,7 @@ public class ServerSticker {
     private String link;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public ServerSticker(int num, String enName, String perName, int mode, boolean hasLink, String linkNameEn, String linkNamePer, String link) {
+    public ServerSticker(int num, String enName, String perName, int mode, boolean hasLink, String linkNameEn, String linkNamePer, String link, String rusName) {
         this.num = num;
         this.enName = enName;
         this.perName = perName;
@@ -40,6 +40,7 @@ public class ServerSticker {
 
 //        Log.e(getClass().getSimpleName(), "link: " + link);
 
+        this.rusName = rusName;
     }
 
     /**
@@ -162,4 +163,7 @@ public class ServerSticker {
         this.additionalProperties.put(name, value);
     }
 
+    public String getRuName() {
+        return rusName;
+    }
 }

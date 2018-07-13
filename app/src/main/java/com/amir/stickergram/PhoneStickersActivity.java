@@ -2,7 +2,6 @@ package com.amir.stickergram;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
@@ -29,10 +28,9 @@ public class PhoneStickersActivity extends BaseActivity
 
     private static final long ANIMATION_DURATION = 500;
 
-    PhoneStickersUnorganizedFragment unorganizedFragment;
-    View loadingFrame;
-    View organizedFragmentView;
-    View unorganizedFragmentView;
+    private PhoneStickersUnorganizedFragment unorganizedFragment;
+    private View loadingFrame;
+    private View organizedFragmentView;
     private int organizedFragmentHeight = 0;
     public boolean isOrganizedFragmentHidden = false;
     private String lastClickedIcon = null;
@@ -49,7 +47,7 @@ public class PhoneStickersActivity extends BaseActivity
 
         unorganizedFragment = (PhoneStickersUnorganizedFragment) getSupportFragmentManager().findFragmentById(R.id.activity_phone_stickers_phone_stickers_unorganized_fragment);
 
-        unorganizedFragmentView = findViewById(R.id.activity_phone_stickers_organized_fragment_container);
+//        View unorganizedFragmentView = findViewById(R.id.activity_phone_stickers_organized_fragment_container);
         organizedFragmentView = findViewById(R.id.activity_phone_stickers_phone_stickers_organized_fragment);
 
         loadingFrame = findViewById(R.id.activity_phone_stickers_loading_frame);
@@ -107,7 +105,7 @@ public class PhoneStickersActivity extends BaseActivity
 
         } else {
             OrganizedStickersDetailedDialogFragment
-                    .newInstance(item.getFolder())
+                    .newInstance(item.getFolder(), true)
                     .show(getSupportFragmentManager(), "dialog");
         }
     }
@@ -153,7 +151,7 @@ public class PhoneStickersActivity extends BaseActivity
 
         if (lastClickedIcon != null)
             OrganizedStickersDetailedDialogFragment
-                    .newInstance(lastClickedIcon)
+                    .newInstance(lastClickedIcon, true)
                     .show(getSupportFragmentManager(), "dialog");
 
 

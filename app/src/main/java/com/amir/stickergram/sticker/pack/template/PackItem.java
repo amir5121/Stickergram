@@ -13,7 +13,8 @@ public class PackItem extends ServerSticker {
                 serverSticker.getHasLink(),
                 serverSticker.getLinkNameEn(),
                 serverSticker.getLinkNamePer(),
-                serverSticker.getLink());
+                serverSticker.getLink(),
+                serverSticker.getRuName());
         this.position = position;
     }
 

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -30,20 +32,35 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amir.stickergram.arcList.ArcCallBack;
 import com.amir.stickergram.arcList.ArcLinearLayout;
 import com.amir.stickergram.arcList.ArcScrollView;
 import com.amir.stickergram.arcList.VerticalArcContainer;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.fonts.EnglishFontsFragment;
 import com.amir.stickergram.fonts.MainFontDialogFragment;
+import com.amir.stickergram.image.ImagePickerDialog;
+import com.amir.stickergram.image.ImageReceiverCallBack;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
+import com.amir.stickergram.image.ImageItem;
 import com.amir.stickergram.infrastructure.Loader;
-import com.amir.stickergram.infrastructure.OnMainImageViewTouch;
-import com.amir.stickergram.infrastructure.TextItem;
-import com.amir.stickergram.infrastructure.TouchImageView;
+import com.amir.stickergram.image.OnMainImageViewTouch;
+import com.amir.stickergram.image.TextItem;
+import com.amir.stickergram.image.TouchImageView;
+import com.amir.stickergram.phoneStickers.CustomRecyclerView;
+import com.amir.stickergram.phoneStickers.organizedDetailed.OrganizedStickersDetailedDialogFragment;
+import com.amir.stickergram.phoneStickers.organizedIcon.OnStickerClickListener;
+import com.amir.stickergram.phoneStickers.unorganized.PhoneStickersUnorganizedFragment;
+import com.amir.stickergram.sticker.icon.IconItem;
+import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.tangxiaolv.telegramgallery.GalleryActivity;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import app.minimize.com.seek_bar_compat.SeekBarCompat;
 
@@ -52,13 +69,23 @@ public class EditImageActivity
         implements
         View.OnTouchListener,
         SeekBar.OnSeekBarChangeListener,
-        EnglishFontsFragment.OnFontItemClicked {
+        EnglishFontsFragment.OnFontItemClicked,
+        PhoneStickersUnorganizedFragment.UnorganizedFragmentCallbacks,
+        CustomRecyclerView.RecyclerViewMovementCallbacks,
+        ImageReceiverCallBack,
+        OnStickerClickListener,
+        OnIconSelectedListener,
+        ArcCallBack {
 
-    //todo: scaler... scale any image while editing it by dragging the top left corner of the image
+    //todo: scaler... scale any com.amir.stickergram.image while editing it by dragging the top left corner of the com.amir.stickergram.image
     private static final String MAIN_FONT_DIALOG_FRAGMENT_TAG = "MAIN_FONT_DIALOG_FRAGMENT_TAG";
     public static final int MAX_TEXT_SIZE = 300;
     private static final String EDIT_IMAGE_STATE = "EDIT_IMAGE_STATE";
     private static final String TAG = EditImageActivity.class.getSimpleName();
+    private static final int ADD_NEW_IMAGE = 5438;
+    public static final String ADDED_IMAGE_ADDRESS = "ADDED_IMAGE_ADDRESS";
+    public static final int INFO_CONTAINER_OFFSET = 70;
+    public static final int REQUEST_CODE_ADD_IMAGE = 12354;
     private TouchImageView selectedLayer;
 
     public FrameLayout textLayerContainer;
@@ -66,7 +93,7 @@ public class EditImageActivity
     private VerticalArcContainer arcContainer;
     private SeekBarCompat sizeSeekBar;
     private SeekBarCompat tiltSeekBar;
-    private SeekBarCompat shadowRadius;
+    private SeekBarCompat shadowRadiusSeekBar;
     private SeekBarCompat shadowDxSeekBar;
     private SeekBarCompat shadowDySeekBar;
 
@@ -87,6 +114,12 @@ public class EditImageActivity
     private int mainContainerHeight;
     private TextView infoTextView;
     private int[] pos;
+    private ImagePickerDialog imagePickerDialog;
+    private View textColorButton;
+    private View textBackgroundColor;
+    private View fontButton;
+    private View textButton;
+    private ShowcaseView showcaseView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,13 +135,11 @@ public class EditImageActivity
         }
 
         setUpView();
-
         selectedLayer = null;
-
         if (savedInstanceState != null) {
             helper.recreateState(savedInstanceState.getBundle(EDIT_IMAGE_STATE));
-        } else getNewTextDialog(true);
-
+        }
+//        else getNewTextDialog(true);
 
     }
 
@@ -118,7 +149,6 @@ public class EditImageActivity
         if (helper != null) {
             setLayerUnselected();
             outState.putBundle(EDIT_IMAGE_STATE, helper.getSaveState());
-//            Log.e(getClass().getSimpleName(), "onSaveInstanceState");
         }
     }
 //
@@ -128,12 +158,40 @@ public class EditImageActivity
 //        helper.create
 //    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) return;
+
+        if (requestCode == MainActivity.GALLERY_REQUEST_CODE) {
+
+            //list of photos of seleced
+            List<String> photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
+            for (String s : photos) {
+
+                Log.e(getClass().getName(), "onActivityResult: " + s);
+            }
+//            tempOutPutFile = Loader.generateEmptyBitmapFile(this, true);
+//            Loader.crop(Uri.fromFile(new File(photos.get(0))), Uri.fromFile(Loader.generateEmptyBitmapFile(this, true)), this, false);
+
+            Intent intent = new Intent(this, CropActivity.class);
+            intent.putExtra(Constants.CROP_SOURCE, Uri.fromFile(new File(photos.get(0))));
+            intent.putExtra(Constants.CROP_DESTINY, Uri.fromFile(Loader.generateEmptyBitmapFile(this, true)));
+            intent.putExtra(Constants.IS_USING_EMPTY_IMAGE, false);
+            intent.putExtra(Constants.LAUNCHED_TO_ADD_IMAGE, true);
+            startActivityForResult(intent, ADD_NEW_IMAGE);
+        } else if (requestCode == ADD_NEW_IMAGE) {
+            receivedImage(BitmapFactory.decodeFile(data.getStringExtra(ADDED_IMAGE_ADDRESS)));
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_edit_image_add_new_text) {
             getNewTextDialog(true);
-            return true;
         } else if (itemId == R.id.menu_edit_image_save) {
             if (Loader.checkPermission(this))
                 instantiateSavingDialog();
@@ -141,9 +199,22 @@ public class EditImageActivity
                 Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
                 Loader.gainPermission(this, Constants.EDIT_ACTIVITY_GAIN_PERMISSION);
             }
-            return true;
+        } else if (itemId == R.id.menu_edit_image_add_new_image) {
+            if (!Loader.checkPermission(this))
+                Loader.gainPermission(this, REQUEST_CODE_ADD_IMAGE);
+            else {
+                getImagePickerDialog();
+            }
         }
-        return false;
+
+        showcaseView.hide();
+        return true;
+    }
+
+    private void getImagePickerDialog() {
+        if (imagePickerDialog == null)
+            imagePickerDialog = new ImagePickerDialog();
+        imagePickerDialog.show(getSupportFragmentManager(), "TAG");
     }
 
     private void instantiateSavingDialog() {
@@ -161,12 +232,12 @@ public class EditImageActivity
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
 
-                    if (Loader.freeMemory() > 2) {
-                        Loader.saveBitmapToCache(tempBitmap); // the SaveStickerActivity uses the cached image for the saving process
-                        finish();
-                        startActivity(new Intent(EditImageActivity.this, SaveStickerActivity.class));
-                    } else
-                        Toast.makeText(EditImageActivity.this, getString(R.string.failed_to_save_the_sticker), Toast.LENGTH_LONG).show();
+//                    if (Loader.freeMemory() > 2) {
+                    Loader.saveBitmapToCache(tempBitmap); // the SaveStickerActivity uses the cached com.amir.stickergram.image for the saving process
+                    finish();
+                    startActivity(new Intent(EditImageActivity.this, SaveStickerActivity.class));
+//                    } else
+//                        Toast.makeText(EditImageActivity.this, getString(R.string.failed_to_save_the_sticker), Toast.LENGTH_LONG).show();
                 }
                 if (which == Dialog.BUTTON_NEGATIVE) {
                 }
@@ -190,97 +261,17 @@ public class EditImageActivity
         finishedEditing.show();
     }
 
-    //    @Override
-//    public void onClick(View view) {
-//        int itemId = view.getId();
-//
-//        if (itemId == R.id.include_pro_note_close) {
-//            if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
-//        } else if (itemId == R.id.include_pro_note_text)
-//            requestProVersion();
-//        else if (itemId == R.id.activity_edit_image_buttons_overlay_layer)
-//            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
-//        else if (selectedLayer != null) {
-//            if (itemId == R.id.include_buttons_size_button) {
-//                setVisibleSeekBar(selectedLayer.getTextSize(), sizeSeekBar);
-//            } else if (itemId == R.id.include_buttons_text_button) {
-//                getNewTextDialog(false);
-//            } else if (itemId == R.id.include_buttons_tilt_button) {
-//                if (!isPaid) buyProNote(getString(R.string.tilt_effect));
-//                setVisibleSeekBar(selectedLayer.getTextItem().getTilt(), tiltSeekBar);
-//            } else if (itemId == R.id.activity_edit_image_move_up_button) {
-//                selectedLayer.getTextItem().moveUp();
-//                selectedLayer.updateTextView();
-//            } else if (itemId == R.id.activity_edit_image_move_down_button) {
-//                selectedLayer.getTextItem().moveDown();
-//                selectedLayer.updateTextView();
-//            } else if (itemId == R.id.activity_edit_image_move_left_button) {
-//                selectedLayer.getTextItem().moveLeft();
-//                selectedLayer.updateTextView();
-//            } else if (itemId == R.id.activity_edit_image_move_right_button) {
-//                selectedLayer.getTextItem().moveRight();
-//                selectedLayer.updateTextView();
-//            } else if (itemId == R.id.include_buttons_font_button) {
-//                MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
-//                mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
-//            } else if (itemId == R.id.include_buttons_text_color) {
-//                Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
-//            } else if (itemId == R.id.include_buttons_shadow_color) {
-//                manageShadowsFirstTap();
-//                Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
-//            } else if (itemId == R.id.include_buttons_shadow_radius) {
-//                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
-//            } else if (itemId == R.id.include_buttons_shadow_dx) {
-////                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
-//                manageShadowsFirstTap();
-//                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
-//            } else if (itemId == R.id.include_buttons_shadow_dy) {
-////                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
-//                manageShadowsFirstTap();
-//                setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
-//            } else if (itemId == R.id.include_buttons_text_background) {
-//                Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
-//            } else if (itemId == R.id.include_buttons_text_stroke_color) {
-////                if (!isPaid)
-////                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors));
-//                if (selectedLayer.isFirstTapOnStrokeColor())
-//                    selectedLayer.getTextItem().setStrokeWidth(selectedLayer.getTextItem().getStrokeWidth());
-//                selectedLayer.setFirstTapOnStrokeColor(false);
-//                Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
-//            } else if (itemId == R.id.include_buttons_text_stroke_width) {
-//                setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
-//            } else if (itemId == R.id.activity_edit_image_main_frame_container) {
-//                setLayerUnselected();
-//            } else if (itemId == R.id.include_buttons_stroke) {
-//                tempArcContainer.swapView(strokeItemsView);
-//                strokeButton.setBackgroundResource(R.drawable.ic_circle);
-//                strokeButton.setImageResource(R.drawable.ic_stroke_blue);
-//                int padding = (int) Loader.convertDpToPixel(2, this);
-//                strokeButton.setPadding(padding, padding, padding, padding);
-//                shadowButton.setBackgroundResource(0);
-//                shadowButton.setPadding(0, 0, 0, 0);
-//
-//            } else if (itemId == R.id.include_buttons_shadow) {
-//                tempArcContainer.swapView(shadowItemsView);
-//                shadowButton.setBackgroundResource(R.drawable.ic_circle);
-//                int padding = (int) Loader.convertDpToPixel(2, this);
-//                shadowButton.setPadding(padding, padding, padding, padding);
-//                strokeButton.setBackgroundResource(0);
-//                strokeButton.setImageResource(R.drawable.ic_stroke);
-//                strokeButton.setPadding(0, 0, 0, 0);
-//
-//            }
-//        } else
-//            Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
-//    }
-//
     private void manageShadowsFirstTap() {
-        if (selectedLayer.isFirstTapOnShadowColor()) {
-            selectedLayer.getTextItem().getShadow().setRadius(5);
-            selectedLayer.getTextItem().getShadow().setDx(5);
-            selectedLayer.getTextItem().getShadow().setDy(5);
+        try {
+            if (selectedLayer.isFirstTapOnShadowColor()) {
+                ((TextItem) selectedLayer.getDrawableItem()).getShadow().setRadius(5);
+                ((TextItem) selectedLayer.getDrawableItem()).getShadow().setDx(5);
+                ((TextItem) selectedLayer.getDrawableItem()).getShadow().setDy(5);
+            }
+            selectedLayer.setFirstTapOnShadowColor(false);
+        } catch (ClassCastException e) {
+            setLayerUnselected();
         }
-        selectedLayer.setFirstTapOnShadowColor(false);
     }
 
     private void buyProNote(String string) {
@@ -294,24 +285,19 @@ public class EditImageActivity
         if (itemId == R.id.activity_edit_image_main_image)
             helper.onTouch(selectedLayer, event);
         else {
-//            boolean isActionUp = false;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-//                    isActionUp = false;
                     clickAction(v, itemId, false);
                     break;
                 case MotionEvent.ACTION_UP:
-//                    isActionUp = true;
                     clickAction(v, itemId, true);
                     break;
             }
-////            if (isActionUp)
         }
         return true;
     }
 
     private void clickAction(View view, int itemId, boolean isActionUp) {
-//        Log.e(getClass().getSimpleName(), "isActionUp: " + isActionUp);
         if (itemId == R.id.include_pro_note_close) {
             if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
         } else if (itemId == R.id.include_pro_note_text) {
@@ -321,145 +307,213 @@ public class EditImageActivity
             if (isActionUp)
                 Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
         } else if (selectedLayer != null) {
-            if (itemId == R.id.include_buttons_size_button) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.size), view);
-                else {
-                    setVisibleSeekBar(selectedLayer.getTextSize(), sizeSeekBar);
-                }
-            } else if (itemId == R.id.include_buttons_text_button) {
-                if (isActionUp)
-                    getNewTextDialog(false);
-            } else if (itemId == R.id.include_buttons_tilt_button) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.tilt), view);
-                else {
-                    if (!isPaid) buyProNote(getString(R.string.tilt_effect));
-                    setVisibleSeekBar(selectedLayer.getTextItem().getTilt(), tiltSeekBar);
-                }
-            } else if (itemId == R.id.activity_edit_image_move_up_button) {
-                if (!isActionUp) {
-                    showInfo(getString(R.string.move_up), view);
-                } else {
-                    selectedLayer.getTextItem().moveUp();
-                    selectedLayer.updateTextView();
-                }
-            } else if (itemId == R.id.activity_edit_image_move_down_button) {
-                if (!isActionUp) {
-                    showInfo(getString(R.string.move_down), view);
-                } else {
-                    selectedLayer.getTextItem().moveDown();
-                    selectedLayer.updateTextView();
-                }
-            } else if (itemId == R.id.activity_edit_image_move_left_button) {
-                if (!isActionUp) {
-                    showInfo(getString(R.string.move_left), view);
-                } else {
-                    selectedLayer.getTextItem().moveLeft();
-                    selectedLayer.updateTextView();
-                }
-            } else if (itemId == R.id.activity_edit_image_move_right_button) {
-                if (!isActionUp) {
-                    showInfo(getString(R.string.move_right), view);
-                } else {
-                    selectedLayer.getTextItem().moveRight();
-                    selectedLayer.updateTextView();
-                }
-            } else if (itemId == R.id.include_buttons_font_button) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.font), view);
-                else {
-                    MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
-                    mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
-                }
-            } else if (itemId == R.id.include_buttons_text_color) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.text_color), view);
-                else {
-                    Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
-                }
-            } else if (itemId == R.id.include_buttons_shadow_color) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.shadow_color), view);
-                else {
-                    manageShadowsFirstTap();
-                    Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
-                }
-            } else if (itemId == R.id.include_buttons_shadow_radius) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.shadow_radius), view);
-                else {
-                    setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getRadius(), shadowRadius);
-                }
-            } else if (itemId == R.id.include_buttons_shadow_dx) {
+            try {
+                if (itemId == R.id.include_buttons_size_button) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.size), view);
+                    else {
+                        setVisibleSeekBar(selectedLayer.getDrawableItem().getSize(), sizeSeekBar);
+                    }
+                } else if (itemId == R.id.include_buttons_text_button) {
+                    if (isActionUp)
+                        getNewTextDialog(false);
+                } else if (itemId == R.id.include_buttons_tilt_button) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.tilt), view);
+                    else {
+                        if (!isPaid) buyProNote(getString(R.string.tilt_effect));
+                        setVisibleSeekBar(selectedLayer.getDrawableItem().getTilt(), tiltSeekBar);
+                    }
+                } else if (itemId == R.id.include_buttons_remove) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.remove), view);
+                    else {
+                        textLayerContainer.removeView(selectedLayer);
+                        helper.getItems().remove(selectedLayer);
+                    }
+                } else if (itemId == R.id.include_buttons_duplicate) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.duplicate), view);
+                    else {
+                        TouchImageView touchItem = new TouchImageView(selectedLayer, getApplicationContext());
+
+                        touchItem.updateDrawable();
+
+                        setSelectedLayer(touchItem);
+                        helper.add(touchItem);
+                        textLayerContainer.removeView(touchItem);
+                        textLayerContainer.addView(touchItem);
+
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_up_button) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.move_up), view);
+                    } else {
+                        selectedLayer.getDrawableItem().moveUp();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_down_button) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.move_down), view);
+                    } else {
+                        selectedLayer.getDrawableItem().moveDown();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_left_button) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.move_left), view);
+                    } else {
+                        selectedLayer.getDrawableItem().moveLeft();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_right_button) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.move_right), view);
+                    } else {
+                        selectedLayer.getDrawableItem().moveRight();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_center_vertical) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.center_vertical), view);
+                    } else {
+                        selectedLayer.getDrawableItem().centerVertical();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_align_left) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.align_left), view);
+                    } else {
+                        selectedLayer.getDrawableItem().alignLeft();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_align_right) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.align_right), view);
+                    } else {
+                        selectedLayer.getDrawableItem().alignRight();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_align_top) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.align_top), view);
+                    } else {
+                        selectedLayer.getDrawableItem().alignTop();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_align_bottom) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.align_bottom), view);
+                    } else {
+                        selectedLayer.getDrawableItem().alignBottom();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.activity_edit_image_move_center_horizontal) {
+                    if (!isActionUp) {
+                        showInfo(getString(R.string.move_right), view);
+                    } else {
+                        selectedLayer.getDrawableItem().centerHorizontal();
+                        selectedLayer.updateDrawable();
+                    }
+                } else if (itemId == R.id.include_buttons_font_button) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.font), view);
+                    else {
+                        MainFontDialogFragment mainFontDialogFragment = new MainFontDialogFragment();
+                        mainFontDialogFragment.show(getSupportFragmentManager(), MAIN_FONT_DIALOG_FRAGMENT_TAG);
+                    }
+                } else if (itemId == R.id.include_buttons_text_color) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.text_color), view);
+                    else {
+                        Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
+                    }
+                } else if (itemId == R.id.include_buttons_shadow_color) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.shadow_color), view);
+                    else {
+                        manageShadowsFirstTap();
+                        Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
+                    }
+                } else if (itemId == R.id.include_buttons_shadow_radius) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.shadow_radius), view);
+                    else {
+                        setVisibleSeekBar(((TextItem) selectedLayer.getDrawableItem()).getShadow().getRadius(), shadowRadiusSeekBar);
+                    }
+                } else if (itemId == R.id.include_buttons_shadow_dx) {
 //                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
-                if (!isActionUp)
-                    showInfo(getString(R.string.shadow_x), view);
-                else {
-                    manageShadowsFirstTap();
-                    setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDx(), shadowDxSeekBar);
-                }
-            } else if (itemId == R.id.include_buttons_shadow_dy) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.shadow_x), view);
+                    else {
+                        manageShadowsFirstTap();
+                        setVisibleSeekBar(((TextItem) selectedLayer.getDrawableItem()).getShadow().getDx(), shadowDxSeekBar);
+                    }
+                } else if (itemId == R.id.include_buttons_shadow_dy) {
 //                if (!isPaid) buyProNote(getString(R.string.shadow_position_effect));
-                if (!isActionUp)
-                    showInfo(getString(R.string.shadow_y), view);
-                else {
-                    manageShadowsFirstTap();
-                    setVisibleSeekBar(selectedLayer.getTextItem().getShadow().getDy(), shadowDySeekBar);
-                }
-            } else if (itemId == R.id.include_buttons_text_background) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.text_background), view);
-                else {
-                    Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
-                }
-            } else if (itemId == R.id.include_buttons_text_stroke_color) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.shadow_y), view);
+                    else {
+                        manageShadowsFirstTap();
+                        setVisibleSeekBar(((TextItem) selectedLayer.getDrawableItem()).getShadow().getDy(), shadowDySeekBar);
+                    }
+                } else if (itemId == R.id.include_buttons_text_background) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.text_background), view);
+                    else {
+                        Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
+                    }
+                } else if (itemId == R.id.include_buttons_text_stroke_color) {
 //                if (!isPaid)
 //                    buyProNote(getString(R.string.stroke_color_is_only_available_in_blue_upgrade_to_pro_to_access_all_colors));
-                if (!isActionUp)
-                    showInfo(getString(R.string.stroke_color), view);
-                else {
-                    if (selectedLayer.isFirstTapOnStrokeColor())
-                        selectedLayer.getTextItem().setStrokeWidth(selectedLayer.getTextItem().getStrokeWidth());
-                    selectedLayer.setFirstTapOnStrokeColor(false);
-                    Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
-                }
-            } else if (itemId == R.id.include_buttons_text_stroke_width) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.stroke_width), view);
-                else {
-                    setVisibleSeekBar((int) selectedLayer.getTextItem().getStrokeWidth(), strokeWidthSeekBar);
-                }
-            } else if (itemId == R.id.activity_edit_image_main_frame_container) {
-                if (isActionUp) setLayerUnselected();
-            } else if (itemId == R.id.include_buttons_stroke) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.drop_shadow), view);
-                else {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.stroke_color), view);
+                    else {
+                        if (selectedLayer.isFirstTapOnStrokeColor())
+                            ((TextItem) selectedLayer.getDrawableItem()).setStrokeWidth(((TextItem) selectedLayer.getDrawableItem()).getStrokeWidth());
+                        selectedLayer.setFirstTapOnStrokeColor(false);
+                        Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
+                    }
+                } else if (itemId == R.id.include_buttons_text_stroke_width) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.stroke_width), view);
+                    else {
+                        setVisibleSeekBar((int) ((TextItem) selectedLayer.getDrawableItem()).getStrokeWidth(), strokeWidthSeekBar);
+                    }
+                } else if (itemId == R.id.activity_edit_image_main_frame_container) {
+                    if (isActionUp) setLayerUnselected();
+                } else if (itemId == R.id.include_buttons_stroke) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.drop_shadow), view);
+                    else {
 
-                    tempArcContainer.swapView(strokeItemsView);
-                    strokeButton.setBackgroundResource(R.drawable.ic_circle);
-                    strokeButton.setImageResource(R.drawable.ic_stroke_blue);
-                    int padding = (int) Loader.convertDpToPixel(2, this);
-                    strokeButton.setPadding(padding, padding, padding, padding);
-                    shadowButton.setBackgroundResource(0);
-                    int defaultPadding = (int) Loader.convertDpToPixel(7, this);
-                    shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
-                }
-            } else if (itemId == R.id.include_buttons_shadow) {
-                if (!isActionUp)
-                    showInfo(getString(R.string.shadow), view);
-                else {
-                    tempArcContainer.swapView(shadowItemsView);
-                    shadowButton.setBackgroundResource(R.drawable.ic_circle);
-                    int padding = (int) Loader.convertDpToPixel(2, this);
-                    shadowButton.setPadding(padding, padding, padding, padding);
-                    strokeButton.setBackgroundResource(0);
-                    strokeButton.setImageResource(R.drawable.ic_stroke);
-                    int defaultPadding = (int) Loader.convertDpToPixel(7, this);
-                    shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
+                        tempArcContainer.swapView(strokeItemsView);
+                        strokeButton.setBackgroundResource(R.drawable.ic_circle);
+                        strokeButton.setImageResource(R.drawable.ic_stroke_blue);
+                        int padding = (int) Loader.convertDpToPixel(2, this);
+                        strokeButton.setPadding(padding, padding, padding, padding);
+                        shadowButton.setBackgroundResource(0);
+                        int defaultPadding = (int) Loader.convertDpToPixel(7, this);
+                        shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
+                    }
+                } else if (itemId == R.id.include_buttons_shadow) {
+                    if (!isActionUp)
+                        showInfo(getString(R.string.shadow), view);
+                    else {
+                        tempArcContainer.swapView(shadowItemsView);
+                        shadowButton.setBackgroundResource(R.drawable.ic_circle);
+                        int padding = (int) Loader.convertDpToPixel(2, this);
+                        shadowButton.setPadding(padding, padding, padding, padding);
+                        strokeButton.setBackgroundResource(0);
+                        strokeButton.setImageResource(R.drawable.ic_stroke);
+                        int defaultPadding = (int) Loader.convertDpToPixel(7, this);
+                        shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
 //                    strokeButton.setPadding(0, 0, 0, 0);
+                    }
                 }
+
+            } catch (ClassCastException e) {
+                setLayerUnselected();
             }
 
             if (isActionUp) hideInfo();
@@ -485,14 +539,14 @@ public class EditImageActivity
                     infoTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     if (Loader.deviceLanguageIsPersian()) {
-                        Log.e(TAG, "x: " + pos[0] + " y: " + pos[1] + " marginStart: " + ((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 + v.getWidth() / 2));
+//                        Log.e(TAG, "x: " + pos[0] + " y: " + pos[1] + " marginStart: " + ((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 + v.getWidth() / 2));
                         params.setMargins((int) (ArcScrollView.screenWidth - pos[0]),
-                                pos[1] - 100, 0, 0);
+                                (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.density), 0, 0);
                         params.setMarginStart((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 - v.getWidth() / 2);
 
                     } else {
                         params.setMargins(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2,
-                                (int) (pos[1] - 70 * BaseActivity.density), 0, 0);
+                                (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.density), 0, 0);
                         params.setMarginStart(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2);
                     }
                     infoTextView.setLayoutParams(params);
@@ -514,37 +568,41 @@ public class EditImageActivity
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (selectedLayer != null) {
-            if (progress > 5 && seekBar == sizeSeekBar) {
-                selectedLayer.getTextItem().setSize(progress);
-            } else if (seekBar == tiltSeekBar) {
-                selectedLayer.getTextItem().setTilt(progress);
-            } else if (seekBar == shadowRadius && progress > 0) {
-                selectedLayer.getTextItem().getShadow().setRadius(progress);
-            } else if (seekBar == shadowDySeekBar) {
-                selectedLayer.getTextItem().getShadow().setDy(progress);
-            } else if (seekBar == shadowDxSeekBar) {
-                selectedLayer.getTextItem().getShadow().setDx(progress);
-            } else if (seekBar == strokeWidthSeekBar) {
-                selectedLayer.getTextItem().setStrokeWidth(progress);
+            try {
+                if (progress > 5 && seekBar == sizeSeekBar) {
+                    selectedLayer.getDrawableItem().setSize(progress);
+                } else if (seekBar == tiltSeekBar) {
+                    selectedLayer.getDrawableItem().setTilt(progress);
+                } else if (seekBar == shadowRadiusSeekBar && progress > 0) {
+                    ((TextItem) selectedLayer.getDrawableItem()).getShadow().setRadius(progress);
+                } else if (seekBar == shadowDySeekBar) {
+                    ((TextItem) selectedLayer.getDrawableItem()).getShadow().setDy(progress);
+                } else if (seekBar == shadowDxSeekBar) {
+                    ((TextItem) selectedLayer.getDrawableItem()).getShadow().setDx(progress);
+                } else if (seekBar == strokeWidthSeekBar) {
+                    ((TextItem) selectedLayer.getDrawableItem()).setStrokeWidth(progress);
+                }
+                selectedLayer.updateDrawable();
+            } catch (ClassCastException e) {
+                setLayerUnselected();
             }
-            selectedLayer.updateTextView();
         }
     }
 
 
     /**
      * because it is not possible to set the activity_edit_image_images_container width and height to match_parent as we would not be able
-     * to drag the text properly and if we set the activity_edit_image_images_container width and height to wrap_content the image
+     * to drag the text properly and if we set the activity_edit_image_images_container width and height to wrap_content the com.amir.stickergram.image
      * on high density phones would be too small i had to set the width and height at runtime
      * <p/>
      * here i get the width and the height of the activity_edit_image_main_frame_container so i know the measurements
      * for the scaling
      * <p/>
-     * based on the orientation of the image if the width of the image is more than it's height i would need to set the activity_edit_image_images_container
+     * based on the orientation of the com.amir.stickergram.image if the width of the com.amir.stickergram.image is more than it's height i would need to set the activity_edit_image_images_container
      * width to match_parent and it's height should be scaled and vise versa
      * <p/>
-     * also i need to set some margin on the image as it won't remain in the center after new width and height were set so i center
-     * the image by setting margin on it
+     * also i need to set some margin on the com.amir.stickergram.image as it won't remain in the center after new width and height were set so i center
+     * the com.amir.stickergram.image by setting margin on it
      */
 
     @Override
@@ -578,8 +636,7 @@ public class EditImageActivity
             RelativeLayout.LayoutParams params =
                     new RelativeLayout.LayoutParams(scaledWidth, scaledHeight);
             params.setMargins(marginStart, 0, 0, 0);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN)
-                params.setMarginStart(marginStart);
+            params.setMarginStart(marginStart);
             params.setMargins(0, marginTop, 0, 0);
             textLayerContainer.setLayoutParams(params);
 //        Log.e(getClass().getSimpleName(), "scale: " + scale);
@@ -631,69 +688,71 @@ public class EditImageActivity
 
     }
 
-
     private void getNewTextDialog(final boolean asNewText) {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_set_new_text, null);
         final EditText editText = (EditText) newTextDialogView.findViewById(R.id.dialog_set_new_text_text);
-        if (!asNewText) {
-            editText.setText(selectedLayer.getTextItem().getText());
-            editText.setSelection(selectedLayer.getTextItem().getText().length());
-            editText.setTypeface(selectedLayer.getTextItem().getFont().getTypeface());
-        } else {
-            editText.setTypeface(TextItem.DEFAULT_FONT);
-        }
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == Dialog.BUTTON_POSITIVE) {
-                    String text = editText.getText().toString();
-                    if (asNewText && !text.equals("")) {
-                        TouchImageView touchItem =
-                                new TouchImageView(EditImageActivity.this,
-//                                        new TextItem("", mainBitmap),
-//                                        ++layerCount,
-                                        mainBitmap);
-                        setSelectedLayer(touchItem);
-//                        touchItem.setOnTouchListener(EditImageActivity.this);
-//                        touchItem.setId(R.id.lol);
-                        helper.add(touchItem);
-                        textLayerContainer.addView(touchItem);
-                    }
-                    if (selectedLayer != null) {
-                        int textLengthTemp = text.length();
-                        if (textLengthTemp >= 1 && textLengthTemp <= 4 && text.charAt(textLengthTemp - 1) != ' ')
-                            text += " ";
-                        selectedLayer.updateText(text);
-                        if (text.equals("")) {
-                            helper.remove(selectedLayer);
-                            setLayerUnselected();
+        try {
+            if (!asNewText) {
+                editText.setText(((TextItem) selectedLayer.getDrawableItem()).getText());
+                editText.setSelection(((TextItem) selectedLayer.getDrawableItem()).getText().length());
+                editText.setTypeface(((TextItem) selectedLayer.getDrawableItem()).getFont().getTypeface());
+            } else {
+                editText.setTypeface(TextItem.DEFAULT_FONT);
+            }
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == Dialog.BUTTON_POSITIVE) {
+                        String text = editText.getText().toString();
+                        if (asNewText && !text.equals("")) {
+                            TouchImageView touchItem =
+                                    new TouchImageView(EditImageActivity.this,
+                                            mainBitmap,
+                                            new TextItem(mainBitmap));
+                            setSelectedLayer(touchItem);
+                            helper.add(touchItem);
+                            textLayerContainer.removeView(touchItem);
+                            textLayerContainer.addView(touchItem);
                         }
+                        if (selectedLayer != null && (selectedLayer.getDrawableItem() instanceof TextItem)) {
+                            int textLengthTemp = text.length();
+                            if (textLengthTemp >= 1 && textLengthTemp <= 4 && text.charAt(textLengthTemp - 1) != ' ')
+                                text += " ";
+                            ((TextItem) selectedLayer.getDrawableItem()).setText(text);
+                            selectedLayer.updateDrawable();
+                            if (text.equals("")) {
+                                helper.remove(selectedLayer);
+                                setLayerUnselected();
+                            }
+                        }
+                    } else if (which == Dialog.BUTTON_NEGATIVE) {
+                        setLayerUnselected();
                     }
-                } else if (which == Dialog.BUTTON_NEGATIVE) {
-                    setLayerUnselected();
                 }
-            }
-        };
+            };
 
-        final AlertDialog newTextDialog = new AlertDialog.Builder(this)
-                .setView(newTextDialogView)
-                .setMessage(getString(R.string.new_text))
-                .setPositiveButton(getString(R.string.done), listener)
-                .setNegativeButton(getString(R.string.cancel), listener)
-                .setCancelable(false)
-                .create();
+            final AlertDialog newTextDialog = new AlertDialog.Builder(this)
+                    .setView(newTextDialogView)
+                    .setMessage(getString(R.string.new_text))
+                    .setPositiveButton(getString(R.string.done), listener)
+                    .setNegativeButton(getString(R.string.cancel), listener)
+                    .setCancelable(false)
+                    .create();
 
-        newTextDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                EditImageActivity.this.setFont((TextView) newTextDialog.findViewById(android.R.id.message));
-                EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
-                EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
-                EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_POSITIVE));
-            }
-        });
+            newTextDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    EditImageActivity.this.setFont((TextView) newTextDialog.findViewById(android.R.id.message));
+                    EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                    EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_NEUTRAL));
+                    EditImageActivity.this.setFont(newTextDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+                }
+            });
 
-        newTextDialog.show();
+            newTextDialog.show();
+        } catch (ClassCastException e) {
+            setLayerUnselected();
+        }
     }
 
     public void setLayerUnselected() {
@@ -703,7 +762,7 @@ public class EditImageActivity
             selectedLayer.setAsSelected(false);
             sizeSeekBar.setVisibility(View.GONE);
             tiltSeekBar.setVisibility(View.GONE);
-            shadowRadius.setVisibility(View.GONE);
+            shadowRadiusSeekBar.setVisibility(View.GONE);
             shadowDxSeekBar.setVisibility(View.GONE);
             shadowDySeekBar.setVisibility(View.GONE);
             strokeWidthSeekBar.setVisibility(View.GONE);
@@ -716,13 +775,42 @@ public class EditImageActivity
     }
 
     public void setSelectedLayer(TouchImageView item) {
+
         if (item != null) {
+
+
             if (selectedLayer != item) {
+                textLayerContainer.removeView(item);
+                textLayerContainer.addView(item);
+//                List<TouchImageView> items = helper.getItems();
+//                for (TouchImageView view :
+//                        items) {
+//                    textLayerContainer.addView(view);
+//
+//                }
                 setLayerUnselected();
                 selectedLayer = item;
                 item.setAsSelected(true);
                 deactivateButtons(false);
             }
+        }
+    }
+
+    private void updateArc(boolean selectedImage) {
+        if (selectedImage) {
+            strokeButton.setVisibility(View.GONE);
+            shadowButton.setVisibility(View.GONE);
+            fontButton.setVisibility(View.GONE);
+            textColorButton.setVisibility(View.GONE);
+            textBackgroundColor.setVisibility(View.GONE);
+            textButton.setVisibility(View.GONE);
+        } else {
+            strokeButton.setVisibility(View.VISIBLE);
+            shadowButton.setVisibility(View.VISIBLE);
+            fontButton.setVisibility(View.VISIBLE);
+            textColorButton.setVisibility(View.VISIBLE);
+            textBackgroundColor.setVisibility(View.VISIBLE);
+            textButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -752,7 +840,7 @@ public class EditImageActivity
 
     private void setVisibleSeekBar(int progress, SeekBarCompat seekBar) {
         sizeSeekBar.setVisibility(View.GONE);
-        shadowRadius.setVisibility(View.GONE);
+        shadowRadiusSeekBar.setVisibility(View.GONE);
         tiltSeekBar.setVisibility(View.GONE);
         shadowDxSeekBar.setVisibility(View.GONE);
         shadowDySeekBar.setVisibility(View.GONE);
@@ -763,16 +851,33 @@ public class EditImageActivity
     }
 
     @Override
+    public void itAllKnockedOut() {
+        if (selectedLayer != null)
+            updateArc(selectedLayer.getDrawableItem() instanceof ImageItem);
+    }
+
+    @Override
+    public void itAllKnockedIn() {
+        if (selectedLayer != null)
+            updateArc(selectedLayer.getDrawableItem() instanceof ImageItem);
+    }
+
+    @Override
     public void onFontItemSelected(FontItem item) {
         if (selectedLayer != null) {
-            selectedLayer.getTextItem().setFont(item);
-            selectedLayer.updateTextView();
+            try {
+                ((TextItem) selectedLayer.getDrawableItem()).setFont(item);
+                selectedLayer.updateDrawable();
+            } catch (ClassCastException e) {
+                setLayerUnselected();
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_image, menu);
+        menu.getItem(1);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -784,7 +889,6 @@ public class EditImageActivity
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
-    //    private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
     private long mBackPressed;
 
     @Override
@@ -810,25 +914,67 @@ public class EditImageActivity
             } else {
                 Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
             }
+        } else if (requestCode == REQUEST_CODE_ADD_IMAGE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getImagePickerDialog();
+            }
         }
     }
 
+    private void runShowCase() {
+        Target homeTarget = new Target() {
+            @Override
+            public Point getPoint() {
+                // Get approximate position of home icon's center
+                int actionBarSize = toolbar.getHeight();
+                int y = actionBarSize / 2;
+                int x;
+                if (Loader.deviceLanguageIsPersian()) {
+                    x = actionBarSize;
+                } else {
+                    x = toolbar.getWidth() - actionBarSize;
+                }
+                return new Point(x, y);
+            }
+        };
+        showcaseView = new ShowcaseView.Builder(this)
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .hideOnTouchOutside()
+//                .replaceEndButton(endButton)
+                .setContentTitle(getString(R.string.add_new_layer))
+                .setTarget(homeTarget)
+                .build();
+
+        showcaseView.hideButton();
+    }
+
     private void setUpView() {
+
         textLayerContainer = (FrameLayout) findViewById(R.id.activity_edit_image_images_container);
         if (textLayerContainer == null)
             throw new RuntimeException("Container was null add activity_edit_image_relative_layout_container to the view");
 
-        View textButton = findViewById(R.id.include_buttons_text_button);
+
+        textButton = findViewById(R.id.include_buttons_text_button);
         View buttonsDeactivateLayer = findViewById(R.id.activity_edit_image_buttons_overlay_layer);
-        View fontButton = findViewById(R.id.include_buttons_font_button);
+        fontButton = findViewById(R.id.include_buttons_font_button);
         View sizeButton = findViewById(R.id.include_buttons_size_button);
-        View textBackgroundColor = findViewById(R.id.include_buttons_text_background);
-        View textColorButton = findViewById(R.id.include_buttons_text_color);
+        textBackgroundColor = findViewById(R.id.include_buttons_text_background);
+        textColorButton = findViewById(R.id.include_buttons_text_color);
         View tiltButton = findViewById(R.id.include_buttons_tilt_button);
         View moveUpButton = findViewById(R.id.activity_edit_image_move_up_button);
         View moveDownButton = findViewById(R.id.activity_edit_image_move_down_button);
         View moveLeftButton = findViewById(R.id.activity_edit_image_move_left_button);
         View moveRightButton = findViewById(R.id.activity_edit_image_move_right_button);
+        findViewById(R.id.include_buttons_duplicate).setOnTouchListener(this);
+        findViewById(R.id.include_buttons_remove).setOnTouchListener(this);
+        findViewById(R.id.activity_edit_image_move_center_horizontal).setOnTouchListener(this);
+        findViewById(R.id.activity_edit_image_move_center_vertical).setOnTouchListener(this);
+        findViewById(R.id.activity_edit_image_move_align_bottom).setOnTouchListener(this);
+        findViewById(R.id.activity_edit_image_move_align_top).setOnTouchListener(this);
+        findViewById(R.id.activity_edit_image_move_align_right).setOnTouchListener(this);
+        findViewById(R.id.activity_edit_image_move_align_left).setOnTouchListener(this);
         stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
         buyNoteContainer = findViewById(R.id.include_pro_note_container);
         buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
@@ -912,7 +1058,7 @@ public class EditImageActivity
                 mainContainer
         );
 
-        this.shadowRadius = Loader.getSeekBar(this,
+        shadowRadiusSeekBar = Loader.getSeekBar(this,
                 20,
                 ContextCompat.getColor(this, R.color.shadow_radius_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.shadow_radius_tilt_seek_bar_progress_color),
@@ -967,9 +1113,9 @@ public class EditImageActivity
             tiltSeekBar.setProgress(180);
             tiltSeekBar.setOnSeekBarChangeListener(this);
         }
-        if (this.shadowRadius != null) {
-            this.shadowRadius.setProgress(2);
-            this.shadowRadius.setOnSeekBarChangeListener(this);
+        if (this.shadowRadiusSeekBar != null) {
+            this.shadowRadiusSeekBar.setProgress(2);
+            this.shadowRadiusSeekBar.setOnSeekBarChangeListener(this);
         }
         if (shadowDxSeekBar != null) {
             shadowDxSeekBar.setProgress(0);
@@ -1004,6 +1150,82 @@ public class EditImageActivity
         pos = new int[2];
 
         deactivateButtons(true);
+        runShowCase();
     }
+
+    @Override
+    public void cutModeToggled(boolean enabled) {
+        //INTENTIONALLY EMPTY
+    }
+
+    @Override
+    public void onSlideUpCallback() {
+        //INTENTIONALLY EMPTY
+    }
+
+    @Override
+    public void onSlideDownCallback() {
+        //INTENTIONALLY EMPTY
+    }
+
+    @Override
+    public void receivedImage(Bitmap image) {
+        image = Loader.createTrimmedBitmap(image);
+        TouchImageView touchItem =
+                new TouchImageView(EditImageActivity.this,
+                        mainBitmap,
+                        new ImageItem(mainBitmap, image));
+        int newSize;
+        if (image.getWidth() > 250 || image.getHeight() > 250) {
+            newSize = touchItem.getDrawableItem().getSize() / 2;
+        } else {
+            newSize = touchItem.getDrawableItem().getSize();
+        }
+        touchItem.getDrawableItem().setSize(newSize);
+        touchItem.updateDrawable();
+
+        setSelectedLayer(touchItem);
+        helper.add(touchItem);
+        textLayerContainer.removeView(touchItem);
+        textLayerContainer.addView(touchItem);
+
+
+        if (imagePickerDialog != null)
+            imagePickerDialog.dismiss();
+
+    }
+
+    @Override
+    public void OnIconClicked(IconItem item) {
+        OrganizedStickersDetailedDialogFragment
+                .newInstance(item.getFolder(), true)
+                .show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void OnIconLongClicked(IconItem item) {
+        //INTENTIONALLY EMPTY
+    }
+
+    @Override
+    public void OnNoItemWereFoundListener() {
+        //INTENTIONALLY EMPTY
+    }
+
+    @Override
+    public void OnCreateNewFolderSelected() {
+        //INTENTIONALLY EMPTY
+    }
+
+    @Override
+    public void OnIconSelected(IconItem item) {
+        imagePickerDialog.onServerStickerIconClicked(item.getName(), item.getEnName());
+    }
+
+    @Override
+    public void OnNoStickerWereFoundListener() {
+        //INTENTIONALLY EMPTY
+    }
+
 
 }

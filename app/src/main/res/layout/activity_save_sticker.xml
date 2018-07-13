@@ -34,7 +34,7 @@
         android:background="@color/lighter_blue"
         android:textColor="#eee"
         android:padding="5dp"
-        android:text="@string/every_sticker_must_be_saved_in_a_package_you_have_the_choice_os_choosing_an_existing_pack_or_creating_a_new_one"
+        android:text="@string/every_sticker_must_be_saved_in_a_package_you_have_the_choice"
         android:gravity="center"
         android:textSize="16sp"/>
 

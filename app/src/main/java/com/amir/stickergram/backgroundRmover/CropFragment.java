@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amir.stickergram.BuildConfig;
 import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
@@ -75,6 +76,7 @@ public class CropFragment extends BaseFragment {
         view.findViewById(R.id.buttonCircle).setOnClickListener(btnListener);
 
         mCropView = (CropImageView) view.findViewById(R.id.activity_crop_crop_image_view);
+//        mCropView.setDebug(BuildConfig.DEBUG);
         mCropView.setCropMode(CropImageView.CropMode.FREE);
 
 //        rotation = (int) Loader.capturedRotationFix(Loader.getRealPathFromURI((Uri) getArguments().getParcelable(Constants.CROP_SOURCE)
@@ -174,10 +176,10 @@ public class CropFragment extends BaseFragment {
                     mCropView.setCropMode(CropImageView.CropMode.FREE);
                     break;
                 case R.id.buttonCircle:
-                    if (BaseActivity.isPaid)
-                        mCropView.setCropMode(CropImageView.CropMode.CIRCLE);
-                    else
-                        Toast.makeText(getContext(), getString(R.string.circular_crop_is_only), Toast.LENGTH_LONG).show();
+//                    if (BaseActivity.isPaid)
+                    mCropView.setCropMode(CropImageView.CropMode.CIRCLE);
+//                    else
+//                        Toast.makeText(getContext(), getString(R.string.circular_crop_is_only), Toast.LENGTH_LONG).show();
                     break;
                 case R.id.buttonRotateLeft:
                     mCropView.rotateImage(CropImageView.RotateDegrees.ROTATE_M90D);
@@ -245,7 +247,7 @@ public class CropFragment extends BaseFragment {
             bundle.putParcelable(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
             Log.e(TAG, "-----width: " + resBitmap.getWidth() + " height: " + resBitmap.getHeight());
             listener.cropFinished(bundle);
-            
+
 
 //            Intent intent = new Intent(getContext(), EditImageActivity.class);
 //            intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));

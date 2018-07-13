@@ -12,7 +12,7 @@ import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
 
 public class EnglishFontsFragment extends BaseFragment implements FontAdapter.OnFontClickListener {
 

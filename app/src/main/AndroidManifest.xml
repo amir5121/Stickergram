@@ -7,11 +7,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".serverHelper.VolleySingleton"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".serverHelper.VolleySingleton"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
 
@@ -30,7 +30,6 @@
         </activity>
 
         <activity android:name=".UserStickersActivity" />
-
         <activity android:name=".SaveStickerActivity" />
 
         <activity android:name=".CropActivity" />
@@ -43,14 +42,17 @@
 
         <activity
             android:name=".EditImageActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".ContactActivity" />
 
         <activity android:name=".HelpActivity" />
 
-        <activity android:name=".ClickedFontActivity">
+        <activity
+            android:name=".ClickedFontActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -63,6 +65,8 @@
                 <data android:host="*" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.tangxiaolv.telegramgallery.GalleryActivity" />
 
     </application>
 

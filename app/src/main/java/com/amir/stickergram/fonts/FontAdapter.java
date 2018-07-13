@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
 
 import java.util.ArrayList;
 import java.util.List;

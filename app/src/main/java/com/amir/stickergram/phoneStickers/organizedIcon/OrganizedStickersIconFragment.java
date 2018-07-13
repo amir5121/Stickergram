@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
+import com.amir.stickergram.image.ImageReceiverCallBack;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.icon.IconItem;
@@ -32,6 +34,18 @@ import java.util.List;
 public class OrganizedStickersIconFragment extends BaseFragment implements IconAdapter.OnStickerClickListener, OnStickerClickListener {
     private OnStickerClickListener listener;
     private OrganizedIconAdapter adapter;
+    private boolean isImagePicker;
+
+    public static OrganizedStickersIconFragment newInstance(boolean isImagePicker) {
+
+        Bundle args = new Bundle();
+
+        args.putBoolean(Constants.IS_AN_IMAGE_PICKER, isImagePicker);
+
+        OrganizedStickersIconFragment fragment = new OrganizedStickersIconFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -49,12 +63,21 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
         setRetainInstance(true);
         View view = inflater.inflate(R.layout.fragment_phone_stickers_organized, container, false);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            isImagePicker = args.getBoolean(Constants.IS_AN_IMAGE_PICKER, false);
+        }
+
         setFont((ViewGroup) view);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_phone_stickers_organized_list);
 
         if (recyclerView != null) {
-            adapter = new OrganizedIconAdapter((BaseActivity) getActivity(), this);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+            adapter = new OrganizedIconAdapter((BaseActivity) getActivity(), this, isImagePicker);
+            if (isImagePicker) {
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, LinearLayoutManager.VERTICAL, false));
+            } else {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+            }
             recyclerView.setAdapter(adapter);
         }
 
@@ -69,46 +92,37 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
 
     @Override
     public void OnIconLongClicked(final IconItem item) {
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == Dialog.BUTTON_POSITIVE) {
-                    adapter.refresh(item.getFolder(), true);
+        if (!isImagePicker) {
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == Dialog.BUTTON_POSITIVE) {
+                        adapter.refresh(item.getFolder(), true);
+                    }
                 }
-            }
-        };
-//        item.getBitmapFromExternalStorage()
-//        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
-//        setFont((ViewGroup) view);
-//
-//        ImageView imageView = (ImageView) view.findViewById(R.id.dialog_single_item_image);
-//        imageView.setImageBitmap(item.getBitmapFromExternalStorage());
-//
-//        TextView textView = (TextView) view.findViewById(R.id.dialog_single_item_title);
-//        textView.setText(getString(R.string.do_you_want_to_delete_this_pack));
+            };
 
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setMessage(
-                        !Loader.deviceLanguageIsPersian() ?
-                                getActivity().getString(R.string.delete) + " " + item.getName() + " " + getActivity().getString(R.string.pack)
-                                : getActivity().getString(R.string.pack) + " " + item.getName() + " " + getActivity().getString(R.string.delete))
-                .setPositiveButton(getString(R.string.delete), listener)
-                .setNegativeButton(getString(R.string.no), listener)
-                .create();
+            final AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setMessage(
+                            !Loader.deviceLanguageIsPersian() ?
+                                    getActivity().getString(R.string.delete) + " " + item.getName() + " " + getActivity().getString(R.string.pack)
+                                    : getActivity().getString(R.string.pack) + " " + item.getName() + " " + getActivity().getString(R.string.delete))
+                    .setPositiveButton(getString(R.string.delete), listener)
+                    .setNegativeButton(getString(R.string.no), listener)
+                    .create();
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                setFont((TextView) dialog.findViewById(android.R.id.message));
-                setFont(dialog.getButton(AlertDialog.BUTTON_NEGATIVE));
-//                setFont(dialog.getButton(AlertDialog.BUTTON_NEUTRAL));
-                setFont(dialog.getButton(AlertDialog.BUTTON_POSITIVE));
-            }
-        });
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    setFont((TextView) dialog.findViewById(android.R.id.message));
+                    setFont(dialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                    setFont(dialog.getButton(AlertDialog.BUTTON_POSITIVE));
+                }
+            });
 
-        dialog.show();
+            dialog.show();
 
-
+        }
     }
 
     @Override
@@ -118,7 +132,8 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
 
     @Override
     public void OnCreateNewFolderSelected() {
-        newOrganizedFolder();
+        if (!isImagePicker)
+            newOrganizedFolder();
     }
 
     public void newOrganizedFolder() {

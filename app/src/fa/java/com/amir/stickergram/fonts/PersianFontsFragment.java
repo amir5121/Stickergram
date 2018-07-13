@@ -11,16 +11,11 @@ import android.view.ViewGroup;
 import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
-import com.amir.stickergram.infrastructure.FontItem;
+import com.amir.stickergram.image.FontItem;
 import com.amir.stickergram.R;
 
-    public class PersianFontsFragment extends BaseFragment implements FontAdapter.OnFontClickListener {
+    public class PersianFontsFragment extends  BaseFragment implements FontAdapter.OnFontClickListener {
     public View loadingFrame;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override

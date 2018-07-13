@@ -44,7 +44,7 @@ public class AndroidHiveServer {
                 Log.e(TAG, "cache was null");
                 getStringFromURL(url);
             }
-        } catch (UnsupportedEncodingException | JSONException e) {
+        } catch (Exception e ) {
             e.printStackTrace();
         }
     }
@@ -88,15 +88,18 @@ public class AndroidHiveServer {
         for (int i = 0; i < length; i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Log.e(TAG, "createServerSticker: " + jsonObject.get(ServerSticker.EN_NAME));
                 names.add(new ServerSticker(
                         Integer.parseInt((String) jsonObject.get(ServerSticker.NUM)),
                         (String) jsonObject.get(ServerSticker.EN_NAME),
                         (String) jsonObject.get(ServerSticker.PER_NAME),
                         Integer.parseInt((String) jsonObject.get(ServerSticker.MODE)),
-                        ((String) jsonObject.get(ServerSticker.HAS_LINK)).equals("1"),
+                        (jsonObject.get(ServerSticker.HAS_LINK)).equals("1"),
                         (String) jsonObject.get(ServerSticker.LINK_NAME_EN),
                         (String) jsonObject.get(ServerSticker.LINK_NAME_PER),
-                        (String) jsonObject.get(ServerSticker.LINK)));
+                        (String) jsonObject.get(ServerSticker.LINK),
+                        (String) jsonObject.get(ServerSticker.RUS_NAME)
+                ));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
