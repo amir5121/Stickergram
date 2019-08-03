@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 @SuppressLint("ViewConstructor")
-public class TouchImageView extends android.support.v7.widget.AppCompatImageView {
+public class TouchImageView extends androidx.appcompat.widget.AppCompatImageView {
     private static final String TEXT_ITEM = "TEXT_ITEM";
     private DrawableItem drawableItem;
     private boolean isFirstTapOnStrokeColor = true;

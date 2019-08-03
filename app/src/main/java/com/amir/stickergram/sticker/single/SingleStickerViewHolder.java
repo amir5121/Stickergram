@@ -1,7 +1,7 @@
 package com.amir.stickergram.sticker.single;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;

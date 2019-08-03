@@ -1,6 +1,6 @@
 package com.amir.stickergram.sticker.pack.user;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.Constants;
 
 import java.io.File;

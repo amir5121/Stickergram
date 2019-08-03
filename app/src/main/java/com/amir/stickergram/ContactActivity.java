@@ -1,23 +1,18 @@
 package com.amir.stickergram;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.amir.stickergram.arcList.SemiCircleDrawable;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.navdrawer.MainNavDrawer;
-import com.amir.stickergram.navdrawer.NavDrawer;
 
 public class ContactActivity extends BaseActivity implements View.OnClickListener {
 

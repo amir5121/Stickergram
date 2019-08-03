@@ -35,7 +35,7 @@
         android:id="@+id/include_detailed_note_container"
         layout="@layout/include_detailed_note" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_user_detailed_pack_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

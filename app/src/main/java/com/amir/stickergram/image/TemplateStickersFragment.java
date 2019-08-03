@@ -1,9 +1,7 @@
 package com.amir.stickergram.image;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,6 @@ import android.view.ViewGroup;
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.Constants;
-import com.amir.stickergram.sticker.icon.IconItem;
-import com.amir.stickergram.sticker.icon.OnIconSelectedListener;
 import com.amir.stickergram.sticker.icon.template.TemplateIconListFragment;
 import com.amir.stickergram.sticker.pack.template.TemplateIconPackDetailedFragment;
 

@@ -9,10 +9,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,16 +58,16 @@ public class UserIconPackDetailedFragment extends BaseFragment
         isInPackCreationMode = false;
         View view = inflater.inflate(R.layout.fragment_user_detailed_pack, container, false);
         setFont((ViewGroup) view);
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_user_detailed_pack_list);
-        folderText = (TextView) view.findViewById(R.id.fragment_user_detailed_pack_text_folder);
-        linkButton = (Button) view.findViewById(R.id.fragment_user_detailed_pack_pack_creation_mode);
+        recyclerView = view.findViewById(R.id.fragment_user_detailed_pack_list);
+        folderText = view.findViewById(R.id.fragment_user_detailed_pack_text_folder);
+        linkButton = view.findViewById(R.id.fragment_user_detailed_pack_pack_creation_mode);
 
         View publishNoteCloseButton = view.findViewById(R.id.include_detailed_note_close);
-        publishNoteText = (TextView) view.findViewById(R.id.include_detailed_note_text);
+        publishNoteText = view.findViewById(R.id.include_detailed_note_text);
         View publishIcon = view.findViewById(R.id.include_detailed_note_info_icon);
-        publishNoteContainer = (LinearLayout) view.findViewById(R.id.include_detailed_note_container);
+        publishNoteContainer = view.findViewById(R.id.include_detailed_note_container);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.fragment_icon_detailed_progressBar);
+        progressBar = view.findViewById(R.id.fragment_icon_detailed_progressBar);
 
         if (publishNoteCloseButton != null &&
                 publishIcon != null &&

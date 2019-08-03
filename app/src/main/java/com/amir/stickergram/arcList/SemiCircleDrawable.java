@@ -1,19 +1,12 @@
 package com.amir.stickergram.arcList;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.amir.stickergram.base.BaseActivity;
-import com.amir.stickergram.infrastructure.Loader;
+import androidx.annotation.NonNull;
 
 public class SemiCircleDrawable extends Drawable {
     //http://stackoverflow.com/questions/15962745/draw-a-semicircle-in-the-background-of-a-view

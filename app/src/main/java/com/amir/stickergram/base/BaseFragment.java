@@ -1,7 +1,7 @@
 package com.amir.stickergram.base;
 
 import android.graphics.Typeface;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;

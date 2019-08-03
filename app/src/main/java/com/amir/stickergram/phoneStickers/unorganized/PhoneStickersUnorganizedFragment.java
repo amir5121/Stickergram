@@ -6,13 +6,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amir.stickergram.EditImageActivity;
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.PhoneStickersActivity;
 import com.amir.stickergram.R;
@@ -138,7 +136,7 @@ public class PhoneStickersUnorganizedFragment extends BaseFragment
         enable = true;
         if (savedInstanceState != null) {
             TypedValue typed_value = new TypedValue();
-            getActivity().getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, typed_value, true);
+            getActivity().getTheme().resolveAttribute(androidx.appcompat.R.attr.actionBarSize, typed_value, true);
             swipeRefresh.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId));
             swipeRefresh.setRefreshing(savedInstanceState.getBoolean(IS_REFRESHING, false));
             setEnable(savedInstanceState.getBoolean(IS_ENABLE, true));

@@ -20,7 +20,8 @@
             android:layout_margin="3dp"
             android:clickable="true"
             android:padding="5dp"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/fragment_phone_stickers_organized_title"
@@ -36,7 +37,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_phone_stickers_organized_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
