@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -236,6 +238,8 @@ public class UserIconPackDetailedFragment extends BaseFragment
                         intent.setType("text/plain");
 //                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(new File(item.getDir()).toString()));
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
+                        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
                         startActivity(intent);
                         Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
                     } else

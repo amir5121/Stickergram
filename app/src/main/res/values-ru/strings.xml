@@ -285,4 +285,10 @@
     <string name="NoRecentGIFs">Недавний GIF</string>
     <string name="telegram_x">телеграмма x</string>
     <string name="golden_telegram">золотая телеграмма</string>
+    <string name="info_gram_telegram">Infogram</string>
+    <string name="nitrogram_telegram">Infogram</string>
+    <string name="bgram_telegram">Bgram</string>
+    <string name="black_telegram">black telegram</string>
+    <string name="teleplus_telegram">Teleplus</string>
+    <string name="teledr_telegram">Telegramdr</string>
 </resources>

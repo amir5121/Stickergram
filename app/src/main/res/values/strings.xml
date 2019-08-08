@@ -128,7 +128,7 @@
     <string name="_4_as_every_sticker_has_a_corresponding">4. Go back to the stickergram app and enter to \"Pack creation mode\" then send the sticker you have created to the bot.</string>
     <string name="_5_after_sending_the_emoji_send">5. Now send an emoji to the bot corresponding to the sticker that you have sent.\n\nIMPORTANT: Do the step 4 and 5 as long as you have stickers to add to your pack on Telegram.</string>
     <string name="_6_when_you_were_done_adding_stickers_to_the_pack_you">6. When you were done adding Stickers to the pack you will need to publish the pack. In order to publish a pack you need to send the publish command to the bot.</string>
-    <string name="_7_after_sending_the_publish_command_you">7.After sending the publish command you need to provide a short name for your pack. Short name will be only used in the link to your Sticker pack.</string>
+    <string name="_7_after_sending_the_publish_command_you">7.After sending the /publish command  and /skip command you need to provide a short name for your pack. Short name will be only used in the link to your Sticker pack.</string>
     <string name="_8_hooray_you_published_a_new_pack">8. Hooray you published a new pack. The bot will give you a link which you can access your stickers from.</string>
     <string name="what_if_i_wanted_to_add_sticker_to_a_published_pack">What if i wanted to add Sticker to a published pack?</string>
     <string name="use_the">Use the </string>
@@ -286,4 +286,10 @@
     <string name="german">German</string>
     <string name="telegram_x">Telegram x</string>
     <string name="golden_telegram">Golden Telegram</string>
+    <string name="info_gram_telegram">Infogram</string>
+    <string name="nitrogram_telegram">Infogram</string>
+    <string name="bgram_telegram">Bgram</string>
+    <string name="black_telegram">black telegram</string>
+    <string name="teleplus_telegram">Teleplus</string>
+    <string name="teledr_telegram">Telegramdr</string>
 </resources>

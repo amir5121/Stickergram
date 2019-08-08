@@ -280,4 +280,6 @@
     <string name="NoRecentPhotos">عکس جدیدی موجود نیست</string>
     <string name="telegram_x">تلگرام ایکس</string>
     <string name="golden_telegram">تلگرام طلایی</string>
+    <string name="bgram_telegram">بی‌گرام</string>
+    <string name="black_telegram">بلک تلگرام</string>
 </resources>

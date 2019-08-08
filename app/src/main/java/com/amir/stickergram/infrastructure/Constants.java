@@ -43,6 +43,12 @@ public class Constants {
     public static final String LAGATGRAM = "org.ilwt.lagatgram";
     public static final String ROYAL_TELEGRAM = "com.shaltouk.mytelegram";
     public static final String TELEGRAM_X = "org.thunderdog.challegram";
+    public static final String INFOGRAM_PACKAGE = "com.infogram.app";
+    public static final String NITRO_TELEGRAM_PACKAGE = "com.nitro.telegram";
+    public static final String BGRAM_PACKAGE = "org.telegram.BifToGram";
+    public static final String BLACKGRAM_PACKAGE = "uz.usoft.blackgram";
+    public static final String TELEPLUS = "in.teleplus";
+    public static final String TELEDR = "com.filtershekanha.teledr";
 
     public static final String STICKERGRAM_URL = "http://stickergramapp.com/";
     public static final String LIST_DIRECTORIES = "listDirectory.php";
@@ -76,7 +82,7 @@ public class Constants {
     public static final String CACHED_JSON = "CACHED_JSON";
 //    public static final String IMAGE_URI = "IMAGE_URI";
 
-    final static String availableFormats[] = {
+    final static String[] availableFormats = {
             TELEGRAM_PACKAGE,
             TELEGRAM_PLUS_PACKAGE,
             MOBOGRAM_PACKAGE,
@@ -85,12 +91,18 @@ public class Constants {
             PERSIAN_TELEGRAM,
             PERSIAN_VOICE_TELEGRAM,
             LAGATGRAM,
+            BLACKGRAM_PACKAGE,
             ORANGE_TELEGRAM,
-            MY_TELEGRAM,
+            INFOGRAM_PACKAGE,
+            TELEPLUS,
+            NITRO_TELEGRAM_PACKAGE,
+            BGRAM_PACKAGE,
             ANIWAYS,
+            MY_TELEGRAM,
             MOBOGRAM_TWO,
             TELEGRAM_PACKAGE_BETA,
             TELEGRAM_X,
+            TELEDR,
             ROYAL_TELEGRAM
     };
 
