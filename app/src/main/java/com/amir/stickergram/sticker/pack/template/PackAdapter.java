@@ -32,7 +32,7 @@ class PackAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
         } catch (ClassCastException e) {
             throw new RuntimeException("must implement OnStickerClickListener");
         }
-        this.inflater = fragment.getLayoutInflater(null);
+        this.inflater = fragment.getActivity().getLayoutInflater();
         helper = new AndroidHiveServer((BaseActivity) fragment.getActivity(), this);
         this.folder = folder;
         updateItems();

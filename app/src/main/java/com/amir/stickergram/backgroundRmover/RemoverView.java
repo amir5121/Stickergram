@@ -7,18 +7,19 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.image.Position;
 
 @SuppressLint("ViewConstructor")
-class RemoverView extends ImageView implements View.OnTouchListener, AsyncCallFloodFill.AsyncFloodFillCallbacks {
+class RemoverView extends AppCompatImageView implements View.OnTouchListener, AsyncCallFloodFill.AsyncFloodFillCallbacks {
     private static final int INITIAL_RADIUS = 20;
     private static final int INITIAL_OFFSET = 90;
     private static final int NONE = 0;
@@ -267,7 +268,7 @@ class RemoverView extends ImageView implements View.OnTouchListener, AsyncCallFl
     }
 
 
-    private float[] getPointerCoordinates(ImageView view, MotionEvent e) {
+    private float[] getPointerCoordinates(AppCompatImageView view, MotionEvent e) {
         final int index = e.getActionIndex();
         final float[] coordinates = new float[]{e.getX(index), e.getY(index)};
         Matrix matrix = new Matrix();

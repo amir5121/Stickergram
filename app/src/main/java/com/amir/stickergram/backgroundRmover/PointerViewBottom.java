@@ -1,13 +1,14 @@
 package com.amir.stickergram.backgroundRmover;
 
 import android.content.Context;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
 
-public class PointerViewBottom extends ImageView {
+public class PointerViewBottom extends AppCompatImageView {
     private int height;
     private int width;
 
@@ -33,7 +34,7 @@ public class PointerViewBottom extends ImageView {
 
     void updatePointer(float top, float left) {
         setVisibility(VISIBLE);
-        setY(top - height / 2);
-        setX(left - width / 2);
+        setY(top - (height >> 1));
+        setX(left - (width >> 1));
     }
 }
