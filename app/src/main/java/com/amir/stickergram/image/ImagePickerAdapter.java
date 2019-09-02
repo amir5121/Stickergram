@@ -35,7 +35,7 @@ public class ImagePickerAdapter extends FragmentPagerAdapter {
             case ORGANIZED_STICKER: // Fragment # 0 - This will show FirstFragment
                 return OrganizedStickersIconFragment.newInstance(true);
             case UNORGANIZED_STICKER:
-                return PhoneStickersUnorganizedFragment.newInstance(true);
+                return PhoneStickersUnorganizedFragment.Companion.newInstance(true);
             default:
                 Log.e(getClass().getSimpleName(), "case Default is happening... MUST NOT");
                 throw new RuntimeException("asking for none existing fragment in " + getClass().getSimpleName());

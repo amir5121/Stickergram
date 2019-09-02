@@ -52,15 +52,15 @@ public class PhoneStickersActivity extends BaseActivity
 
         loadingFrame = findViewById(R.id.activity_phone_stickers_loading_frame);
 
-        if (PhoneStickersUnorganizedFragment.isInCropMode) onSlideUpCallback();
+        if (PhoneStickersUnorganizedFragment.Companion.isInCropMode()) onSlideUpCallback();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
         getMenuInflater().inflate(R.menu.phone_sticker_unoraganized_fragment_menu, menu);
-        menu.getItem(1).setVisible(PhoneStickersUnorganizedFragment.isInCropMode);
-        menu.getItem(0).setVisible(!PhoneStickersUnorganizedFragment.isInCropMode);
+        menu.getItem(1).setVisible(PhoneStickersUnorganizedFragment.Companion.isInCropMode());
+        menu.getItem(0).setVisible(!PhoneStickersUnorganizedFragment.Companion.isInCropMode());
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -80,13 +80,13 @@ public class PhoneStickersActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        if (PhoneStickersUnorganizedFragment.isInCropMode || !unorganizedFragment.isEnable()) {
+        if (PhoneStickersUnorganizedFragment.Companion.isInCropMode() || !unorganizedFragment.isEnable()) {
             if (!unorganizedFragment.isEnable()) {
                 unorganizedFragment.setEnable(true);
                 onSlideUpCallback();
                 return;
             }
-            if (PhoneStickersUnorganizedFragment.isInCropMode) {
+            if (PhoneStickersUnorganizedFragment.Companion.isInCropMode()) {
                 unorganizedFragment.toggleCutMode();
             }
         } else {
@@ -100,7 +100,7 @@ public class PhoneStickersActivity extends BaseActivity
     public void OnIconClicked(IconItem item) {
         lastClickedIcon = item.getFolder();
 
-        if (PhoneStickersUnorganizedFragment.isInCropMode) {
+        if (PhoneStickersUnorganizedFragment.Companion.isInCropMode()) {
             new AsyncStickersCut(this, unorganizedFragment.getSelectedItems(), item.getFolder(), this).execute();
 
         } else {
@@ -181,7 +181,7 @@ public class PhoneStickersActivity extends BaseActivity
 
     @Override
     public void onSlideDownCallback() {
-        if (isOrganizedFragmentHidden && !PhoneStickersUnorganizedFragment.isInCropMode || !unorganizedFragment.isEnable()) {
+        if (isOrganizedFragmentHidden && !PhoneStickersUnorganizedFragment.Companion.isInCropMode() || !unorganizedFragment.isEnable()) {
             slideDown();
         }
     }

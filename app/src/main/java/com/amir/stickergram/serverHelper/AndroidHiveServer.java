@@ -72,6 +72,7 @@ public class AndroidHiveServer {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.wtf(TAG, error.toString() );
                 listener.onDismissRefresh(true);
             }
         });
@@ -81,7 +82,7 @@ public class AndroidHiveServer {
     }
 
 
-    public void createServerSticker(JSONArray jsonArray) {
+    private void createServerSticker(JSONArray jsonArray) {
         int length = jsonArray.length();
         ArrayList<ServerSticker> names = new ArrayList<>(length);
         Log.e(getClass().getSimpleName(), "createServerSticker");
