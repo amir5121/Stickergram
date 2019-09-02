@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -34,9 +36,15 @@ import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class UserIconPackDetailedFragment extends BaseFragment
         implements OnStickerClickListener, View.OnClickListener {
@@ -168,17 +176,34 @@ public class UserIconPackDetailedFragment extends BaseFragment
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
                     if (Loader.getActivePack() != null) {
-//                    if (BaseActivity.isTelegramInstalled) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setPackage(Loader.getActivePack());
                         intent.setType("application/pdf");
-//                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(new File(item.getWebpDir()).toString()));
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getWebpDir())));
-//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
-//                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                         startActivity(intent);
-                    } else
+                    } else {
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();
+                    }
+                } else if (which == Dialog.BUTTON_NEGATIVE) {
+                    try {
+                        InputStream in = new FileInputStream(item.getDir());
+                        File dir = new File(BaseActivity.PICTURES_DIRECTORY);
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        }
+                        String imagePath = BaseActivity.PICTURES_DIRECTORY + item.getFolder() + item.getName() + Constants.PNG;
+                        FileOutputStream fo = new FileOutputStream(imagePath);
+                        Loader.copyFile(in, fo);
+                        in.close();
+                        fo.close();
+                        MediaScannerConnection.scanFile(getContext(), new String[] { imagePath }, new String[] { "image/jpeg" }, null);
+
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else if (which == Dialog.BUTTON_NEUTRAL) {
                     sendImageToBot((BaseActivity) UserIconPackDetailedFragment.this.getActivity(), item);
                     Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
@@ -188,16 +213,16 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
         setFont((ViewGroup) view);
-        TextView textView = (TextView) view.findViewById(R.id.dialog_single_item_title);
+        TextView textView = view.findViewById(R.id.dialog_single_item_title);
         textView.setText(activity.getString(R.string.do_you_want_to_send_this_sticker));
-        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
+        ImageView stickerImage = view.findViewById(R.id.dialog_single_item_image);
         if (stickerImage != null)
             stickerImage.setImageBitmap(BitmapFactory.decodeFile(item.getDir()));
 
         final AlertDialog sendImageToUserDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
 //                .setTitle(activity.getString(R.string.do_you_want_to_send_this_sticker))
-                .setNegativeButton(activity.getString(R.string.no), listener)
+                .setNegativeButton(activity.getString(R.string.export), listener)
                 .setPositiveButton(activity.getString(R.string.send), listener)
                 .setNeutralButton(activity.getString(R.string.send_to_bot), listener)
                 .create();
@@ -224,7 +249,6 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
         sendImageToUserDialog.show();
     }
-
 
 
     private void sendImageToBot(final BaseActivity activity, final PackItem item) {
@@ -313,10 +337,10 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
         setFont((ViewGroup) view);
-        TextView textView = (TextView) view.findViewById(R.id.dialog_single_item_title);
+        TextView textView = view.findViewById(R.id.dialog_single_item_title);
         textView.setText(activity.getString(R.string.do_you_want_to_delete_this_sticker));
 
-        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_single_item_image);
+        ImageView stickerImage = view.findViewById(R.id.dialog_single_item_image);
 
         Bitmap bitmap = BitmapFactory.decodeFile(item.getDir());
         if (stickerImage != null)
@@ -336,7 +360,6 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE));
             }
         });
-
 
 
         deleteDialog.show();

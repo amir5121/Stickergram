@@ -15,7 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -368,7 +368,7 @@ public class Loader {
         return file.getAbsolutePath();
     }
 
-    public static String getFileName(Uri uri, BaseActivity activity) {
+    private static String getFileName(Uri uri, BaseActivity activity) {
         String result = null;
         if (uri.getScheme().equals("content")) {
             Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
@@ -605,7 +605,6 @@ public class Loader {
             if (tempFile.exists()) tempFile.delete();
             tempFile.createNewFile();
             in = activity.getAssets().open("empty.png");
-            if (in == null) Log.e(TAG, "inputStream was null in generateEmptyBitmapFile");
             OutputStream os = new FileOutputStream(tempFile);
             Loader.copyFile(in, os);
         } catch (IOException e) {

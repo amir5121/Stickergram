@@ -51,7 +51,7 @@
     <string name="stickergram">Stickergram</string>
     <string name="made">Erstellt mit</string>
     <string name="press_back_button_again">drücke nochmal zurück um die app zu verlassen</string>
-    <string name="package_name">Packet name</string>
+    <string name="package_name">Paket name</string>
     <string name="Folder">ordner</string>
     <string name="every_sticker_must_be_in_a_pack">jeder Sticker muss in einem Paket gespeichert werden</string>
     <string name="every_sticker_must_be_saved_in_a_package_you_have_the_choice">jeder Sticker muss in einem Paket gespeichert werden. Du kannst einen bereits existierendes oder ein neues Paket auswählen</string>
@@ -163,9 +163,9 @@
     <string name="add_to_pack">zum Paket hinzufügen?</string>
     <string name="add">hinzufügen</string>
     <string name="addsticker_link_to_your_pack">\'/Sticker hinzufügen\'</string>
-    <string name="command_to_add_sticker_to_a_published_pack_for_example_if_i_have_a_sticker_that_i_published_with_this_link">Befehl um Sticker zu einem veröffentlichten Paket hinzuzufügen. Nachdem du den Befehl gesendet hast Wähle ein Paket, von der Liste die dir gezeigt wird, zu den du Sticker hinzufügen willst  \n\ndann komm zurück zur app und gehe zum Paket Erstellungs modus und sende die Sticker die du hinzufügen möchtest an den bot. Danach sende einen emoji der den Sticker wiederspiegelt. Sende dann /done.\n\nes kann bis zu einer Stunde dauern bis alle änderungen am Paket übernommen wurden.</string>
+    <string name="command_to_add_sticker_to_a_published_pack_for_example_if_i_have_a_sticker_that_i_published_with_this_link">Befehl um Sticker zu einem veröffentlichten Paket hinzuzufügen. Nachdem du den Befehl gesendet hast Wähle ein Paket, von der Liste die dir gezeigt wird, zu den du Sticker hinzufügen willst  \n\ndann komm zurück zur app und gehe zum Paket Erstellungs modus und sende die Sticker die du hinzufügen möchtest an den bot. Danach sende einen emoji der den Sticker widerspiegelt. Sende dann /done.\n\nes kann bis zu einer Stunde dauern bis alle änderungen am Paket übernommen wurden.</string>
     <string name="addsticker_telegram_me_addstickers_stickergramapp">\'/addsticker telegram.me/addstickers/stickergramApp\'</string>
-    <string name="then_send_an_emoji_and_the_sticker_itself_afterward">dann sende ein emoji und Sticker (im Paket Erstellungs modus). Beachte dass es bis zu einer Stunde dauern kann bis der Sticker hinzugefügt wird. Sollte es nicht klappen versuche das Paket zu löschen und und wieder hinzuzufügen.</string>
+    <string name="then_send_an_emoji_and_the_sticker_itself_afterward">dann sende ein emoji und Sticker (im Paket Erstellungs modus). Beachte dass es bis zu einer Stunde dauern kann bis der Sticker hinzugefügt wird. Sollte es nicht klappen versuche das Paket zu löschen und wieder hinzuzufügen.</string>
     <string name="telegram_me_addstickers_stickergramapp">\'telegram.me/addstickers/stickergramApp\'</string>
     <string name="and_i_want_to_add_another_sticker_to_that_pack_i_should_write_this_command">ich möchte einen weiteren Sticker zu den Paket hinzuzufügen, ich sollte dieses Kommando schreiben:</string>
     <string name="delsticker">\'/delsticker\'</string>
@@ -292,4 +292,5 @@
     <string name="black_telegram">black telegram</string>
     <string name="teleplus_telegram">Teleplus</string>
     <string name="teledr_telegram">Telegramdr</string>
+    <string name="export">In Galerie speichern</string>
 </resources>

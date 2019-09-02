@@ -1,5 +1,6 @@
 package com.amir.stickergram.sticker.pack.template;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,8 +46,9 @@ class PackAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
     }
 
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.item_pack_sticker, parent, false);
         view.setOnClickListener(this);
         return new ViewHolder(view);
@@ -98,7 +100,7 @@ class PackAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
 //        return folder;
 //    }
 
-    public PackItem getServerSticker() {
+    PackItem getServerSticker() {
 //        Log.e(getClass().getSimpleName(), "getServerSticker: " + serverSticker.getLink());
         return serverSticker;
     }

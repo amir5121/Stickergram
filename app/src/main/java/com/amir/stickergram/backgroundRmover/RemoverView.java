@@ -305,7 +305,7 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
     /**
      * Calculate the degree to be rotated by.
      *
-     * @param event
+     * @param event i don't remember what's this parameter
      * @return Degrees
      */
     private float rotation(MotionEvent event) {

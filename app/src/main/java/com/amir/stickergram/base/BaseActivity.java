@@ -7,11 +7,13 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +44,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public static String USER_STICKERS_DIRECTORY;
     public static String BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY;
     public static String STICKERGRAM_ROOT;
+    public static String PICTURES_DIRECTORY;
     public static String STICKERGRAM = "/Stickergram";
 
     private SharedPreferences preferences;
@@ -73,6 +76,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
         USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.user/";
         BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/.phone_organized/";
         STICKERGRAM_ROOT = Environment.getExternalStorageDirectory() + STICKERGRAM + File.separator;
+        PICTURES_DIRECTORY = Environment.getExternalStorageDirectory() + File.separator + "Pictures" + STICKERGRAM + File.separator;
         FONT_DIRECTORY = Environment.getExternalStorageDirectory() + STICKERGRAM + "/font/";
         TEMP_STICKER_CASH_DIR = getExternalCacheDir() + File.separator + "temp_sticker.png";
         TEMP_CROP_CASH_DIR = getExternalCacheDir() + File.separator + "temp_crop.png";
@@ -128,7 +132,7 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
 
-        toolbar = (Toolbar) findViewById(R.id.include_toolbar);
+        toolbar = findViewById(R.id.include_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             ActionBar ab = getSupportActionBar();
@@ -188,7 +192,6 @@ public abstract class BaseActivity extends BaseAuthenticatedActivity {
                 // functionality that depends on this permission.
             }
 
-            return;
         }
     }
 

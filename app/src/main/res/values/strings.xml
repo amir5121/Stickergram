@@ -292,4 +292,5 @@
     <string name="black_telegram">black telegram</string>
     <string name="teleplus_telegram">Teleplus</string>
     <string name="teledr_telegram">Telegramdr</string>
+    <string name="export">Save To gallery</string>
 </resources>

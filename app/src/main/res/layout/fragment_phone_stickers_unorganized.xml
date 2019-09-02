@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_below="@id/include_toolbar"
     android:background="@color/phone_sticker_background_color">
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/activity_phone_stickers_unorganized_swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/include_toolbar">
+        android:layout_height="match_parent">
 
         <com.amir.stickergram.phoneStickers.CustomRecyclerView
             android:id="@+id/activity_phone_stickers_unorganized_list"
@@ -37,7 +37,6 @@
         android:id="@+id/activity_phone_stickers_no_cached_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/include_toolbar"
         android:gravity="center"
         android:text="@string/telegram_has_not_cashed_any_stickers"
         android:textColor="#fff"

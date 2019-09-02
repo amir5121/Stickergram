@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/include_toolbar"
@@ -25,7 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/ic_square" />
+                android:src="@drawable/ic_square"
+                tools:ignore="ContentDescription" />
 
 
             <ImageButton
@@ -34,7 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/ic_circle_stroke" />
+                android:src="@drawable/ic_circle_stroke"
+                tools:ignore="ContentDescription" />
 
             <Button
                 android:id="@+id/button1_1"
@@ -87,7 +90,8 @@
             android:background="#882196f3"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="16dp"
-            android:src="@drawable/ic_rotate_left" />
+            android:src="@drawable/ic_rotate_left"
+            tools:ignore="ContentDescription,UnusedAttribute" />
 
         <ImageButton
             android:id="@+id/buttonRotateRight"
@@ -99,7 +103,8 @@
             android:background="#882196f3"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="16dp"
-            android:src="@drawable/ic_rotate_right" />
+            android:src="@drawable/ic_rotate_right"
+            tools:ignore="ContentDescription,UnusedAttribute" />
 
     </LinearLayout>
 
@@ -133,7 +138,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#771565c0"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <ProgressBar
             android:id="@+id/activity_crop_progress_bar"

@@ -60,6 +60,9 @@ public class PackItem {
     public String getFolder() {
         return folder;
     }
+    public String getName() {
+        return name;
+    }
 
     public String getDir() {
 //        return BaseActivity.USER_STICKERS_DIRECTORY + folder + File.separator + name + PNG;
