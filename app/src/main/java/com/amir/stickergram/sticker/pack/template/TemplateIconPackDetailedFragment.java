@@ -109,7 +109,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
         }
         if (recyclerView != null) {
             adapter = new PackAdapter(this, enName);
-            if (BaseActivity.isTablet || BaseActivity.isInLandscape)
+            if (BaseActivity.Companion.isTablet() || BaseActivity.Companion.isInLandscape())
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
             else recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
             recyclerView.setAdapter(adapter);
@@ -139,7 +139,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
         } else {
             url = Constants.STICKERGRAM_URL + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.WEBP;
         }
-        final String dir = BaseActivity.CACHE_DIR + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.PNG;
+        final String dir = BaseActivity.Companion.getCACHE_DIR() + Constants.STICKERS + item.getEnName() + "/" + item.getPosition() + Constants.PNG;
 
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override

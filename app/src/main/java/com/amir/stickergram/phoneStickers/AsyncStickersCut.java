@@ -92,15 +92,15 @@ public class AsyncStickersCut extends AsyncTask<Void, Void, Void> {
     }
 
     private int numberOfExistingStickersInDestiny(String destinyFolder) {
-        return new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + File.separator + destinyFolder + "/").listFiles().length;
+        return new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + File.separator + destinyFolder + "/").listFiles().length;
     }
 
     private String getDestinyThumb(String destinyFolder, int i) {
-        return BaseActivity.BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY + File.separator + destinyFolder + "_" + i + Constants.PNG;
+        return BaseActivity.Companion.getBASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY() + File.separator + destinyFolder + "_" + i + Constants.PNG;
     }
 
     private String getDestinySticker(String destinyFolder, int i) {
-        return BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + destinyFolder + "/" + i + Constants.PNG;
+        return BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + destinyFolder + "/" + i + Constants.PNG;
     }
 
     @Override

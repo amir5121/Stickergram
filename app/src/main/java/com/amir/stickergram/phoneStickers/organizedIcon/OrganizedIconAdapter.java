@@ -40,7 +40,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
     }
 
     public List<String> getItems() throws IOException {
-        File file = new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY);
+        File file = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY());
         if (!file.exists())
             if (Loader.checkPermission(activity))
                 file.mkdirs();
@@ -98,7 +98,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
             if (name != null) { //picking the name of the folder as the name of the stickers
                 int i = name.lastIndexOf("/") + 1;
                 name = name.substring(i, name.length());
-                holder.populate(new IconItem(name, null, BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY));
+                holder.populate(new IconItem(name, null, BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY()));
             }
         }
     }
@@ -133,7 +133,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
         if (delete) {
             int i = items.indexOf(folder);
             items.remove(i);
-            Loader.removeDirectory(new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + folder + File.separator));
+            Loader.removeDirectory(new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + folder + File.separator));
             removeThumbs(folder);
             notifyItemRemoved(i);
         } else {
@@ -144,7 +144,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
     }
 
     private void removeThumbs(String folder) {
-        File organizedThumbs = new File(BaseActivity.BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY);
+        File organizedThumbs = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY());
         if (organizedThumbs.exists()) {
             File[] files = organizedThumbs.listFiles();
             for (File file : files) {

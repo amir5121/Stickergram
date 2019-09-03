@@ -21,7 +21,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder(View itemView) {
         super(itemView);
-        iconImageView = (ImageView) itemView.findViewById(R.id.item_pack_sticker_image);
+        iconImageView = itemView.findViewById(R.id.item_pack_sticker_image);
         progressView = itemView.findViewById(R.id.item_pack_sticker_progress_container);
         errorImage = itemView.findViewById(R.id.item_pack_sticker_error);
     }
@@ -31,7 +31,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         progressView.setVisibility(View.VISIBLE);
         ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
         String url = Constants.STICKERGRAM_URL + Constants.CACHE + item.getEnName() + "/" + item.getPosition() + Constants.PNG;
-        final String dir = BaseActivity.CACHE_DIR + item.getEnName() + "/" + item.getPosition() + Constants.PNG;
+        final String dir = BaseActivity.Companion.getCACHE_DIR() + item.getEnName() + "/" + item.getPosition() + Constants.PNG;
         iconImageView.setVisibility(View.INVISIBLE);
         iconImageView.setImageBitmap(null);
         errorImage.setVisibility(View.GONE);

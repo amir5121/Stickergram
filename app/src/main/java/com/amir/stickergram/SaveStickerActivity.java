@@ -39,13 +39,13 @@ public class SaveStickerActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_sticker);
 
-        if (isTablet) {
+        if (Companion.isTablet()) {
             UserIconListFragment fragment =
                     (UserIconListFragment) getSupportFragmentManager().findFragmentById(R.id.activity_save_sticker_user_stickers_fragment);
             if (fragment != null)
                 fragment.updateAdapterForSavingActivity();
         }
-        Button createNewPackButton = (Button) findViewById(R.id.activity_save_sticker_create_new_pack);
+        Button createNewPackButton = findViewById(R.id.activity_save_sticker_create_new_pack);
         if (createNewPackButton != null) {
             createNewPackButton.setOnClickListener(this);
         }
@@ -70,7 +70,7 @@ public class SaveStickerActivity extends BaseActivity
     public void onClick(View view) {
         int itemId = view.getId();
         if (itemId == R.id.activity_save_sticker_create_new_pack) {
-            File stickerDirectories = new File(USER_STICKERS_DIRECTORY);
+            File stickerDirectories = new File(Companion.getUSER_STICKERS_DIRECTORY());
             List stickers = null;
             if (stickerDirectories.exists())
                 stickers = Arrays.asList(stickerDirectories.list());
@@ -136,7 +136,7 @@ public class SaveStickerActivity extends BaseActivity
                                     text = text.substring(0, textLength - 1);
                                     textLength = text.length();
                                 }
-                                File folder = new File(BaseActivity.USER_STICKERS_DIRECTORY + text + File.separator);
+                                File folder = new File(BaseActivity.Companion.getUSER_STICKERS_DIRECTORY() + text + File.separator);
                                 if (folder.mkdirs())
                                     goToStickerPack(text);
                                 newTextDialog.dismiss();
@@ -157,7 +157,7 @@ public class SaveStickerActivity extends BaseActivity
 
     private void goToStickerPack(String stickerFolder) {
 
-        String dir = BaseActivity.USER_STICKERS_DIRECTORY + stickerFolder + File.separator;
+        String dir = BaseActivity.Companion.getUSER_STICKERS_DIRECTORY() + stickerFolder + File.separator;
         File folder = new File(dir);
         File[] files;
 //        Log.e(getClass().getSimpleName(), "Directory: " + dir);
@@ -165,14 +165,14 @@ public class SaveStickerActivity extends BaseActivity
             files = folder.listFiles();
         else throw new RuntimeException("Invalid Folder");
         try {
-            File cashedSticker = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
+            File cashedSticker = new File(BaseActivity.Companion.getTEMP_STICKER_CASH_DIR());
             if (cashedSticker.exists() && cashedSticker.isFile()) {
                 Loader.copyFile(cashedSticker,
                         new File(dir + files.length + ".png"));
 
-                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.TEMP_STICKER_CASH_DIR);
+                Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.Companion.getTEMP_STICKER_CASH_DIR());
                 File thumbFile =
-                        new File((BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + stickerFolder + "_" + files.length + ".png"));
+                        new File((BaseActivity.Companion.getBASE_USER_THUMBNAIL_DIRECTORY() + File.separator + stickerFolder + "_" + files.length + ".png"));
                 if (!thumbFile.getParentFile().exists())
                     if (!thumbFile.getParentFile().mkdirs())
                         Log.e(getClass().getSimpleName(), "failed");

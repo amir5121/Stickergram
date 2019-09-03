@@ -225,7 +225,7 @@ public class CropFragment extends BaseFragment {
                 resBitmap = cropped;
             }
 
-            File file = new File(BaseActivity.TEMP_CROP_CASH_DIR);
+            File file = new File(BaseActivity.Companion.getTEMP_CROP_CASH_DIR());
             if (file.exists()) {
                 file.delete();
             }

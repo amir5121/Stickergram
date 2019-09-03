@@ -47,14 +47,14 @@ public class TemplateIconListFragment extends BaseFragment
 
         View view = inflater.inflate(R.layout.fragment_template_sticker_icon, container, false);
         setFont((ViewGroup) view);
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_icon_list_swipeRefresh);
+        refreshLayout = view.findViewById(R.id.fragment_icon_list_swipeRefresh);
         refreshLayout.setOnRefreshListener(this);
         noItemFoundText = view.findViewById(R.id.fragment_icon_list_no_item_found_text);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_template_list_list);
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_template_list_list);
         if (recyclerView != null) {
             adapter = new IconAdapter((BaseActivity) getActivity(), this);
 
-            if (BaseActivity.isInLandscape || BaseActivity.isTablet)
+            if (BaseActivity.Companion.isInLandscape() || BaseActivity.Companion.isTablet())
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             else recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
             recyclerView.setAdapter(adapter);
@@ -78,7 +78,7 @@ public class TemplateIconListFragment extends BaseFragment
     @Override
     public void OnNoStickerWereFoundListener() {
         noItemFoundText.setVisibility(View.VISIBLE);
-        if (BaseActivity.isInLandscape || BaseActivity.isTablet)
+        if (BaseActivity.Companion.isInLandscape() || BaseActivity.Companion.isTablet())
             noItemFoundText.setRotation(90);
     }
 

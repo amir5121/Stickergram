@@ -45,7 +45,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         iconImageView.setVisibility(View.INVISIBLE);
         iconImageView.setImageBitmap(null);
         final String url = Constants.STICKERGRAM_URL + Constants.CACHE + item.getEnName() + "/" + 5 + Constants.PNG;
-        final String dir = BaseActivity.CACHE_DIR + item.getEnName() + "/" + 5 + Constants.PNG;
+        final String dir = BaseActivity.Companion.getCACHE_DIR() + item.getEnName() + "/" + 5 + Constants.PNG;
         Bitmap bitmap = Loader.getCachedImage(dir);
 
         //todo: http://stackoverflow.com/questions/23978828/how-do-i-use-disk-caching-in-picasso

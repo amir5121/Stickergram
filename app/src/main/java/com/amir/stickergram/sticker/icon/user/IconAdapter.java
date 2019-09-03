@@ -37,7 +37,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
     }
 
     public List<String> getItems() throws IOException {
-        File file = new File(BaseActivity.USER_STICKERS_DIRECTORY);
+        File file = new File(BaseActivity.Companion.getUSER_STICKERS_DIRECTORY());
         if (!file.exists())
             if (Loader.checkPermission(activity))
                 file.mkdirs();
@@ -82,7 +82,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
         if (name != null) { //picking the name of the folder as the name of the stickers
             int i = name.lastIndexOf("/") + 1;
             name = name.substring(i, name.length());
-            holder.populate(new IconItem(name, null, BaseActivity.USER_STICKERS_DIRECTORY));
+            holder.populate(new IconItem(name, null, BaseActivity.Companion.getUSER_STICKERS_DIRECTORY()));
 //            }
         }
     }

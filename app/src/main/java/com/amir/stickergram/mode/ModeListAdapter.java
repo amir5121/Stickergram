@@ -47,7 +47,7 @@ public class ModeListAdapter extends BaseAdapter implements View.OnClickListener
         Mode mode = modesList.get(i);
         ((TextView) view.findViewById(R.id.mode_item_text)).setText(mode.getName());
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.mode_item_radio_button);
-        String chosenModePack = BaseActivity.chosenMode.getPack();
+        String chosenModePack = BaseActivity.Companion.getChosenMode().getPack();
 
 //        if () {
         if (chosenModePack != null && mode.getPack() != null && chosenModePack.equals(mode.getPack())) {

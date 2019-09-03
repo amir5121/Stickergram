@@ -540,12 +540,12 @@ public class EditImageActivity
                     if (Loader.deviceLanguageIsPersian()) {
 //                        Log.e(TAG, "x: " + pos[0] + " y: " + pos[1] + " marginStart: " + ((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 + v.getWidth() / 2));
                         params.setMargins((int) (ArcScrollView.screenWidth - pos[0]),
-                                (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.density), 0, 0);
+                                (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.Companion.getDensity()), 0, 0);
                         params.setMarginStart((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 - v.getWidth() / 2);
 
                     } else {
                         params.setMargins(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2,
-                                (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.density), 0, 0);
+                                (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.Companion.getDensity()), 0, 0);
                         params.setMarginStart(pos[0] - infoTextView.getWidth() / 2 + v.getWidth() / 2);
                     }
                     infoTextView.setLayoutParams(params);
@@ -611,7 +611,7 @@ public class EditImageActivity
 //        Log.e(getClass().getSimpleName(), "toolbar height: " + getSupportActionBar().getHeight());
         if (mainContainerHeight == 0) {
             mainContainerHeight = mainContainer.getHeight();
-            toolbarHeight = toolbar.getHeight();
+            toolbarHeight = getToolbar().getHeight();
             if (selectedLayer == null)
                 stickerContainer.animate()
                         .translationY((mainContainerHeight - toolbarHeight) / 2 - stickerContainer.getHeight() / 2)
@@ -926,13 +926,13 @@ public class EditImageActivity
             @Override
             public Point getPoint() {
                 // Get approximate position of home icon's center
-                int actionBarSize = toolbar.getHeight();
+                int actionBarSize = getToolbar().getHeight();
                 int y = actionBarSize / 2;
                 int x;
                 if (Loader.deviceLanguageIsPersian()) {
                     x = actionBarSize;
                 } else {
-                    x = toolbar.getWidth() - actionBarSize;
+                    x = getToolbar().getWidth() - actionBarSize;
                 }
                 return new Point(x, y);
             }

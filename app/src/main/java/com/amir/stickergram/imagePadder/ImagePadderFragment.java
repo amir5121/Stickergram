@@ -113,7 +113,7 @@ public class ImagePadderFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void saveImage() {
-        File file = new File(BaseActivity.TEMP_CROP_CASH_DIR);
+        File file = new File(BaseActivity.Companion.getTEMP_CROP_CASH_DIR());
         Loader.createFolderStructure(file);
         try {
             if (lastRes == null)

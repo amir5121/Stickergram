@@ -187,7 +187,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         RadioButton englishLanguageRadioButton = (RadioButton) includeLanguages.findViewById(R.id.activity_setting_english_radio_button);
 
 
-        switch (language) {
+        switch (getUserLanguage()) {
             case Constants.PERSIAN_LANGUAGE:
                 persianLanguageRadioButton.setChecked(true);
                 break;

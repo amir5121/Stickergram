@@ -291,7 +291,7 @@ public class Loader {
 
     public static void saveBitmapToCache(Bitmap mainBitmap) {
         OutputStream outputStream;
-        File file = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
+        File file = new File(BaseActivity.Companion.getTEMP_STICKER_CASH_DIR());
         try {
             if (file.exists()) {
                 file.delete();
@@ -330,7 +330,7 @@ public class Loader {
             Toast.makeText(activity, activity.getString(R.string.choose_a_font), Toast.LENGTH_LONG).show();
             return null;
         }
-        File file = new File(BaseActivity.FONT_DIRECTORY + getFileName(uri, activity));// you can also use app's internal cache to store the file
+        File file = new File(BaseActivity.Companion.getFONT_DIRECTORY() + getFileName(uri, activity));// you can also use app's internal cache to store the file
         if (!file.getParentFile().exists()) {
             if (!file.getParentFile().mkdirs())
                 return null;
@@ -411,9 +411,9 @@ public class Loader {
             seekBar.setElevation(5);
         }
 
-        float scale = BaseActivity.density;
+        float scale = BaseActivity.Companion.getDensity();
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (50 * scale));
-        if (!BaseActivity.isInLandscape) {
+        if (!BaseActivity.Companion.isInLandscape()) {
             params.addRule(RelativeLayout.ABOVE, R.id.include_buttons_scroll_view);
 //            params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (55 * scale));
             params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (5 * scale));
@@ -597,7 +597,7 @@ public class Loader {
 
     @NonNull
     public static File generateEmptyBitmapFile(BaseActivity activity, boolean flag) {
-        File tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
+        File tempFile = new File(BaseActivity.Companion.getTEMP_STICKER_CASH_DIR());
 //        else tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR_2);
 //        else tempFile = new File(BaseActivity.TEMP_STICKER_CASH_DIR);
         try {
@@ -720,11 +720,11 @@ public class Loader {
 
     @NonNull
     public static String getActiveStickerDir() {
-        return BaseActivity.chosenMode.getCacheDir();
+        return BaseActivity.Companion.getChosenMode().getCacheDir();
     }
 
     public static String getActivePack() {
-        return BaseActivity.chosenMode.getPack();
+        return BaseActivity.Companion.getChosenMode().getPack();
     }
 
     public static ArrayList<Mode> getAllAvailableModes(BaseActivity activity) {

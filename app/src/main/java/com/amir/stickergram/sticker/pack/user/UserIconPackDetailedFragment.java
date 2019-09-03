@@ -187,16 +187,17 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 } else if (which == Dialog.BUTTON_NEGATIVE) {
                     try {
                         InputStream in = new FileInputStream(item.getDir());
-                        File dir = new File(BaseActivity.PICTURES_DIRECTORY);
+                        File dir = new File(BaseActivity.Companion.getPICTURES_DIRECTORY());
                         if (!dir.exists()) {
                             dir.mkdirs();
                         }
-                        String imagePath = BaseActivity.PICTURES_DIRECTORY + item.getFolder() + item.getName() + Constants.PNG;
+                        String imagePath = BaseActivity.Companion.getPICTURES_DIRECTORY() + item.getFolder() + item.getName() + Constants.PNG;
                         FileOutputStream fo = new FileOutputStream(imagePath);
                         Loader.copyFile(in, fo);
                         in.close();
                         fo.close();
                         MediaScannerConnection.scanFile(getContext(), new String[] { imagePath }, new String[] { "image/jpeg" }, null);
+                        Toast.makeText(activity, activity.getString(R.string.export), Toast.LENGTH_LONG).show();
 
 
                     } catch (FileNotFoundException e) {
@@ -277,16 +278,16 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_send_sticker, null, false);
         setFont((ViewGroup) view);
-        ImageView stickerImage = (ImageView) view.findViewById(R.id.dialog_send_sticker_image_view);
+        ImageView stickerImage = view.findViewById(R.id.dialog_send_sticker_image_view);
 
-        if (BaseActivity.isInLandscape) {
+        if (BaseActivity.Companion.isInLandscape()) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.RIGHT_OF, R.id.dialog_send_sticker_note_container);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 params.addRule(RelativeLayout.END_OF, R.id.dialog_send_sticker_note_container);
             }
             stickerImage.setLayoutParams(params);
-            RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams((int) (200 * BaseActivity.density), ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams((int) (200 * BaseActivity.Companion.getDensity()), ViewGroup.LayoutParams.WRAP_CONTENT);
             View noteText = view.findViewById(R.id.dialog_send_sticker_note_container);
             if (noteText != null) noteText.setLayoutParams(params2);
         }
@@ -397,10 +398,10 @@ public class UserIconPackDetailedFragment extends BaseFragment
                     (BaseActivity) getActivity(),
                     this,
                     folder,
-                    BaseActivity.USER_STICKERS_DIRECTORY,
-                    BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY);
+                    BaseActivity.Companion.getUSER_STICKERS_DIRECTORY(),
+                    BaseActivity.Companion.getBASE_USER_THUMBNAIL_DIRECTORY());
 
-            if (BaseActivity.isTablet || BaseActivity.isInLandscape)
+            if (BaseActivity.Companion.isTablet() || BaseActivity.Companion.isInLandscape())
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
             else
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));

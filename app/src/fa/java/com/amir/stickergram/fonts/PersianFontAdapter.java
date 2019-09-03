@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class PersianFontAdapter extends FontAdapter {
-    public PersianFontAdapter(BaseActivity activity, OnFontClickListener listener, View loadingFrame) {
+    PersianFontAdapter(BaseActivity activity, OnFontClickListener listener, View loadingFrame) {
         super(activity, listener, loadingFrame);
     }
 
@@ -39,7 +39,7 @@ public class PersianFontAdapter extends FontAdapter {
         }
     }
 
-    List<FontItem> readPersianFont() throws IOException {
+    private List<FontItem> readPersianFont() throws IOException {
 
         String folder = Constants.PERSIAN_FONT_DIRECTORY;
         AssetManager assetManager = activity.getAssets();
@@ -50,7 +50,7 @@ public class PersianFontAdapter extends FontAdapter {
         List<String> fontNames = null;
         try {
             InputStream in = assetManager.open(Constants.FONT_DIRECTORY_IN_ASSET + Constants.PERSIAN_FONT_NAME);
-            String persian_font_names = BaseActivity.CACHE_DIR + Constants.PERSIAN_FONT_NAME;
+            String persian_font_names = BaseActivity.Companion.getCACHE_DIR() + Constants.PERSIAN_FONT_NAME;
             FileOutputStream fo = new FileOutputStream(persian_font_names);
             Loader.copyFile(in, fo);
             in.close();
@@ -77,7 +77,7 @@ public class PersianFontAdapter extends FontAdapter {
         }
 
         if (fontNames != null) {
-            if (fonts.length != fontNames.size()) {
+            if (fonts != null && fonts.length != fontNames.size()) {
                 Log.e(getClass().getSimpleName(), "not enough name for persian fonts");
                 Log.e(getClass().getSimpleName(), fonts.length + " " + fontNames.size());
                 return null;

@@ -112,7 +112,7 @@ public class Constants {
     public static final String APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET = "Ubuntu.ttf";
     public static final String IMAGE_ROTATION = "IMAGE_ROTATION";
     public static final String PNG_NO_DOT = "png";
-    public static final String MOVED_STICKERS_INFO = Environment.getExternalStorageDirectory() + BaseActivity.STICKERGRAM + "/moveInfo.txt";
+    public static final String MOVED_STICKERS_INFO = Environment.getExternalStorageDirectory() + BaseActivity.Companion.getSTICKERGRAM() + "/moveInfo.txt";
 
     public static final String IS_AN_IMAGE_PICKER = "IS_AN_IMAGE_PICKER";
     public static final String LAUNCHED_TO_ADD_IMAGE = "LAUNCHED_TO_ADD_IMAGE";

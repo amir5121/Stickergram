@@ -21,7 +21,7 @@ public class PointerViewBottom extends AppCompatImageView {
 
     private void setLayoutParams() {
         RelativeLayout.LayoutParams params =
-                new RelativeLayout.LayoutParams((int) (20 * BaseActivity.density), (int) (20 * BaseActivity.density));
+                new RelativeLayout.LayoutParams((int) (20 * BaseActivity.Companion.getDensity()), (int) (20 * BaseActivity.Companion.getDensity()));
         setLayoutParams(params);
     }
 

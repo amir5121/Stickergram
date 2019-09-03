@@ -27,7 +27,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
         attach(activity, listener);
     }
 
-    public void attach(BaseActivity activity, AsyncPhoneTaskListener listener) {
+    private void attach(BaseActivity activity, AsyncPhoneTaskListener listener) {
 
 //        try {
         this.listener = listener;
@@ -37,7 +37,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
 //        }
 
 //        if (activity.getExternalCacheDir() != null)
-        baseThumbDir = activity.getExternalCacheDir() + File.separator + "phone_" + BaseActivity.chosenMode.getPack();
+        baseThumbDir = activity.getExternalCacheDir() + File.separator + "phone_" + BaseActivity.Companion.getChosenMode().getPack();
 //        else
 //            baseThumbDir = activity.getCacheDir().getAbsolutePath() + File.separator + "phone_" + BaseActivity.chosenMode.getPack();
         this.context = activity;
@@ -59,7 +59,7 @@ public class AsyncTaskPhoneAdapter extends AsyncTask<SingleStickersAdapter, Inte
         }
         int temp = 0;
         int percent;
-        File files[] = folder.listFiles();
+        File[] files = folder.listFiles();
         int length = files.length;
         DataSource dataSource = params[0].getDataSource();
         Set<String> updateSet = new HashSet<>();

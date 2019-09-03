@@ -65,7 +65,7 @@ class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
         else name = items.get(position).getEnName();
 
         if (name != null) {
-            holder.populate(new IconItem(name, items.get(position).getEnName(), BaseActivity.USER_STICKERS_DIRECTORY));
+            holder.populate(new IconItem(name, items.get(position).getEnName(), BaseActivity.Companion.getUSER_STICKERS_DIRECTORY()));
         }
     }
 

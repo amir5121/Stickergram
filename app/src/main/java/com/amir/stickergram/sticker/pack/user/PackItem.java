@@ -108,7 +108,7 @@ public class PackItem {
     }
 
     public void removeThumb() {
-        File file = new File(BaseActivity.BASE_USER_THUMBNAIL_DIRECTORY + File.separator + folder + "_" + name + PNG);
+        File file = new File(BaseActivity.Companion.getBASE_USER_THUMBNAIL_DIRECTORY() + File.separator + folder + "_" + name + PNG);
         if (file.exists())
             file.delete();
     }

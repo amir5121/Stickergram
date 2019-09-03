@@ -41,12 +41,12 @@ public class UserIconListFragment extends BaseFragment implements IconAdapter.On
 
         View view = inflater.inflate(R.layout.fragment_user_sticker_icon, container, false);
         setFont((ViewGroup) view);
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_template_list_list);
+        recyclerView = view.findViewById(R.id.fragment_template_list_list);
         if (recyclerView != null) {
             IconAdapter adapter = new IconAdapter((BaseActivity) getActivity(), this);
 
-            if (BaseActivity.isInLandscape
-                    || BaseActivity.isTablet)
+            if (BaseActivity.Companion.isInLandscape()
+                    || BaseActivity.Companion.isTablet())
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             else recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
             recyclerView.setAdapter(adapter);
@@ -74,7 +74,7 @@ public class UserIconListFragment extends BaseFragment implements IconAdapter.On
     }
 
     public void updateAdapterForSavingActivity() {
-        if (BaseActivity.isTablet)
+        if (BaseActivity.Companion.isTablet())
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6));
     }
 

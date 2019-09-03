@@ -65,7 +65,7 @@ public class CropActivity extends BaseActivity implements CropFragment.CropFragm
 
             getSupportFragmentManager().
                     beginTransaction().
-                    replace(R.id.crop_fragment_container, BackgroundRemoverFragment.getInstance(bundle)).
+                    replace(R.id.crop_fragment_container, BackgroundRemoverFragment.Companion.getInstance(bundle)).
                     commit();
         }
     }

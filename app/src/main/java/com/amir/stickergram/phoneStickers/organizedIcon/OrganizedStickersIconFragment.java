@@ -136,7 +136,7 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
     }
 
     public void newOrganizedFolder() {
-        File stickerDirectories = new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY);
+        File stickerDirectories = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY());
         List stickers = null;
         if (stickerDirectories.exists())
             stickers = Arrays.asList(stickerDirectories.list());
@@ -202,7 +202,7 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
                                 text = text.substring(0, textLength - 1);
                                 textLength = text.length();
                             }
-                            File folder = new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + text + File.separator);
+                            File folder = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + text + File.separator);
                             if (folder.mkdirs())
                                 adapter.refresh(text, false);
                             newTextDialog.dismiss();
