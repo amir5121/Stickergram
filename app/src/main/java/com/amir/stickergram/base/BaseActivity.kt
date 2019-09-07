@@ -8,18 +8,13 @@ import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
-
-import androidx.annotation.LayoutRes
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.widget.Toolbar
-
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.Toolbar
 import com.amir.stickergram.AppType
 import com.amir.stickergram.R
 import com.amir.stickergram.UserStickersActivity
@@ -27,9 +22,7 @@ import com.amir.stickergram.infrastructure.Constants
 import com.amir.stickergram.infrastructure.Loader
 import com.amir.stickergram.mode.Mode
 import com.amir.stickergram.navdrawer.NavDrawer
-
 import java.io.File
-import java.util.ArrayList
 
 abstract class BaseActivity : BaseAuthenticatedActivity() {
 
@@ -173,7 +166,6 @@ abstract class BaseActivity : BaseAuthenticatedActivity() {
     }
 
     fun setDefaultMode(mode: Mode) {
-
         chosenMode = mode
         val editor = preferences!!.edit()
         editor.putString(Constants.ACTIVE_PACK, mode.pack)
@@ -188,7 +180,6 @@ abstract class BaseActivity : BaseAuthenticatedActivity() {
             editor.apply()
 
             Loader.setLocale(language, this)
-            //            restartActivity();
         }
     }
 
