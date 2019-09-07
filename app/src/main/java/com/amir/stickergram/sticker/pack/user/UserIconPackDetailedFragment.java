@@ -180,6 +180,8 @@ public class UserIconPackDetailedFragment extends BaseFragment
                         intent.setPackage(Loader.getActivePack());
                         intent.setType("application/pdf");
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getWebpDir())));
+//                        Intent i=new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, AUTHORITY, f));
+//                        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         startActivity(intent);
                     } else {
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();

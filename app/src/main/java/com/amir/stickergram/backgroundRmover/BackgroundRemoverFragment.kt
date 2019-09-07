@@ -30,7 +30,7 @@ import java.io.IOException
 import app.minimize.com.seek_bar_compat.SeekBarCompat
 
 class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverView.RemoverViewCallbacks, SeekBar.OnSeekBarChangeListener {
-    private var removerView: RemoverView? = null
+    private lateinit var removerView: RemoverView
     private var pointerViewBottom: PointerViewBottom? = null
     private var modeButton: ImageButton? = null
     private var radiusSeekBar: SeekBarCompat? = null
@@ -43,16 +43,15 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
     private var loadingDialog: View? = null
     private var applyFloodFillMode = false
     private var floodFillerButton: ImageButton? = null
-    private var listener: BackgroundRemoverFragmentCallbacks? = null
+    private lateinit var listener: BackgroundRemoverFragmentCallbacks
     private var backgroundButton: ImageButton? = null
     private var chessBackground: View? = null
     private var removeTag: TextView? = null
-    private var hintContainer: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
         try {
-            listener = activity as BackgroundRemoverFragmentCallbacks?
+            listener = activity as BackgroundRemoverFragmentCallbacks
         } catch (e: ClassCastException) {
             throw RuntimeException("Parent activity must implement BackgroundRemoverFragmentCallbacks")
         }
@@ -90,13 +89,7 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
         toleranceContainer = view.findViewById(R.id.fragment_remove_background_tolerance_container)
 
         removeTag = view.findViewById<View>(R.id.fragment_remove_background_remove_tag) as TextView
-        hintContainer = view.findViewById(R.id.fragment_remove_background_hint_container)
 
-        view.findViewById<View>(R.id.fragment_remove_background_hint_close_button).setOnClickListener(this)
-
-
-        //            Bitmap mBitmap = Constants.getWorkingBitmap();
-        //            if (mBitmap == null)
         val info = arguments
         if (info != null) {
             try {
@@ -135,34 +128,28 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(BITMAP_EXTRA, removerView!!.finishedBitmap)
+        outState.putParcelable(BITMAP_EXTRA, removerView.finishedBitmap)
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu!!.clear()
-        inflater!!.inflate(R.menu.crop_activity_menu, menu)
+        inflater!!.inflate(R.menu.crop_activity_menu_with_undo, menu)
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.crop_activity_menu_save) {
-            //            File file = new File(BaseActivity.TEMP_CROP_CASH_DIR);
-            //            createFolderStructure(file);
-            //            try {
-            //                removerView.getFinishedBitmap().compress(Bitmap.CompressFormat.PNG, 85, new FileOutputStream(file));
-            listener!!.backgroundRemoverFinished(removerView!!.finishedBitmap!!)
-            //                Intent intent = new Intent(getContext(), EditImageActivity.class);
-            //                intent.putExtra(Constants.EDIT_IMAGE_URI, Uri.fromFile(file));
-            //                startActivity(intent);
-            //                getActivity().finish();
+        when (item.itemId) {
+            R.id.crop_activity_menu_save -> {
+                listener.backgroundRemoverFinished(removerView.finishedBitmap!!)
+                return true
+            }
+            R.id.crop_activity_menu_undo -> {
+                removerView.undo()
+                return true
+            }
 
-            //            } catch (FileNotFoundException e) {
-            //                e.printStackTrace();
-            //            }
-            return true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -170,16 +157,15 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
     override fun onClick(view: View) {
         val itemId = view.id
         if (itemId == R.id.fragment_remove_background_repair_toggle_mode) {
-            if (removerView!!.removeToggle()) {
+            if (removerView.removeToggle()) {
                 removeTag!!.text = getText(R.string.remove)
                 switchTo(REMOVE)
             } else {
                 removeTag!!.text = getText(R.string.repair)
                 switchTo(REPAIR)
-                hintContainer!!.visibility = View.GONE
             }
         } else if (itemId == R.id.fragment_remove_background_mode_zoom_toggle) {
-            if (removerView!!.changeZoomMode()) {
+            if (removerView.changeZoomMode()) {
                 //zoom mode enabled
                 switchTo(ZOOM_ON)
             } else {
@@ -187,10 +173,10 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
             }
         } else if (itemId == R.id.fragment_remove_background_radius_button) {
             manageSeekBarsVisibility(radiusContainer)
-            radiusSeekBar!!.progress = removerView!!.radius
+            radiusSeekBar!!.progress = removerView.radius
         } else if (itemId == R.id.fragment_remove_background_mode_offset) {
             manageSeekBarsVisibility(offsetContainer)
-            offsetSeekBar!!.progress = removerView!!.offset
+            offsetSeekBar!!.progress = removerView.offset
         } else if (itemId == R.id.fragment_remove_background_flood_filler) {
             if (!applyFloodFillMode) {
                 switchTo(SHOW_FLOOD_POINTER)
@@ -208,8 +194,6 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
                 backgroundButton!!.setBackgroundColor(Color.WHITE)
                 chessBackground!!.visibility = View.GONE
             }
-        } else if (itemId == R.id.fragment_remove_background_hint_close_button) {
-            hintContainer!!.visibility = View.GONE
         }
     }
 
@@ -217,13 +201,13 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
         manageSeekBarsVisibility(null)
         when (mode) {
             REMOVE -> {
-                removerView!!.setUsingFloodFillPointer(false)
+                removerView.setUsingFloodFillPointer(false)
                 modeButton!!.setImageResource(R.drawable.ic_remove_blue)
                 modeButton!!.setBackgroundColor(LIGHT_BLUE)
                 dismissFloodPointer()
             }
             REPAIR -> {
-                removerView!!.setUsingFloodFillPointer(false)
+                removerView.setUsingFloodFillPointer(false)
                 modeButton!!.setImageResource(R.drawable.ic_repair)
                 modeButton!!.setBackgroundColor(Color.WHITE)
                 dismissFloodPointer()
@@ -240,15 +224,15 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
             }
             SHOW_FLOOD_POINTER -> {
                 manageSeekBarsVisibility(toleranceContainer)
-                toleranceSeekBar!!.progress = removerView!!.tolerance
-                removerView!!.setUsingFloodFillPointer(true)
+                toleranceSeekBar!!.progress = removerView.tolerance
+                removerView.setUsingFloodFillPointer(true)
                 floodFillerButton!!.setBackgroundColor(Color.WHITE)
                 floodFillerButton!!.setImageResource(R.drawable.ic_done_blue)
                 setApplyFloodFillMode(true)
             }
             APPLY_FLOOD -> {
-                removerView!!.floodFill()
-                removerView!!.setUsingFloodFillPointer(false)
+                removerView.floodFill()
+                removerView.setUsingFloodFillPointer(false)
                 floodFillerButton!!.setBackgroundColor(LIGHT_BLUE)
                 floodFillerButton!!.setImageResource(R.drawable.ic_flood_fill)
             }
@@ -257,7 +241,7 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
     }
 
     private fun dismissFloodPointer() {
-        removerView!!.setUsingFloodFillPointer(false)
+        removerView.setUsingFloodFillPointer(false)
         floodFillerButton!!.setBackgroundColor(Color.parseColor("#1565c0"))
         floodFillerButton!!.setImageResource(R.drawable.ic_flood_fill)
         setApplyFloodFillMode(false)
@@ -306,11 +290,11 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
     override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
         //        int seekBarId = seekBar.getId();
         if (seekBar === radiusSeekBar) {
-            removerView!!.radius = seekBar.getProgress()
+            removerView.radius = seekBar.getProgress()
         } else if (seekBar === offsetSeekBar) {
-            removerView!!.offset = seekBar.getProgress()
+            removerView.offset = seekBar.getProgress()
         } else if (seekBar === toleranceSeekBar) {
-            removerView!!.tolerance = seekBar.getProgress()
+            removerView.tolerance = seekBar.getProgress()
         }
     }
 
@@ -322,7 +306,7 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
 
     }
 
-    fun setApplyFloodFillMode(applyFloodFillMode: Boolean) {
+    private fun setApplyFloodFillMode(applyFloodFillMode: Boolean) {
         this.applyFloodFillMode = applyFloodFillMode
     }
 
@@ -331,15 +315,15 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
     }
 
     companion object {
-        private val BITMAP_EXTRA = "BITMAP_EXTRA"
-        private val REMOVE = 0
-        private val REPAIR = 1
-        private val ZOOM_ON = 2
-        private val ZOOM_OFF = 3
-        private val SHOW_FLOOD_POINTER = 4
-        private val APPLY_FLOOD = 5
-        private val BITMAP_WIDTH = "BITMAP_WIDTH"
-        private val BITMAP_HEIGHT = "BITMAP_HEIGHT"
+        private const val BITMAP_EXTRA = "BITMAP_EXTRA"
+        private const val REMOVE = 0
+        private const val REPAIR = 1
+        private const val ZOOM_ON = 2
+        private const val ZOOM_OFF = 3
+        private const val SHOW_FLOOD_POINTER = 4
+        private const val APPLY_FLOOD = 5
+        private const val BITMAP_WIDTH = "BITMAP_WIDTH"
+        private const val BITMAP_HEIGHT = "BITMAP_HEIGHT"
         private val LIGHT_BLUE = Color.parseColor("#1565c0")
 
         fun getInstance(bundle: Bundle): Fragment {

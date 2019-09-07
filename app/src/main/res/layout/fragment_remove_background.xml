@@ -310,34 +310,4 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/fragment_remove_background_hint_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="#BB2196f3"
-        android:elevation="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:text="@string/undo_button"
-            android:textColor="#fff"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/fragment_remove_background_hint_close_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="10dp"
-            android:src="@drawable/ic_close" />
-
-    </LinearLayout>
-
 </RelativeLayout>

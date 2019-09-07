@@ -223,7 +223,7 @@
     <string name="move_right">Переместить вправо</string>
     <string name="shadow_x">Shadow X</string>
     <string name="shadow_y">Shadow Y</string>
-    <string name="background_remover">Очистка фона</string>
+    <string name="background_remover">Очистка</string>
     <string name="crop">Обрезать</string>
     <string name="image_stroke">Обводка изображения </string>
     <string name="somthing_went_wrong">Что-то пошло не так</string>
@@ -292,4 +292,5 @@
     <string name="teleplus_telegram">Teleplus</string>
     <string name="teledr_telegram">Telegramdr</string>
     <string name="export">Сохранить в галерею</string>
+    <string name="undo">расстегивать</string>
 </resources>

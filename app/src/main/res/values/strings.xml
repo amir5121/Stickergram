@@ -225,7 +225,7 @@
     <string name="move_right">Move right</string>
     <string name="shadow_x">Shadow X</string>
     <string name="shadow_y">Shadow Y</string>
-    <string name="background_remover">Background remover</string>
+    <string name="background_remover">Remover</string>
     <string name="crop">Crop</string>
     <string name="image_stroke">Image Stroke</string>
     <string name="somthing_went_wrong">Something went wrong</string>
@@ -293,4 +293,5 @@
     <string name="teleplus_telegram">Teleplus</string>
     <string name="teledr_telegram">Telegramdr</string>
     <string name="export">Save To gallery</string>
+    <string name="undo">Undo</string>
 </resources>

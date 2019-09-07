@@ -10,8 +10,8 @@ android {
         applicationId "com.amir.stickergram"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 45
-        versionName "4.1.0"
+        versionCode 49
+        versionName "4.2.0"
     }
 
     flavorDimensions "main"
@@ -53,7 +53,7 @@ dependencies {
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     implementation "androidx.core:core-ktx:1.0.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
+    implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
 }
 repositories {
     mavenCentral()

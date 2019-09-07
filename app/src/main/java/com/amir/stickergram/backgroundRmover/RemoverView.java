@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -18,15 +19,20 @@ import android.widget.FrameLayout;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.image.Position;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 @SuppressLint("ViewConstructor")
 class RemoverView extends AppCompatImageView implements View.OnTouchListener, AsyncCallFloodFill.AsyncFloodFillCallbacks {
+    private static final String TAG = "RemoverView";
     private static final int INITIAL_RADIUS = 20;
     private static final int INITIAL_OFFSET = 90;
     private static final int NONE = 0;
     private static final int DRAG = 1;
     private static final int ZOOM = 2;
-    //    private static final int REMOVE = 3;
     protected int mode = NONE;
+    private Bitmap undoWait;
 
     // remember some things for zooming
     private Position mid = new Position(0, 0);
@@ -54,22 +60,17 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
     private int top;
     private boolean usingFloodFillPointer = false;
     private Paint linePaint;
-//    private Bitmap tempBitmap;
     private int tolerance = 15;
+    private LinkedList<Bitmap> history;
 
-//    RemoverView(BaseActivity activity, RemoverViewCallbacks listener, Bitmap mBitmap, int[] pixels, int width, int height) {
     RemoverView(BaseActivity activity, RemoverViewCallbacks listener, Bitmap mBitmap) {
         super(activity);
         this.activity = activity;
         this.listener = listener;
+        history = new LinkedList<>();
 
         setLayoutParams();
 
-//        if (mBitmap == null && pixels != null) {
-//            mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//            mBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
-//            mBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-//        }
         if (mBitmap != null) {
             background = mBitmap;
             background.setHasAlpha(true);
@@ -92,7 +93,7 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
 
             allPixels = new int[backgroundWidth * backgroundHeight];
             background.getPixels(allPixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
-
+            saveAction();
             matrix = new Matrix();
             savedMatrix = new Matrix();
         } else Log.e(getClass().getSimpleName(), "background was null");
@@ -150,6 +151,8 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
+                if (!zoomMode && !usingFloodFillPointer)
+                    saveAction();
                 mode = NONE;
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -160,9 +163,7 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!usingFloodFillPointer)
-                                drawTransparentCircle((int) coor[0], (int) coor[1], true);
-                            else drawTransparentCircle((int) coor[0], (int) coor[1], false);
+                            drawTransparentCircle((int) coor[0], (int) coor[1], !usingFloodFillPointer);
                         }
                     }).start();
                 } else if (mode == DRAG) {
@@ -186,6 +187,7 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
 
         return true;
     }
+
 
     private void drawTransparentCircle(int left, int top, boolean changeBitmap) {
         if (background == null) return;
@@ -262,6 +264,51 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
             });
         }
     }
+
+    @Override
+    public void floodFillFinished(int[] pixels) {
+        background.setPixels(pixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
+        allPixels = pixels;
+        setImageBitmap(background);
+        listener.floodFillerFinished();
+        saveAction();
+    }
+
+    @Override
+    public void onProgressStarted() {
+        listener.floodFillerStarted();
+    }
+
+    void floodFill() {
+        int top = (int) (this.top - offset / scale);
+        new AsyncCallFloodFill(this, allPixels, left, top, tolerance, backgroundWidth, backgroundHeight).execute();
+    }
+
+
+    private void saveAction() {
+        Bitmap copy = background.copy(Bitmap.Config.ARGB_8888, true);
+        if (undoWait != null)
+            history.addLast(undoWait);
+        undoWait = null;
+        history.addLast(copy);
+        Log.wtf(TAG, "saveAction: " + history.size());
+    }
+
+    public void undo() {
+        if (history.size() == 1) {
+            background = history.getLast().copy(Bitmap.Config.ARGB_8888, true);
+            undoWait = null;
+        } else {
+            if (undoWait == null && history.size() > 1)
+                history.removeLast();
+            undoWait = history.getLast().copy(Bitmap.Config.ARGB_8888, true);
+            background = history.removeLast();
+        }
+        setImageBitmap(background);
+        background.getPixels(allPixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
+        Log.wtf(TAG, "undo: " + history.size());
+    }
+
 
     private int getLine(int i) {
         return i / backgroundWidth;
@@ -344,46 +391,6 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
     void setOffset(int offset) {
         this.offset = offset;
         drawTransparentCircle(left, top, false);
-    }
-
-    @Override
-    public void floodFillFinished(int[] pixels) {
-//        tempBitmap = emptyBitmap;
-//        setImageBitmap(tempBitmap);
-//        background = emptyBitmap;
-        background.setPixels(pixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
-        allPixels = pixels;
-        setImageBitmap(background);
-//        background.getPixels(allPixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
-
-        listener.floodFillerFinished();
-    }
-
-//    public void applyFloodFill(boolean flag) {
-//        setUsingFloodFillPointer(false);
-//        if (tempBitmap == null) {
-//            flag = false;
-//            Toast.makeText(getContext(), getContext().getString(R.string.could_not_retrive_image), Toast.LENGTH_SHORT).show();
-//        }
-//        if (flag) {
-//            background = tempBitmap;
-//            tempBitmap = null;
-//            background.getPixels(allPixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
-//            setImageBitmap(background);
-//        } else {
-//            setImageBitmap(background);
-//        }
-//    }
-
-    @Override
-    public void onProgressStarted() {
-        listener.floodFillerStarted();
-    }
-
-    void floodFill() {
-        int top = (int) (this.top - offset / scale);
-
-        new AsyncCallFloodFill(this, allPixels, left, top, tolerance, backgroundWidth, backgroundHeight).execute();
     }
 
     void setUsingFloodFillPointer(boolean usingFloodFillPointer) {

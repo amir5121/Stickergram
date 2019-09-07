@@ -1,6 +1,7 @@
 package com.amir.stickergram.serverHelper;
 
 import android.app.Application;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ public class VolleySingleton extends Application {
         if (Loader.freeMemory() < 5) {
             Toast.makeText(this, getString(R.string.low_storage), Toast.LENGTH_LONG).show();
         }
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
 
     public static synchronized VolleySingleton getInstance() {

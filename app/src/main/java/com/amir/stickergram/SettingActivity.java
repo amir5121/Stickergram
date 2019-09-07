@@ -182,9 +182,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 //    }
 
     private void manageRadioButton() {
-        RadioButton persianLanguageRadioButton = (RadioButton) includeLanguages.findViewById(R.id.activity_setting_persian_radio_button);
+        RadioButton persianLanguageRadioButton = includeLanguages.findViewById(R.id.activity_setting_persian_radio_button);
 //        RadioButton systemLanguageRadioButton = (RadioButton) findViewById(R.id.activity_setting_system_radio_button);
-        RadioButton englishLanguageRadioButton = (RadioButton) includeLanguages.findViewById(R.id.activity_setting_english_radio_button);
+        RadioButton englishLanguageRadioButton = includeLanguages.findViewById(R.id.activity_setting_english_radio_button);
 
 
         switch (getUserLanguage()) {

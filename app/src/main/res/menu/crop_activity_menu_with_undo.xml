@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/crop_activity_menu_undo"
+        android:icon="@drawable/ic_undo"
+        android:title="@string/undo"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/crop_activity_menu_save"
         android:icon="@drawable/ic_save"
         android:title="@string/save"

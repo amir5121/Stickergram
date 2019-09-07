@@ -224,7 +224,7 @@
     <string name="shadow_x">X سایه</string>
     <string name="shadow_y">Y سایه</string>
     <string name="apply">اعمال کردن</string>
-    <string name="background_remover">حذف پس زمینه</string>
+    <string name="background_remover">حذف</string>
     <string name="crop">برش</string>
     <string name="discard">انصراف</string>
     <string name="image_stroke">هاله عکس</string>
@@ -287,4 +287,5 @@
     <string name="teledr_telegram">تلگرام‌دی‌آر</string>
     <string name="teleplus_telegram">تله‌پلاس</string>
     <string name="export">ذخیره در گالری</string>
+    <string name="undo">خنثی کردن</string>
 </resources>
