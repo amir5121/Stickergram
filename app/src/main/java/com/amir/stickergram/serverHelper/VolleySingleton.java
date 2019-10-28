@@ -26,7 +26,7 @@ public class VolleySingleton extends Application {
         super.onCreate();
         mInstance = this;
 
-        if (Loader.freeMemory() < 5) {
+        if (Loader.INSTANCE.freeMemory() < 5) {
             Toast.makeText(this, getString(R.string.low_storage), Toast.LENGTH_LONG).show();
         }
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();

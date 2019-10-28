@@ -181,7 +181,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
         final Button positiveButton = editStickerDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
 
-        Bitmap bitmap = Loader.getCachedImage(dir);
+        Bitmap bitmap = Loader.INSTANCE.getCachedImage(dir);
         if (bitmap == null) {
             imageLoader.get(url, new ImageLoader.ImageListener() {
                 @Override
@@ -189,7 +189,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
                     Bitmap mBitmap = response.getBitmap();
                     if (mBitmap != null) {
                         stickerImage.setImageBitmap(mBitmap);
-                        Loader.cacheImage(mBitmap, dir);
+                        Loader.INSTANCE.cacheImage(mBitmap, dir);
                         positiveButton.setEnabled(true);
                         progressView.setVisibility(View.GONE);
                     }
@@ -224,7 +224,7 @@ public class TemplateIconPackDetailedFragment extends BaseFragment
             if (serverSticker != null)
                 if (serverSticker.getHasLink()) {
                     linkButton.setVisibility(View.VISIBLE);
-                    if (Loader.deviceLanguageIsPersian())
+                    if (Loader.INSTANCE.deviceLanguageIsPersian())
                         linkButton.setText(serverSticker.getLinkNamePer());
                     else linkButton.setText(serverSticker.getLinkNameEn());
                     linkButton.setOnClickListener(this);

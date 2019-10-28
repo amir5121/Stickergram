@@ -288,4 +288,10 @@
     <string name="teleplus_telegram">تله‌پلاس</string>
     <string name="export">ذخیره در گالری</string>
     <string name="undo">خنثی کردن</string>
+    <string name="add_pack_fail_prompt_update_whatsapp">بسته استیکر اضافه نشده است. اگر می خواهید آن را اضافه کنید ، اطمینان حاصل کنید که آخرین نسخه WhatsApp را به روز کنید.</string>
+    <string name="add_to_whatsapp">افزودن به واتساپ</string>
+    <string name="cannot_find_play_store">"Google Play روی دستگاه نصب نشده است. "</string>
+    <string name="is_sticker_already">نمی توان به واتساپ اضافه کرد. آیا اسنیکر از قبل اضافه شده است؟</string>
+    <string name="more_than_30">واتساپ اجازه نمی دهد بیش از 30 استیکر در یک پک باشد. فقط 30 استیرک اول به واتساپ اضافه می شود</string>
+    <string name="no_less_than_3">برای استفاده در واتساپ حداقل به 3 استیکر نیاز دارید</string>
 </resources>

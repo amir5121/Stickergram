@@ -37,7 +37,7 @@ public class MainNavDrawer extends NavDrawer {
             @Override
             public void onClick(View v) {
                 super.onClick(v);
-                Loader.rate(activity);
+                Loader.INSTANCE.rate(activity);
             }
         });
         addItem(new ActivityNavDrawerItem(SettingActivity.class, activity.getString(R.string.setting), R.drawable.ic_settings, R.id.include_nav_drawer_bottom_items));
@@ -45,7 +45,7 @@ public class MainNavDrawer extends NavDrawer {
             @Override
             public void onClick(View view) {
                 super.onClick(view);
-                Loader.exit(activity);
+                Loader.INSTANCE.exit(activity);
             }
         });
 

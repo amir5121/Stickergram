@@ -294,4 +294,10 @@
     <string name="teledr_telegram">Telegramdr</string>
     <string name="export">In Galerie speichern</string>
     <string name="undo">rückgängig machen</string>
+    <string name="add_pack_fail_prompt_update_whatsapp">Stickerpack nicht hinzugefügt. Wenn Sie es hinzufügen möchten, stellen Sie sicher, dass Sie auf die neueste Version von WhatsApp aktualisieren.</string>
+    <string name="add_to_whatsapp">"Zu WhatsApp hinzufügen "</string>
+    <string name="cannot_find_play_store">"Google Play не установлен на устройстве. "</string>
+    <string name="is_sticker_already">"Не могу добавить в WhatsApp. Стикер уже добавлен? "</string>
+    <string name="more_than_30">WhatsApp erlaubt nicht mehr als 30 Aufkleber in einer Packung. Nur die Top 30 werden zu WhatsApp hinzugefügt</string>
+    <string name="no_less_than_3">Sie benötigen mindestens 3 Aufkleber, um nach WhatsApp zu exportieren.</string>
 </resources>

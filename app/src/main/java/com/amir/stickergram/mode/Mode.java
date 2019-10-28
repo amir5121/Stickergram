@@ -16,10 +16,10 @@ public class Mode {
     private static final String TAG = "Mode";
     private String pack;
     private String name;
-    public boolean isAvailable = false;
+    public boolean isAvailable;
 
     public Mode(String pack, BaseActivity activity) {
-        isAvailable = Loader.isAppInstalled(activity, pack);
+        isAvailable = Loader.INSTANCE.isAppInstalled(activity, pack);
         this.pack = pack;
 
         if (pack != null)

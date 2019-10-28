@@ -114,7 +114,7 @@ public class ImagePadderFragment extends BaseFragment implements View.OnClickLis
 
     private void saveImage() {
         File file = new File(BaseActivity.Companion.getTEMP_CROP_CASH_DIR());
-        Loader.createFolderStructure(file);
+        Loader.INSTANCE.createFolderStructure(file);
         try {
             if (lastRes == null)
                 mainImage.compress(Bitmap.CompressFormat.PNG, 85, new FileOutputStream(file));

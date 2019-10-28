@@ -57,7 +57,7 @@ public class AsyncStickersCut extends AsyncTask<Void, Void, Void> {
                     .append(separator)
                     .append(i + numberOfExistingStickers)
                     .append(separator)
-                    .append(Loader.isPersian(destinyFolder) ? destinyFolder : destinyFolder)
+                    .append(Loader.INSTANCE.isPersian(destinyFolder) ? destinyFolder : destinyFolder)
 //                    .append((i != size - 1) ? "\n" : "");
                     .append("\n");
 //            Log.e(getClass().getSimpleName(), " destinyDir: " + destiny);
@@ -80,7 +80,7 @@ public class AsyncStickersCut extends AsyncTask<Void, Void, Void> {
             Log.e(getClass().getSimpleName(), " sourceThumbDir: " + sourceThumbDir + " destinyThumbDir: " + destinyThumbDir);
 
             try {
-                Log.e(getClass().getSimpleName(), "copyRes: " + Loader.copyFile(new File(sourceThumbDir), new File(destinyThumbDir)));
+                Log.e(getClass().getSimpleName(), "copyRes: " + Loader.INSTANCE.copyFile(new File(sourceThumbDir), new File(destinyThumbDir)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -92,7 +92,10 @@ public class AsyncStickersCut extends AsyncTask<Void, Void, Void> {
     }
 
     private int numberOfExistingStickersInDestiny(String destinyFolder) {
-        return new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + File.separator + destinyFolder + "/").listFiles().length;
+        File[] files = new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + File.separator + destinyFolder + "/").listFiles();
+        if (files != null)
+            return files.length;
+        return 0;
     }
 
     private String getDestinyThumb(String destinyFolder, int i) {
@@ -100,7 +103,7 @@ public class AsyncStickersCut extends AsyncTask<Void, Void, Void> {
     }
 
     private String getDestinySticker(String destinyFolder, int i) {
-        return BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + destinyFolder + "/" + i + Constants.PNG;
+        return Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + destinyFolder + "/" + i + Constants.PNG;
     }
 
     @Override

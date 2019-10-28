@@ -35,7 +35,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         iconImageView.setVisibility(View.INVISIBLE);
         iconImageView.setImageBitmap(null);
         errorImage.setVisibility(View.GONE);
-        Bitmap bitmap = Loader.getCachedImage(dir);
+        Bitmap bitmap = Loader.INSTANCE.getCachedImage(dir);
         if (bitmap == null) {
             imageLoader.get(url, new ImageLoader.ImageListener() {
                 @Override
@@ -44,7 +44,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                     if (mBitmap != null) {
                         iconImageView.setImageBitmap(mBitmap);
                         iconImageView.setVisibility(View.VISIBLE);
-                        Loader.cacheImage(mBitmap, dir);
+                        Loader.INSTANCE.cacheImage(mBitmap, dir);
                         progressView.setVisibility(View.GONE);
                     }
                 }

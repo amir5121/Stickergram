@@ -58,14 +58,14 @@ class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements View.OnCli
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name;
-        if (Loader.deviceLanguageIsPersian())
+        if (Loader.INSTANCE.deviceLanguageIsPersian())
             name = items.get(position).getPerName();
 //        else if (Loader.deviceLanguageIsRussian())
 //            name = items.get(position).getRuName();
         else name = items.get(position).getEnName();
 
         if (name != null) {
-            holder.populate(new IconItem(name, items.get(position).getEnName(), BaseActivity.Companion.getUSER_STICKERS_DIRECTORY()));
+            holder.populate(new IconItem(name, items.get(position).getEnName(), Constants.USER_STICKERS_DIRECTORY));
         }
     }
 

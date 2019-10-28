@@ -50,7 +50,7 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
         if (itemId == R.id.activity_contact_send_email_button) {
             sendEmail();
         } else if (itemId == R.id.activity_contact_join_channel) {
-            Loader.joinToStickergramChannel(this);
+            Loader.INSTANCE.joinToStickergramChannel(this);
         }
     }
 

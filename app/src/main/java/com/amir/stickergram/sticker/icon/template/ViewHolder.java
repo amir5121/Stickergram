@@ -27,11 +27,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder(View itemView, AssetManager assets) {
         super(itemView);
-        iconImageView = (ImageView) itemView.findViewById(R.id.template_sticker_icon_item_stickerItem);
+        iconImageView = itemView.findViewById(R.id.template_sticker_icon_item_stickerItem);
         progressView = itemView.findViewById(R.id.item_icon_sticker_loading_container);
         errorText = itemView.findViewById(R.id.item_icon_sticker_error_text);
-        iconNameTextView = (TextView) itemView.findViewById(R.id.template_sticker_icon_item_stickerName);
-        if (Loader.deviceLanguageIsPersian())
+        iconNameTextView = itemView.findViewById(R.id.template_sticker_icon_item_stickerName);
+        if (Loader.INSTANCE.deviceLanguageIsPersian())
             iconNameTextView.setTypeface(Typeface.createFromAsset(assets, Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
         else
             iconNameTextView.setTypeface(Typeface.createFromAsset(assets, Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
@@ -46,7 +46,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         iconImageView.setImageBitmap(null);
         final String url = Constants.STICKERGRAM_URL + Constants.CACHE + item.getEnName() + "/" + 5 + Constants.PNG;
         final String dir = BaseActivity.Companion.getCACHE_DIR() + item.getEnName() + "/" + 5 + Constants.PNG;
-        Bitmap bitmap = Loader.getCachedImage(dir);
+        Bitmap bitmap = Loader.INSTANCE.getCachedImage(dir);
 
         //todo: http://stackoverflow.com/questions/23978828/how-do-i-use-disk-caching-in-picasso
 
@@ -61,7 +61,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                         iconImageView.setImageBitmap(response);
                         iconImageView.setVisibility(View.VISIBLE);
                         progressView.setVisibility(View.GONE);
-                        Loader.cacheImage(response, dir);
+                        Loader.INSTANCE.cacheImage(response, dir);
                     }
                 }
             }, 0, 0, null, null, new Response.ErrorListener() {

@@ -103,7 +103,7 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
 
             final AlertDialog dialog = new AlertDialog.Builder(getContext())
                     .setMessage(
-                            !Loader.deviceLanguageIsPersian() ?
+                            !Loader.INSTANCE.deviceLanguageIsPersian() ?
                                     getActivity().getString(R.string.delete) + " " + item.getName() + " " + getActivity().getString(R.string.pack)
                                     : getActivity().getString(R.string.pack) + " " + item.getName() + " " + getActivity().getString(R.string.delete))
                     .setPositiveButton(getString(R.string.delete), listener)
@@ -136,7 +136,7 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
     }
 
     public void newOrganizedFolder() {
-        File stickerDirectories = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY());
+        File stickerDirectories = new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY);
         List stickers = null;
         if (stickerDirectories.exists())
             stickers = Arrays.asList(stickerDirectories.list());
@@ -202,7 +202,7 @@ public class OrganizedStickersIconFragment extends BaseFragment implements IconA
                                 text = text.substring(0, textLength - 1);
                                 textLength = text.length();
                             }
-                            File folder = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + text + File.separator);
+                            File folder = new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + text + File.separator);
                             if (folder.mkdirs())
                                 adapter.refresh(text, false);
                             newTextDialog.dismiss();

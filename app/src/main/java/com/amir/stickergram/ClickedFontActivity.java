@@ -23,7 +23,7 @@ public class ClickedFontActivity extends BaseActivity {
         Uri uri = getIntent().getData();
         if (uri != null)
             try {
-                String filePath = Loader.makeACopyToFontFolder(uri, this);
+                String filePath = Loader.INSTANCE.makeACopyToFontFolder(uri, this);
                 if (filePath == null) {
                     Toast.makeText(this, getString(R.string.couldn_t_add_the_font), Toast.LENGTH_LONG).show();
                     finish();

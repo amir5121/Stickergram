@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -75,7 +77,8 @@ public class OnMainImageViewTouch {
                 if (offsetPosition == null) {
                     Log.e(getClass().getSimpleName(), " onTouch setLayerUnselected");
                     activity.setLayerUnselected();
-                }break;
+                }
+                break;
             }
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -185,7 +188,7 @@ public class OnMainImageViewTouch {
     }
 
     public void remove(TouchImageView selectedLayer) {
-        items.remove(items.indexOf(selectedLayer));
+        items.remove(selectedLayer);
     }
 
     private void addLabel() {
@@ -202,7 +205,7 @@ public class OnMainImageViewTouch {
         int strokeWidth = 5;
 //        Log.e(getClass().getSimpleName(), "stroke width: " + strokeWidth);
         int stickergramTextSize;
-        if (Loader.deviceLanguageIsPersian()) {
+        if (Loader.INSTANCE.deviceLanguageIsPersian()) {
             textItem.setFont(new FontItem(null, Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET), 0, null));
             stickergramTextSize = (int) ((bitmapWidth / 17) + (labelDecrementRatio / bitmapWidth));
         } else {
@@ -259,9 +262,12 @@ public class OnMainImageViewTouch {
         int size = bundle.getInt(DRAWABLE_LAYER_NUMBER);
         for (int i = 0; i < size; i++) {
             Log.e(getClass().getSimpleName(), "recreateState: " + TOUCH_IMAGE_VIEW + i);
-            TouchImageView touchItem = new TouchImageView(activity, bundle.getBundle(TOUCH_IMAGE_VIEW + i), mainBitmap);
-            activity.textLayerContainer.addView(touchItem);
-            items.add(touchItem);
+            Bundle touchViewBundle = bundle.getBundle(TOUCH_IMAGE_VIEW + i);
+            if (touchViewBundle != null) {
+                TouchImageView touchItem = new TouchImageView(activity, touchViewBundle, mainBitmap);
+                activity.textLayerContainer.addView(touchItem);
+                items.add(touchItem);
+            }
         }
 
     }

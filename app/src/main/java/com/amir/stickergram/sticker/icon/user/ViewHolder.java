@@ -21,11 +21,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder(View itemView, AssetManager assets) {
         super(itemView);
-        iconImageView = (ImageView) itemView.findViewById(R.id.template_sticker_icon_item_stickerItem);
-        iconNameTextView = (TextView) itemView.findViewById(R.id.template_sticker_icon_item_stickerName);
+        iconImageView = itemView.findViewById(R.id.template_sticker_icon_item_stickerItem);
+        iconNameTextView = itemView.findViewById(R.id.template_sticker_icon_item_stickerName);
 
 //        if (iconImageView != null && iconNameTextView != null)
-            if (Loader.deviceLanguageIsPersian())
+            if (Loader.INSTANCE.deviceLanguageIsPersian())
                 iconNameTextView.setTypeface(Typeface.createFromAsset(assets, Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
             else
                 iconNameTextView.setTypeface(Typeface.createFromAsset(assets, Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));

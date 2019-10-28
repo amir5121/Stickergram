@@ -50,11 +50,6 @@ abstract class BaseActivity : BaseAuthenticatedActivity() {
         val externalCacheDir = externalCacheDir!!
         BASE_USER_THUMBNAIL_DIRECTORY = externalCacheDir.toString() + File.separator + "thumb_Stickers"
         BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY = externalCacheDir.toString() + File.separator + "thumb_phone_organized_Stickers"
-        USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.user/"
-        BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.phone_organized/"
-        STICKERGRAM_ROOT = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + File.separator
-        PICTURES_DIRECTORY = Environment.getExternalStorageDirectory().toString() + File.separator + "Pictures" + STICKERGRAM + File.separator
-        FONT_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/font/"
         TEMP_STICKER_CASH_DIR = externalCacheDir.toString() + File.separator + "temp_sticker.png"
         TEMP_CROP_CASH_DIR = externalCacheDir.toString() + File.separator + "temp_crop.png"
         CACHE_DIR = cacheDir.absolutePath + "/"
@@ -201,14 +196,8 @@ abstract class BaseActivity : BaseAuthenticatedActivity() {
         lateinit var CACHE_DIR: String
         lateinit var TEMP_STICKER_CASH_DIR: String
         lateinit var TEMP_CROP_CASH_DIR: String
-        lateinit var FONT_DIRECTORY: String
         lateinit var BASE_USER_THUMBNAIL_DIRECTORY: String
         lateinit var BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY: String
-        lateinit var USER_STICKERS_DIRECTORY: String
-        lateinit var BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY: String
-        lateinit var STICKERGRAM_ROOT: String
-        lateinit var PICTURES_DIRECTORY: String
-        var STICKERGRAM = "/Stickergram"
 
         var isTablet: Boolean = false
         var isInLandscape: Boolean = false

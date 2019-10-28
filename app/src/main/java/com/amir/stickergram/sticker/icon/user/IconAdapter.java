@@ -1,6 +1,7 @@
 package com.amir.stickergram.sticker.icon.user;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.icon.IconItem;
 
@@ -28,37 +30,17 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
         this.activity = activity;
         this.listener = listener;
         this.inflater = activity.getLayoutInflater();
-        try {
-            items = getItems();
-            if (items.size() == 0) listener.OnNoItemWereFoundListener();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        items = getItems();
+        if (items.size() == 0) listener.OnNoItemWereFoundListener();
     }
 
-    public List<String> getItems() throws IOException {
-        File file = new File(BaseActivity.Companion.getUSER_STICKERS_DIRECTORY());
-        if (!file.exists())
-            if (Loader.checkPermission(activity))
-                file.mkdirs();
-            else {
-                Loader.gainPermission(activity, 0);
-                activity.finish();
-            }
-        File[] files = file.listFiles();
-        if (files == null) {
-            Log.e(getClass().getSimpleName(), "files were null");
+    public List<String> getItems() {
+        List<String> directories = Loader.INSTANCE.getUserStickerDirectories(activity, activity);
+        if (directories == null)
             activity.finish();
-            return null;
-        }
-        List<String> directories = new ArrayList<>();
-        for (File file1 : files) {
-            if (!file1.isFile()) {
-                directories.add(file1.getAbsolutePath());
-            }
-        }
         return directories;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -82,7 +64,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
         if (name != null) { //picking the name of the folder as the name of the stickers
             int i = name.lastIndexOf("/") + 1;
             name = name.substring(i, name.length());
-            holder.populate(new IconItem(name, null, BaseActivity.Companion.getUSER_STICKERS_DIRECTORY()));
+            holder.populate(new IconItem(name, null, Constants.USER_STICKERS_DIRECTORY));
 //            }
         }
     }

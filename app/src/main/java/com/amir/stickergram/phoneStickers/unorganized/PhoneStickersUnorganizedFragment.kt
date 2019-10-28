@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -32,6 +35,7 @@ import com.amir.stickergram.sticker.single.SingleStickersAdapter
 import com.amir.stickergram.sticker.single.StickerItem
 
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.ArrayList
 
@@ -78,12 +82,12 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
             }
         }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             this.listener = context as UnorganizedFragmentCallbacks?
         } catch (e: ClassCastException) {
-            throw RuntimeException(context!!.packageName + " must implement UnorganizedFragmentCallbacks")
+            throw RuntimeException(context.packageName + " must implement UnorganizedFragmentCallbacks")
         }
 
         try {
@@ -119,16 +123,14 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
                     Color.parseColor("#FFFFBB33"),
                     Color.parseColor("#FFFF4444"))
         }
-        if (recyclerView != null) {
-            adapter = SingleStickersAdapter((activity as BaseActivity?)!!, this)
-            adapter!!.refreshPhoneSticker()
-            if (BaseActivity.isTablet || BaseActivity.isInLandscape) {
-                recyclerView.layoutManager = GridLayoutManager(context, 5)
-            } else {
-                recyclerView.layoutManager = GridLayoutManager(context, 3)
-            }
-            recyclerView.adapter = adapter
+        adapter = SingleStickersAdapter((activity as BaseActivity?)!!, this)
+        adapter!!.refreshPhoneSticker()
+        if (BaseActivity.isTablet || BaseActivity.isInLandscape) {
+            recyclerView.layoutManager = GridLayoutManager(context, 5)
+        } else {
+            recyclerView.layoutManager = GridLayoutManager(context, 3)
         }
+        recyclerView.adapter = adapter
 
         isInCropMode = false
         enable = true
@@ -307,7 +309,7 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
     }
 
     override fun onRequestReadWritePermission() {
-        Loader.gainPermission(activity as BaseActivity?, Constants.PHONE_STICKERS_GAIN_PERMISSION)
+        Loader.gainPermission(activity as BaseActivity, Constants.PHONE_STICKERS_GAIN_PERMISSION)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -321,7 +323,7 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
     }
 
     private fun callAsyncTaskPhoneAdapter() {
-        val file = File(BaseActivity.STICKERGRAM_ROOT + ".nomedia")
+        val file = File(Constants.STICKERGRAM_ROOT + ".nomedia")
         try {
             file.parentFile.mkdirs()
             file.createNewFile()
@@ -330,7 +332,7 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
         }
 
         if (!swipeRefresh!!.isRefreshing || onRefreshWasCalled) {
-            AsyncTaskPhoneAdapter(activity as BaseActivity?, this).execute(adapter)
+            AsyncTaskPhoneAdapter(activity as BaseActivity, this).execute(adapter)
             onRefreshWasCalled = false
         }
     }
@@ -367,7 +369,7 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
                 // contacts-related task you need to do.
 
             } else {
-                Log.e(javaClass.getSimpleName(), "permission denied")
+                Log.e(javaClass.simpleName, "permission denied")
                 activity!!.finish()
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity!!.overridePendingTransition(0, 0)
@@ -418,5 +420,6 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
             fragment.arguments = args
             return fragment
         }
+
     }
 }

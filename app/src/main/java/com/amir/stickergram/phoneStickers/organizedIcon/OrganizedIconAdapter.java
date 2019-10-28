@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.amir.stickergram.R;
 import com.amir.stickergram.base.BaseActivity;
+import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.sticker.icon.IconItem;
 //import com.amir.stickergram.sticker.icon.user.ViewHolder;
@@ -40,12 +41,12 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
     }
 
     public List<String> getItems() throws IOException {
-        File file = new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY());
+        File file = new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY);
         if (!file.exists())
-            if (Loader.checkPermission(activity))
+            if (Loader.INSTANCE.checkPermission(activity))
                 file.mkdirs();
             else {
-                Loader.gainPermission(activity, 0);
+                Loader.INSTANCE.gainPermission(activity, 0);
                 activity.finish();
             }
         File[] files = file.listFiles();
@@ -98,7 +99,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
             if (name != null) { //picking the name of the folder as the name of the stickers
                 int i = name.lastIndexOf("/") + 1;
                 name = name.substring(i, name.length());
-                holder.populate(new IconItem(name, null, BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY()));
+                holder.populate(new IconItem(name, null, Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY));
             }
         }
     }
@@ -133,7 +134,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
         if (delete) {
             int i = items.indexOf(folder);
             items.remove(i);
-            Loader.removeDirectory(new File(BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY() + folder + File.separator));
+            Loader.INSTANCE.removeDirectory(new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + folder + File.separator));
             removeThumbs(folder);
             notifyItemRemoved(i);
         } else {

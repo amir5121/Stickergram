@@ -47,7 +47,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         modeButton = (Button) findViewById(R.id.activity_setting_mode);
         mExpandLayout = (ExpandableWeightLayout) findViewById(R.id.activity_setting_expandable_layout);
 
-        if (Loader.getAllAvailableModes(this).size() <= 1) {
+        if (Loader.INSTANCE.getAllAvailableModes(this).size() <= 1) {
             modeButton.setVisibility(View.GONE);
         }
 
@@ -205,7 +205,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private void instantiateListOfAvailableModes() {
         ListView listView = (ListView) includeModes.findViewById(R.id.activity_setting_modes_list);
-        final ArrayList<Mode> modes = Loader.getAllAvailableModes(this);
+        final ArrayList<Mode> modes = Loader.INSTANCE.getAllAvailableModes(this);
         ModeListAdapter adapter = new ModeListAdapter(this);
         listView.setAdapter(adapter);
 

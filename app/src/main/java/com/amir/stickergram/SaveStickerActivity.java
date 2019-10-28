@@ -6,8 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,10 +72,11 @@ public class SaveStickerActivity extends BaseActivity
     public void onClick(View view) {
         int itemId = view.getId();
         if (itemId == R.id.activity_save_sticker_create_new_pack) {
-            File stickerDirectories = new File(Companion.getUSER_STICKERS_DIRECTORY());
+            File stickerDirectories = new File(Constants.USER_STICKERS_DIRECTORY);
             List stickers = null;
-            if (stickerDirectories.exists())
-                stickers = Arrays.asList(stickerDirectories.list());
+            String[] stickerListDir = stickerDirectories.list();
+            if (stickerDirectories.exists() && stickerListDir != null)
+                stickers = Arrays.asList(stickerListDir);
 
             if (!isPaid) {
                 if (stickers != null) {
@@ -85,7 +88,7 @@ public class SaveStickerActivity extends BaseActivity
             }
             final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_new_package, null);
             setFont((ViewGroup) newTextDialogView);
-            final EditText editText = (EditText) newTextDialogView.findViewById(R.id.dialog_set_new_text_text);
+            final EditText editText = newTextDialogView.findViewById(R.id.dialog_set_new_text_text);
 
             final AlertDialog newTextDialog = new AlertDialog.Builder(this)
                     .setView(newTextDialogView)
@@ -132,11 +135,11 @@ public class SaveStickerActivity extends BaseActivity
                                     !text.contains("?")) {
 
                                 int textLength = text.length();
-                                while (text.charAt(textLength - 1) == ' ' && textLength > 0) {
+                                while (text.charAt(textLength - 1) == ' ') {
                                     text = text.substring(0, textLength - 1);
                                     textLength = text.length();
                                 }
-                                File folder = new File(BaseActivity.Companion.getUSER_STICKERS_DIRECTORY() + text + File.separator);
+                                File folder = new File(Constants.USER_STICKERS_DIRECTORY + text + File.separator);
                                 if (folder.mkdirs())
                                     goToStickerPack(text);
                                 newTextDialog.dismiss();
@@ -154,10 +157,9 @@ public class SaveStickerActivity extends BaseActivity
     }
 
 
-
     private void goToStickerPack(String stickerFolder) {
 
-        String dir = BaseActivity.Companion.getUSER_STICKERS_DIRECTORY() + stickerFolder + File.separator;
+        String dir = Constants.USER_STICKERS_DIRECTORY + stickerFolder + File.separator;
         File folder = new File(dir);
         File[] files;
 //        Log.e(getClass().getSimpleName(), "Directory: " + dir);
@@ -166,15 +168,16 @@ public class SaveStickerActivity extends BaseActivity
         else throw new RuntimeException("Invalid Folder");
         try {
             File cashedSticker = new File(BaseActivity.Companion.getTEMP_STICKER_CASH_DIR());
-            if (cashedSticker.exists() && cashedSticker.isFile()) {
-                Loader.copyFile(cashedSticker,
+            if (cashedSticker.exists() && cashedSticker.isFile() && files != null) {
+                Loader.INSTANCE.copyFile(cashedSticker,
                         new File(dir + files.length + ".png"));
 
                 Bitmap bitmap = BitmapFactory.decodeFile(BaseActivity.Companion.getTEMP_STICKER_CASH_DIR());
                 File thumbFile =
                         new File((BaseActivity.Companion.getBASE_USER_THUMBNAIL_DIRECTORY() + File.separator + stickerFolder + "_" + files.length + ".png"));
-                if (!thumbFile.getParentFile().exists())
-                    if (!thumbFile.getParentFile().mkdirs())
+                File parentFile = thumbFile.getParentFile();
+                if (parentFile != null && !parentFile.exists())
+                    if (!parentFile.mkdirs())
                         Log.e(getClass().getSimpleName(), "failed");
 
                 if (!thumbFile.exists())

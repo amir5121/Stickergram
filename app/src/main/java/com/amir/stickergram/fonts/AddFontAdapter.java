@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.image.FontItem;
+import com.amir.stickergram.infrastructure.Constants;
 
 import java.io.File;
 
@@ -18,7 +19,7 @@ class AddFontAdapter extends FontAdapter {
     public void setItems() {
         if (fontItems.size() > 0)
             fontItems.clear();
-        File f = new File(BaseActivity.Companion.getFONT_DIRECTORY());
+        File f = new File(Constants.FONT_DIRECTORY);
         File[] files = f.listFiles();
         if (files != null) {
             for (File file : files) {

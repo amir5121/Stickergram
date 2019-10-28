@@ -22,7 +22,7 @@ public class ModeListAdapter extends BaseAdapter implements View.OnClickListener
     public ModeListAdapter(BaseActivity activity) {
         this.activity = activity;
         inflater = activity.getLayoutInflater();
-        modesList = Loader.getAllAvailableModes(activity);
+        modesList = Loader.INSTANCE.getAllAvailableModes(activity);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ModeListAdapter extends BaseAdapter implements View.OnClickListener
             view = inflater.inflate(R.layout.mode_item, viewGroup, false);
         Mode mode = modesList.get(i);
         ((TextView) view.findViewById(R.id.mode_item_text)).setText(mode.getName());
-        RadioButton radioButton = (RadioButton) view.findViewById(R.id.mode_item_radio_button);
+        RadioButton radioButton = view.findViewById(R.id.mode_item_radio_button);
         String chosenModePack = BaseActivity.Companion.getChosenMode().getPack();
 
 //        if () {

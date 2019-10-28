@@ -1,7 +1,10 @@
 package com.amir.stickergram.base;
 
 import android.graphics.Typeface;
+
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,14 @@ import com.amir.stickergram.infrastructure.Loader;
 public class BaseFragment extends Fragment {
 
     public void setFont(TextView textView) {
-        if (textView != null)
-            if (Loader.deviceLanguageIsPersian())
-                textView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
-            else
-                textView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+        if (textView != null) {
+            FragmentActivity activity = getActivity();
+            if (activity != null)
+                if (Loader.INSTANCE.deviceLanguageIsPersian())
+                    textView.setTypeface(Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_PERSIAN_FONT_ADDRESS_IN_ASSET));
+                else
+                    textView.setTypeface(Typeface.createFromAsset(activity.getAssets(), Constants.APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET));
+        }
     }
 
     public void setFont(ViewGroup group) {

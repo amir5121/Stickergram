@@ -50,7 +50,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 if (type != null) {
                     if (action == Intent.ACTION_SEND) {
                         if (type.contains("image")) {
-                            tempOutPutFile = Loader.generateEmptyBitmapFile(this, true)
+                            tempOutPutFile = Loader.generateEmptyBitmapFile(this)
                             Loader.crop(mIntent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as Uri, Uri.fromFile(tempOutPutFile), this, false)
                         }
                     }
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             }
         } else if (itemId == R.id.dialog_from_scratch_empty_image) {
             if (Loader.checkPermission(this)) {
-                val tempFile = Loader.generateEmptyBitmapFile(this, true)
+                val tempFile = Loader.generateEmptyBitmapFile(this)
                 if (tempFile.exists() && tempOutPutFile!!.exists()) {
                     Loader.crop(Uri.fromFile(tempFile), Uri.fromFile(tempOutPutFile), this, true)
                 }
@@ -124,7 +124,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun instantiateChooserDialog() {
-        tempOutPutFile = Loader.generateEmptyBitmapFile(this, false)
+        tempOutPutFile = Loader.generateEmptyBitmapFile(this)
 
         if (!tempOutPutFile!!.mkdirs())
             Log.e(javaClass.simpleName, "could not make directory")

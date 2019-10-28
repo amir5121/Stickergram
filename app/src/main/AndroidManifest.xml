@@ -69,6 +69,14 @@
 
         <activity android:name="com.tangxiaolv.telegramgallery.GalleryActivity" />
 
+
+        <provider
+            android:name="com.amir.whatsapp.StickerContentProvider"
+            android:authorities="${contentProviderAuthority}"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="com.whatsapp.sticker.READ" />
+
     </application>
 
 </manifest>

@@ -12,10 +12,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -177,7 +180,7 @@ public class EditImageActivity
 
             Intent intent = new Intent(this, CropActivity.class);
             intent.putExtra(Constants.CROP_SOURCE, Uri.fromFile(new File(photos.get(0))));
-            intent.putExtra(Constants.CROP_DESTINY, Uri.fromFile(Loader.generateEmptyBitmapFile(this, true)));
+            intent.putExtra(Constants.CROP_DESTINY, Uri.fromFile(Loader.INSTANCE.generateEmptyBitmapFile(this)));
             intent.putExtra(Constants.IS_USING_EMPTY_IMAGE, false);
             intent.putExtra(Constants.LAUNCHED_TO_ADD_IMAGE, true);
             startActivityForResult(intent, ADD_NEW_IMAGE);
@@ -192,15 +195,15 @@ public class EditImageActivity
         if (itemId == R.id.menu_edit_image_add_new_text) {
             getNewTextDialog(true);
         } else if (itemId == R.id.menu_edit_image_save) {
-            if (Loader.checkPermission(this))
+            if (Loader.INSTANCE.checkPermission(this))
                 instantiateSavingDialog();
             else {
                 Toast.makeText(this, getResources().getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show();
-                Loader.gainPermission(this, Constants.EDIT_ACTIVITY_GAIN_PERMISSION);
+                Loader.INSTANCE.gainPermission(this, Constants.EDIT_ACTIVITY_GAIN_PERMISSION);
             }
         } else if (itemId == R.id.menu_edit_image_add_new_image) {
-            if (!Loader.checkPermission(this))
-                Loader.gainPermission(this, REQUEST_CODE_ADD_IMAGE);
+            if (!Loader.INSTANCE.checkPermission(this))
+                Loader.INSTANCE.gainPermission(this, REQUEST_CODE_ADD_IMAGE);
             else {
                 getImagePickerDialog();
             }
@@ -219,7 +222,7 @@ public class EditImageActivity
     private void instantiateSavingDialog() {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_finish_editing, null);
         setFont((ViewGroup) newTextDialogView);
-        ImageView finishedImage = (ImageView) newTextDialogView.findViewById(R.id.dialog_finish_editing_image);
+        ImageView finishedImage = newTextDialogView.findViewById(R.id.dialog_finish_editing_image);
         setLayerUnselected();
         final Bitmap tempBitmap = helper.getFinishedBitmap();
 //        mainBitmap = mainBitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -232,14 +235,14 @@ public class EditImageActivity
                 if (which == Dialog.BUTTON_POSITIVE) {
 
 //                    if (Loader.freeMemory() > 2) {
-                    Loader.saveBitmapToCache(tempBitmap); // the SaveStickerActivity uses the cached com.amir.stickergram.image for the saving process
+                    Loader.INSTANCE.saveBitmapToCache(tempBitmap); // the SaveStickerActivity uses the cached com.amir.stickergram.image for the saving process
                     finish();
                     startActivity(new Intent(EditImageActivity.this, SaveStickerActivity.class));
 //                    } else
 //                        Toast.makeText(EditImageActivity.this, getString(R.string.failed_to_save_the_sticker), Toast.LENGTH_LONG).show();
                 }
-                if (which == Dialog.BUTTON_NEGATIVE) {
-                }
+//                if (which == Dialog.BUTTON_NEGATIVE) {
+//                }
             }
         };
 
@@ -425,14 +428,14 @@ public class EditImageActivity
                     if (!isActionUp)
                         showInfo(getString(R.string.text_color), view);
                     else {
-                        Loader.setColor(this, selectedLayer, Constants.TEXT_COLOR);
+                        Loader.INSTANCE.setColor(this, selectedLayer, Constants.TEXT_COLOR);
                     }
                 } else if (itemId == R.id.include_buttons_shadow_color) {
                     if (!isActionUp)
                         showInfo(getString(R.string.shadow_color), view);
                     else {
                         manageShadowsFirstTap();
-                        Loader.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
+                        Loader.INSTANCE.setColor(this, selectedLayer, Constants.TEXT_SHADOW_COLOR);
                     }
                 } else if (itemId == R.id.include_buttons_shadow_radius) {
                     if (!isActionUp)
@@ -460,7 +463,7 @@ public class EditImageActivity
                     if (!isActionUp)
                         showInfo(getString(R.string.text_background), view);
                     else {
-                        Loader.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
+                        Loader.INSTANCE.setColor(this, selectedLayer, Constants.TEXT_BACKGROUND_COLOR);
                     }
                 } else if (itemId == R.id.include_buttons_text_stroke_color) {
 //                if (!isPaid)
@@ -471,7 +474,7 @@ public class EditImageActivity
                         if (selectedLayer.isFirstTapOnStrokeColor())
                             ((TextItem) selectedLayer.getDrawableItem()).setStrokeWidth(((TextItem) selectedLayer.getDrawableItem()).getStrokeWidth());
                         selectedLayer.setFirstTapOnStrokeColor(false);
-                        Loader.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
+                        Loader.INSTANCE.setColor(this, selectedLayer, Constants.TEXT_STROKE_COLOR);
                     }
                 } else if (itemId == R.id.include_buttons_text_stroke_width) {
                     if (!isActionUp)
@@ -489,10 +492,10 @@ public class EditImageActivity
                         tempArcContainer.swapView(strokeItemsView);
                         strokeButton.setBackgroundResource(R.drawable.ic_circle);
                         strokeButton.setImageResource(R.drawable.ic_stroke_blue);
-                        int padding = (int) Loader.convertDpToPixel(2, this);
+                        int padding = (int) Loader.INSTANCE.convertDpToPixel(2, this);
                         strokeButton.setPadding(padding, padding, padding, padding);
                         shadowButton.setBackgroundResource(0);
-                        int defaultPadding = (int) Loader.convertDpToPixel(7, this);
+                        int defaultPadding = (int) Loader.INSTANCE.convertDpToPixel(7, this);
                         shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
                     }
                 } else if (itemId == R.id.include_buttons_shadow) {
@@ -501,11 +504,11 @@ public class EditImageActivity
                     else {
                         tempArcContainer.swapView(shadowItemsView);
                         shadowButton.setBackgroundResource(R.drawable.ic_circle);
-                        int padding = (int) Loader.convertDpToPixel(2, this);
+                        int padding = (int) Loader.INSTANCE.convertDpToPixel(2, this);
                         shadowButton.setPadding(padding, padding, padding, padding);
                         strokeButton.setBackgroundResource(0);
                         strokeButton.setImageResource(R.drawable.ic_stroke);
-                        int defaultPadding = (int) Loader.convertDpToPixel(7, this);
+                        int defaultPadding = (int) Loader.INSTANCE.convertDpToPixel(7, this);
                         shadowButton.setPadding(defaultPadding, 0, defaultPadding, 0);
 //                    strokeButton.setPadding(0, 0, 0, 0);
                     }
@@ -537,7 +540,7 @@ public class EditImageActivity
                 public void onGlobalLayout() {
                     infoTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    if (Loader.deviceLanguageIsPersian()) {
+                    if (Loader.INSTANCE.deviceLanguageIsPersian()) {
 //                        Log.e(TAG, "x: " + pos[0] + " y: " + pos[1] + " marginStart: " + ((int) (ArcScrollView.screenWidth - pos[0]) - infoTextView.getWidth() / 2 + v.getWidth() / 2));
                         params.setMargins((int) (ArcScrollView.screenWidth - pos[0]),
                                 (int) (pos[1] - INFO_CONTAINER_OFFSET * BaseActivity.Companion.getDensity()), 0, 0);
@@ -611,7 +614,9 @@ public class EditImageActivity
 //        Log.e(getClass().getSimpleName(), "toolbar height: " + getSupportActionBar().getHeight());
         if (mainContainerHeight == 0) {
             mainContainerHeight = mainContainer.getHeight();
-            toolbarHeight = getToolbar().getHeight();
+            Toolbar toolbar = getToolbar();
+            if (toolbar != null)
+                toolbarHeight = toolbar.getHeight();
             if (selectedLayer == null)
                 stickerContainer.animate()
                         .translationY((mainContainerHeight - toolbarHeight) / 2 - stickerContainer.getHeight() / 2)
@@ -650,7 +655,8 @@ public class EditImageActivity
         try {
             if (imageUri == null) {
                 String dirInAsset = getIntent().getStringExtra(Constants.EDIT_IMAGE_DIR_IN_ASSET);
-                imageBitmap = BitmapFactory.decodeStream(getAssets().open(dirInAsset));
+                if (dirInAsset != null)
+                    imageBitmap = BitmapFactory.decodeStream(getAssets().open(dirInAsset));
             } else {
 //                Log.e(getClass().getSimpleName(), "updateBitmap from the extra: " + imageUri.toString());
                 imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
@@ -689,7 +695,7 @@ public class EditImageActivity
 
     private void getNewTextDialog(final boolean asNewText) {
         final View newTextDialogView = getLayoutInflater().inflate(R.layout.dialog_set_new_text, null);
-        final EditText editText = (EditText) newTextDialogView.findViewById(R.id.dialog_set_new_text_text);
+        final EditText editText = newTextDialogView.findViewById(R.id.dialog_set_new_text_text);
         try {
             if (!asNewText) {
                 editText.setText(((TextItem) selectedLayer.getDrawableItem()).getText());
@@ -904,7 +910,7 @@ public class EditImageActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if (requestCode == Constants.EDIT_ACTIVITY_GAIN_PERMISSION) {
             if (grantResults.length > 0
@@ -929,7 +935,7 @@ public class EditImageActivity
                 int actionBarSize = getToolbar().getHeight();
                 int y = actionBarSize / 2;
                 int x;
-                if (Loader.deviceLanguageIsPersian()) {
+                if (Loader.INSTANCE.deviceLanguageIsPersian()) {
                     x = actionBarSize;
                 } else {
                     x = getToolbar().getWidth() - actionBarSize;
@@ -950,7 +956,7 @@ public class EditImageActivity
 
     private void setUpView() {
 
-        textLayerContainer = (FrameLayout) findViewById(R.id.activity_edit_image_images_container);
+        textLayerContainer = findViewById(R.id.activity_edit_image_images_container);
         if (textLayerContainer == null)
             throw new RuntimeException("Container was null add activity_edit_image_relative_layout_container to the view");
 
@@ -974,20 +980,20 @@ public class EditImageActivity
         findViewById(R.id.activity_edit_image_move_align_top).setOnTouchListener(this);
         findViewById(R.id.activity_edit_image_move_align_right).setOnTouchListener(this);
         findViewById(R.id.activity_edit_image_move_align_left).setOnTouchListener(this);
-        stickerContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_frame_container);
+        stickerContainer = findViewById(R.id.activity_edit_image_main_frame_container);
         buyNoteContainer = findViewById(R.id.include_pro_note_container);
-        buyNoteText = (TextView) findViewById(R.id.include_pro_note_text);
+        buyNoteText = findViewById(R.id.include_pro_note_text);
         View proNoteCloseButton = findViewById(R.id.include_pro_note_close);
-        arcContainer = (VerticalArcContainer) findViewById(R.id.include_buttons_scroll_view);
+        arcContainer = findViewById(R.id.include_buttons_scroll_view);
         arcContainer.bringToFront();
 
-        strokeButton = (ImageView) findViewById(R.id.include_buttons_stroke);
+        strokeButton = findViewById(R.id.include_buttons_stroke);
         strokeButton.setOnTouchListener(this);
 
-        shadowButton = (ImageView) findViewById(R.id.include_buttons_shadow);
+        shadowButton = findViewById(R.id.include_buttons_shadow);
         shadowButton.setOnTouchListener(this);
 
-        tempArcContainer = (ArcScrollView) findViewById(R.id.include_arc_buttons_temp_arc);
+        tempArcContainer = findViewById(R.id.include_arc_buttons_temp_arc);
 
         strokeItemsView = (ArcLinearLayout) getLayoutInflater().inflate(R.layout.stroke_arc_linear_layout, arcContainer, false);
         View strokeWidthButton = strokeItemsView.findViewById(R.id.include_buttons_text_stroke_width);
@@ -999,9 +1005,9 @@ public class EditImageActivity
         View shadowDy = shadowItemsView.findViewById(R.id.include_buttons_shadow_dy);
         View shadowColorButton = shadowItemsView.findViewById(R.id.include_buttons_shadow_color);
 
-        ImageView mainImageView = (ImageView) findViewById(R.id.activity_edit_image_main_image);
+        ImageView mainImageView = findViewById(R.id.activity_edit_image_main_image);
         helper = new OnMainImageViewTouch(this, mainBitmap, mainImageView);
-        mainContainer = (RelativeLayout) findViewById(R.id.activity_edit_image_main_container);
+        mainContainer = findViewById(R.id.activity_edit_image_main_container);
 //        View scrollView = findViewById(R.id.include_buttons_scroll_view);
 //        if (isTablet && !isInLandscape) {
 //            if (scrollView != null) {
@@ -1015,7 +1021,7 @@ public class EditImageActivity
 //            mainImageView.setImageBitmap(mainBitmap);
             mainImageView.setOnTouchListener(this);
         }
-        sizeSeekBar = Loader.getSeekBar(this,
+        sizeSeekBar = Loader.INSTANCE.getSeekBar(this,
                 mainBitmap.getWidth() / 2,
                 ContextCompat.getColor(this, R.color.size_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.size_seek_bar_progress_color),
@@ -1023,7 +1029,7 @@ public class EditImageActivity
                 0,
                 mainContainer
         );
-        strokeWidthSeekBar = Loader.getSeekBar(this,
+        strokeWidthSeekBar = Loader.INSTANCE.getSeekBar(this,
                 25,
                 ContextCompat.getColor(this, R.color.stroke_width_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.stroke_width_seek_bar_progress_color),
@@ -1031,7 +1037,7 @@ public class EditImageActivity
                 0,
                 mainContainer
         );
-        shadowDxSeekBar = Loader.getSeekBar(this,
+        shadowDxSeekBar = Loader.INSTANCE.getSeekBar(this,
                 100,
                 ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.shadow_dx_seek_bar_progress_color),
@@ -1040,7 +1046,7 @@ public class EditImageActivity
                 mainContainer
         );
 
-        shadowDySeekBar = Loader.getSeekBar(this,
+        shadowDySeekBar = Loader.INSTANCE.getSeekBar(this,
                 100,
                 ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.shadow_dy_seek_bar_progress_color),
@@ -1048,7 +1054,7 @@ public class EditImageActivity
                 0,
                 mainContainer
         );
-        tiltSeekBar = Loader.getSeekBar(this,
+        tiltSeekBar = Loader.INSTANCE.getSeekBar(this,
                 360,
                 ContextCompat.getColor(this, R.color.tilt_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.tilt_seek_bar_progress_color),
@@ -1057,7 +1063,7 @@ public class EditImageActivity
                 mainContainer
         );
 
-        shadowRadiusSeekBar = Loader.getSeekBar(this,
+        shadowRadiusSeekBar = Loader.INSTANCE.getSeekBar(this,
                 20,
                 ContextCompat.getColor(this, R.color.shadow_radius_seek_bar_background_color),
                 ContextCompat.getColor(this, R.color.shadow_radius_tilt_seek_bar_progress_color),
@@ -1169,7 +1175,7 @@ public class EditImageActivity
 
     @Override
     public void receivedImage(Bitmap image) {
-        image = Loader.createTrimmedBitmap(image);
+        image = Loader.INSTANCE.createTrimmedBitmap(image);
         TouchImageView touchItem =
                 new TouchImageView(EditImageActivity.this,
                         mainBitmap,

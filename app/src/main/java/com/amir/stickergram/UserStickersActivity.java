@@ -33,8 +33,8 @@ public class UserStickersActivity extends BaseActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!Loader.checkPermission(this)) {
-            Loader.gainPermission(this, Constants.USER_STICKER_GAIN_PERMISSION);
+        if (!Loader.INSTANCE.checkPermission(this)) {
+            Loader.INSTANCE.gainPermission(this, Constants.USER_STICKER_GAIN_PERMISSION);
             return;
         }
 

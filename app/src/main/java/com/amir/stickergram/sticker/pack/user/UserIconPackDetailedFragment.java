@@ -1,18 +1,23 @@
 package com.amir.stickergram.sticker.pack.user;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amir.stickergram.BuildConfig;
 import com.amir.stickergram.HelpActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.UserStickersActivity;
@@ -38,6 +44,9 @@ import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.base.BaseFragment;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
+import com.amir.whatsapp.WhitelistCheck;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,6 +54,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import kotlin.jvm.internal.Intrinsics;
 
 public class UserIconPackDetailedFragment extends BaseFragment
         implements OnStickerClickListener, View.OnClickListener {
@@ -59,10 +70,11 @@ public class UserIconPackDetailedFragment extends BaseFragment
     private MenuItem modeChooserMenuItem;
     private TextView publishNoteText;
     private boolean publishNoteIsHidden = false;
+    private View whatsappButton;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         isInPackCreationMode = false;
@@ -71,6 +83,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
         recyclerView = view.findViewById(R.id.fragment_user_detailed_pack_list);
         folderText = view.findViewById(R.id.fragment_user_detailed_pack_text_folder);
         linkButton = view.findViewById(R.id.fragment_user_detailed_pack_pack_creation_mode);
+        whatsappButton = view.findViewById(R.id.fragment_user_detailed_pack_export_to_whatsapp);
 
         View publishNoteCloseButton = view.findViewById(R.id.include_detailed_note_close);
         publishNoteText = view.findViewById(R.id.include_detailed_note_text);
@@ -83,11 +96,13 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 publishIcon != null &&
                 publishNoteText != null &&
                 linkButton != null &&
+                whatsappButton != null &&
                 publishNoteContainer != null) {
             publishNoteText.setOnClickListener(this);
             publishNoteText.setOnClickListener(this);
             publishNoteCloseButton.setOnClickListener(this);
             linkButton.setOnClickListener(this);
+            whatsappButton.setOnClickListener(this);
             publishNoteContainer.setVisibility(View.GONE);
         }
         refresh(folder); // this guy sets the adapter
@@ -114,9 +129,11 @@ public class UserIconPackDetailedFragment extends BaseFragment
     @Override
     public void onClick(View view) {
         int itemId = view.getId();
+        FragmentActivity activity = getActivity();
         if (itemId == R.id.fragment_user_detailed_pack_pack_creation_mode) {
             if (isInPackCreationMode) {
-                Loader.goToBotInTelegram((BaseActivity) getActivity());
+                if (activity != null)
+                    Loader.INSTANCE.goToBotInTelegram((BaseActivity) activity);
             } else {
                 gotoPackCreationMode(true);
             }
@@ -126,9 +143,20 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 publishNoteIsHidden = true;
 //                Log.e(getClass().getSimpleName(), "on click: " + publishNoteIsHidden);
             }
+        } else if (itemId == R.id.fragment_user_detailed_pack_export_to_whatsapp) {
+            if (adapter.getItemCount() < 3) {
+                Toast.makeText(activity, getString(R.string.no_less_than_3), Toast.LENGTH_LONG).show();
+            } else {
+                new AsyncTaskAddWhatsapp().execute();
+                if (adapter.getItemCount() > 30) {
+                    Toast.makeText(activity, getString(R.string.more_than_30), Toast.LENGTH_LONG).show();
+                }
+            }
         } else if (itemId == R.id.include_detailed_note_text || itemId == R.id.include_detailed_note_info_icon) {
-            getActivity().finish();
-            startActivity(new Intent(getActivity(), HelpActivity.class));
+            if (activity != null) {
+                activity.finish();
+                startActivity(new Intent(activity, HelpActivity.class));
+            }
         }
     }
 
@@ -140,6 +168,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 publishNoteContainer.setVisibility(View.VISIBLE);
                 publishNoteIsHidden = false;
             }
+            whatsappButton.setVisibility(View.GONE);
             if (modeChooserMenuItem != null) {
                 modeChooserMenuItem.setTitle(getString(R.string.go_to_normal_mode));
             }
@@ -153,6 +182,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
             }
             if (modeChooserMenuItem != null)
                 modeChooserMenuItem.setTitle(getString(R.string.go_to_pack_creation_mode));
+            whatsappButton.setVisibility(View.VISIBLE);
             linkButton.setVisibility(View.GONE);
             isInPackCreationMode = false;
             publishNoteText.setText(getString(R.string.to_save_permanently));
@@ -163,11 +193,12 @@ public class UserIconPackDetailedFragment extends BaseFragment
     @Override
     public void OnIconClicked(final PackItem item) {
         final BaseActivity activity = (BaseActivity) getActivity();
-        if (isInPackCreationMode)
-            sendImageToBot(activity, item);
-        else
-            sendImageToUser(activity, item);
-
+        if (activity != null) {
+            if (isInPackCreationMode)
+                sendImageToBot(activity, item);
+            else
+                sendImageToUser(activity, item);
+        }
     }
 
     private void sendImageToUser(final BaseActivity activity, final PackItem item) {
@@ -175,9 +206,9 @@ public class UserIconPackDetailedFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-                    if (Loader.getActivePack() != null) {
+                    if (Loader.INSTANCE.getActivePack() != null) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setPackage(Loader.getActivePack());
+                        intent.setPackage(Loader.INSTANCE.getActivePack());
                         intent.setType("application/pdf");
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getWebpDir())));
 //                        Intent i=new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, AUTHORITY, f));
@@ -189,16 +220,16 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 } else if (which == Dialog.BUTTON_NEGATIVE) {
                     try {
                         InputStream in = new FileInputStream(item.getDir());
-                        File dir = new File(BaseActivity.Companion.getPICTURES_DIRECTORY());
+                        File dir = new File(Constants.PICTURES_DIRECTORY);
                         if (!dir.exists()) {
                             dir.mkdirs();
                         }
-                        String imagePath = BaseActivity.Companion.getPICTURES_DIRECTORY() + item.getFolder() + item.getName() + Constants.PNG;
+                        String imagePath = Constants.PICTURES_DIRECTORY + item.getFolder() + item.getName() + Constants.PNG;
                         FileOutputStream fo = new FileOutputStream(imagePath);
-                        Loader.copyFile(in, fo);
+                        Loader.INSTANCE.copyFile(in, fo);
                         in.close();
                         fo.close();
-                        MediaScannerConnection.scanFile(getContext(), new String[] { imagePath }, new String[] { "image/jpeg" }, null);
+                        MediaScannerConnection.scanFile(getContext(), new String[]{imagePath}, new String[]{"image/jpeg"}, null);
                         Toast.makeText(activity, activity.getString(R.string.export), Toast.LENGTH_LONG).show();
 
 
@@ -208,7 +239,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
                         e.printStackTrace();
                     }
                 } else if (which == Dialog.BUTTON_NEUTRAL) {
-                    sendImageToBot((BaseActivity) UserIconPackDetailedFragment.this.getActivity(), item);
+                    sendImageToBot(activity, item);
                     Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
                 }
             }
@@ -222,7 +253,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
         if (stickerImage != null)
             stickerImage.setImageBitmap(BitmapFactory.decodeFile(item.getDir()));
 
-        final AlertDialog sendImageToUserDialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog sendImageToUserDialog = new AlertDialog.Builder(activity)
                 .setView(view)
 //                .setTitle(activity.getString(R.string.do_you_want_to_send_this_sticker))
                 .setNegativeButton(activity.getString(R.string.export), listener)
@@ -259,9 +290,9 @@ public class UserIconPackDetailedFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == Dialog.BUTTON_POSITIVE) {
-                    if (Loader.getActivePack() != null) {
+                    if (Loader.INSTANCE.getActivePack() != null) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setPackage(Loader.getActivePack());
+                        intent.setPackage(Loader.INSTANCE.getActivePack());
                         intent.setType("text/plain");
 //                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(new File(item.getDir()).toString()));
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
@@ -298,7 +329,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
         if (stickerImage != null)
             stickerImage.setImageBitmap(bitmap);
 
-        final AlertDialog sendToBotDialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog sendToBotDialog = new AlertDialog.Builder(activity)
                 .setView(view)
 //                .setTitle(activity.getString(R.string.add_to_pack))
                 .setNegativeButton(activity.getString(R.string.no), listener)
@@ -337,44 +368,48 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 }
             }
         };
+        if (activity != null) {
+            View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
+            setFont((ViewGroup) view);
+            TextView textView = view.findViewById(R.id.dialog_single_item_title);
+            textView.setText(activity.getString(R.string.do_you_want_to_delete_this_sticker));
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_single_item, null, false);
-        setFont((ViewGroup) view);
-        TextView textView = view.findViewById(R.id.dialog_single_item_title);
-        textView.setText(activity.getString(R.string.do_you_want_to_delete_this_sticker));
+            ImageView stickerImage = view.findViewById(R.id.dialog_single_item_image);
 
-        ImageView stickerImage = view.findViewById(R.id.dialog_single_item_image);
+            Bitmap bitmap = BitmapFactory.decodeFile(item.getDir());
+            if (stickerImage != null)
+                stickerImage.setImageBitmap(bitmap);
 
-        Bitmap bitmap = BitmapFactory.decodeFile(item.getDir());
-        if (stickerImage != null)
-            stickerImage.setImageBitmap(bitmap);
-
-        final AlertDialog deleteDialog = new AlertDialog.Builder(getActivity())
-                .setView(view)
+            final AlertDialog deleteDialog = new AlertDialog.Builder(activity)
+                    .setView(view)
 //                .setTitle(activity.getString(R.string.do_you_want_to_delete_this_sticker))
-                .setNegativeButton(activity.getString(R.string.cancel), listener)
-                .setPositiveButton(activity.getString(R.string.delete), listener)
-                .create();
+                    .setNegativeButton(activity.getString(R.string.cancel), listener)
+                    .setPositiveButton(activity.getString(R.string.delete), listener)
+                    .create();
 
-        deleteDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
-                activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE));
-            }
-        });
+            deleteDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_NEGATIVE));
+                    activity.setFont(deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE));
+                }
+            });
 
 
-        deleteDialog.show();
+            deleteDialog.show();
+        }
     }
 
     @Override
     public void folderDeleted() {
         //restarting the activity without animation
         //that's the way to do it
-        getActivity().finish();
-        startActivity(new Intent(getActivity(), UserStickersActivity.class));
-        getActivity().overridePendingTransition(0, 0);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.finish();
+            startActivity(new Intent(activity, UserStickersActivity.class));
+            activity.overridePendingTransition(0, 0);
+        }
     }
 
 
@@ -400,7 +435,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
                     (BaseActivity) getActivity(),
                     this,
                     folder,
-                    BaseActivity.Companion.getUSER_STICKERS_DIRECTORY(),
+                    Constants.USER_STICKERS_DIRECTORY,
                     BaseActivity.Companion.getBASE_USER_THUMBNAIL_DIRECTORY());
 
             if (BaseActivity.Companion.isTablet() || BaseActivity.Companion.isInLandscape())
@@ -427,6 +462,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
         @Override
         protected Void doInBackground(String... folders) {
+//            Log.e("UserIconPackDetailed", folder);
             adapter.refresh();
             return null;
         }
@@ -440,4 +476,142 @@ public class UserIconPackDetailedFragment extends BaseFragment
             adapter.notifyItemRange();
         }
     }
+
+    private class AsyncTaskAddWhatsapp extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... folders) {
+//            Log.e("UserIconPackDetailed", folder);
+            updateWhatsappExportFiles(folder);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (progressBar != null)
+                progressBar.setVisibility(View.GONE);
+            addStickerPackToWhatsApp(folder, folder);
+        }
+    }
+
+    private static final int ADD_PACK = 200;
+    private static final String EXTRA_STICKER_PACK_ID = "sticker_pack_id";
+    private static final String EXTRA_STICKER_PACK_AUTHORITY = "sticker_pack_authority";
+    private static final String EXTRA_STICKER_PACK_NAME = "sticker_pack_name";
+
+    private void addStickerPackToWhatsApp(String identifier, String stickerPackName) {
+        FragmentActivity activity = getActivity();
+        Context context = getContext();
+        if (activity != null && context != null) {
+            try {
+                //if neither WhatsApp Consumer or WhatsApp Business is installed, then tell user to install the apps.
+                if (WhitelistCheck.isWhatsAppConsumerAppNotInstalled(activity.getPackageManager()) && WhitelistCheck.isWhatsAppSmbAppNotInstalled(activity.getPackageManager())) {
+                    Toast.makeText(context, R.string.add_pack_fail_prompt_update_whatsapp, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                final boolean stickerPackWhitelistedInWhatsAppConsumer = WhitelistCheck.isStickerPackWhitelistedInWhatsAppConsumer(context, identifier);
+                final boolean stickerPackWhitelistedInWhatsAppSmb = WhitelistCheck.isStickerPackWhitelistedInWhatsAppSmb(context, identifier);
+                if (!stickerPackWhitelistedInWhatsAppConsumer && !stickerPackWhitelistedInWhatsAppSmb) {
+                    //ask users which app to add the pack to.
+                    launchIntentToAddPackToChooser(identifier, stickerPackName);
+                } else if (!stickerPackWhitelistedInWhatsAppConsumer) {
+                    launchIntentToAddPackToSpecificPackage(identifier, stickerPackName, WhitelistCheck.CONSUMER_WHATSAPP_PACKAGE_NAME);
+                } else if (!stickerPackWhitelistedInWhatsAppSmb) {
+                    launchIntentToAddPackToSpecificPackage(identifier, stickerPackName, WhitelistCheck.SMB_WHATSAPP_PACKAGE_NAME);
+                } else {
+                    Toast.makeText(context, R.string.is_sticker_already, Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                Toast.makeText(context, R.string.add_pack_fail_prompt_update_whatsapp, Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    private void launchIntentToAddPackToSpecificPackage(String identifier, String stickerPackName, String whatsappPackageName) {
+        Intent intent = createIntentToAddStickerPack(identifier, stickerPackName);
+        intent.setPackage(whatsappPackageName);
+        try {
+            startActivityForResult(intent, ADD_PACK);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), R.string.add_pack_fail_prompt_update_whatsapp, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //Handle cases either of WhatsApp are set as default app to handle this intent. We still want users to see both options.
+    private void launchIntentToAddPackToChooser(String identifier, String stickerPackName) {
+        Intent intent = createIntentToAddStickerPack(identifier, stickerPackName);
+        try {
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.add_to_whatsapp)), ADD_PACK);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), R.string.add_pack_fail_prompt_update_whatsapp, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @NonNull
+    private Intent createIntentToAddStickerPack(String identifier, String stickerPackName) {
+        Intent intent = new Intent();
+        intent.setAction("com.whatsapp.intent.action.ENABLE_STICKER_PACK");
+        intent.putExtra(EXTRA_STICKER_PACK_ID, identifier);
+        intent.putExtra(EXTRA_STICKER_PACK_AUTHORITY, BuildConfig.CONTENT_PROVIDER_AUTHORITY);
+        intent.putExtra(EXTRA_STICKER_PACK_NAME, stickerPackName);
+        return intent;
+    }
+
+    private static void updateWhatsappExportFiles(@NotNull String userPackName) {
+        Intrinsics.checkParameterIsNotNull(userPackName, "userPackName");
+        File folder = new File(Constants.USER_STICKERS_DIRECTORY + userPackName + File.separator);
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            int i = 0;
+            if (files == null) {
+                Intrinsics.throwNpe();
+            }
+
+            for (int var5 = files.length; i < var5; ++i) {
+                String pngDirectory = folder.getPath() + File.separator + i + ".png";
+                String webFolderDirectory = Constants.BASE_PHONE_WHATSAPP_WEBP_DIRECTORY + userPackName + File.separator;
+                File webFolder = new File(webFolderDirectory);
+
+                if (!webFolder.exists()) {
+                    webFolder.mkdirs();
+                }
+
+                String webpDirectory = webFolderDirectory + i + ".webp";
+                File webpFile = new File(webpDirectory);
+                if (webpFile.exists())
+                    webpFile.delete();
+
+                try {
+
+                    Bitmap webpBitmap = BitmapFactory.decodeFile(pngDirectory);
+                    if (i == 0) {
+                        Bitmap.createScaledBitmap(
+                                webpBitmap, 96, 96, false).compress(
+                                Bitmap.CompressFormat.PNG, 50, new FileOutputStream(
+                                        webFolderDirectory + "trayImageFile" + ".png"
+                                )
+                        );
+                    }
+
+                    Bitmap tempBitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tempBitmap);
+                    Intrinsics.checkExpressionValueIsNotNull(webpBitmap, "webpBitmap");
+                    canvas.drawBitmap(webpBitmap, (float) (512 - webpBitmap.getWidth()) / 2.0F, (float) (512 - webpBitmap.getHeight()) / 2.0F, null);
+                    tempBitmap.compress(Bitmap.CompressFormat.WEBP, 80, new FileOutputStream(webpDirectory));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
 }

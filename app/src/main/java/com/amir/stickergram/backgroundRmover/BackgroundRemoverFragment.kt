@@ -132,10 +132,10 @@ class BackgroundRemoverFragment : BaseFragment(), View.OnClickListener, RemoverV
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu!!.clear()
-        inflater!!.inflate(R.menu.crop_activity_menu_with_undo, menu)
+        menu.clear()
+        inflater.inflate(R.menu.crop_activity_menu_with_undo, menu)
     }
 
 

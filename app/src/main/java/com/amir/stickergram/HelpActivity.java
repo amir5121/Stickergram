@@ -4,7 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -24,7 +26,6 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         setNavDrawer(new MainNavDrawer(this));
-
         setUpView();
     }
 
@@ -49,7 +50,7 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
                 publishButton != null
 //                watchVideo != null &&
 //                watchAddSticker != null
-                ) {
+        ) {
             activateBotButton.setOnClickListener(this);
             createNewPack.setOnClickListener(this);
             goToBot.setOnClickListener(this);
@@ -72,19 +73,19 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         int itemId = view.getId();
         if (itemId == R.id.activity_faq_activate_bot) {
-            Loader.goToBotInTelegram(this);
+            Loader.INSTANCE.goToBotInTelegram(this);
         } else if (itemId == R.id.activity_faq_go_to_bot1 || itemId == R.id.activity_faq_go_to_bot2 || itemId == R.id.activity_faq_go_to_bot3) {
-            Loader.goToBotInTelegram(this);
+            Loader.INSTANCE.goToBotInTelegram(this);
         } else if (itemId == R.id.activity_faq_go_to_user_pack) {
             Intent intent = new Intent(this, UserStickersActivity.class);
             startActivity(intent);
             finish();
         } else if (itemId == R.id.activity_faq_publish) {
             copyToClipboard(PUBLISH_COMMAND);
-            Loader.goToBotInTelegram(this);
+            Loader.INSTANCE.goToBotInTelegram(this);
         } else if (itemId == R.id.activity_faq_new_pack) {
             copyToClipboard(NEW_PACK_COMMAND);
-            Loader.goToBotInTelegram(this);
+            Loader.INSTANCE.goToBotInTelegram(this);
 //        } else if (itemId == R.id.activity_help_watch_video) {
 //            Intent intent = new Intent(Intent.ACTION_VIEW);
 //            intent.setData(Uri.parse(getString(R.string.link_to_video)));
@@ -99,8 +100,10 @@ public class HelpActivity extends BaseActivity implements View.OnClickListener {
     private void copyToClipboard(CharSequence text) {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("label", text);
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(this, getString(R.string.copied), Toast.LENGTH_SHORT).show();
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, getString(R.string.copied), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

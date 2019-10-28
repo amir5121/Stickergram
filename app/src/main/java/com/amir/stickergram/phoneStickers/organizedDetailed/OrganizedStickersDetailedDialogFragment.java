@@ -43,7 +43,7 @@ public class OrganizedStickersDetailedDialogFragment extends BaseDialogFragment 
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         try {
@@ -95,7 +95,7 @@ public class OrganizedStickersDetailedDialogFragment extends BaseDialogFragment 
                     (BaseActivity) getActivity(),
                     this,
                     folder,
-                    BaseActivity.Companion.getBASE_PHONE_ORGANIZED_STICKERS_DIRECTORY(),
+                    Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY,
                     BaseActivity.Companion.getBASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY()));
 
             if (BaseActivity.Companion.isTablet() || BaseActivity.Companion.isInLandscape()) {
@@ -119,7 +119,7 @@ public class OrganizedStickersDetailedDialogFragment extends BaseDialogFragment 
             imageListener.receivedImage(item.getBitmap());
             dismiss();
         } else
-            Loader.loadStickerDialog(Uri.fromFile(new File(item.getDir())), (BaseActivity) getActivity());
+            Loader.INSTANCE.loadStickerDialog(Uri.fromFile(new File(item.getDir())), (BaseActivity) getActivity());
     }
 
     @Override

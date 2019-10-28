@@ -295,18 +295,19 @@ class RemoverView extends AppCompatImageView implements View.OnTouchListener, As
     }
 
     public void undo() {
-        if (history.size() == 1) {
-            background = history.getLast().copy(Bitmap.Config.ARGB_8888, true);
-            undoWait = null;
-        } else {
-            if (undoWait == null && history.size() > 1)
-                history.removeLast();
-            undoWait = history.getLast().copy(Bitmap.Config.ARGB_8888, true);
-            background = history.removeLast();
+        if (!history.isEmpty()) {
+            if (history.size() == 1) {
+                background = history.getLast().copy(Bitmap.Config.ARGB_8888, true);
+                undoWait = null;
+            } else {
+                if (undoWait == null)
+                    history.removeLast();
+                undoWait = history.getLast().copy(Bitmap.Config.ARGB_8888, true);
+                background = history.removeLast();
+            }
+            setImageBitmap(background);
+            background.getPixels(allPixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
         }
-        setImageBitmap(background);
-        background.getPixels(allPixels, 0, backgroundWidth, 0, 0, backgroundWidth, backgroundHeight);
-        Log.wtf(TAG, "undo: " + history.size());
     }
 
 

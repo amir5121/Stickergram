@@ -1,16 +1,17 @@
 package com.amir.stickergram.infrastructure;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
 
 import com.amir.stickergram.AppType;
-import com.amir.stickergram.base.BaseActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
 
 import java.io.File;
 
 public class Constants {
+    public static final String WEBSITE = "https://stickergramapp.com/";
+    private static final String STICKERGRAM = "/Stickergram";
+
     public static final int TEXT_COLOR = 0;
     public static final int TEXT_SHADOW_COLOR = 1;
     public static final int TEXT_BACKGROUND_COLOR = 2;
@@ -112,7 +113,7 @@ public class Constants {
     public static final String APPLICATION_ENGLISH_FONT_ADDRESS_IN_ASSET = "Ubuntu.ttf";
     public static final String IMAGE_ROTATION = "IMAGE_ROTATION";
     public static final String PNG_NO_DOT = "png";
-    public static final String MOVED_STICKERS_INFO = Environment.getExternalStorageDirectory() + BaseActivity.Companion.getSTICKERGRAM() + "/moveInfo.txt";
+    public static final String MOVED_STICKERS_INFO = Environment.getExternalStorageDirectory() + Constants.STICKERGRAM + "/moveInfo.txt";
 
     public static final String IS_AN_IMAGE_PICKER = "IS_AN_IMAGE_PICKER";
     public static final String LAUNCHED_TO_ADD_IMAGE = "LAUNCHED_TO_ADD_IMAGE";
@@ -123,4 +124,12 @@ public class Constants {
             .hintOfPick("this is pick hint")
             .filterMimeTypes(new String[]{"image/*"})
             .build();
+
+    public static final String USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.user/";
+    public static final String BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.phone_organized/";
+    public static final String BASE_PHONE_WHATSAPP_WEBP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.webps/";
+    public static final String STICKERGRAM_ROOT = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + File.separator;
+    public static final String PICTURES_DIRECTORY = Environment.getExternalStorageDirectory().toString() + File.separator + "Pictures" + STICKERGRAM + File.separator;
+    public static final String FONT_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/font/";
+
 }
