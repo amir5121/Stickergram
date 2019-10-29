@@ -17,6 +17,7 @@ import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
+import com.amir.stickergram.infrastructure.LoaderStatic;
 import com.amir.stickergram.util.IabHelper;
 import com.amir.stickergram.util.IabResult;
 import com.amir.stickergram.util.Inventory;
@@ -31,6 +32,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     //todo: read the comment on that answer
     private static final String TAG = "BaseAuthenticated";
     private static final int REQUEST_BUY_PRO = 1001;
+    public static final int STROKE_WIDTH = 5;
     public static final String BUY_THE_AWESOME_STICKERGRAM_PRO_VERSION = "BuyTheAwesomeStickergramProVersion";
     public static final String BAZAR_PACKAGE = "com.farsitel.bazaar";
     public static boolean isPaid;
@@ -60,8 +62,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
         String base64EncodedPublicKey =
                 "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwDKKu/aR+orhZFDEyn1ADsjAa5vRhdSqaJNAs6Sv4E3oeal3mLIn8wQNyDynMI0CgTlP5SuJkOwqllg6oZgrC5k1lDWCjWqfEpiVho65aQRNVIblyvNAUTLreb+MhzLkvGqHP9XuQ2v7Om2IyoYrNr4U+tHZ5CHu8lX4PFI6Vd1ithtI/QX4+KthavCpCFiEYTccC0vXlBn9NlDMzyG3BwI91dmzZl+5a/3hy3eMysCAwEAAQ==";
 
-
-        if (Loader.isAppInstalled(this, BAZAR_PACKAGE))
+        if (Loader.INSTANCE.isAppInstalled(this, BAZAR_PACKAGE))
             isPaymentAppInstalled = true;
         if (isPaymentAppInstalled) {
             mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -240,7 +241,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
             return;
 
         }
-        if (Loader.checkLuckyPatcher(this)) {
+        if (Loader.INSTANCE.checkLuckyPatcher(this)) {
             Toast.makeText(this, getString(R.string.uninstall_lucky_patcher), Toast.LENGTH_LONG).show();
             finish();
         }

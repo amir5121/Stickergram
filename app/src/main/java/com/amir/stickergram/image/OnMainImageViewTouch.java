@@ -48,7 +48,11 @@ public class OnMainImageViewTouch {
         this.activity = activity;
         this.mainBitmap = mainBitmap;
         items = new ArrayList<>();
-        if (!BaseAuthenticatedActivity.isPaid) {
+        List<String> userStickerDirectories = Loader.INSTANCE.getUserStickerDirectories(activity, activity);
+        boolean firstSticker = false;
+        if (userStickerDirectories != null)
+            firstSticker = userStickerDirectories.isEmpty();
+        if (!BaseAuthenticatedActivity.isPaid && !firstSticker) {
             addLabel();
         }
         mainImageView.setImageBitmap(getFinishedBitmap());
@@ -202,7 +206,6 @@ public class OnMainImageViewTouch {
         int bitmapWidth = mainBitmap.getWidth();
         float labelDecrementRatio = 1600.0f;
 //        int strokeWidth = (bitmapWidth / 51) + Math.abs(bitmapWidth - 512) / 80 - 2;
-        int strokeWidth = 5;
 //        Log.e(getClass().getSimpleName(), "stroke width: " + strokeWidth);
         int stickergramTextSize;
         if (Loader.INSTANCE.deviceLanguageIsPersian()) {
@@ -219,7 +222,7 @@ public class OnMainImageViewTouch {
 
 //        textItem.setShadow(new Shadow(Color.parseColor("#555555"), 5, 5, 0));
 //        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
-        textItem.setStrokeWidth(strokeWidth);
+        textItem.setStrokeWidth(BaseAuthenticatedActivity.STROKE_WIDTH);
         textItem.setSize(stickergramTextSize);
         textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
         textItem.setTextStrokeColor(ContextCompat.getColor(activity, R.color.stickergram_label_stroke_color));

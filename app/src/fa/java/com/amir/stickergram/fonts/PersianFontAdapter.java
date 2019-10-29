@@ -52,7 +52,7 @@ public class PersianFontAdapter extends FontAdapter {
             InputStream in = assetManager.open(Constants.FONT_DIRECTORY_IN_ASSET + Constants.PERSIAN_FONT_NAME);
             String persian_font_names = BaseActivity.Companion.getCACHE_DIR() + Constants.PERSIAN_FONT_NAME;
             FileOutputStream fo = new FileOutputStream(persian_font_names);
-            Loader.copyFile(in, fo);
+            Loader.INSTANCE.copyFile(in, fo);
             in.close();
             fo.close();
 

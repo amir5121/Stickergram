@@ -60,15 +60,14 @@ import com.amir.stickergram.image.TextItem
 import com.amir.stickergram.image.TouchImageView
 
 object Loader {
-    private val TAG = "LOADER"
+    private const val TAG = "LOADER"
 
     val activeStickerDir: String
         get() = BaseActivity.chosenMode.cacheDir
 
     val activePack: String?
         get() = BaseActivity.chosenMode.pack
-
-
+    
     fun gainPermission(activity: BaseActivity, requestCode: Int) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
@@ -456,11 +455,11 @@ object Loader {
     fun isAppInstalled(context: Context, packageName: String?): Boolean {
         if (packageName == null) return false
         val pm = context.packageManager
-        try {
+        return try {
             pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
-            return true
+            true
         } catch (e: PackageManager.NameNotFoundException) {
-            return false
+            false
         }
 
     }

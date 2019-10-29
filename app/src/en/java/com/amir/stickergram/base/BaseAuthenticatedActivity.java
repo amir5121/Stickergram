@@ -38,6 +38,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     private static String HAS_BOUGHT_PRO = "HAS_BOUGHT_PRO";
     private static final String ITEM_SKU = "com.amir.stickergram.pro";
     private static boolean inAppBillingSetupOk = false;
+    public static final int STROKE_WIDTH = 1;
     private static boolean isPaymentAppInstalled = false;
     private SharedPreferences preferences;
     private IabHelper mHelper;
@@ -185,10 +186,10 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     }
 
     protected boolean getProStatus() {
-        if (BuildConfig.DEBUG) {
-//            Toast.makeText(this, "is in debug mode", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+//        if (BuildConfig.DEBUG) {
+////            Toast.makeText(this, "is in debug mode", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
         return preferences.getBoolean(HAS_BOUGHT_PRO, false);
 //        }
 //        return true;

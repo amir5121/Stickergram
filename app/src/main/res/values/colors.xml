@@ -39,7 +39,7 @@
     <color name="stickergram_label_color">#ddffffff</color>
     <color name="sticker_item_background">#560e7bff</color>
     <color name="sticker_item_background_selected">#8afddfdf</color>
-    <color name="lighter_blue">#9942a5f5</color>
+    <color name="lighter_blue">#42a5f5</color>
     <color name="main_activity_text_color">#ffffff</color>
     <color name="default_background_color">#2196f3</color>
     <color name="dialog_text_color">#fff</color>
