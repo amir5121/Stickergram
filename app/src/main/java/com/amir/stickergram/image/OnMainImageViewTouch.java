@@ -222,7 +222,7 @@ public class OnMainImageViewTouch {
 
 //        textItem.setShadow(new Shadow(Color.parseColor("#555555"), 5, 5, 0));
 //        textItem.setFont(new FontItem("stickergram Font", Typeface.SANS_SERIF, FontItem.DEFAULTS, FontItem.SANS_SERIF));
-        textItem.setStrokeWidth(BaseAuthenticatedActivity.STROKE_WIDTH);
+        textItem.setStrokeWidth(1);
         textItem.setSize(stickergramTextSize);
         textItem.setTextColor(ContextCompat.getColor(activity, R.color.stickergram_label_color));
         textItem.setTextStrokeColor(ContextCompat.getColor(activity, R.color.stickergram_label_stroke_color));

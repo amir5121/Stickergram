@@ -38,7 +38,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     private static String HAS_BOUGHT_PRO = "HAS_BOUGHT_PRO";
     private static final String ITEM_SKU = "com.amir.stickergram.pro";
     private static boolean inAppBillingSetupOk = false;
-    public static final int STROKE_WIDTH = 1;
+    public static final int STROKE_WIDTH = 0;
     private static boolean isPaymentAppInstalled = false;
     private SharedPreferences preferences;
     private IabHelper mHelper;
