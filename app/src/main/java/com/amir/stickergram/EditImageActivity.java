@@ -323,7 +323,7 @@ public class EditImageActivity
                     if (!isActionUp)
                         showInfo(getString(R.string.tilt), view);
                     else {
-                        if (!isPaid) buyProNote(getString(R.string.tilt_effect));
+//                        if (!isPaid) buyProNote(getString(R.string.tilt_effect));
                         setVisibleSeekBar(selectedLayer.getDrawableItem().getTilt(), tiltSeekBar);
                     }
                 } else if (itemId == R.id.include_buttons_remove) {
@@ -763,7 +763,7 @@ public class EditImageActivity
     public void setLayerUnselected() {
         if (selectedLayer != null) {
             Log.e(getClass().getSimpleName(), "setLayerUnselected was called ");
-            if (!isPaid) selectedLayer.notPaid();
+//            if (!isPaid) selectedLayer.notPaid();
             selectedLayer.setAsSelected(false);
             sizeSeekBar.setVisibility(View.GONE);
             tiltSeekBar.setVisibility(View.GONE);

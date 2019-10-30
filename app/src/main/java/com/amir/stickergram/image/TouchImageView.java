@@ -168,7 +168,7 @@ public class TouchImageView extends androidx.appcompat.widget.AppCompatImageView
 
 
     public void notPaid() {
-        drawableItem.setTilt(180);
+//        drawableItem.setTilt(180);
 //        Shadow shadow = textItem.getShadow();
 //        shadow.setDx(0);
 //        shadow.setDy(0);
