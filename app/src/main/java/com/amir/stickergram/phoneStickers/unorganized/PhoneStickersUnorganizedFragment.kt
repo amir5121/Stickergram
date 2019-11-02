@@ -323,9 +323,11 @@ class PhoneStickersUnorganizedFragment : BaseFragment(), SingleStickersAdapter.O
     }
 
     private fun callAsyncTaskPhoneAdapter() {
-        val file = File(Constants.STICKERGRAM_ROOT + ".nomedia")
+        val file = File(BaseActivity.STICKERGRAM_ROOT + ".nomedia")
+        File(BaseActivity.STICKERGRAM_ROOT).mkdirs()
         try {
             file.parentFile.mkdirs()
+            Log.e(javaClass.simpleName, file.toString())
             file.createNewFile()
         } catch (e: IOException) {
             e.printStackTrace()

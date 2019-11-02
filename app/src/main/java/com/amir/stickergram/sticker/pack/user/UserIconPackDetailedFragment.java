@@ -220,11 +220,11 @@ public class UserIconPackDetailedFragment extends BaseFragment
                 } else if (which == Dialog.BUTTON_NEGATIVE) {
                     try {
                         InputStream in = new FileInputStream(item.getDir());
-                        File dir = new File(Constants.PICTURES_DIRECTORY);
+                        File dir = new File(BaseActivity.PICTURES_DIRECTORY);
                         if (!dir.exists()) {
                             dir.mkdirs();
                         }
-                        String imagePath = Constants.PICTURES_DIRECTORY + item.getFolder() + item.getName() + Constants.PNG;
+                        String imagePath = BaseActivity.PICTURES_DIRECTORY + item.getFolder() + item.getName() + Constants.PNG;
                         FileOutputStream fo = new FileOutputStream(imagePath);
                         Loader.INSTANCE.copyFile(in, fo);
                         in.close();
@@ -435,7 +435,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
                     (BaseActivity) getActivity(),
                     this,
                     folder,
-                    Constants.USER_STICKERS_DIRECTORY,
+                    BaseActivity.USER_STICKERS_DIRECTORY,
                     BaseActivity.Companion.getBASE_USER_THUMBNAIL_DIRECTORY());
 
             if (BaseActivity.Companion.isTablet() || BaseActivity.Companion.isInLandscape())
@@ -567,7 +567,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
     private static void updateWhatsappExportFiles(@NotNull String userPackName) {
         Intrinsics.checkParameterIsNotNull(userPackName, "userPackName");
-        File folder = new File(Constants.USER_STICKERS_DIRECTORY + userPackName + File.separator);
+        File folder = new File(BaseActivity.USER_STICKERS_DIRECTORY + userPackName + File.separator);
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles();
             int i = 0;
@@ -577,7 +577,7 @@ public class UserIconPackDetailedFragment extends BaseFragment
 
             for (int var5 = files.length; i < var5; ++i) {
                 String pngDirectory = folder.getPath() + File.separator + i + ".png";
-                String webFolderDirectory = Constants.BASE_PHONE_WHATSAPP_WEBP_DIRECTORY + userPackName + File.separator;
+                String webFolderDirectory = BaseActivity.BASE_PHONE_WHATSAPP_WEBP_DIRECTORY + userPackName + File.separator;
                 File webFolder = new File(webFolderDirectory);
 
                 if (!webFolder.exists()) {

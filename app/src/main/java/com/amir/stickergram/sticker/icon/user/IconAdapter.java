@@ -35,10 +35,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
     }
 
     public List<String> getItems() {
-        List<String> directories = Loader.INSTANCE.getUserStickerDirectories(activity, activity);
-        if (directories == null)
-            activity.finish();
-        return directories;
+        return Loader.INSTANCE.getUserStickerDirectories(activity, activity);
     }
 
 
@@ -64,7 +61,7 @@ public class IconAdapter extends RecyclerView.Adapter<ViewHolder> implements Vie
         if (name != null) { //picking the name of the folder as the name of the stickers
             int i = name.lastIndexOf("/") + 1;
             name = name.substring(i, name.length());
-            holder.populate(new IconItem(name, null, Constants.USER_STICKERS_DIRECTORY));
+            holder.populate(new IconItem(name, null, BaseActivity.USER_STICKERS_DIRECTORY));
 //            }
         }
     }

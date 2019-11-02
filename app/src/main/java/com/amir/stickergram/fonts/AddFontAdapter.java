@@ -19,7 +19,7 @@ class AddFontAdapter extends FontAdapter {
     public void setItems() {
         if (fontItems.size() > 0)
             fontItems.clear();
-        File f = new File(Constants.FONT_DIRECTORY);
+        File f = new File(BaseActivity.FONT_DIRECTORY);
         File[] files = f.listFiles();
         if (files != null) {
             for (File file : files) {

@@ -1,6 +1,7 @@
 package com.amir.stickergram.phoneStickers.organizedIcon;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
     }
 
     public List<String> getItems() throws IOException {
-        File file = new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY);
+        File file = new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY);
         if (!file.exists())
             if (Loader.INSTANCE.checkPermission(activity))
                 file.mkdirs();
@@ -50,10 +51,11 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
                 activity.finish();
             }
         File[] files = file.listFiles();
+        Log.e(getClass().getSimpleName(), file.toString());
         if (files == null) {
             Log.e(getClass().getSimpleName(), "files were null");
             activity.finish();
-            return null;
+            return new ArrayList<>();
         }
         List<String> directories = new ArrayList<>();
 //        int i = 0;
@@ -99,7 +101,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
             if (name != null) { //picking the name of the folder as the name of the stickers
                 int i = name.lastIndexOf("/") + 1;
                 name = name.substring(i, name.length());
-                holder.populate(new IconItem(name, null, Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY));
+                holder.populate(new IconItem(name, null, BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY));
             }
         }
     }
@@ -134,7 +136,7 @@ class OrganizedIconAdapter extends RecyclerView.Adapter<ViewHolder> implements V
         if (delete) {
             int i = items.indexOf(folder);
             items.remove(i);
-            Loader.INSTANCE.removeDirectory(new File(Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + folder + File.separator));
+            Loader.INSTANCE.removeDirectory(new File(BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY + folder + File.separator));
             removeThumbs(folder);
             notifyItemRemoved(i);
         } else {

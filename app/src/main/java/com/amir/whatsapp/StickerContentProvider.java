@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.amir.stickergram.BuildConfig;
+import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.infrastructure.Loader;
 
@@ -91,7 +92,7 @@ public class StickerContentProvider extends ContentProvider {
         if (context != null && !authority.startsWith(context.getPackageName())) {
             throw new IllegalStateException("your authority (" + authority + ") for the content provider should start with your package name: " + context.getPackageName());
         }
-        updateURIs();
+//        updateURIs();
 
         return true;
     }
@@ -314,7 +315,7 @@ public class StickerContentProvider extends ContentProvider {
         if (context != null) {
             final File cacheFile = context.getExternalCacheDir();
             final File file = new File(cacheFile, fileName);
-            final InputStream open = new FileInputStream(Constants.BASE_PHONE_WHATSAPP_WEBP_DIRECTORY + identifier + File.separator + fileName);
+            final InputStream open = new FileInputStream(BaseActivity.BASE_PHONE_WHATSAPP_WEBP_DIRECTORY + identifier + File.separator + fileName);
             final FileOutputStream fileOutputStream = new FileOutputStream(file);
             byte[] buffer = new byte[1024];
             int read;

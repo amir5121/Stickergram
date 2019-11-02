@@ -316,7 +316,7 @@ object Loader {
             Toast.makeText(activity, activity.getString(R.string.choose_a_font), Toast.LENGTH_LONG).show()
             return null
         }
-        val file = File(Constants.FONT_DIRECTORY + getFileName(uri, activity))// you can also use app's internal cache to store the file
+        val file = File(BaseActivity.FONT_DIRECTORY + getFileName(uri, activity))// you can also use app's internal cache to store the file
         if (!file.parentFile!!.exists()) {
             if (!file.parentFile!!.mkdirs())
                 return null
@@ -883,17 +883,17 @@ object Loader {
         return true
     }
 
-    fun getUserStickerDirectories(context: Context, activity: BaseActivity?): List<String>? {
-        val file = File(Constants.USER_STICKERS_DIRECTORY)
+    fun getUserStickerDirectories(context: Context, activity: BaseActivity?): List<String> {
+        val file = File(BaseActivity.USER_STICKERS_DIRECTORY)
         if (!file.exists())
             if (checkPermission(context))
                 file.mkdirs()
             else {
                 if (activity != null)
                     gainPermission(activity, 0)
-                return null
+                return ArrayList()
             }
-        val files = file.listFiles() ?: return null
+        val files = file.listFiles() ?: return ArrayList()
         val directories = ArrayList<String>()
         for (file1 in files) {
             if (!file1.isFile) {

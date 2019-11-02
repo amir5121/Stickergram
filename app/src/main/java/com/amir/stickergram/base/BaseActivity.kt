@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -53,6 +54,25 @@ abstract class BaseActivity : BaseAuthenticatedActivity() {
         TEMP_STICKER_CASH_DIR = externalCacheDir.toString() + File.separator + "temp_sticker.png"
         TEMP_CROP_CASH_DIR = externalCacheDir.toString() + File.separator + "temp_crop.png"
         CACHE_DIR = cacheDir.absolutePath + "/"
+
+        val externalDirectory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString() + Constants.STICKERGRAM
+        else
+            Environment.getExternalStorageDirectory().toString() + Constants.STICKERGRAM
+
+        PICTURES_DIRECTORY = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString() + Constants.STICKERGRAM + File.separator
+        } else {
+            Environment.getExternalStorageDirectory().toString() + File.separator + "Pictures" + Constants.STICKERGRAM + File.separator
+        }
+
+        STICKERGRAM_ROOT = externalDirectory + File.separator
+        USER_STICKERS_DIRECTORY = "$externalDirectory/.user/"
+        BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = "$externalDirectory/.phone_organized/"
+        BASE_PHONE_WHATSAPP_WEBP_DIRECTORY = "$externalDirectory/.webps/"
+        FONT_DIRECTORY = "$externalDirectory/font/"
+
+
 
         chosenMode = Mode(preferences!!.getString(Constants.ACTIVE_PACK, null), this)
         if (chosenMode.pack == null) {
@@ -198,6 +218,12 @@ abstract class BaseActivity : BaseAuthenticatedActivity() {
         lateinit var TEMP_CROP_CASH_DIR: String
         lateinit var BASE_USER_THUMBNAIL_DIRECTORY: String
         lateinit var BASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY: String
+        lateinit var STICKERGRAM_ROOT: String
+        lateinit var USER_STICKERS_DIRECTORY: String
+        lateinit var PICTURES_DIRECTORY: String
+        lateinit var BASE_PHONE_WHATSAPP_WEBP_DIRECTORY: String
+        lateinit var BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY: String
+        lateinit var FONT_DIRECTORY: String
 
         var isTablet: Boolean = false
         var isInLandscape: Boolean = false

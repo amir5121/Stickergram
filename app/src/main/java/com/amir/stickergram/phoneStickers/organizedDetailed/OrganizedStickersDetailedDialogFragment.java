@@ -95,7 +95,7 @@ public class OrganizedStickersDetailedDialogFragment extends BaseDialogFragment 
                     (BaseActivity) getActivity(),
                     this,
                     folder,
-                    Constants.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY,
+                    BaseActivity.BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY,
                     BaseActivity.Companion.getBASE_PHONE_ORGANIZED_THUMBNAIL_DIRECTORY()));
 
             if (BaseActivity.Companion.isTablet() || BaseActivity.Companion.isInLandscape()) {

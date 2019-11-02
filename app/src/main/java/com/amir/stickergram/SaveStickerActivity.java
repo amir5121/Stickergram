@@ -72,7 +72,7 @@ public class SaveStickerActivity extends BaseActivity
     public void onClick(View view) {
         int itemId = view.getId();
         if (itemId == R.id.activity_save_sticker_create_new_pack) {
-            File stickerDirectories = new File(Constants.USER_STICKERS_DIRECTORY);
+            File stickerDirectories = new File(BaseActivity.USER_STICKERS_DIRECTORY);
             List stickers = null;
             String[] stickerListDir = stickerDirectories.list();
             if (stickerDirectories.exists() && stickerListDir != null)
@@ -139,7 +139,7 @@ public class SaveStickerActivity extends BaseActivity
                                     text = text.substring(0, textLength - 1);
                                     textLength = text.length();
                                 }
-                                File folder = new File(Constants.USER_STICKERS_DIRECTORY + text + File.separator);
+                                File folder = new File(BaseActivity.USER_STICKERS_DIRECTORY + text + File.separator);
                                 if (folder.mkdirs())
                                     goToStickerPack(text);
                                 newTextDialog.dismiss();
@@ -159,7 +159,7 @@ public class SaveStickerActivity extends BaseActivity
 
     private void goToStickerPack(String stickerFolder) {
 
-        String dir = Constants.USER_STICKERS_DIRECTORY + stickerFolder + File.separator;
+        String dir = BaseActivity.USER_STICKERS_DIRECTORY + stickerFolder + File.separator;
         File folder = new File(dir);
         File[] files;
 //        Log.e(getClass().getSimpleName(), "Directory: " + dir);

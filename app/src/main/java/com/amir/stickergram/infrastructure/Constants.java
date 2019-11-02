@@ -10,7 +10,7 @@ import java.io.File;
 
 public class Constants {
     public static final String WEBSITE = "https://stickergramapp.com/";
-    private static final String STICKERGRAM = "/Stickergram";
+    public static final String STICKERGRAM = "/Stickergram";
 
     public static final int TEXT_COLOR = 0;
     public static final int TEXT_SHADOW_COLOR = 1;
@@ -125,11 +125,5 @@ public class Constants {
             .filterMimeTypes(new String[]{"image/*"})
             .build();
 
-    public static final String USER_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.user/";
-    public static final String BASE_PHONE_ORGANIZED_STICKERS_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.phone_organized/";
-    public static final String BASE_PHONE_WHATSAPP_WEBP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/.webps/";
-    public static final String STICKERGRAM_ROOT = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + File.separator;
-    public static final String PICTURES_DIRECTORY = Environment.getExternalStorageDirectory().toString() + File.separator + "Pictures" + STICKERGRAM + File.separator;
-    public static final String FONT_DIRECTORY = Environment.getExternalStorageDirectory().toString() + STICKERGRAM + "/font/";
 
 }
