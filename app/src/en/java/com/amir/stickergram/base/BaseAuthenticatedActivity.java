@@ -7,14 +7,14 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amir.stickergram.BuildConfig;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.amir.stickergram.MainActivity;
 import com.amir.stickergram.R;
 import com.amir.stickergram.infrastructure.Constants;
@@ -27,6 +27,7 @@ import com.tozny.crypto.android.AesCbcWithIntegrity;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     //todo: https://code.google.com/p/android/issues/detail?id=203555 android N support
@@ -42,6 +43,7 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     private static boolean isPaymentAppInstalled = false;
     private SharedPreferences preferences;
     private IabHelper mHelper;
+//    private static final String uuid = generateUUID();
 
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 
@@ -96,6 +98,25 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
         };
 
+//        Toast.makeText(this, uuid, Toast.LENGTH_LONG).show();
+    }
+
+    private static String generateUUID() {
+        String uniquePseudoID = "35" +
+                Build.BOARD.length() % 10 +
+                Build.BRAND.length() % 10 +
+                Build.DEVICE.length() % 10 +
+                Build.DISPLAY.length() % 10 +
+                Build.HOST.length() % 10 +
+                Build.ID.length() % 10 +
+                Build.MANUFACTURER.length() % 10 +
+                Build.MODEL.length() % 10 +
+                Build.PRODUCT.length() % 10 +
+                Build.TAGS.length() % 10 +
+                Build.TYPE.length() % 10 +
+                Build.USER.length() % 10;
+        String serial = Build.getRadioVersion();
+        return new UUID(uniquePseudoID.hashCode(), serial.hashCode()).toString();
     }
 
     // Listener that's called when we finish querying the items and
@@ -113,23 +134,24 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
 
             Log.d(TAG, "Query inventory was successful.");
 
-                /*
-                 * Check for items we own. Notice that for each purchase, we check
-                 * the developer payload to see if it's correct! See
-                 * verifyDeveloperPayload().
-                 */
+            /*
+             * Check for items we own. Notice that for each purchase, we check
+             * the developer payload to see if it's correct! See
+             * verifyDeveloperPayload().
+             */
 
             // // Check for gas delivery -- if we own gas, we should fill up the
             // tank immediately
             Purchase gasPurchase = inventory.getPurchase(ITEM_SKU);
             if (gasPurchase != null
                 //&& verifyDeveloperPayload(gasPurchase)
-                    ) {
+            ) {
                 Log.d(TAG, "We have gas. Consuming it.");
                 setBuyProTrue();
             }
         }
     };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (inAppBillingSetupOk) {
@@ -186,6 +208,8 @@ public abstract class BaseAuthenticatedActivity extends AppCompatActivity {
     }
 
     protected boolean getProStatus() {
+//        if (uuid.equals("ffffffff-d7da-9c68-ffff-ffffb45f73eb"))
+//            return true;
 //        if (BuildConfig.DEBUG) {
 ////            Toast.makeText(this, "is in debug mode", Toast.LENGTH_SHORT).show();
 //            return true;

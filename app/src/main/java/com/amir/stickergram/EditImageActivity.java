@@ -12,13 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +27,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
 import com.amir.stickergram.arcList.ArcCallBack;
 import com.amir.stickergram.arcList.ArcLinearLayout;
 import com.amir.stickergram.arcList.ArcScrollView;
@@ -41,15 +40,15 @@ import com.amir.stickergram.arcList.VerticalArcContainer;
 import com.amir.stickergram.base.BaseActivity;
 import com.amir.stickergram.fonts.EnglishFontsFragment;
 import com.amir.stickergram.fonts.MainFontDialogFragment;
-import com.amir.stickergram.image.ImagePickerDialog;
-import com.amir.stickergram.image.ImageReceiverCallBack;
-import com.amir.stickergram.infrastructure.Constants;
 import com.amir.stickergram.image.FontItem;
 import com.amir.stickergram.image.ImageItem;
-import com.amir.stickergram.infrastructure.Loader;
+import com.amir.stickergram.image.ImagePickerDialog;
+import com.amir.stickergram.image.ImageReceiverCallBack;
 import com.amir.stickergram.image.OnMainImageViewTouch;
 import com.amir.stickergram.image.TextItem;
 import com.amir.stickergram.image.TouchImageView;
+import com.amir.stickergram.infrastructure.Constants;
+import com.amir.stickergram.infrastructure.Loader;
 import com.amir.stickergram.phoneStickers.CustomRecyclerView;
 import com.amir.stickergram.phoneStickers.organizedDetailed.OrganizedStickersDetailedDialogFragment;
 import com.amir.stickergram.phoneStickers.organizedIcon.OnStickerClickListener;
@@ -138,9 +137,9 @@ public class EditImageActivity
 
         setUpView();
         selectedLayer = null;
-        if (savedInstanceState != null) {
-            helper.recreateState(savedInstanceState.getBundle(EDIT_IMAGE_STATE));
-        }
+//        if (savedInstanceState != null) {
+//            helper.recreateState(savedInstanceState.getBundle(EDIT_IMAGE_STATE));
+//        }
 //        else getNewTextDialog(true);
 
     }
@@ -150,7 +149,7 @@ public class EditImageActivity
         super.onSaveInstanceState(outState);
         if (helper != null) {
             setLayerUnselected();
-            outState.putBundle(EDIT_IMAGE_STATE, helper.getSaveState());
+//            outState.putBundle(EDIT_IMAGE_STATE, helper.getSaveState());
         }
     }
 //

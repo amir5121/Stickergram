@@ -5,13 +5,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-
+import androidx.appcompat.app.AlertDialog
 import com.amir.stickergram.base.BaseActivity
 import com.amir.stickergram.infrastructure.Constants
 import com.amir.stickergram.infrastructure.Loader
@@ -19,7 +18,6 @@ import com.amir.stickergram.navdrawer.MainNavDrawer
 import com.tangxiaolv.telegramgallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_nav_drawer.*
-
 import java.io.File
 
 
@@ -39,7 +37,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         setNavDrawer(MainNavDrawer(this))
 
         setUpView()
-
+//        Loader.gainPermissionAnthon(this, ANTHON_REQUEST_CODE)
 
         //coming from topMarginAnimation share intent
         val mIntent = intent
@@ -190,6 +188,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     //process result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != RESULT_OK)
             return
 
@@ -206,7 +205,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun chooseOrCapturePicture() {
         GalleryActivity.openActivity(this@MainActivity, GALLERY_REQUEST_CODE, Constants.galleryConfig)
-
     }
 
 

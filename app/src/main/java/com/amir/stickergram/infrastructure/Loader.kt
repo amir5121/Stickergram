@@ -2,17 +2,13 @@ package com.amir.stickergram.infrastructure
 
 import android.Manifest
 import android.app.Dialog
-import android.content.ActivityNotFoundException
-import android.content.ContentResolver
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.*
-
-import androidx.exifinterface.media.ExifInterface
-
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.Matrix
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
@@ -20,11 +16,6 @@ import android.os.Environment
 import android.os.StatFs
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AlertDialog
-
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -33,31 +24,24 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.exifinterface.media.ExifInterface
+import app.minimize.com.seek_bar_compat.SeekBarCompat
 import com.amir.stickergram.CropActivity
 import com.amir.stickergram.EditImageActivity
-import com.amir.stickergram.mode.Mode
 import com.amir.stickergram.R
 import com.amir.stickergram.base.BaseActivity
-import com.flask.colorpicker.ColorPickerView
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder
-
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.RandomAccessFile
-import java.nio.channels.FileChannel
-import java.util.ArrayList
-import java.util.Locale
-
-import app.minimize.com.seek_bar_compat.SeekBarCompat
-
 import com.amir.stickergram.image.TextItem
 import com.amir.stickergram.image.TouchImageView
+import com.amir.stickergram.mode.Mode
+import com.flask.colorpicker.ColorPickerView
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder
+import java.io.*
+import java.nio.channels.FileChannel
+import java.util.*
 
 object Loader {
     private const val TAG = "LOADER"
@@ -67,7 +51,7 @@ object Loader {
 
     val activePack: String?
         get() = BaseActivity.chosenMode.pack
-    
+
     fun gainPermission(activity: BaseActivity, requestCode: Int) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
@@ -95,38 +79,38 @@ object Loader {
         }
     }
 
-    //    public static void gainPermissionAnthon(BaseActivity activity, int requestCode) {
-    //        if (
-    //                ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
-    //                        Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-    //
-    //            // Should we show an explanation?
-    //            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-    //                    Manifest.permission.READ_CONTACTS)) {
-    //
-    //                // Show an explanation to the user *asynchronously* -- don't block
-    //                // this thread waiting for the user's response! After the user
-    //                // sees the explanation, try again to request the permission.
-    //
-    //            } else {
-    //
-    //                // No explanation needed, we can request the permission.
-    //
-    //                ActivityCompat.requestPermissions(activity,
-    //                        new String[]{Manifest.permission.READ_PHONE_STATE}, requestCode);
-    //
-    //                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-    //                // app-defined int constant. The callback method gets the
-    //                // result of the request.
-    //            }
-    //        }
-    //    }
-    //
-    //    public static boolean checkPermissionAnthon(BaseActivity activity) {
-    //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
-    //            return ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
-    //        return true;
-    //    }
+//    fun gainPermissionAnthon(activity: BaseActivity, requestCode: Int) {
+//        if (
+//                ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
+//                        Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+//
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+//                    Manifest.permission.READ_CONTACTS)) {
+//
+//                // Show an explanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//
+//            } else {
+//
+//                // No explanation needed, we can request the permission.
+//
+//                ActivityCompat.requestPermissions(activity,
+//                        arrayOf(Manifest.permission.READ_PHONE_STATE), requestCode)
+//                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+//                // app-defined int constant. The callback method gets the
+//                // result of the request.
+//            }
+//        }
+//    }
+
+
+//    fun checkPermissionAnthon(activity: AppCompatActivity): Boolean {
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
+//            return ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+//        return true
+//    }
 
     fun checkPermission(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED else true
@@ -292,7 +276,7 @@ object Loader {
                 inputStream = FileInputStream(file)
                 Log.e("fileSize: $TAG", inputStream.available().toString())
                 i++
-            } while (inputStream.available() >= 350000) // decreasing size to please the Telegram
+            } while (inputStream.available() >= 256000) // decreasing size to please the Telegram
             inputStream.close()
         } catch (e: IOException) {
             e.printStackTrace()
