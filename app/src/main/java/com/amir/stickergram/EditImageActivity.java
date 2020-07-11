@@ -145,7 +145,7 @@ public class EditImageActivity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (helper != null) {
             setLayerUnselected();
@@ -618,7 +618,7 @@ public class EditImageActivity
                 toolbarHeight = toolbar.getHeight();
             if (selectedLayer == null)
                 stickerContainer.animate()
-                        .translationY((mainContainerHeight - toolbarHeight) / 2 - stickerContainer.getHeight() / 2)
+                        .translationY((mainContainerHeight - toolbarHeight) / 2f - stickerContainer.getHeight() / 2f)
                         .setDuration(500);
 //            Log.e(getClass().getSimpleName(), "toolbarHeight: " + toolbarHeight);
             int stickerContainerWidth = stickerContainer.getWidth();
@@ -824,7 +824,7 @@ public class EditImageActivity
                 if (selectedLayer == null) {
                     hideInfo();
                     stickerContainer.animate()
-                            .translationY((mainContainerHeight - toolbarHeight) / 2 - stickerContainer.getHeight() / 2)
+                            .translationY((mainContainerHeight - toolbarHeight) / 2f - stickerContainer.getHeight() / 2f)
                             .setDuration(500);
                     arcContainer.knockout();
                 }
