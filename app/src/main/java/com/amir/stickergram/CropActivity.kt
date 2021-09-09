@@ -31,13 +31,13 @@ class CropActivity : BaseActivity(), CropFragment.CropFragmentCallbacks, Backgro
         if (intent != null) {
             hasUsedAnEmptyImage = intent.getBooleanExtra(Constants.IS_USING_EMPTY_IMAGE, false)
             launchedToAddImage = intent.getBooleanExtra(Constants.LAUNCHED_TO_ADD_IMAGE, false)
-            bundle.putParcelable(Constants.CROP_SOURCE, intent.getParcelableExtra<Parcelable>(Constants.CROP_SOURCE))
+            bundle.putParcelable(Constants.CROP_SOURCE, intent.getParcelableExtra(Constants.CROP_SOURCE))
             val destinyUri = intent.getParcelableExtra<Uri>(Constants.CROP_DESTINY)
             bundle.putParcelable(Constants.CROP_DESTINY, destinyUri)
 
         }
 
-        supportActionBar!!.title = getString(R.string.crop)
+        supportActionBar?.title = getString(R.string.crop)
         supportFragmentManager.beginTransaction().add(R.id.crop_fragment_container, CropFragment.newInstance(bundle)).commit()
 
 

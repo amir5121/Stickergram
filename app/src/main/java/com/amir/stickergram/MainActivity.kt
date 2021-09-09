@@ -194,12 +194,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
         if (requestCode == GALLERY_REQUEST_CODE) {
 
-            val photos = data!!.getSerializableExtra(GalleryActivity.PHOTOS) as List<String>
-            for (s in photos) {
+            val photos = data?.getStringArrayListExtra(GalleryActivity.PHOTOS)
+            photos?.let {
 
-                Log.e(javaClass.name, "onActivityResult: $s")
+                for (s in photos) {
+
+                    Log.e(javaClass.name, "onActivityResult: $s")
+                }
+                Loader.crop(Uri.fromFile(File((photos)[0])), Uri.fromFile(tempOutPutFile), this, false)
             }
-            Loader.crop(Uri.fromFile(File(photos[0])), Uri.fromFile(tempOutPutFile), this, false)
         }
     }
 
@@ -227,9 +230,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     companion object {
-        private const val REQUEST_SELECT_IMAGE = 999
-        private const val MAIN_ACTIVITY_SEQUENCE_ID = "MAIN_ACTIVITY_SEQUENCE_ID"
+        //        private const val REQUEST_SELECT_IMAGE = 999
+//        private const val MAIN_ACTIVITY_SEQUENCE_ID = "MAIN_ACTIVITY_SEQUENCE_ID"
         const val GALLERY_REQUEST_CODE = 5654
-        private const val TAG = "MainActivity"
+//        private const val TAG = "MainActivity"
     }
 }

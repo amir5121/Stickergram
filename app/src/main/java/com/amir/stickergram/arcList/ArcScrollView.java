@@ -12,7 +12,9 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+
 import androidx.annotation.RequiresApi;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -70,18 +72,14 @@ public class ArcScrollView extends HorizontalScrollView {
         final int N = a.getIndexCount();
         for (int i = 0; i < N; ++i) {
             int attr = a.getIndex(i);
-            switch (attr) {
-                case R.styleable.ArcScrollView_radius:
-                    circleRadius = a.getDimension(R.styleable.ArcScrollView_radius, 0);
+            if (attr == R.styleable.ArcScrollView_radius) {
+                circleRadius = a.getDimension(R.styleable.ArcScrollView_radius, 0);
 //                    Log.e(getClass().getSimpleName(), "radius: " + circleRadius);
-                    break;
-                case R.styleable.ArcScrollView_stroke_width:
-                    strokeWidth = a.getDimension(R.styleable.ArcScrollView_stroke_width, 0);
-                    break;
-                case R.styleable.ArcScrollView_findBestWidth:
-                    useBestWidth = a.getBoolean(R.styleable.ArcScrollView_findBestWidth, true);
-                    break;
-//                case R.styleable.ArcScrollView_level:
+            } else if (attr == R.styleable.ArcScrollView_stroke_width) {
+                strokeWidth = a.getDimension(R.styleable.ArcScrollView_stroke_width, 0);
+            } else if (attr == R.styleable.ArcScrollView_findBestWidth) {
+                useBestWidth = a.getBoolean(R.styleable.ArcScrollView_findBestWidth, true);
+                //                case R.styleable.ArcScrollView_level:
 //                    level = a.getInteger(R.styleable.ArcScrollView_level, -1);
 ////                    event.setLevel(level);
 //                    break;
@@ -308,69 +306,69 @@ public class ArcScrollView extends HorizontalScrollView {
     public void swapView(final ArcLinearLayout view) {
         if (!animationInProgress)
             Log.e(TAG, "swapView: ");
-            if (view == null) { //in case you want to hide the view
-                animate()
-                        .alpha(0)
-                        .translationY(strokeWidth + prevChildBottom)
-                        .setDuration(500)
-                        .setInterpolator(new BounceInterpolator())
-                        .setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animator) {
-                                animationInProgress = true;
-                            }
+        if (view == null) { //in case you want to hide the view
+            animate()
+                    .alpha(0)
+                    .translationY(strokeWidth + prevChildBottom)
+                    .setDuration(500)
+                    .setInterpolator(new BounceInterpolator())
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
+                            animationInProgress = true;
+                        }
 
-                            @Override
-                            public void onAnimationEnd(Animator animator) {
-                                setVisibility(GONE);
-                                animationInProgress = false;
-                            }
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            setVisibility(GONE);
+                            animationInProgress = false;
+                        }
 
-                            @Override
-                            public void onAnimationCancel(Animator animator) {
+                        @Override
+                        public void onAnimationCancel(Animator animator) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animator) {
+                        @Override
+                        public void onAnimationRepeat(Animator animator) {
 
-                            }
-                        })
-                        .start();
-            } else if (getVisibility() != GONE) {
-                animate()
-                        .alpha(0)
-                        .translationY(strokeWidth + prevChildBottom)
-                        .setDuration(700)
-                        .setInterpolator(new BounceInterpolator())
-                        .setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animator) {
-                                animationInProgress = true;
-                            }
+                        }
+                    })
+                    .start();
+        } else if (getVisibility() != GONE) {
+            animate()
+                    .alpha(0)
+                    .translationY(strokeWidth + prevChildBottom)
+                    .setDuration(700)
+                    .setInterpolator(new BounceInterpolator())
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
+                            animationInProgress = true;
+                        }
 
-                            @Override
-                            public void onAnimationEnd(Animator animator) {
-                                bringBackUp(view);
-                                animationInProgress = false;
-                            }
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            bringBackUp(view);
+                            animationInProgress = false;
+                        }
 
-                            @Override
-                            public void onAnimationCancel(Animator animator) {
+                        @Override
+                        public void onAnimationCancel(Animator animator) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animator) {
+                        @Override
+                        public void onAnimationRepeat(Animator animator) {
 
-                            }
-                        })
-                        .start();
-            } else {//if it is already hidden make it appear
-                setTranslationY(strokeWidth + prevChildBottom);
-                setVisibility(VISIBLE);
-                bringBackUp(view);
-            }
+                        }
+                    })
+                    .start();
+        } else {//if it is already hidden make it appear
+            setTranslationY(strokeWidth + prevChildBottom);
+            setVisibility(VISIBLE);
+            bringBackUp(view);
+        }
 
 
     }

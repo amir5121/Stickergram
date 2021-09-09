@@ -101,10 +101,15 @@ abstract class BaseAuthenticatedActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (inAppBillingSetupOk) {
-            if (!mHelper!!.handleActivityResult(requestCode, resultCode, data)) {
-                super.onActivityResult(requestCode, resultCode, data)
+            mHelper?.let {
+                if (!it.handleActivityResult(requestCode, resultCode, data)) {
+                    super.onActivityResult(requestCode, resultCode, data)
+                }
             }
-        } else super.onActivityResult(requestCode, resultCode, data)
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     fun requestProVersion() {
@@ -202,6 +207,7 @@ abstract class BaseAuthenticatedActivity : AppCompatActivity() {
         private const val REQUEST_BUY_PRO = 1001
         const val BUY_THE_AWESOME_STICKERGRAM_PRO_VERSION = "BuyTheAwesomeStickergramProVersion"
         private const val GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms"
+
         @JvmField
         var isPaid = false
         private const val HAS_BOUGHT_PRO = "HAS_BOUGHT_PRO"

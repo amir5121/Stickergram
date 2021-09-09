@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Stickergram.iml" filepath="$PROJECT_DIR$/Stickergram.iml" group="Stickergram" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Stickergram/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-658516546/Android.Stickergram.iml" filepath="$PROJECT_DIR$/.idea/modules/-658516546/Android.Stickergram.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/626630224/Android.Stickergram.app.iml" filepath="$PROJECT_DIR$/.idea/modules/626630224/Android.Stickergram.app.iml" />
     </modules>
   </component>
 </project>
