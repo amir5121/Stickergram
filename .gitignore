@@ -6,5 +6,6 @@
 .DS_Store
 /build
 /captures
-/app
+/app/en
+/app/fa
 *.hprof
