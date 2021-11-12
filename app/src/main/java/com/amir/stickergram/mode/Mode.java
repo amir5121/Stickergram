@@ -20,6 +20,7 @@ public class Mode {
 
     public Mode(String pack, BaseActivity activity) {
         isAvailable = Loader.INSTANCE.isAppInstalled(activity, pack);
+        Log.wtf("ASDWWWWWWWWWWWWWWWWWWw", String.valueOf(isAvailable));
         this.pack = pack;
 
         if (pack != null)

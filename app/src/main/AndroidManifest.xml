@@ -5,7 +5,27 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <queries>
+        <package android:name="org.telegram.messenger" />
+        <package android:name="org.telegram.messenger.beta" />
+        <package android:name="com.hanista.mobogram" />
+        <package android:name="com.hanista.mobogram.two" />
+        <package android:name="org.ir.talaeii" />
+        <package android:name="ir.ilmili.telegraph" />
+        <package android:name="org.telegram.plus" />
+        <package android:name="ir.persianfox.messenger" />
+        <package android:name="org.telegram.comorangetelegram" />
+        <package android:name="ir.rrgc.telegram" />
+        <package android:name="ir.alimodaresi.mytelegram" />
+        <package android:name="com.aniways.anigram.messenger" />
+        <package android:name="org.ilwt.lagatgram" />
+        <package android:name="com.shaltouk.mytelegram" />
+        <package android:name="org.thunderdog.challegram" />
+        <package android:name="com.infogram.app" />
+        <package android:name="com.nitro.telegram" />
+        <package android:name="org.telegram.BifToGram" />
+        <package android:name="uz.usoft.blackgram" />
+    </queries>
 
     <application
         android:name=".serverHelper.VolleySingleton"

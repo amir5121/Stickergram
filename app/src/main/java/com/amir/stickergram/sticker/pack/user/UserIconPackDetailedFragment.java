@@ -2,13 +2,14 @@ package com.amir.stickergram.sticker.pack.user;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +57,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import kotlin.jvm.internal.Intrinsics;
 
@@ -210,34 +214,14 @@ public class UserIconPackDetailedFragment extends BaseFragment
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setPackage(Loader.INSTANCE.getActivePack());
                         intent.setType("application/pdf");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getWebpDir())));
-//                        Intent i=new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, AUTHORITY, f));
-//                        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(intent);
+                        startActivity(Intent.createChooser(intent, "Send to Telegram"));
                     } else {
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();
                     }
                 } else if (which == Dialog.BUTTON_NEGATIVE) {
-                    try {
-                        InputStream in = new FileInputStream(item.getDir());
-                        File dir = new File(BaseActivity.PICTURES_DIRECTORY);
-                        if (!dir.exists()) {
-                            dir.mkdirs();
-                        }
-                        String imagePath = BaseActivity.PICTURES_DIRECTORY + item.getFolder() + item.getName() + Constants.PNG;
-                        FileOutputStream fo = new FileOutputStream(imagePath);
-                        Loader.INSTANCE.copyFile(in, fo);
-                        in.close();
-                        fo.close();
-                        MediaScannerConnection.scanFile(getContext(), new String[]{imagePath}, new String[]{"image/jpeg"}, null);
-                        Toast.makeText(activity, activity.getString(R.string.export), Toast.LENGTH_LONG).show();
-
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    saveToGallery(item, activity);
                 } else if (which == Dialog.BUTTON_NEUTRAL) {
                     sendImageToBot(activity, item);
                     Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
@@ -284,6 +268,35 @@ public class UserIconPackDetailedFragment extends BaseFragment
         sendImageToUserDialog.show();
     }
 
+    private Uri saveToGallery(final PackItem item, final BaseActivity activity) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, item.getFolder() + item.getName());
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, item.getFolder() + item.getName());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        // Add the date meta data to ensure the image is added at the front of the gallery
+        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures" + Constants.STICKERGRAM);
+        }
+        ContentResolver contentResolver = getContext().getContentResolver();
+        Uri url = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        try {
+            InputStream in = new FileInputStream(item.getDir());
+            OutputStream fo = contentResolver.openOutputStream(url);
+            Loader.INSTANCE.copyFile(in, fo);
+            in.close();
+            fo.close();
+            Toast.makeText(activity, activity.getString(R.string.export), Toast.LENGTH_LONG).show();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
 
     private void sendImageToBot(final BaseActivity activity, final PackItem item) {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -293,12 +306,16 @@ public class UserIconPackDetailedFragment extends BaseFragment
                     if (Loader.INSTANCE.getActivePack() != null) {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setPackage(Loader.INSTANCE.getActivePack());
-                        intent.setType("text/plain");
-//                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(new File(item.getDir()).toString()));
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
+                        intent.setType("application/pdf");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            intent.putExtra(Intent.EXTRA_STREAM, saveToGallery(item, activity));
+                        } else {
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(item.getDir())));
+                        }
                         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                         StrictMode.setVmPolicy(builder.build());
-                        startActivity(intent);
+//                        startActivity(intent);
+                        startActivity(Intent.createChooser(intent, "Send to Telegram"));
                         Toast.makeText(getContext(), getString(R.string.choose_the_stickers_bot), Toast.LENGTH_LONG).show();
                     } else
                         Toast.makeText(activity, getString(R.string.telegram_is_not_installed_you_can_t_create_sticker), Toast.LENGTH_LONG).show();

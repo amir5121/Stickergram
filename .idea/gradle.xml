@@ -9,8 +9,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/media/amir/Other/ComputerProgrammingProjects/Android/Stickergram" />
-            <option value="/media/amir/Other/ComputerProgrammingProjects/Android/Stickergram/app" />
+            <option value="/mnt/01D31FC53EDA2B20/ComputerProgrammingProjects/Android/Stickergram" />
+            <option value="/mnt/01D31FC53EDA2B20/ComputerProgrammingProjects/Android/Stickergram/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
