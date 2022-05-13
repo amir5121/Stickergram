@@ -53,13 +53,23 @@ object Loader {
         get() = BaseActivity.chosenMode.pack
 
     fun gainPermission(activity: BaseActivity, requestCode: Int) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED &&
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
+        ) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-                            Manifest.permission.READ_CONTACTS)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity,
+                    Manifest.permission.READ_CONTACTS
+                )
+            ) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -69,8 +79,13 @@ object Loader {
 
                 // No explanation needed, we can request the permission.
 
-                ActivityCompat.requestPermissions(activity,
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), requestCode)
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), requestCode
+                )
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -113,7 +128,10 @@ object Loader {
 //    }
 
     fun checkPermission(context: Context): Boolean {
-        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED else true
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED else true
     }
 
     @Throws(IOException::class)
@@ -150,7 +168,11 @@ object Loader {
     fun generateThumbnail(fromDirectory: String, toDirectory: String): String? {
         val regionalBitmap = BitmapFactory.decodeFile(fromDirectory) ?: return null
 //        if (regionalBitmap == null) Log.e(TAG, "regionalBitmap was null");
-        val bitmap = ThumbnailUtils.extractThumbnail(regionalBitmap, regionalBitmap.width / 4, regionalBitmap.height / 4)
+        val bitmap = ThumbnailUtils.extractThumbnail(
+            regionalBitmap,
+            regionalBitmap.width / 4,
+            regionalBitmap.height / 4
+        )
         var outStream: FileOutputStream? = null
 
         try {
@@ -198,11 +220,11 @@ object Loader {
         stickerImage.setImageURI(uri)
 
         val dialog = AlertDialog.Builder(activity)
-                .setView(view)
-                //                .setTitle(activity.getString(R.string.edit_this_sticker))
-                .setNegativeButton(activity.getString(R.string.no), listener)
-                .setPositiveButton(activity.getString(R.string.yes), listener)
-                .create()
+            .setView(view)
+            //                .setTitle(activity.getString(R.string.edit_this_sticker))
+            .setNegativeButton(activity.getString(R.string.no), listener)
+            .setPositiveButton(activity.getString(R.string.yes), listener)
+            .create()
 
         dialog.setOnShowListener {
             activity.setFont(dialog.findViewById<View>(android.R.id.message) as TextView?)
@@ -288,7 +310,12 @@ object Loader {
         val height = mainBitmap.height
         val width = mainBitmap.width
         Log.e(TAG, (1 + i / 10.0).toString())
-        val temp = Bitmap.createScaledBitmap(mainBitmap, (width / (1 + i / 10.0)).toInt(), (height / (1 + i / 10.0)).toInt(), false)
+        val temp = Bitmap.createScaledBitmap(
+            mainBitmap,
+            (width / (1 + i / 10.0)).toInt(),
+            (height / (1 + i / 10.0)).toInt(),
+            false
+        )
         return Bitmap.createScaledBitmap(temp, width, height, false)
     }
 
@@ -296,11 +323,17 @@ object Loader {
     fun makeACopyToFontFolder(uri: Uri, activity: BaseActivity): String? {
         //        Log.e(TAG, "fileName: " + getFileName(uri, activity));
         val fileName = getFileName(uri, activity)
-        if (!fileName.toLowerCase().contains(".ttf")) {
-            Toast.makeText(activity, activity.getString(R.string.choose_a_font), Toast.LENGTH_LONG).show()
+        if (!fileName.lowercase(Locale.getDefault()).contains(".ttf")) {
+            Toast.makeText(activity, activity.getString(R.string.choose_a_font), Toast.LENGTH_LONG)
+                .show()
             return null
         }
-        val file = File(BaseActivity.FONT_DIRECTORY + getFileName(uri, activity))// you can also use app's internal cache to store the file
+        val file = File(
+            BaseActivity.FONT_DIRECTORY + getFileName(
+                uri,
+                activity
+            )
+        )// you can also use app's internal cache to store the file
         if (!file.parentFile!!.exists()) {
             if (!file.parentFile!!.mkdirs())
                 return null
@@ -343,7 +376,9 @@ object Loader {
             val cursor = activity.contentResolver.query(uri, null, null, null, null)
             try {
                 if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    val columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (columnIndex > 0)
+                        result = cursor.getString(columnIndex)
                 }
             } finally {
                 cursor?.close()
@@ -360,13 +395,15 @@ object Loader {
         return result
     }
 
-    fun getSeekBar(context: Context,
-                   range: Int,
-                   backGroundColor: Int,
-                   progressColor: Int,
-                   thumbColor: Int,
-                   defaultPosition: Int,
-                   viewGroup: RelativeLayout): SeekBarCompat {
+    fun getSeekBar(
+        context: Context,
+        range: Int,
+        backGroundColor: Int,
+        progressColor: Int,
+        thumbColor: Int,
+        defaultPosition: Int,
+        viewGroup: RelativeLayout
+    ): SeekBarCompat {
         val seekBar = SeekBarCompat(context)
         seekBar.max = range
         //        seekBar.setBackgroundColor(backGroundColor);
@@ -379,7 +416,8 @@ object Loader {
         }
 
         val scale = BaseActivity.density
-        val params = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (50 * scale).toInt())
+        val params =
+            RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (50 * scale).toInt())
         if (!BaseActivity.isInLandscape) {
             params.addRule(RelativeLayout.ABOVE, R.id.include_buttons_scroll_view)
             //            params.setMargins((int) (10 * scale), 0, (int) (10 * scale), (int) (55 * scale));
@@ -401,35 +439,35 @@ object Loader {
     fun setColor(activity: BaseActivity, touchImageView: TouchImageView, type: Int) {
 
         ColorPickerDialogBuilder
-                .with(activity)
-                .setTitle(activity.getString(R.string.choose_color))
-                .initialColor(Color.WHITE)
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(12)
-                .setOnColorSelectedListener {
-                    //                        toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
-                }
-                .setPositiveButton(activity.getString(R.string.ok)) { dialog, selectedColor, allColors ->
-                    //                        changeBackgroundColor(selectedColor);
-                    if (type == Constants.TEXT_COLOR)
-                        (touchImageView.drawableItem as TextItem).textColor = selectedColor
-                    else if (type == Constants.TEXT_SHADOW_COLOR)
-                        (touchImageView.drawableItem as TextItem).shadow.color = selectedColor
-                    else if (type == Constants.TEXT_BACKGROUND_COLOR)
-                        (touchImageView.drawableItem as TextItem).backgroundColor = selectedColor
-                    else if (type == Constants.TEXT_STROKE_COLOR)
-                        (touchImageView.drawableItem as TextItem).textStrokeColor = selectedColor
-                    touchImageView.updateDrawable()
-                }
-                .setNegativeButton(activity.getString(R.string.cancel)) { dialog, which -> }
-                .build()
-                .show()
+            .with(activity)
+            .setTitle(activity.getString(R.string.choose_color))
+            .initialColor(Color.WHITE)
+            .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+            .density(12)
+            .setOnColorSelectedListener {
+                //                        toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+            }
+            .setPositiveButton(activity.getString(R.string.ok)) { dialog, selectedColor, allColors ->
+                //                        changeBackgroundColor(selectedColor);
+                if (type == Constants.TEXT_COLOR)
+                    (touchImageView.drawableItem as TextItem).textColor = selectedColor
+                else if (type == Constants.TEXT_SHADOW_COLOR)
+                    (touchImageView.drawableItem as TextItem).shadow.color = selectedColor
+                else if (type == Constants.TEXT_BACKGROUND_COLOR)
+                    (touchImageView.drawableItem as TextItem).backgroundColor = selectedColor
+                else if (type == Constants.TEXT_STROKE_COLOR)
+                    (touchImageView.drawableItem as TextItem).textStrokeColor = selectedColor
+                touchImageView.updateDrawable()
+            }
+            .setNegativeButton(activity.getString(R.string.cancel)) { dialog, which -> }
+            .build()
+            .show()
     }
 
     fun isPersian(string: String): Boolean {
         for (i in 0 until string.length) {
             val charAsciiNum = string[i].toInt()
-            if (charAsciiNum > 1575 && charAsciiNum < 1641 || charAsciiNum == 1662 || charAsciiNum == 1711 || charAsciiNum == 1670 || charAsciiNum == 1688)
+            if (charAsciiNum in 1576..1640 || charAsciiNum == 1662 || charAsciiNum == 1711 || charAsciiNum == 1670 || charAsciiNum == 1688)
                 return true
         }
         return false
@@ -458,7 +496,10 @@ object Loader {
 
         var orientation = 0
         if (ei != null) {
-            orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            orientation = ei.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
         }
 
         //        Log.e(TAG, "orientation: " + orientation);
@@ -538,7 +579,11 @@ object Loader {
             myIntent.setPackage(activePack)
             activity.startActivity(myIntent)
         } else
-            Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                activity.getString(R.string.telegram_is_not_installed),
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     /**
@@ -587,7 +632,8 @@ object Loader {
 
     fun rate(activity: BaseActivity) {
         val appPackageName = activity.packageName
-        val marketIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName"))
+        val marketIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName"))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         } else {
@@ -596,7 +642,11 @@ object Loader {
         try {
             activity.startActivity(marketIntent)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(activity, activity.getString(R.string.no_market_was_found), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                activity.getString(R.string.no_market_was_found),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }
@@ -616,12 +666,12 @@ object Loader {
             }
         }
         val dialog = AlertDialog.Builder(activity)
-                .setMessage(activity.getString(R.string.are_sure_you_want_to_exit))
-                //                .setMessage(activity.getString(R.string.i_feel_you_might_wanna_rate_me))
-                .setPositiveButton(activity.getString(R.string.exit), listener)
-                .setNegativeButton(activity.getString(R.string.rate), listener)
-                .setNeutralButton(activity.getString(R.string.channel), listener)
-                .create()
+            .setMessage(activity.getString(R.string.are_sure_you_want_to_exit))
+            //                .setMessage(activity.getString(R.string.i_feel_you_might_wanna_rate_me))
+            .setPositiveButton(activity.getString(R.string.exit), listener)
+            .setNegativeButton(activity.getString(R.string.rate), listener)
+            .setNeutralButton(activity.getString(R.string.channel), listener)
+            .create()
 
         dialog.setOnShowListener {
             activity.setFont(dialog.findViewById<View>(android.R.id.message) as TextView?)
@@ -644,7 +694,11 @@ object Loader {
             myIntent.setPackage(activePack)
             activity.startActivity(myIntent)
         } else
-            Toast.makeText(activity, activity.getString(R.string.telegram_is_not_installed), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                activity.getString(R.string.telegram_is_not_installed),
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     fun deviceLanguageIsPersian(): Boolean {
@@ -727,8 +781,10 @@ object Loader {
             val config = Configuration()
             config.setLocale(locale)
 
-            activity.baseContext.resources.updateConfiguration(config,
-                    activity.baseContext.resources.displayMetrics)
+            activity.baseContext.resources.updateConfiguration(
+                config,
+                activity.baseContext.resources.displayMetrics
+            )
         }
     }
 
@@ -779,11 +835,12 @@ object Loader {
         try {
             //this is the file going to use temporally to save the bytes.
             // This file will not be a com.amir.stickergram.image, it will store the raw com.amir.stickergram.image data.
-            val file = File(Environment.getExternalStorageDirectory().toString() + File.separator + "temp.tmp")
+            val file = File(
+                Environment.getExternalStorageDirectory().toString() + File.separator + "temp.tmp"
+            )
 
             //Open an RandomAccessFile
             //Make sure you have added uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-            //into AndroidManifest.xml file
             val randomAccessFile = RandomAccessFile(file, "rw")
 
             // get the width and height of the source bitmap.
@@ -794,7 +851,8 @@ object Loader {
             //Copy the byte to the file
             //Assume source bitmap loaded using options.inPreferredConfig = Config.ARGB_8888;
             val channel = randomAccessFile.channel
-            val map = channel.map(FileChannel.MapMode.READ_WRITE, 0, (imgIn.rowBytes * height).toLong())
+            val map =
+                channel.map(FileChannel.MapMode.READ_WRITE, 0, (imgIn.rowBytes * height).toLong())
             imgIn.copyPixelsToBuffer(map)
             //recycle the source bitmap, this will be no longer used.
             imgIn.recycle()

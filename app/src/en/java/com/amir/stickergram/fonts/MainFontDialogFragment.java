@@ -2,13 +2,17 @@ package com.amir.stickergram.fonts;
 
 import android.app.Dialog;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +44,10 @@ public class MainFontDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.dialog_set_font, null, false);
 
-        ViewPager viewPager = (ViewPager) mainView.findViewById(R.id.dialog_set_font_view_pager);
+        ViewPager viewPager = mainView.findViewById(R.id.dialog_set_font_view_pager);
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = (TabLayout) mainView.findViewById(R.id.dialog_set_font_tabs);
+        TabLayout tabLayout = mainView.findViewById(R.id.dialog_set_font_tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
@@ -58,7 +62,7 @@ public class MainFontDialogFragment extends DialogFragment {
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<BaseFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -66,6 +70,7 @@ public class MainFontDialogFragment extends DialogFragment {
             super(manager);
         }
 
+        @NonNull
         @Override
         public BaseFragment getItem(int position) {
             return mFragmentList.get(position);

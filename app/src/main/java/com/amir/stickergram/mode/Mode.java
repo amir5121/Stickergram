@@ -14,7 +14,7 @@ public class Mode {
     private static final String BASE_MODE_CACHE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Android" + File.separator + "data" + File.separator;
     private static final String END_CACHE_DIR = File.separator + "cache" + File.separator;
     private static final String TAG = "Mode";
-    private String pack;
+    private final String pack;
     private String name;
     public boolean isAvailable;
 

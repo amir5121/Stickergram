@@ -26,7 +26,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     //    private static final int ANTHON_REQUEST_CODE = 222;
 
     private var pickAnImageDialog: AlertDialog? = null
-    private var tempOutPutFile: File? = null // this is where the captured com.amir.stickergram.image would be saved
+    private var tempOutPutFile: File? =
+        null // this is where the captured com.amir.stickergram.image would be saved
 
     //todo: use snackBar instead of Toast
 
@@ -49,7 +50,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     if (action == Intent.ACTION_SEND) {
                         if (type.contains("image")) {
                             tempOutPutFile = Loader.generateEmptyBitmapFile(this)
-                            Loader.crop(mIntent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as Uri, Uri.fromFile(tempOutPutFile), this, false)
+                            Loader.crop(
+                                mIntent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as Uri,
+                                Uri.fromFile(tempOutPutFile),
+                                this,
+                                false
+                            )
                         }
                     }
                 }
@@ -87,14 +93,22 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 startActivity(Intent(this, UserStickersActivity::class.java))
             } else {
                 Loader.gainPermission(this, Constants.USER_STICKER_GAIN_PERMISSION)
-                Toast.makeText(this, resources.getString(R.string.need_permission_to_look_for_your_stickers), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.need_permission_to_look_for_your_stickers),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else if (itemId == R.id.activity_main_phone_stickers) {
             if (Loader.checkPermission(this)) {
                 startActivity(Intent(this, PhoneStickersActivity::class.java))
             } else {
                 Loader.gainPermission(this, Constants.PHONE_STICKERS_GAIN_PERMISSION)
-                Toast.makeText(this, resources.getString(R.string.need_permission_to_access_telegram_cache), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.need_permission_to_access_telegram_cache),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         } else if (itemId == R.id.activity_main_start_scratch_stickers) {
@@ -129,7 +143,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         val view = layoutInflater.inflate(R.layout.dialog_from_scratch, null)
         setFont(view as ViewGroup)
         if (isInLandscape) {
-            val linearLayout = view.findViewById<View>(R.id.dialog_from_scratch_main_container) as LinearLayout
+            val linearLayout =
+                view.findViewById<View>(R.id.dialog_from_scratch_main_container) as LinearLayout
             linearLayout.orientation = LinearLayout.HORIZONTAL
             linearLayout.setPadding(20, 20, 20, 20)
         }
@@ -142,13 +157,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             fromPicture.setOnClickListener(this)
         }
         pickAnImageDialog = AlertDialog.Builder(this)
-                .setView(view)
-                .create()
+            .setView(view)
+            .create()
         pickAnImageDialog!!.show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
         when (requestCode) {
             Constants.USER_STICKER_GAIN_PERMISSION -> {
                 // If request is cancelled, the result arrays are empty.
@@ -158,7 +175,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     // contacts-related task you need to do.
 
                 } else {
-                    Toast.makeText(this, resources.getString(R.string.need_permission_to_look_for_your_stickers), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        resources.getString(R.string.need_permission_to_look_for_your_stickers),
+                        Toast.LENGTH_LONG
+                    ).show()
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -176,17 +197,22 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startActivity(Intent(this, PhoneStickersActivity::class.java))
                 } else {
-                    Toast.makeText(this, resources.getString(R.string.need_permission_to_save_the_sticker), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        resources.getString(R.string.need_permission_to_save_the_sticker),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 return
             }
-        }// Loader.PHONE_STICKERS_GAIN_PERMISSION and Loader.USER_STICKER_GAIN_PERMISSION is checked in the BaseActivity because they can be called in different places
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+// Loader.PHONE_STICKERS_GAIN_PERMISSION and Loader.USER_STICKER_GAIN_PERMISSION is checked in the BaseActivity because they can be called in different places
         // other 'case' lines to check for other
         // permissions this app might request
     }
 
 
-    //process result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != RESULT_OK)
@@ -198,16 +224,24 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             photos?.let {
 
                 for (s in photos) {
-
                     Log.e(javaClass.name, "onActivityResult: $s")
                 }
-                Loader.crop(Uri.fromFile(File((photos)[0])), Uri.fromFile(tempOutPutFile), this, false)
+                Loader.crop(
+                    Uri.fromFile(File((photos)[0])),
+                    Uri.fromFile(tempOutPutFile),
+                    this,
+                    false
+                )
             }
         }
     }
 
     private fun chooseOrCapturePicture() {
-        GalleryActivity.openActivity(this@MainActivity, GALLERY_REQUEST_CODE, Constants.galleryConfig)
+        GalleryActivity.openActivity(
+            this@MainActivity,
+            GALLERY_REQUEST_CODE,
+            Constants.galleryConfig
+        )
     }
 
 

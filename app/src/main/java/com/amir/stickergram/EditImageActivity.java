@@ -275,11 +275,6 @@ public class EditImageActivity
         }
     }
 
-    private void buyProNote(String string) {
-        if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.VISIBLE);
-        if (buyNoteText != null) buyNoteText.setText(string);
-    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int itemId = v.getId();
@@ -302,8 +297,8 @@ public class EditImageActivity
         if (itemId == R.id.include_pro_note_close) {
             if (buyNoteContainer != null) buyNoteContainer.setVisibility(View.GONE);
         } else if (itemId == R.id.include_pro_note_text) {
-            if (isActionUp)
-                requestProVersion();
+//            if (isActionUp)
+//                requestProVersion();
         } else if (itemId == R.id.activity_edit_image_buttons_overlay_layer) {
             if (isActionUp)
                 Toast.makeText(this, getString(R.string.select_a_text), Toast.LENGTH_LONG).show();
@@ -924,6 +919,7 @@ public class EditImageActivity
                 getImagePickerDialog();
             }
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void runShowCase() {
